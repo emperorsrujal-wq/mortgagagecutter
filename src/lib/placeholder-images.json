@@ -1,3 +1,22 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero",
+      "description": "Happy couple looking towards a bright financial future.",
+      "imageUrl": "https://images.unsplash.com/photo-1555689070-2d15336749b6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxoYXBweSUyMGNvdXBsZXxlbnwwfHx8fDE3NTk1NjI5MTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "happy couple"
+    },
+    {
+      "id": "method-access",
+      "description": "A celebratory image, like someone happily shredding a mortgage statement.",
+      "imageUrl": "https://images.unsplash.com/photo-1758691737138-7b9b1884b1db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjZWxlYnJhdGlvbiUyMHN1Y2Nlc3N8ZW58MHx8fHwxNzU5NjM2ODkxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "celebration success"
+    },
+    {
+      "id": "purchase-secure",
+      "description": "Lock icon for secure payment.",
+      "imageUrl": "https://images.unsplash.com/photo-1663868891817-8853b9eb83f0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxsb2NrJTIwaWNvbnxlbnwwfHx8fDE3NTk2MzY4OTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "lock icon"
+    }
+  ]
 }
