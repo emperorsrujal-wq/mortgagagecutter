@@ -6,8 +6,8 @@ export default function Home() {
   const heroImage = PlaceHolderImages.find((p) => p.id === 'hero');
 
   return (
-    <div className="relative">
-      <section className="relative w-full h-[calc(100vh-65px)] flex items-center justify-center">
+    <div className="relative flex-1 flex flex-col">
+      <section className="relative w-full flex-1 flex items-center justify-center">
         {heroImage && (
           <Image
             src={heroImage.imageUrl}
