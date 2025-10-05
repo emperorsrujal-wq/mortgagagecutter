@@ -18,6 +18,10 @@ import {
   Zap,
   TrendingUp,
   Info,
+  Award,
+  Clock,
+  Heart,
+  Target,
 } from 'lucide-react';
 import {
   ChartConfig,
@@ -32,6 +36,8 @@ import {
   Tooltip,
 } from 'recharts';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+
 
 const chartConfig = {
   traditional: {
@@ -49,18 +55,20 @@ const StatCard = ({
   label,
   value,
   colorClass,
+  isPrimary,
 }: {
   icon: React.ElementType;
   label: string;
   value: string;
   colorClass: string;
+  isPrimary?: boolean;
 }) => (
-  <div className="p-4 rounded-lg bg-secondary flex items-center gap-4">
+  <div className={`p-4 rounded-lg flex items-center gap-4 ${isPrimary ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}>
     <div className={`p-3 rounded-full ${colorClass}`}>
-      <Icon className="h-6 w-6 text-white" />
+      <Icon className={`h-6 w-6 ${isPrimary ? 'text-primary' : 'text-white'}`} />
     </div>
     <div>
-      <p className="text-sm text-muted-foreground">{label}</p>
+      <p className={`text-sm ${isPrimary ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>{label}</p>
       <p className="text-2xl font-bold">{value}</p>
     </div>
   </div>
@@ -97,14 +105,21 @@ export function ComparisonDisplay() {
         }
       });
       
+      const today = new Date();
+      const traditionalPayoffDate = new Date(today.getFullYear() + traditional.remainingYears, today.getMonth(), today.getDate());
+      const cutterPayoffDate = new Date(today.getFullYear() + cutterYears, today.getMonth(), today.getDate());
 
       setData({
-        traditional,
+        traditional: {
+          ...traditional,
+          payoffDate: traditionalPayoffDate,
+        },
         cutter: {
           remainingYears: cutterYears,
           totalInterest: cutterInterest,
           yearsFaster,
           interestSaved,
+          payoffDate: cutterPayoffDate,
         },
         chartData,
         report,
@@ -119,81 +134,90 @@ export function ComparisonDisplay() {
     maximumFractionDigits: 0,
   }), []);
 
+  const dateFormatter = useMemo(() => new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+  }), []);
+
   if (!data) {
     return <div className="text-center py-20">Invalid data provided.</div>;
   }
+  
+  const yearsSaved = Math.floor(data.cutter.yearsFaster);
+  const monthsSaved = Math.round((data.cutter.yearsFaster - yearsSaved) * 12);
 
   return (
     <div className="container mx-auto py-12 px-4">
       <header className="text-center mb-12">
-        <h1 className="text-4xl font-bold tracking-tight">
-          See How Much You Could Save!
+        <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-primary">
+          Your Personalized Savings Blueprint
         </h1>
-        <p className="text-xl text-muted-foreground mt-2">
-          Unlock years of freedom and thousands in potential interest savings.
+        <p className="text-xl text-muted-foreground mt-2 max-w-3xl mx-auto">
+          Here’s a clear comparison showing how the Mortgage Cutter Method accelerates your journey to financial freedom.
         </p>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Traditional */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="text-muted-foreground" />
-              Traditional Mortgage
-            </CardTitle>
-            <CardDescription>Your current payoff plan.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <StatCard
-              icon={Calendar}
-              label="Years to Pay Off"
-              value={`${data.traditional.remainingYears.toFixed(1)} Years`}
-              colorClass="bg-muted-foreground"
-            />
-            <StatCard
-              icon={DollarSign}
-              label="Total Interest Paid"
-              value={currencyFormatter.format(data.traditional.totalInterest)}
-              colorClass="bg-muted-foreground"
-            />
-          </CardContent>
-        </Card>
-
-        {/* Mortgage Cutter */}
-        <Card className="border-primary border-2 shadow-lg">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-primary">
-              <Zap />
-              The Mortgage Cutter Method
-            </CardTitle>
-            <CardDescription>Your accelerated payoff plan.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <StatCard
-              icon={Calendar}
-              label="Years to Pay Off"
-              value={`${data.cutter.remainingYears.toFixed(1)} Years`}
-              colorClass="bg-accent"
-            />
-            <StatCard
-              icon={DollarSign}
-              label="Total Interest Paid"
-              value={currencyFormatter.format(data.cutter.totalInterest)}
-              colorClass="bg-accent"
-            />
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+         <StatCard
+            icon={Clock}
+            label="Years Paid Off Faster"
+            value={`${yearsSaved} Years, ${monthsSaved} Months`}
+            colorClass="bg-accent/20"
+            isPrimary={true}
+          />
+          <StatCard
+            icon={Heart}
+            label="Total Interest Saved"
+            value={currencyFormatter.format(data.cutter.interestSaved)}
+            colorClass="bg-accent/20"
+            isPrimary={true}
+          />
       </div>
+
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>Side-by-Side Comparison</CardTitle>
+          <CardDescription>See the powerful difference the Mortgage Cutter Method can make.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="font-bold">Metric</TableHead>
+                <TableHead className="text-center font-bold">Your Current Mortgage</TableHead>
+                <TableHead className="text-center font-bold text-primary">Mortgage Cutter Method</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell className="font-medium flex items-center gap-2"><Calendar /> Payoff Date</TableCell>
+                <TableCell className="text-center">{dateFormatter.format(data.traditional.payoffDate)}</TableCell>
+                <TableCell className="text-center font-semibold text-primary">{dateFormatter.format(data.cutter.payoffDate)}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium flex items-center gap-2"><Clock /> Remaining Time</TableCell>
+                <TableCell className="text-center">{data.traditional.remainingYears.toFixed(1)} Years</TableCell>
+                <TableCell className="text-center font-semibold text-primary">{data.cutter.remainingYears.toFixed(1)} Years</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium flex items-center gap-2"><DollarSign /> Total Future Interest</TableCell>
+                <TableCell className="text-center">{currencyFormatter.format(data.traditional.totalInterest)}</TableCell>
+                <TableCell className="text-center font-semibold text-primary">{currencyFormatter.format(data.cutter.totalInterest)}</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
 
       <Card className="mt-8">
         <CardHeader>
-          <CardTitle>Payoff Comparison</CardTitle>
-          <CardDescription>Loan balance over time</CardDescription>
+          <CardTitle>Loan Balance Over Time</CardTitle>
+          <CardDescription>This chart illustrates how quickly your mortgage balance could drop.</CardDescription>
         </CardHeader>
-        <CardContent className="h-[300px]">
+        <CardContent className="h-[300px] lg:h-[400px]">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={data.chartData}>
+            <AreaChart data={data.chartData} margin={{ top: 10, right: 30, left: 20, bottom: 20 }}>
               <defs>
                 <linearGradient id="colorCutter" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.8}/>
@@ -205,7 +229,7 @@ export function ComparisonDisplay() {
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" tickFormatter={(tick) => (tick / 12).toFixed(0) + 'y'} />
+              <XAxis dataKey="month" tickFormatter={(tick) => `Year ${(tick / 12).toFixed(0)}`} label={{ value: 'Years', position: 'insideBottom', offset: -15 }} />
               <YAxis tickFormatter={(tick) => currencyFormatter.format(tick)} />
               <Tooltip
                 content={({ active, payload, label }) =>
@@ -217,30 +241,34 @@ export function ComparisonDisplay() {
                   ) : null
                 }
               />
-              <Area type="monotone" dataKey="Traditional" stroke={chartConfig.traditional.color} fill="url(#colorTraditional)" />
-              <Area type="monotone" dataKey="Mortgage Cutter" stroke={chartConfig.cutter.color} fill="url(#colorCutter)" />
+              <Area type="monotone" dataKey="Traditional" stroke={chartConfig.traditional.color} fillOpacity={1} fill="url(#colorTraditional)" />
+              <Area type="monotone" dataKey="Mortgage Cutter" stroke={chartConfig.cutter.color} fillOpacity={1} fill="url(#colorCutter)" />
             </AreaChart>
           </ResponsiveContainer>
         </CardContent>
       </Card>
       
       {data.report && (
-         <Alert className="mt-8">
+         <Alert className="mt-8 border-primary/50">
            <Info className="h-4 w-4" />
-           <AlertTitle>Your Personalized AI Savings Report</AlertTitle>
+           <AlertTitle className="font-bold">Your Personalized AI Savings Report</AlertTitle>
            <AlertDescription className="whitespace-pre-wrap">{data.report}</AlertDescription>
          </Alert>
       )}
 
-      <Card className="mt-8 text-center bg-gradient-to-r from-primary/80 to-accent/80 text-primary-foreground p-8">
-        <h2 className="text-3xl font-bold">Ready to see how it works?</h2>
-        <p className="mt-2 mb-6 text-lg">
-          Get the exact step-by-step system and tools to make this a reality.
-        </p>
-        <Button size="lg" asChild className="bg-card text-card-foreground hover:bg-card/90">
-          <Link href="/purchase">Get Instant Access for {currencyFormatter.format(79)}</Link>
-        </Button>
-        <p className="text-xs mt-2">One-time payment. No subscriptions.</p>
+      <Card className="mt-8 text-center bg-gradient-to-r from-primary to-accent text-primary-foreground p-8 shadow-2xl">
+        <CardHeader>
+           <CardTitle className="text-3xl font-bold">Ready to Take Control?</CardTitle>
+           <CardDescription className="text-lg text-primary-foreground/90">
+             Get the exact step-by-step system and tools to make these savings a reality.
+           </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button size="lg" asChild className="bg-card text-card-foreground hover:bg-card/90 transform hover:scale-105 transition-transform duration-200">
+            <Link href="/purchase">Get Instant Access for {currencyFormatter.format(79)}</Link>
+          </Button>
+          <p className="text-xs mt-4 opacity-80">One-time payment. Lifetime access. No hidden fees.</p>
+        </CardContent>
       </Card>
     </div>
   );
