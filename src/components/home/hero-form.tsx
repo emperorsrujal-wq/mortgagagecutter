@@ -21,14 +21,51 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { ArrowRight } from 'lucide-react';
+import { useState } from 'react';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
   email: z.string().email({ message: 'Please enter a valid email.' }),
 });
 
+async function subscribeToEmailService(values: z.infer<typeof formSchema>) {
+  // DEVELOPER NOTE:
+  // This is where you would integrate with your email marketing service.
+  // 1. You would typically make a POST request to a serverless function
+  //    or an API route that you create.
+  // 2. This backend function would then securely use your email service's
+  //    API key to add the user to your list.
+  //
+  // Example using a hypothetical API route:
+  /*
+  try {
+    const response = await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(values),
+    });
+
+    if (!response.ok) {
+      // Handle server-side errors
+      console.error('Failed to subscribe user.');
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error('Error subscribing user:', error);
+    return false;
+  }
+  */
+  
+  // For now, we'll simulate a successful API call.
+  console.log('Simulating email subscription for:', values);
+  return new Promise(resolve => setTimeout(() => resolve(true), 500));
+}
+
+
 export function HeroForm() {
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,9 +74,16 @@ export function HeroForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // In a real app, you'd save the lead here.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsSubmitting(true);
+    
+    // Call the function to subscribe the user to the email service.
+    await subscribeToEmailService(values);
+
+    // After attempting to subscribe, redirect the user.
+    // In a real app, you might want to handle subscription failures gracefully.
+    
+    setIsSubmitting(false);
     router.push('/questionnaire');
   }
 
@@ -61,7 +105,7 @@ export function HeroForm() {
                 <FormItem>
                   <FormLabel className='sr-only'>Your Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Your Name" {...field} />
+                    <Input placeholder="Your Name" {...field} disabled={isSubmitting} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -74,14 +118,14 @@ export function HeroForm() {
                 <FormItem>
                   <FormLabel className='sr-only'>Email Address</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="Email Address" {...field} />
+                    <Input type="email" placeholder="Email Address" {...field} disabled={isSubmitting} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" size="lg">
-              Show Me My Savings
+            <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" size="lg" disabled={isSubmitting}>
+              {isSubmitting ? 'Submitting...' : 'Show Me My Savings'}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <p className="text-center text-xs text-muted-foreground pt-2">
