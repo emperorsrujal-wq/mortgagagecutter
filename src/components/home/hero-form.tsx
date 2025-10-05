@@ -20,6 +20,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { ArrowRight } from 'lucide-react';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -43,11 +44,11 @@ export function HeroForm() {
   }
 
   return (
-    <Card className="max-w-md w-full shadow-2xl">
-      <CardHeader>
-        <CardTitle>Start Your Journey to Freedom</CardTitle>
+    <Card className="w-full max-w-md shadow-2xl bg-card/90 backdrop-blur-sm">
+      <CardHeader className="text-center">
+        <CardTitle className="text-2xl">Get Your Free Savings Estimate</CardTitle>
         <CardDescription>
-          Enter your details to begin.
+          See how much you could save in 60 seconds.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -58,9 +59,9 @@ export function HeroForm() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Your Name</FormLabel>
+                  <FormLabel className='sr-only'>Your Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="John Doe" {...field} />
+                    <Input placeholder="Your Name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -71,19 +72,20 @@ export function HeroForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email Address</FormLabel>
+                  <FormLabel className='sr-only'>Email Address</FormLabel>
                   <FormControl>
-                    <Input placeholder="you@example.com" {...field} />
+                    <Input type="email" placeholder="Email Address" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full bg-primary hover:bg-primary/90" size="lg">
-              Start Saving Now
+            <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" size="lg">
+              Show Me My Savings
+              <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <p className="text-center text-xs text-muted-foreground pt-2">
-              No hidden fees. Just smarter mortgage payoff.
+              100% Free. No obligation.
             </p>
           </form>
         </Form>

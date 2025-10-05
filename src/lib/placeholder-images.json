@@ -17,6 +17,12 @@
       "description": "Lock icon for secure payment.",
       "imageUrl": "https://images.unsplash.com/photo-1663868891817-8853b9eb83f0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxsb2NrJTIwaWNvbnxlbnwwfHx8fDE3NTk2MzY4OTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "lock icon"
+    },
+    {
+      "id": "testimonial-person",
+      "description": "Portrait of a happy person.",
+      "imageUrl": "https://images.unsplash.com/photo-1543269664-56d93c1b41a6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxoYXBweSUyMHBlcnNvbnxlbnwwfHx8fDE3NTk2NDMzODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "happy person"
     }
   ]
 }
