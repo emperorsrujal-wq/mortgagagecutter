@@ -32,7 +32,7 @@ const siteConfig = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `Mortgage Cutter | Pay Off Your Mortgage 10+ Years Sooner`,
+    default: `Mortgage Cutter Method | Pay Off Your Mortgage 10+ Years Sooner`,
     template: `%s | Mortgage Cutter`,
   },
   description: siteConfig.description,
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
         url: siteConfig.ogImage,
         width: 1200,
         height: 630,
-        alt: 'A happy couple using the Mortgage Cutter method to plan their financial future.',
+        alt: 'A happy couple celebrating their financial freedom after using the Mortgage Cutter method.',
       },
     ],
   },
@@ -63,6 +63,28 @@ export const metadata: Metadata = {
     icon: '/favicon.ico',
   },
 };
+
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Mortgage Cutter',
+  url: 'https://mortgagecutter.com',
+  logo: `${siteConfig.url}/favicon.ico`, 
+  sameAs: [], 
+};
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Mortgage Cutter',
+  url: 'https://mortgagecutter.com',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: `${siteConfig.url}/search?q={search_term_string}`,
+    'query-input': 'required name=search_term_string',
+  },
+};
+
 
 export default function RootLayout({
   children,
@@ -82,6 +104,8 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
       </head>
       <body
         className="font-body antialiased bg-background"

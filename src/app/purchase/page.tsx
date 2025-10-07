@@ -14,6 +14,25 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Lock } from 'lucide-react';
 
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  'itemListElement': [
+    {
+      '@type': 'ListItem',
+      'position': 1,
+      'name': 'Home',
+      'item': 'https://mortgagecutter.com'
+    },
+    {
+      '@type': 'ListItem',
+      'position': 2,
+      'name': 'Purchase'
+    }
+  ]
+};
+
+
 export default function PurchasePage() {
   const router = useRouter();
 
@@ -23,6 +42,8 @@ export default function PurchasePage() {
   };
 
   return (
+    <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
     <div className="container mx-auto py-12 px-4">
       <Card className="max-w-lg mx-auto shadow-lg">
         <CardHeader className="text-center">
@@ -72,5 +93,6 @@ export default function PurchasePage() {
         </form>
       </Card>
     </div>
+    </>
   );
 }
