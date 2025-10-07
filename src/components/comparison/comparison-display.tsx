@@ -4,165 +4,157 @@
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState, useMemo } from 'react';
-import { calculateMortgage } from '@/lib/mortgage';
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
   DollarSign,
   Calendar,
-  Clock,
-  Heart,
+  Sparkles,
+  TrendingUp,
+  TrendingDown,
   Info,
+  Loader2,
+  AlertCircle
 } from 'lucide-react';
-import {
-  ChartConfig,
-} from '@/components/ui/chart';
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  ResponsiveContainer,
-  Tooltip,
-} from 'recharts';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import type { EstimatorInput, EstimatorOutput, RunResult } from '@/lib/mortgage-types';
+import { getSavingsReport } from '@/app/actions';
+import { cn } from '@/lib/utils';
 
 
-const chartConfig = {
-  traditional: {
-    label: 'Traditional',
-    color: 'hsl(var(--muted-foreground))',
-  },
-  cutter: {
-    label: 'Mortgage Cutter',
-    color: 'hsl(var(--primary))',
-  },
-} satisfies ChartConfig;
+const currencyFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+});
 
-const StatCard = ({
+function StatCard({
   icon: Icon,
   label,
   value,
-  colorClass,
-  isPrimary,
+  color,
 }: {
   icon: React.ElementType;
   label: string;
-  value: string;
-  colorClass: string;
-  isPrimary?: boolean;
-}) => (
-  <div className={`p-4 rounded-lg flex items-center gap-4 ${isPrimary ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}>
-    <div className={`p-3 rounded-full ${colorClass}`}>
-      <Icon className={`h-6 w-6 ${isPrimary ? 'text-primary' : 'text-white'}`} />
+  value: string | number;
+  color?: string;
+}) {
+  return (
+    <div className="flex items-start gap-4 rounded-lg bg-secondary p-4">
+      <div className="rounded-full bg-primary/10 p-3">
+        <Icon className={cn('h-6 w-6', color || 'text-primary')} />
+      </div>
+      <div>
+        <div className="text-sm text-muted-foreground">{label}</div>
+        <div className="text-2xl font-bold">{value}</div>
+      </div>
     </div>
-    <div>
-      <p className={`text-sm ${isPrimary ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>{label}</p>
-      <p className="text-2xl font-bold">{value}</p>
-    </div>
-  </div>
-);
+  );
+}
 
 export function ComparisonDisplay() {
   const searchParams = useSearchParams();
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<EstimatorOutput | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [activeScenario, setActiveScenario] = useState<'optimistic' | 'base' | 'pessimistic'>('base');
 
   useEffect(() => {
-    const balance = parseFloat(
-      searchParams.get('currentMortgageBalance') || '0'
-    );
-    const rate = parseFloat(searchParams.get('currentInterestRate') || '0') / 100;
-    const payment = parseFloat(
-      searchParams.get('monthlyMortgagePayment') || '0'
-    );
-    const monthlyIncome = parseFloat(searchParams.get('monthlyIncome') || '0');
-    // The expenses from the querystring do NOT include the mortgage payment.
-    const monthlyExpenses = parseFloat(searchParams.get('monthlyExpenses') || '0');
-    const report = searchParams.get('report') || '';
-    
-    // For the HELOC calculation, total expenses must include the mortgage payment.
-    const totalMonthlyExpenses = monthlyExpenses + payment;
+    const params = Object.fromEntries(searchParams.entries());
+    const input: EstimatorInput = {
+      country: params.country as "US" | "CA",
+      homeValue: parseFloat(params.homeValue),
+      currentLoanBalance: parseFloat(params.currentLoanBalance),
+      currentRateAPR: parseFloat(params.currentRateAPR) / 100,
+      currentTermMonthsRemaining: parseInt(params.currentTermMonthsRemaining),
+      grossMonthlyIncome: parseFloat(params.grossMonthlyIncome),
+      monthlySpendLow: parseFloat(params.monthlySpendLow),
+      monthlySpendMid: parseFloat(params.monthlySpendMid),
+      monthlySpendHigh: parseFloat(params.monthlySpendHigh),
+      helocRateAPR: parseFloat(params.helocRateAPR) / 100,
+      drawYears: 10, 
+      repaymentYears: 20,
+      requestedCombinedLTV: 0.8,
+      requestedRevolvingLTV: 0.65,
+      closingCostsEstimate: 0,
+      maxMonths: 480,
+    };
 
-    if (balance && rate && payment && monthlyIncome && totalMonthlyExpenses) {
-      const traditional = calculateMortgage({
-        balance,
-        annualRate: rate,
-        monthlyPayment: payment,
-        method: 'traditional',
-      });
-      
-      const cutter = calculateMortgage({
-        balance,
-        annualRate: rate,
-        monthlyPayment: payment,
-        method: 'heloc',
-        monthlyIncome,
-        monthlyExpenses: totalMonthlyExpenses, // Use the corrected total expenses
-      });
-
-      const yearsFaster = traditional.remainingYears - cutter.remainingYears;
-      const interestSaved = traditional.totalInterest - cutter.totalInterest;
-
-      const maxMonths = Math.ceil(Math.max(traditional.amortization.length > 0 ? traditional.amortization[traditional.amortization.length - 1].month : 0, cutter.amortization.length > 0 ? cutter.amortization[cutter.amortization.length - 1].month: 0));
-      const chartData = Array.from({ length: maxMonths + 1 }, (_, i) => {
-        const month = i;
-        const traditionalPoint = traditional.amortization.find(p => p.month === month);
-        const cutterPoint = cutter.amortization.find(p => p.month === month);
-
-        return {
-          month: month,
-          Traditional: traditionalPoint ? traditionalPoint.balance : null,
-          'Mortgage Cutter': cutterPoint ? cutterPoint.balance : null,
+    const runCalculation = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const result = await getSavingsReport(input);
+        if (result.success) {
+          setData(result.report);
+        } else {
+          setError(result.error);
         }
-      }).filter(p => p.month % 12 === 0 || p.Traditional === 0 || p['Mortgage Cutter'] === 0 || p.month === maxMonths);
-      
-      const today = new Date();
-      const traditionalPayoffDate = new Date(today.getFullYear() + Math.floor(traditional.remainingYears), today.getMonth() + Math.round((traditional.remainingYears % 1) * 12), today.getDate());
-      const cutterPayoffDate = new Date(today.getFullYear() + Math.floor(cutter.remainingYears), today.getMonth() + Math.round((cutter.remainingYears % 1) * 12), today.getDate());
+      } catch (e) {
+        setError(e instanceof Error ? e.message : 'An unexpected error occurred.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-      setData({
-        traditional: {
-          ...traditional,
-          payoffDate: traditionalPayoffDate,
-        },
-        cutter: {
-          ...cutter,
-          yearsFaster,
-          interestSaved,
-          payoffDate: cutterPayoffDate,
-        },
-        chartData,
-        report,
-      });
-    }
+    runCalculation();
   }, [searchParams]);
 
-  const currencyFormatter = useMemo(() => new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }), []);
+  const activeHelocResult = useMemo(() => {
+    if (!data) return null;
+    return data.heloc[activeScenario];
+  }, [data, activeScenario]);
 
-  const dateFormatter = useMemo(() => new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'long',
-  }), []);
+  if (isLoading) {
+    return (
+      <div className="flex flex-col justify-center items-center min-h-[calc(100vh-200px)]">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <p className="mt-4 text-lg text-muted-foreground">
+          Building your savings blueprint...
+        </p>
+      </div>
+    );
+  }
 
-  if (!data) {
-    return <div className="text-center py-20">Invalid data provided. Please ensure all fields are filled out correctly.</div>;
+  if (error) {
+    return (
+       <Alert variant="destructive" className="container max-w-2xl my-12">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Calculation Error</AlertTitle>
+          <AlertDescription>
+            <p>We couldn't generate your savings report. Here's the error message:</p>
+            <pre className="mt-2 text-xs bg-muted/50 p-2 rounded">{error}</pre>
+            <Button asChild variant="secondary" size="sm" className="mt-4">
+              <Link href="/questionnaire">Go Back and Try Again</Link>
+            </Button>
+          </AlertDescription>
+        </Alert>
+    );
+  }
+
+  if (!data || !activeHelocResult) {
+    return null;
   }
   
-  const yearsSaved = Math.floor(data.cutter.yearsFaster);
-  const monthsSaved = Math.round((data.cutter.yearsFaster - yearsSaved) * 12);
+  const yearsSaved = Math.floor((data.mortgage.monthsToZero - activeHelocResult.monthsToZero) / 12);
+  const monthsSaved = (data.mortgage.monthsToZero - activeHelocResult.monthsToZero) % 12;
+  const interestSaved = data.mortgage.totalInterest - activeHelocResult.totalInterest;
+
+  const scenarioConfig = {
+    optimistic: { label: 'Optimistic', color: 'text-green-500', icon: TrendingUp },
+    base: { label: 'Base', color: 'text-primary', icon: TrendingUp },
+    pessimistic: { label: 'Pessimistic', color: 'text-amber-500', icon: TrendingDown },
+  };
 
   return (
     <div className="container mx-auto py-12 px-4">
@@ -171,108 +163,97 @@ export function ComparisonDisplay() {
           Your Personalized Savings Blueprint
         </h1>
         <p className="text-xl text-muted-foreground mt-2 max-w-3xl mx-auto">
-          Here’s a clear comparison showing how the Mortgage Cutter Method accelerates your journey to financial freedom.
+          Here’s how the Mortgage Cutter Method can accelerate your journey to financial freedom based on your spending habits.
         </p>
       </header>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-         <StatCard
-            icon={Clock}
-            label="Years Paid Off Faster"
-            value={`${yearsSaved} Years, ${monthsSaved} Months`}
-            colorClass="bg-accent/20"
-            isPrimary={true}
-          />
-          <StatCard
-            icon={Heart}
-            label="Total Interest Saved"
-            value={currencyFormatter.format(data.cutter.interestSaved)}
-            colorClass="bg-accent/20"
-            isPrimary={true}
-          />
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+        <StatCard 
+          icon={Calendar} 
+          label="Paid Off Faster" 
+          value={`${yearsSaved} Years, ${monthsSaved} Months`}
+          color={scenarioConfig[activeScenario].color}
+        />
+        <StatCard 
+          icon={Sparkles} 
+          label="Total Interest Saved" 
+          value={currencyFormatter.format(interestSaved)}
+          color={scenarioConfig[activeScenario].color}
+        />
       </div>
 
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle>Side-by-Side Comparison</CardTitle>
-          <CardDescription>See the powerful difference the Mortgage Cutter Method can make.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="font-bold">Metric</TableHead>
-                <TableHead className="text-center font-bold">Your Current Mortgage</TableHead>
-                <TableHead className="text-center font-bold text-primary">Mortgage Cutter Method</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell className="font-medium flex items-center gap-2"><Calendar /> Payoff Date</TableCell>
-                <TableCell className="text-center">{dateFormatter.format(data.traditional.payoffDate)}</TableCell>
-                <TableCell className="text-center font-semibold text-primary">{dateFormatter.format(data.cutter.payoffDate)}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium flex items-center gap-2"><Clock /> Remaining Time</TableCell>
-                <TableCell className="text-center">{data.traditional.remainingYears.toFixed(1)} Years</TableCell>
-                <TableCell className="text-center font-semibold text-primary">{data.cutter.remainingYears.toFixed(1)} Years</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium flex items-center gap-2"><DollarSign /> Total Future Interest</TableCell>
-                <TableCell className="text-center">{currencyFormatter.format(data.traditional.totalInterest)}</TableCell>
-                <TableCell className="text-center font-semibold text-primary">{currencyFormatter.format(data.cutter.totalInterest)}</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
 
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>Status Quo: Traditional Mortgage</CardTitle>
+            <CardDescription>Your current path without any changes.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableBody>
+                <TableRow>
+                  <TableCell className="font-medium">Months to Payoff</TableCell>
+                  <TableCell className="text-right font-mono">{data.mortgage.monthsToZero}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className="font-medium">Total Interest Paid</TableCell>
+                  <TableCell className="text-right font-mono">{currencyFormatter.format(data.mortgage.totalInterest)}</TableCell>
+                </TableRow>
+                 <TableRow>
+                  <TableCell className="font-medium">Monthly P&amp;I Payment</TableCell>
+                  <TableCell className="text-right font-mono">{currencyFormatter.format(data.assumptions.sameMonthlyOutlayAsMortgage)}</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+        
+        <Card className="border-2 border-primary shadow-lg">
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle className="text-primary">HELOC / Mortgage Cutter Method</CardTitle>
+            </div>
+            <CardDescription>Your accelerated path to being debt-free.</CardDescription>
+            <div className="flex gap-2 pt-2">
+              {(['optimistic', 'base', 'pessimistic'] as const).map(scenario => (
+                <Button key={scenario} variant={activeScenario === scenario ? "default" : "outline"} size="sm" onClick={() => setActiveScenario(scenario)}>
+                  {scenarioConfig[scenario].label}
+                </Button>
+              ))}
+            </div>
+          </CardHeader>
+          <CardContent>
+             <Table>
+              <TableBody>
+                <TableRow>
+                  <TableCell className="font-medium">Months to Payoff</TableCell>
+                  <TableCell className="text-right font-mono">{activeHelocResult.monthsToZero}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className="font-medium">Total Interest Paid</TableCell>
+                  <TableCell className="text-right font-mono">{currencyFormatter.format(activeHelocResult.totalInterest)}</TableCell>
+                </TableRow>
+                 <TableRow>
+                  <TableCell className="font-medium">Avg. Monthly Payment</TableCell>
+                  <TableCell className="text-right font-mono">{currencyFormatter.format(activeHelocResult.avgMonthlyPayment)}</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
 
-      <Card className="mt-8">
-        <CardHeader>
-          <CardTitle>Loan Balance Over Time</CardTitle>
-          <CardDescription>This chart illustrates how quickly your mortgage balance could drop.</CardDescription>
-        </CardHeader>
-        <CardContent className="h-[300px] lg:h-[400px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={data.chartData} margin={{ top: 10, right: 30, left: 20, bottom: 20 }}>
-              <defs>
-                <linearGradient id="colorCutter" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.8}/>
-                  <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
-                </linearGradient>
-                <linearGradient id="colorTraditional" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="hsl(var(--muted-foreground))" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="hsl(var(--muted-foreground))" stopOpacity={0}/>
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" tickFormatter={(tick) => `Year ${(tick / 12).toFixed(0)}`} label={{ value: 'Years', position: 'insideBottom', offset: -15 }} />
-              <YAxis tickFormatter={(tick) => currencyFormatter.format(tick)} />
-              <Tooltip
-                content={({ active, payload, label }) =>
-                  active && payload && payload.length ? (
-                    <div className="rounded-lg border bg-background p-2 shadow-sm">
-                      <p className="text-sm font-bold">Year {(label / 12).toFixed(1)}</p>
-                      {payload.map((p, i) => <p key={i} style={{color: p.color}}>{`${p.name}: ${currencyFormatter.format(p.value as number)}`}</p>)}
-                    </div>
-                  ) : null
-                }
-              />
-              <Area type="monotone" dataKey="Traditional" stroke={chartConfig.traditional.color} fillOpacity={1} fill="url(#colorTraditional)" />
-              <Area type="monotone" dataKey="Mortgage Cutter" stroke={chartConfig.cutter.color} fillOpacity={1} fill="url(#colorCutter)" />
-            </AreaChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
-      
-      {data.report && (
-         <Alert className="mt-8 border-primary/50">
+       <Alert className="mt-8 border-primary/50">
            <Info className="h-4 w-4" />
-           <AlertTitle className="font-bold">Your Personalized AI Savings Report</AlertTitle>
-           <AlertDescription className="whitespace-pre-wrap">{data.report}</AlertDescription>
-         </Alert>
-      )}
+           <AlertTitle className="font-bold">Assumptions & Notes</AlertTitle>
+           <AlertDescription>
+             <ul className="list-disc list-inside space-y-1 mt-2 text-xs">
+                {data.assumptions.notes.map((note, i) => <li key={i}>{note}</li>)}
+                <li>Estimates are for educational purposes and are not a guarantee of savings or loan approval.</li>
+             </ul>
+           </AlertDescription>
+       </Alert>
 
       <Card className="mt-8 text-center bg-gradient-to-r from-primary to-accent text-primary-foreground p-8 shadow-2xl">
         <CardHeader>
