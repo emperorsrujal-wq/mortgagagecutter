@@ -36,46 +36,6 @@ export default function Home() {
             <HeroForm />
           </div>
         </section>
-
-        {/* How It Works Section */}
-        <section className="py-16 md:py-24 bg-background">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              A Simpler Path to Financial Freedom
-            </h2>
-            <p className="max-w-3xl mx-auto text-lg text-muted-foreground mb-12">
-              Our estimator shows you how to use a simple home equity strategy to potentially save thousands and cut years off your loan.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-              <div className="flex flex-col items-center text-center p-6 border rounded-lg shadow-sm">
-                <Calculator className="h-12 w-12 text-primary mb-4" />
-                <h3 className="text-xl font-semibold mb-2">1. Enter Your Details</h3>
-                <p className="text-muted-foreground">
-                  Provide your current mortgage, debts, and cash flow information in our free HELOC calculator.
-                </p>
-              </div>
-              <div className="flex flex-col items-center text-center p-6 border rounded-lg shadow-sm">
-                <Landmark className="h-12 w-12 text-primary mb-4" />
-                <h3 className="text-xl font-semibold mb-2">2. See the Comparison</h3>
-                <p className="text-muted-foreground">
-                  Our mortgage payoff estimator compares your current timeline to the Mortgage Cutter method side-by-side.
-                </p>
-              </div>
-              <div className="flex flex-col items-center text-center p-6 border rounded-lg shadow-sm">
-                <ShieldCheck className="h-12 w-12 text-primary mb-4" />
-                <h3 className="text-xl font-semibold mb-2">3. Unlock Your Plan</h3>
-                <p className="text-muted-foreground">
-                  Get a personalized blueprint illustrating your potential savings in interest and time.
-                </p>
-              </div>
-            </div>
-             <div className="mt-12">
-              <Button asChild size="lg">
-                <Link href="/questionnaire">Get Started Now</Link>
-              </Button>
-            </div>
-          </div>
-        </section>
       </div>
     </>
   );
