@@ -4,19 +4,10 @@ import {
   GoogleAuthProvider,
   OAuthProvider,
   signInWithPopup,
-  signOut,
 } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { useAuth, useUser } from '@/firebase';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { useRouter } from 'next/navigation';
 
 const GoogleIcon = () => (
   <svg className="h-5 w-5" viewBox="0 0 24 24">
@@ -50,7 +41,14 @@ const AppleIcon = () => (
 
 export function AuthButtons() {
   const auth = useAuth();
-  const { user, isUserLoading } = useUser();
+  const { user } = useUser();
+  const router = useRouter();
+
+  if (user) {
+    // Redirect if user is already signed in
+    router.push('/questionnaire');
+    return null;
+  }
 
   const handleSignIn = async (provider: 'google' | 'apple') => {
     const authProvider =
@@ -59,67 +57,29 @@ export function AuthButtons() {
         : new OAuthProvider('apple.com');
     try {
       await signInWithPopup(auth, authProvider);
+      router.push('/questionnaire');
     } catch (error) {
       console.error(`Error signing in with ${provider}`, error);
     }
   };
 
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      console.error('Error signing out', error);
-    }
-  };
-
-  if (isUserLoading) {
-    return <div className="h-9 w-24 animate-pulse rounded-md bg-muted" />;
-  }
-
-  if (user) {
-    return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={user.photoURL ?? ''} alt={user.displayName ?? ''} />
-              <AvatarFallback>
-                {user.displayName
-                  ? user.displayName.charAt(0)
-                  : user.email?.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56" align="end" forceMount>
-          <DropdownMenuLabel className="font-normal">
-            <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none">
-                {user.displayName}
-              </p>
-              <p className="text-xs leading-none text-muted-foreground">
-                {user.email}
-              </p>
-            </div>
-          </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleSignOut}>
-            Log out
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    );
-  }
-
   return (
-    <div className="flex items-center gap-2">
-      <Button variant="outline" onClick={() => handleSignIn('google')}>
+    <div className="flex flex-col sm:flex-row items-center gap-2">
+      <Button
+        variant="outline"
+        className="w-full"
+        onClick={() => handleSignIn('google')}
+      >
         <GoogleIcon />
-        <span className="ml-2 hidden sm:inline">Sign in with Google</span>
+        <span className="ml-2">Sign in with Google</span>
       </Button>
-      <Button variant="outline" onClick={() => handleSignIn('apple')}>
+      <Button
+        variant="outline"
+        className="w-full"
+        onClick={() => handleSignIn('apple')}
+      >
         <AppleIcon />
-         <span className="ml-2 hidden sm:inline">Sign in with Apple</span>
+        <span className="ml-2">Sign in with Apple</span>
       </Button>
     </div>
   );
