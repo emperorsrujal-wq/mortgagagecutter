@@ -68,6 +68,8 @@ export function QuestionnaireForm() {
     const apiValues = {
       ...values,
       currentInterestRate: values.currentInterestRate / 100,
+      // The AI prompt expects monthlyExpenses to include the mortgage payment.
+      monthlyExpenses: values.monthlyExpenses + values.monthlyMortgagePayment,
     };
     const result = await getSavingsReport(apiValues);
     setIsSubmitting(false);
@@ -205,9 +207,9 @@ export function QuestionnaireForm() {
           name="monthlyExpenses"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Total Monthly Expenses ($)</FormLabel>
+              <FormLabel>Total Monthly Expenses (excluding mortgage) ($)</FormLabel>
               <FormControl>
-                <Input type="number" step="any" placeholder="4500" {...field} />
+                <Input type="number" step="any" placeholder="2500" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

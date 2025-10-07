@@ -84,8 +84,12 @@ export function ComparisonDisplay() {
       searchParams.get('monthlyMortgagePayment') || '0'
     );
     const monthlyIncome = parseFloat(searchParams.get('monthlyIncome') || '0');
+    // The expenses from the querystring do NOT include the mortgage payment.
     const monthlyExpenses = parseFloat(searchParams.get('monthlyExpenses') || '0');
     const report = searchParams.get('report') || '';
+    
+    // For the HELOC calculation, total expenses must include the mortgage payment.
+    const totalMonthlyExpenses = monthlyExpenses + payment;
 
     if (balance && rate && payment && monthlyIncome && monthlyExpenses) {
       const traditional = calculateMortgage({
@@ -101,7 +105,7 @@ export function ComparisonDisplay() {
         monthlyPayment: payment,
         method: 'heloc',
         monthlyIncome,
-        monthlyExpenses,
+        monthlyExpenses: totalMonthlyExpenses, // Use the corrected total expenses
       });
 
       const yearsFaster = traditional.remainingYears - cutter.remainingYears;
