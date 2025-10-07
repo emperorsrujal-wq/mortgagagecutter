@@ -168,7 +168,7 @@ export default function LearnPage() {
                 <Link href="/questionnaire">Use the Mortgage Payoff Calculator</Link>
               </Button>
               <Button asChild variant="outline" size="lg">
-                <Link href="#">Learn About HELOCs vs. Mortgages</Link>
+                <Link href="/learn">Learn About HELOCs vs. Mortgages</Link>
               </Button>
               <Button asChild variant="outline" size="lg">
                 <Link href="#">Understand Daily Interest</Link>
