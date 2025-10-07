@@ -3,6 +3,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
+import { FirebaseClientProvider } from '@/firebase/client-provider';
 
 export const metadata: Metadata = {
   title: 'Mortgage Freedom Accelerator',
@@ -29,12 +30,14 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased bg-background" suppressHydrationWarning={true}>
-        <div className="flex flex-col min-h-screen">
-          <Header />
-          <main className="flex-1 flex flex-col">{children}</main>
-          <Footer />
-        </div>
-        <Toaster />
+        <FirebaseClientProvider>
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-1 flex flex-col">{children}</main>
+            <Footer />
+          </div>
+          <Toaster />
+        </FirebaseClientProvider>
       </body>
     </html>
   );

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { AuthButtons } from '@/components/auth/auth-buttons';
 
 export default function Header() {
   return (
@@ -12,20 +13,23 @@ export default function Header() {
             MORTGAGE CUTTER
           </span>
         </Link>
-        <nav className="hidden md:flex items-center gap-2">
-          <Button variant="ghost" asChild>
-            <Link href="/">Home</Link>
-          </Button>
-          <Button variant="ghost" asChild>
-            <Link href="#">About</Link>
-          </Button>
-          <Button variant="ghost" asChild>
-            <Link href="#">Benefits</Link>
-          </Button>
-          <Button variant="ghost" asChild>
-            <Link href="#">Contact</Link>
-          </Button>
-        </nav>
+        <div className="flex items-center gap-4">
+          <nav className="hidden md:flex items-center gap-2">
+            <Button variant="ghost" asChild>
+              <Link href="/">Home</Link>
+            </Button>
+            <Button variant="ghost" asChild>
+              <Link href="#">About</Link>
+            </Button>
+            <Button variant="ghost" asChild>
+              <Link href="#">Benefits</Link>
+            </Button>
+            <Button variant="ghost" asChild>
+              <Link href="#">Contact</Link>
+            </Button>
+          </nav>
+          <AuthButtons />
+        </div>
       </div>
     </header>
   );
