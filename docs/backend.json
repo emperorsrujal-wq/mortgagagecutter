@@ -1,0 +1,309 @@
+{
+  "entities": {
+    "Lead": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Lead",
+      "type": "object",
+      "description": "Represents a potential customer who has submitted their information.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the lead."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the lead."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the lead.",
+          "format": "email"
+        },
+        "submissionDate": {
+          "type": "string",
+          "description": "Date and time the lead information was submitted.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "email",
+        "submissionDate"
+      ]
+    },
+    "MortgageQuestionnaireResponse": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "MortgageQuestionnaireResponse",
+      "type": "object",
+      "description": "Represents a user's response to the mortgage questionnaire.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the questionnaire response."
+        },
+        "leadId": {
+          "type": "string",
+          "description": "Reference to the Lead who submitted the questionnaire. (Relationship: Lead 1:1 MortgageQuestionnaireResponse)"
+        },
+        "currentMortgageBalance": {
+          "type": "number",
+          "description": "The user's current mortgage balance."
+        },
+        "currentInterestRate": {
+          "type": "number",
+          "description": "The user's current interest rate."
+        },
+        "originalLoanAmount": {
+          "type": "number",
+          "description": "The original loan amount."
+        },
+        "loanTerm": {
+          "type": "number",
+          "description": "The loan term in years."
+        },
+        "monthlyMortgagePayment": {
+          "type": "number",
+          "description": "The user's monthly mortgage payment (principal & interest)."
+        },
+        "yearsInHome": {
+          "type": "number",
+          "description": "Number of years the user has been in their home."
+        },
+        "estimatedHomeValue": {
+          "type": "number",
+          "description": "Estimated home value (optional)."
+        }
+      },
+      "required": [
+        "id",
+        "leadId",
+        "currentMortgageBalance",
+        "currentInterestRate",
+        "originalLoanAmount",
+        "loanTerm",
+        "monthlyMortgagePayment",
+        "yearsInHome"
+      ]
+    },
+    "Purchase": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Purchase",
+      "type": "object",
+      "description": "Represents a purchase of the Mortgage Cutter method.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the purchase."
+        },
+        "leadId": {
+          "type": "string",
+          "description": "Reference to the Lead who made the purchase. (Relationship: Lead 1:1 Purchase)"
+        },
+        "purchaseDate": {
+          "type": "string",
+          "description": "Date and time of the purchase.",
+          "format": "date-time"
+        },
+        "amount": {
+          "type": "number",
+          "description": "The amount paid for the method (e.g., 79.00)."
+        },
+        "paymentMethod": {
+          "type": "string",
+          "description": "The payment method used (e.g., credit card, PayPal)."
+        }
+      },
+      "required": [
+        "id",
+        "leadId",
+        "purchaseDate",
+        "amount",
+        "paymentMethod"
+      ]
+    },
+    "SavingsReport": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "SavingsReport",
+      "type": "object",
+      "description": "Represents the personalized savings report generated for a user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the savings report."
+        },
+        "leadId": {
+          "type": "string",
+          "description": "Reference to the Lead who received the savings report. (Relationship: Lead 1:1 SavingsReport)"
+        },
+        "traditionalInterestPaid": {
+          "type": "number",
+          "description": "Estimated total interest paid with a traditional mortgage."
+        },
+        "mortgageCutterInterestPaid": {
+          "type": "number",
+          "description": "Estimated total interest paid using the Mortgage Cutter Method."
+        },
+        "yearsToPayOffTraditional": {
+          "type": "number",
+          "description": "Number of years to pay off the mortgage traditionally."
+        },
+        "yearsToPayOffMortgageCutter": {
+          "type": "number",
+          "description": "Number of years to pay off the mortgage using the Mortgage Cutter Method."
+        },
+        "reportGeneratedDate": {
+          "type": "string",
+          "description": "Date and time the report was generated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "leadId",
+        "traditionalInterestPaid",
+        "mortgageCutterInterestPaid",
+        "yearsToPayOffTraditional",
+        "yearsToPayOffMortgageCutter",
+        "reportGeneratedDate"
+      ]
+    },
+    "UserAuthentication": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserAuthentication",
+      "type": "object",
+      "description": "Stores user authentication information from third-party providers.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user authentication record."
+        },
+        "leadId": {
+          "type": "string",
+          "description": "Reference to the Lead who owns this authentication. (Relationship: Lead 1:1 UserAuthentication)"
+        },
+        "provider": {
+          "type": "string",
+          "description": "The authentication provider (e.g., 'google', 'apple')."
+        },
+        "providerUserId": {
+          "type": "string",
+          "description": "The user ID provided by the authentication provider."
+        }
+      },
+      "required": [
+        "id",
+        "leadId",
+        "provider",
+        "providerUserId"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/leads/{leadId}",
+        "definition": {
+          "entityName": "Lead",
+          "schema": {
+            "$ref": "#/backend/entities/Lead"
+          },
+          "description": "Stores lead information. Uses the lead's unique ID as the document ID.",
+          "params": [
+            {
+              "name": "leadId",
+              "description": "The unique identifier for the lead."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/leads/{leadId}/mortgage_questionnaire_response/{responseId}",
+        "definition": {
+          "entityName": "MortgageQuestionnaireResponse",
+          "schema": {
+            "$ref": "#/backend/entities/MortgageQuestionnaireResponse"
+          },
+          "description": "Stores mortgage questionnaire responses for a given lead. The leadId links back to the Lead. There is a one-to-one relation with leads.",
+          "params": [
+            {
+              "name": "leadId",
+              "description": "The unique identifier for the lead."
+            },
+            {
+              "name": "responseId",
+              "description": "The unique identifier for the mortgage questionnaire response."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/leads/{leadId}/purchases/{purchaseId}",
+        "definition": {
+          "entityName": "Purchase",
+          "schema": {
+            "$ref": "#/backend/entities/Purchase"
+          },
+          "description": "Stores purchase information for a given lead. The leadId links back to the Lead. There is a one-to-one relation with leads.",
+          "params": [
+            {
+              "name": "leadId",
+              "description": "The unique identifier for the lead."
+            },
+            {
+              "name": "purchaseId",
+              "description": "The unique identifier for the purchase."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/leads/{leadId}/savings_reports/{reportId}",
+        "definition": {
+          "entityName": "SavingsReport",
+          "schema": {
+            "$ref": "#/backend/entities/SavingsReport"
+          },
+          "description": "Stores savings reports for a given lead. The leadId links back to the Lead. There is a one-to-one relation with leads.",
+          "params": [
+            {
+              "name": "leadId",
+              "description": "The unique identifier for the lead."
+            },
+            {
+              "name": "reportId",
+              "description": "The unique identifier for the savings report."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/leads/{leadId}/user_authentications/{authId}",
+        "definition": {
+          "entityName": "UserAuthentication",
+          "schema": {
+            "$ref": "#/backend/entities/UserAuthentication"
+          },
+          "description": "Stores user authentication information for a given lead. The leadId links back to the Lead. There is a one-to-one relation with leads.",
+          "params": [
+            {
+              "name": "leadId",
+              "description": "The unique identifier for the lead."
+            },
+            {
+              "name": "authId",
+              "description": "The unique identifier for the user authentication record."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to manage leads, their mortgage questionnaire responses, purchase information, savings reports, and authentication details.  A top-level `leads` collection stores lead information, using the lead's unique ID as the document ID.  Related data (mortgage questionnaire, purchase, savings report, and authentication) are stored in subcollections under each lead, ensuring data locality and simplifying queries.  This structure prioritizes data consistency and ease of management for the application's core entities.\n\n**Authorization Independence:**  Each subcollection implicitly inherits the lead's ownership.  If more complex access control is needed (e.g., sharing a savings report), consider denormalizing a `members` map into the shared documents or creating a separate shared collection and copying the necessary lead data for authorization.\n\n**QAPs:**\n*   **List Leads:** Listing is supported on the top-level `/leads` collection.  Rules can enforce that only admins (if implemented) can list all leads, while individual users can only access their own lead document (based on `request.auth.uid` matching the `leadId` or potentially the document ID). The current setup defaults to a path-based ownership, which limits access to authenticated users. This meets the QAP because we can add security rules to limit the listing of the leads.\n*   **Accessing Related Data:** Access to the mortgage questionnaire, purchase, and savings report is implicitly tied to access to the lead. Rules can enforce that only the lead (or authorized personnel) can access these subcollections.\n*   **Authentication:** The `user_authentications` subcollection stores authentication details. Rules should restrict read and write access to only the lead associated with the authentication record. This prevents unauthorized modification or viewing of authentication data."
+  }
+}
