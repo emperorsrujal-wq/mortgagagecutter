@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -148,6 +149,7 @@ export function QuestionnaireForm() {
                 </FormControl>
                 <SelectContent>
                   <SelectItem value="30">30 years</SelectItem>
+                  <SelectItem value="25">25 years</SelectItem>
                   <SelectItem value="20">20 years</SelectItem>
                   <SelectItem value="15">15 years</SelectItem>
                   <SelectItem value="10">10 years</SelectItem>
