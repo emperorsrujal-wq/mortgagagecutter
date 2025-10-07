@@ -9,10 +9,12 @@ const siteConfig = {
   name: 'Mortgage Cutter',
   url: 'https://mortgagecutter.com',
   description:
-    'Discover how to pay off your mortgage 10+ years sooner with the Mortgage Cutter method. Get a free, personalized savings estimate and accelerate your journey to financial freedom.',
+    'Discover the Mortgage Cutter method to pay off your mortgage 10+ years sooner. Use our free mortgage payoff calculator to get a personalized savings estimate and accelerate your journey to financial freedom.',
   ogImage:
     'https://images.unsplash.com/photo-1555689070-2d15336749b6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxoYXBweSUyMGNvdXBsZXxlbnwwfHx8fDE3NTk1NjI5MTl8MA&ixlib=rb-4.1.0&q=80&w=1080',
   keywords: [
+    'mortgagecutter',
+    'mortgage cutter',
     'pay off mortgage early',
     'mortgage accelerator',
     'HELOC strategy',
@@ -23,14 +25,15 @@ const siteConfig = {
     'mortgage payoff calculator',
     'real estate investing',
     'wealth building',
+    'all-in-one mortgage',
   ],
 };
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} | Pay Off Your Mortgage 10+ Years Sooner`,
-    template: `%s | ${siteConfig.name}`,
+    default: `Mortgage Cutter | Pay Off Your Mortgage 10+ Years Sooner`,
+    template: `%s | Mortgage Cutter`,
   },
   description: siteConfig.description,
   keywords: siteConfig.keywords,
@@ -39,20 +42,20 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: siteConfig.url,
-    title: siteConfig.name,
+    title: `Mortgage Cutter: Pay Off Your Mortgage Faster`,
     description: siteConfig.description,
     images: [
       {
         url: siteConfig.ogImage,
         width: 1200,
         height: 630,
-        alt: 'A happy couple planning their financial future in their home.',
+        alt: 'A happy couple using the Mortgage Cutter method to plan their financial future.',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: siteConfig.name,
+    title: `Mortgage Cutter: Pay Off Your Mortgage Faster`,
     description: siteConfig.description,
     images: [siteConfig.ogImage],
   },
