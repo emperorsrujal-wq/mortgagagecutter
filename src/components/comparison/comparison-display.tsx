@@ -111,21 +111,22 @@ export function ComparisonDisplay() {
       const yearsFaster = traditional.remainingYears - cutter.remainingYears;
       const interestSaved = traditional.totalInterest - cutter.totalInterest;
 
-      const maxMonths = Math.ceil(Math.max(traditional.amortization.length, cutter.amortization.length) / 30 * 12);
-      const chartData = Array.from({ length: maxMonths }, (_, i) => {
-        const year = i / 12;
-        const traditionalPoint = traditional.amortization.find(p => Math.abs(p.month / 12 - year) < 1/12);
-        const cutterPoint = cutter.amortization.find(p => Math.abs(p.month / 12 - year) < 1/12);
+      const maxMonths = Math.ceil(Math.max(traditional.amortization.length > 0 ? traditional.amortization[traditional.amortization.length - 1].month : 0, cutter.amortization.length > 0 ? cutter.amortization[cutter.amortization.length - 1].month: 0));
+      const chartData = Array.from({ length: maxMonths + 1 }, (_, i) => {
+        const month = i;
+        const traditionalPoint = traditional.amortization.find(p => p.month === month);
+        const cutterPoint = cutter.amortization.find(p => p.month === month);
+
         return {
-          month: i,
+          month: month,
           Traditional: traditionalPoint ? traditionalPoint.balance : null,
           'Mortgage Cutter': cutterPoint ? cutterPoint.balance : null,
         }
-      }).filter(p => p.month % 12 === 0 || p.Traditional === 0 || p['Mortgage Cutter'] === 0);
+      }).filter(p => p.month % 12 === 0 || p.Traditional === 0 || p['Mortgage Cutter'] === 0 || p.month === maxMonths);
       
       const today = new Date();
-      const traditionalPayoffDate = new Date(today.getFullYear() + traditional.remainingYears, today.getMonth(), today.getDate());
-      const cutterPayoffDate = new Date(today.getFullYear() + cutter.remainingYears, today.getMonth(), today.getDate());
+      const traditionalPayoffDate = new Date(today.getFullYear() + Math.floor(traditional.remainingYears), today.getMonth() + Math.round((traditional.remainingYears % 1) * 12), today.getDate());
+      const cutterPayoffDate = new Date(today.getFullYear() + Math.floor(cutter.remainingYears), today.getMonth() + Math.round((cutter.remainingYears % 1) * 12), today.getDate());
 
       setData({
         traditional: {

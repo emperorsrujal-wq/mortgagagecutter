@@ -85,13 +85,11 @@ function calculateHeloc(
     { month: 0, balance: balance },
   ];
   
-  // Assume income is received on the 1st of the month
-  // Assume expenses are paid on the last day of the month
+  // Per the document, the HELOC strategy relies on positive cash flow to pay down principal.
   const netMonthlyCashFlow = monthlyIncome - monthlyExpenses;
   
   if (netMonthlyCashFlow <= 0) {
       // If no positive cash flow, it functions like an interest-only loan and will never be paid off.
-      // For simplicity, return a very high number to indicate this.
       return { remainingYears: 99, totalInterest: 9999999, amortization: [] };
   }
 
@@ -100,17 +98,20 @@ function calculateHeloc(
     days++;
     const dayOfMonth = (days -1) % 30 + 1;
     let dailyInterest = currentBalance * dailyRate;
+    totalInterest += dailyInterest;
+    
+    // Apply interest to the balance
+    currentBalance += dailyInterest;
 
+    // On day 1 of the month, deposit income
     if(dayOfMonth === 1){
       currentBalance -= monthlyIncome;
     }
     
+    // On the last day of the month, add expenses back
     if(dayOfMonth === 30){
        currentBalance += monthlyExpenses;
     }
-
-    currentBalance += dailyInterest;
-    totalInterest += dailyInterest;
     
     // Record balance monthly for the chart
     if (days % 30 === 0) {
@@ -118,10 +119,14 @@ function calculateHeloc(
     }
     
     if (currentBalance <= 0) {
+        // If balance is paid off, add final point to amortization and break
+        if(days % 30 !== 0) {
+           amortization.push({ month: Math.ceil(days / 30), balance: 0 });
+        }
         break;
     }
 
-    if (days > 50 * 365) break; // Safety break
+    if (days > 50 * 365) break; // Safety break for infinite loops
   }
 
   return { remainingYears: days / 365, totalInterest, amortization };
