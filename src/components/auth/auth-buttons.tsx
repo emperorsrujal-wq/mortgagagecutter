@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { useAuth, useUser } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
+import { useEffect } from 'react';
 
 const GoogleIcon = () => (
   <svg className="h-5 w-5" viewBox="0 0 24 24">
@@ -47,13 +48,14 @@ export function AuthButtons() {
   const router = useRouter();
   const { toast } = useToast();
 
-  if (user) {
-    // Redirect if user is already signed in
-    router.push('/questionnaire');
-    return null;
-  }
+  useEffect(() => {
+    if (user) {
+      router.push('/questionnaire');
+    }
+  }, [user, router]);
 
   const handleSignIn = async (provider: 'google' | 'apple') => {
+    if (!auth) return;
     const authProvider =
       provider === 'google'
         ? new GoogleAuthProvider()
@@ -79,6 +81,10 @@ export function AuthButtons() {
       }
     }
   };
+  
+  if (user) {
+    return null; // Don't render buttons if user is logged in, useEffect will handle redirect
+  }
 
   return (
     <div className="flex flex-col sm:flex-row items-center gap-2">
