@@ -1,14 +1,14 @@
 
 'use server';
 
-import { calculateSavings } from '@/lib/mortgage';
-import type { EstimatorInput, EstimatorOutput } from '@/lib/mortgage-types';
+import { estimate } from '@/lib/mortgage';
+import type { Inputs, Outputs } from '@/lib/mortgage-types';
 
 export async function getSavingsReport(
-  data: EstimatorInput
-): Promise<{ success: true; report: EstimatorOutput } | { success: false; error: string }> {
+  data: Inputs
+): Promise<{ success: true; report: Outputs } | { success: false; error: string }> {
   try {
-    const result = calculateSavings(data);
+    const result = estimate(data);
     return { success: true, report: result };
   } catch (error) {
     console.error('Error in getSavingsReport:', error);
@@ -16,5 +16,3 @@ export async function getSavingsReport(
     return { success: false, error: `Failed to generate savings report: ${message}` };
   }
 }
-
-    

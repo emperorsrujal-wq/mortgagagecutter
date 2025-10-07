@@ -1,57 +1,34 @@
 
-export type Country = "US" | "CA";
+export type Debt = {
+  id: string;
+  balance: number;
+  rateAPR: number;
+  paymentMonthly: number;
+  kind: 'cc' | 'car' | 'loc' | 'other';
+};
 
-export interface EstimatorInput {
-  country: Country;
+export type Inputs = {
   homeValue: number;
-  currentLoanBalance: number;
-  currentRateAPR: number; // decimal
-  currentTermMonthsRemaining: number;
+  ltvLimit?: number;
+  mortgageBalance: number;
+  mortgageRateAPR: number;
+  amortYearsRemaining: number;
 
-  grossMonthlyIncome: number;
-  monthlySpendLow: number;  // excluding P&I
-  monthlySpendMid: number;
-  monthlySpendHigh: number;
+  debts: Debt[];
+  netMonthlyIncome: number;
+  monthlyExpenses: number;
 
-  helocRateAPR: number; // decimal
-  introRateAPR?: number; // decimal
-  introMonths?: number;
-  
-  drawYears: number;
-  repaymentYears: number;
+  savings: { savings: number; chequing: number; shortTerm: number };
+  helocRateAPR: number;
+  cardOffset?: boolean;
+};
 
-  requestedCombinedLTV: number; // 0..1
-  requestedRevolvingLTV: number; // 0..1
-  closingCostsEstimate: number;
-  monthlyEscrows?: number;
-
-  maxMonths: number;
-}
-
-export interface EstimatorOutput {
-  assumptions: {
-    dailyInterestBasis: 365;
-    sameMonthlyOutlayAsMortgage: number;
-    notes: string[];
-  };
-  mortgage: {
-    monthsToZero: number;
-    totalInterest: number;
-  };
-  heloc: {
-    optimistic: RunResult;
-    base: RunResult;
-    pessimistic: RunResult;
-  };
-}
-
-export interface RunResult {
-  monthsToZero: number;
-  totalInterest: number;
-  peakBalance: number;
-  avgMonthlyPayment: number;
-  introSavings?: number;
-  finalBalance: number;
-}
-
-    
+export type Outputs = {
+  debtFreeMonthsBaseline: number;
+  interestBaseline: number;
+  debtFreeMonthsHeloc: number;
+  interestHeloc: number;
+  interestSaved: number;
+  borrowingRoomAfterSetup: number;
+  series: { month: number; balanceBaseline: number; balanceHeloc: number }[];
+};

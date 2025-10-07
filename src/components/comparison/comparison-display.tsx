@@ -3,7 +3,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, Suspense } from 'react';
 import {
   Card,
   CardContent,
@@ -13,23 +13,28 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import {
   DollarSign,
   Calendar,
   Sparkles,
   TrendingUp,
-  TrendingDown,
   Info,
   Loader2,
-  AlertCircle
+  AlertCircle,
+  PiggyBank,
+  Wallet,
 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import type { EstimatorInput, EstimatorOutput, RunResult } from '@/lib/mortgage-types';
+import type { Inputs, Outputs, Debt } from '@/lib/mortgage-types';
 import { getSavingsReport } from '@/app/actions';
 import { cn } from '@/lib/utils';
-
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '@/components/ui/chart';
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -43,54 +48,129 @@ function StatCard({
   label,
   value,
   color,
+  description,
 }: {
   icon: React.ElementType;
   label: string;
   value: string | number;
   color?: string;
+  description?: string;
 }) {
   return (
-    <div className="flex items-start gap-4 rounded-lg bg-secondary p-4">
+    <div className="flex items-start gap-4 rounded-lg bg-card p-4 shadow-sm border">
       <div className="rounded-full bg-primary/10 p-3">
         <Icon className={cn('h-6 w-6', color || 'text-primary')} />
       </div>
       <div>
         <div className="text-sm text-muted-foreground">{label}</div>
         <div className="text-2xl font-bold">{value}</div>
+        {description && <p className="text-xs text-muted-foreground mt-1">{description}</p>}
       </div>
     </div>
   );
 }
 
-export function ComparisonDisplay() {
+function ComparisonChart({ data }: { data: Outputs['series'] }) {
+    const chartData = useMemo(() => {
+     if (data.length === 0) return [];
+     // only show ~120 points for performance
+     const step = Math.max(1, Math.floor(data.length / 120));
+     return data.filter((_, i) => i % step === 0);
+   }, [data]);
+ 
+   const formatYAxis = (tick: number) => {
+     if (tick >= 1000000) return `${(tick / 1000000).toFixed(1)}M`;
+     if (tick >= 1000) return `${(tick / 1000).toFixed(0)}K`;
+     return tick.toString();
+   };
+
+  const formatTooltip = (value: number) => currencyFormatter.format(value);
+
+  return (
+    <ChartContainer config={{}} className="min-h-[300px] w-full">
+      <AreaChart data={chartData} margin={{ left: 10, right: 10, top: 10, bottom: 10 }}>
+        <defs>
+          <linearGradient id="colorHeloc" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.8} />
+            <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0.1} />
+          </linearGradient>
+          <linearGradient id="colorBaseline" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="hsl(var(--muted-foreground))" stopOpacity={0.5} />
+            <stop offset="95%" stopColor="hsl(var(--muted-foreground))" stopOpacity={0.1} />
+          </linearGradient>
+        </defs>
+        <CartesianGrid vertical={false} strokeDasharray="3 3" />
+        <XAxis
+          dataKey="month"
+          tickFormatter={(tick) => `Yr ${Math.floor(tick / 12)}`}
+          tickLine={false}
+          axisLine={false}
+          interval="preserveStartEnd"
+          minTickGap={50}
+        />
+        <YAxis
+          tickFormatter={formatYAxis}
+          tickLine={false}
+          axisLine={false}
+          width={50}
+        />
+        <ChartTooltip
+          cursor={true}
+          content={
+            <ChartTooltipContent
+              labelFormatter={(label) => `Month: ${label}`}
+              formatter={(value, name) => [
+                formatTooltip(value as number),
+                name === 'balanceHeloc' ? 'HELOC Method' : 'Baseline',
+              ]}
+            />
+          }
+        />
+        <Area
+          type="monotone"
+          dataKey="balanceBaseline"
+          stackId="1"
+          stroke="hsl(var(--muted-foreground))"
+          fill="url(#colorBaseline)"
+          name="Baseline"
+        />
+        <Area
+          type="monotone"
+          dataKey="balanceHeloc"
+          stackId="2"
+          stroke="hsl(var(--primary))"
+          fill="url(#colorHeloc)"
+          name="HELOC Method"
+        />
+      </AreaChart>
+    </ChartContainer>
+  );
+}
+
+
+function InnerComparison() {
   const searchParams = useSearchParams();
-  const [data, setData] = useState<EstimatorOutput | null>(null);
+  const [data, setData] = useState<Outputs | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeScenario, setActiveScenario] = useState<'optimistic' | 'base' | 'pessimistic'>('base');
 
   useEffect(() => {
     const params = Object.fromEntries(searchParams.entries());
-    const input: EstimatorInput = {
-      country: params.country as "US" | "CA",
+    const input: Inputs = {
       homeValue: parseFloat(params.homeValue),
-      currentLoanBalance: parseFloat(params.currentLoanBalance),
-      currentRateAPR: parseFloat(params.currentRateAPR) / 100,
-      currentTermMonthsRemaining: parseInt(params.currentTermMonthsRemaining),
-      grossMonthlyIncome: parseFloat(params.grossMonthlyIncome),
-      monthlySpendLow: parseFloat(params.monthlySpendLow),
-      monthlySpendMid: parseFloat(params.monthlySpendMid),
-      monthlySpendHigh: parseFloat(params.monthlySpendHigh),
-      helocRateAPR: parseFloat(params.helocRateAPR) / 100,
-      drawYears: 10, 
-      repaymentYears: 20,
-      requestedCombinedLTV: 0.8,
-      requestedRevolvingLTV: 0.65,
-      closingCostsEstimate: 0,
-      maxMonths: 480,
+      mortgageBalance: parseFloat(params.mortgageBalance),
+      mortgageRateAPR: parseFloat(params.mortgageRateAPR),
+      amortYearsRemaining: parseInt(params.amortYearsRemaining),
+      netMonthlyIncome: parseFloat(params.netMonthlyIncome),
+      monthlyExpenses: parseFloat(params.monthlyExpenses),
+      debts: params.debts ? JSON.parse(params.debts) : [],
+      savings: params.savings ? JSON.parse(params.savings) : { savings: 0, chequing: 0, shortTerm: 0 },
+      helocRateAPR: parseFloat(params.helocRateAPR),
+      ltvLimit: params.ltvLimit ? parseFloat(params.ltvLimit) : 0.8,
+      cardOffset: params.cardOffset === 'true',
     };
 
-    const runCalculation = async () => {
+    async function runCalculation() {
       setIsLoading(true);
       setError(null);
       try {
@@ -105,56 +185,40 @@ export function ComparisonDisplay() {
       } finally {
         setIsLoading(false);
       }
-    };
+    }
 
     runCalculation();
   }, [searchParams]);
-
-  const activeHelocResult = useMemo(() => {
-    if (!data) return null;
-    return data.heloc[activeScenario];
-  }, [data, activeScenario]);
 
   if (isLoading) {
     return (
       <div className="flex flex-col justify-center items-center min-h-[calc(100vh-200px)]">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        <p className="mt-4 text-lg text-muted-foreground">
-          Building your savings blueprint...
-        </p>
+        <p className="mt-4 text-lg text-muted-foreground">Building your savings blueprint...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-       <Alert variant="destructive" className="container max-w-2xl my-12">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Calculation Error</AlertTitle>
-          <AlertDescription>
-            <p>We couldn't generate your savings report. Here's the error message:</p>
-            <pre className="mt-2 text-xs bg-muted/50 p-2 rounded">{error}</pre>
-            <Button asChild variant="secondary" size="sm" className="mt-4">
-              <Link href="/questionnaire">Go Back and Try Again</Link>
-            </Button>
-          </AlertDescription>
-        </Alert>
+      <Alert variant="destructive" className="container max-w-2xl my-12">
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>Calculation Error</AlertTitle>
+        <AlertDescription>
+          <p>We couldn't generate your savings report. Here's the error message:</p>
+          <pre className="mt-2 text-xs bg-muted/50 p-2 rounded whitespace-pre-wrap">{error}</pre>
+          <Button asChild variant="secondary" size="sm" className="mt-4">
+            <Link href="/questionnaire">Go Back and Try Again</Link>
+          </Button>
+        </AlertDescription>
+      </Alert>
     );
   }
 
-  if (!data || !activeHelocResult) {
-    return null;
-  }
-  
-  const yearsSaved = Math.floor((data.mortgage.monthsToZero - activeHelocResult.monthsToZero) / 12);
-  const monthsSaved = (data.mortgage.monthsToZero - activeHelocResult.monthsToZero) % 12;
-  const interestSaved = data.mortgage.totalInterest - activeHelocResult.totalInterest;
+  if (!data) return null;
 
-  const scenarioConfig = {
-    optimistic: { label: 'Optimistic', color: 'text-green-500', icon: TrendingUp },
-    base: { label: 'Base', color: 'text-primary', icon: TrendingUp },
-    pessimistic: { label: 'Pessimistic', color: 'text-amber-500', icon: TrendingDown },
-  };
+  const yearsSaved = Math.floor((data.debtFreeMonthsBaseline - data.debtFreeMonthsHeloc) / 12);
+  const monthsSaved = (data.debtFreeMonthsBaseline - data.debtFreeMonthsHeloc) % 12;
 
   return (
     <div className="container mx-auto py-12 px-4">
@@ -163,46 +227,59 @@ export function ComparisonDisplay() {
           Your Personalized Savings Blueprint
         </h1>
         <p className="text-xl text-muted-foreground mt-2 max-w-3xl mx-auto">
-          Here’s how the Mortgage Cutter Method can accelerate your journey to financial freedom based on your spending habits.
+          Here’s how the Mortgage Cutter Method can accelerate your journey to financial freedom.
         </p>
       </header>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
         <StatCard 
           icon={Calendar} 
-          label="Paid Off Faster" 
-          value={`${yearsSaved} Years, ${monthsSaved} Months`}
-          color={scenarioConfig[activeScenario].color}
+          label="Debt-Free Sooner" 
+          value={data.debtFreeMonthsBaseline === Infinity ? "Massively" : `${yearsSaved} yrs, ${monthsSaved} mo`}
+          description="Time until all consolidated debt is paid off."
         />
         <StatCard 
           icon={Sparkles} 
           label="Total Interest Saved" 
-          value={currencyFormatter.format(interestSaved)}
-          color={scenarioConfig[activeScenario].color}
+          value={data.interestSaved === Infinity ? "Potentially Unlimited" : currencyFormatter.format(data.interestSaved)}
+          description="The extra money that stays in your pocket."
+        />
+        <StatCard 
+          icon={Wallet} 
+          label="Borrowing Room" 
+          value={currencyFormatter.format(data.borrowingRoomAfterSetup)}
+          description="Initial available credit in your HELOC after setup."
+          color="text-green-500"
         />
       </div>
+
+      <Card className="mb-8">
+        <CardHeader>
+            <CardTitle>Debt Payoff Timeline</CardTitle>
+            <CardDescription>Visualizing your journey to zero debt: Baseline vs. HELOC Method.</CardDescription>
+        </CardHeader>
+        <CardContent>
+            {data.series.length > 0 ? <ComparisonChart data={data.series} /> : <p>Could not generate chart data.</p>}
+        </CardContent>
+      </Card>
 
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <Card>
           <CardHeader>
-            <CardTitle>Status Quo: Traditional Mortgage</CardTitle>
+            <CardTitle>Status Quo: Traditional Payments</CardTitle>
             <CardDescription>Your current path without any changes.</CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
               <TableBody>
                 <TableRow>
-                  <TableCell className="font-medium">Months to Payoff</TableCell>
-                  <TableCell className="text-right font-mono">{data.mortgage.monthsToZero}</TableCell>
+                  <TableCell className="font-medium">Debt-Free In</TableCell>
+                  <TableCell className="text-right font-mono">{data.debtFreeMonthsBaseline === Infinity ? 'Never' : `${Math.floor(data.debtFreeMonthsBaseline / 12)} yrs ${data.debtFreeMonthsBaseline % 12} mo`}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell className="font-medium">Total Interest Paid</TableCell>
-                  <TableCell className="text-right font-mono">{currencyFormatter.format(data.mortgage.totalInterest)}</TableCell>
-                </TableRow>
-                 <TableRow>
-                  <TableCell className="font-medium">Monthly P&amp;I Payment</TableCell>
-                  <TableCell className="text-right font-mono">{currencyFormatter.format(data.assumptions.sameMonthlyOutlayAsMortgage)}</TableCell>
+                  <TableCell className="text-right font-mono">{data.interestBaseline === Infinity ? 'Infinite' : currencyFormatter.format(data.interestBaseline)}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
@@ -211,32 +288,19 @@ export function ComparisonDisplay() {
         
         <Card className="border-2 border-primary shadow-lg">
           <CardHeader>
-            <div className="flex justify-between items-center">
-              <CardTitle className="text-primary">HELOC / Mortgage Cutter Method</CardTitle>
-            </div>
-            <CardDescription>Your accelerated path to being debt-free.</CardDescription>
-            <div className="flex gap-2 pt-2">
-              {(['optimistic', 'base', 'pessimistic'] as const).map(scenario => (
-                <Button key={scenario} variant={activeScenario === scenario ? "default" : "outline"} size="sm" onClick={() => setActiveScenario(scenario)}>
-                  {scenarioConfig[scenario].label}
-                </Button>
-              ))}
-            </div>
+            <CardTitle className="text-primary">The Mortgage Cutter Method</CardTitle>
+            <CardDescription>Your accelerated path using a HELOC.</CardDescription>
           </CardHeader>
           <CardContent>
              <Table>
               <TableBody>
                 <TableRow>
-                  <TableCell className="font-medium">Months to Payoff</TableCell>
-                  <TableCell className="text-right font-mono">{activeHelocResult.monthsToZero}</TableCell>
+                  <TableCell className="font-medium">Debt-Free In</TableCell>
+                  <TableCell className="text-right font-mono">{data.debtFreeMonthsHeloc === Infinity ? 'Never' : `${Math.floor(data.debtFreeMonthsHeloc / 12)} yrs ${data.debtFreeMonthsHeloc % 12} mo`}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell className="font-medium">Total Interest Paid</TableCell>
-                  <TableCell className="text-right font-mono">{currencyFormatter.format(activeHelocResult.totalInterest)}</TableCell>
-                </TableRow>
-                 <TableRow>
-                  <TableCell className="font-medium">Avg. Monthly Payment</TableCell>
-                  <TableCell className="text-right font-mono">{currencyFormatter.format(activeHelocResult.avgMonthlyPayment)}</TableCell>
+                  <TableCell className="text-right font-mono">{data.interestHeloc === Infinity ? 'Infinite' : currencyFormatter.format(data.interestHeloc)}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
@@ -246,12 +310,9 @@ export function ComparisonDisplay() {
 
        <Alert className="mt-8 border-primary/50">
            <Info className="h-4 w-4" />
-           <AlertTitle className="font-bold">Assumptions & Notes</AlertTitle>
-           <AlertDescription>
-             <ul className="list-disc list-inside space-y-1 mt-2 text-xs">
-                {data.assumptions.notes.map((note, i) => <li key={i}>{note}</li>)}
-                <li>Estimates are for educational purposes and are not a guarantee of savings or loan approval.</li>
-             </ul>
+           <AlertTitle className="font-bold">Assumptions & Disclaimers</AlertTitle>
+           <AlertDescription className="text-xs mt-2">
+            Estimates are for educational purposes and are not a guarantee of savings or loan approval. All debts are assumed to be consolidated into the HELOC. The calculation does not include bank fees, closing costs, or property taxes/insurance. Results depend on your actual income, spending, and final lender terms.
            </AlertDescription>
        </Alert>
 
@@ -271,4 +332,12 @@ export function ComparisonDisplay() {
       </Card>
     </div>
   );
+}
+
+export function ComparisonDisplay() {
+  return (
+    <Suspense fallback={<Loader2 className="h-12 w-12 animate-spin text-primary self-center mt-24" />}>
+      <InnerComparison />
+    </Suspense>
+  )
 }

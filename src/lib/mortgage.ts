@@ -1,194 +1,183 @@
 
-import type { EstimatorInput, EstimatorOutput, RunResult } from './mortgage-types';
+import type { Inputs, Outputs, Debt } from './mortgage-types';
 
-/**
- * Runs the mortgage baseline calculation.
- * @param balance - The current loan balance.
- * @param apr - The annual percentage rate as a decimal.
- * @param termMonths - The remaining term in months.
- * @param maxMonths - A safe limit to prevent infinite loops.
- * @returns An object with months to zero, total interest, and the calculated payment.
- */
-function runMortgageBaseline(balance: number, apr: number, termMonths: number, maxMonths: number): { monthsToZero: number; totalInterest: number; payment: number; } {
-  if (balance <= 0) return { monthsToZero: 0, totalInterest: 0, payment: 0 };
+export function estimate(inputs: Inputs): Outputs {
+  const ltv = inputs.ltvLimit ?? 0.8;
+  const offsetFactor = inputs.cardOffset ? 0.8 : 1.0;
 
-  const r = apr / 12;
-  const payment = r === 0 ? balance / termMonths : (balance * r * Math.pow(1 + r, termMonths)) / (Math.pow(1 + r, termMonths) - 1);
+  // 1) Baseline mortgage payment
+  const mortPaymentMonthly = (() => {
+    const i = inputs.mortgageRateAPR / 12 / 100;
+    const n = inputs.amortYearsRemaining * 12;
+    const B = inputs.mortgageBalance;
+    if (n <= 0 || B <= 0) return 0;
+    return i === 0
+      ? B / n
+      : (B * (i * Math.pow(1 + i, n))) / (Math.pow(1 + i, n) - 1);
+  })();
 
-  if (isNaN(payment) || payment <= 0) {
-    return { monthsToZero: maxMonths, totalInterest: 0, payment: 0 };
-  }
+  // 2) Baseline amortization (mortgage + other debts)
+  function amortize(
+    balance: number,
+    rateAPR: number,
+    payMonthly: number,
+    series: { month: number; balance: number }[] = []
+  ) {
+    const i = rateAPR / 12 / 100;
+    let months = 0;
+    let interest = 0;
+    let currentBalance = balance;
 
-  let b = balance;
-  let totalInterest = 0;
-  let m = 0;
-  while (b > 0 && m < maxMonths) {
-    const i = b * r;
-    if (payment <= i) { // Not paying down principal
-      return { monthsToZero: maxMonths, totalInterest: totalInterest, payment };
+    while (currentBalance > 0 && months < 2000) {
+      const interestM = currentBalance * i;
+      if (payMonthly <= interestM && i > 0) {
+        // Payment doesn't cover interest, loan will never be paid off
+        months = Infinity;
+        interest = Infinity;
+        break;
+      }
+      const principal = Math.max(0, payMonthly - interestM);
+      interest += interestM;
+      currentBalance = Math.max(0, currentBalance - principal);
+      months++;
+      const seriesEntry = series.find((s) => s.month === months);
+      if (seriesEntry) {
+        seriesEntry.balance += currentBalance;
+      } else {
+        series.push({ month: months, balance: currentBalance });
+      }
     }
-    const princ = Math.min(payment - i, b);
-    b -= princ;
-    totalInterest += i;
-    m++;
-  }
-  return { monthsToZero: m, totalInterest, payment };
-}
-
-/**
- * Runs a single HELOC scenario based on a specific monthly spend.
- * @param params - The shared estimator input.
- * @param netSpendMonthly - The monthly spending for this scenario.
- * @returns A RunResult object for this scenario.
- */
-function runHelocScenario(params: EstimatorInput & { mortgagePayment: number; }, netSpendMonthly: number): RunResult {
-  const { mortgagePayment: budget, helocRateAPR, introRateAPR, introMonths = 0, maxMonths } = params;
-
-  const split = splitStructureIfCanada(params);
-  if (split.error) {
-    throw new Error(split.error);
+    return { months, interest, series };
   }
 
-  let b = split.helocStart;
-  let termBal = split.termPortion;
-  let months = 0;
-  let totalInterest = 0;
-  let peak = b + termBal;
-  let introSavings = 0;
+  let baseInterest = 0;
+  let baseMonths = 0;
+  let baselineSeries: { month: number; balance: number }[] = [];
 
-  const aprFor = (k: number) => (introRateAPR && k < introMonths) ? introRateAPR : helocRateAPR;
+  // Amortize mortgage
+  if (inputs.mortgageBalance > 0 && mortPaymentMonthly > 0) {
+    const mort = amortize(
+      inputs.mortgageBalance,
+      inputs.mortgageRateAPR,
+      mortPaymentMonthly,
+      baselineSeries
+    );
+    baseInterest += mort.interest;
+    baseMonths = Math.max(baseMonths, mort.months);
+  } else if (inputs.mortgageBalance > 0) {
+    // If no payment, treat as interest-only for baseline purposes
+    baseMonths = Infinity;
+    baseInterest = Infinity;
+  }
 
-  while ((b + termBal) > 1 && months < maxMonths) {
-    const currentAPR = aprFor(months);
-    const naturalNet = Math.max(0, params.grossMonthlyIncome - netSpendMonthly);
-    const cashOut = Math.min(budget, naturalNet);
+  // Amortize other debts
+  for (const d of inputs.debts) {
+    if (d.balance > 0) {
+      const minCC = 0.02 * d.balance;
+      const iOnly = (d.rateAPR / 12 / 100) * d.balance + 10;
+      const pay =
+        d.paymentMonthly > 0
+          ? d.paymentMonthly
+          : d.kind === 'cc'
+          ? Math.max(minCC, iOnly)
+          : Math.max(0, iOnly);
 
-    const avgDaily = Math.max(0, b - 0.5 * cashOut);
-    const helocInterest = avgDaily * (currentAPR / 12);
-    
-    totalInterest += helocInterest;
-    
-    if (introRateAPR && months < introMonths) {
-      const regularInterest = avgDaily * (helocRateAPR / 12);
-      introSavings += (regularInterest - helocInterest);
+      if (pay > 0) {
+        const res = amortize(d.balance, d.rateAPR, pay, baselineSeries);
+        baseInterest += res.interest;
+        baseMonths = Math.max(baseMonths, res.months);
+      } else {
+        baseMonths = Infinity;
+        baseInterest = Infinity;
+      }
     }
-    
-    let remainingCash = cashOut;
-
-    // Pay interest due
-    const interestPaid = Math.min(remainingCash, helocInterest);
-    remainingCash -= interestPaid;
-
-    // Add unpaid interest to balance if cashflow is insufficient
-    if (helocInterest > interestPaid) {
-      b += (helocInterest - interestPaid);
-    }
-
-    // Pay down principal, prioritizing term portion
-    let termPrincipalPay = 0;
-    if (termBal > 0) {
-      termPrincipalPay = Math.min(remainingCash, termBal);
-      termBal -= termPrincipalPay;
-      remainingCash -= termPrincipalPay;
-    }
-    
-    let helocPrincipalPay = Math.min(remainingCash, b);
-    b -= helocPrincipalPay;
-
-    peak = Math.max(peak, b + termBal);
-    months++;
-  }
-
-  return {
-    monthsToZero: months >= maxMonths ? maxMonths : months,
-    totalInterest,
-    peakBalance: peak,
-    avgMonthlyPayment: budget, // By design, we use the same outlay
-    introSavings: introSavings > 0 ? introSavings : undefined,
-    finalBalance: b + termBal,
-  };
-}
-
-
-/**
- * Splits the loan structure based on Canadian readvanceable mortgage rules.
- * @param p - The EstimatorInput.
- * @returns The split structure or an error.
- */
-function splitStructureIfCanada(p: EstimatorInput): { helocStart: number; termPortion: number; error?: string } {
-  if (p.country !== "CA") {
-    return { helocStart: p.currentLoanBalance, termPortion: 0 };
-  }
-  const combinedCap = Math.min(p.requestedCombinedLTV, 0.80) * p.homeValue;
-  const revolvingCap = Math.min(p.requestedRevolvingLTV, 0.65) * p.homeValue;
-
-  if (p.currentLoanBalance > combinedCap) {
-    return { helocStart: 0, termPortion: 0, error: `Loan balance of ${p.currentLoanBalance} exceeds the maximum ${combinedCap} (80% LTV) for a readvanceable product. More equity is needed.` };
-  }
-
-  const eligibleBalance = Math.min(p.currentLoanBalance, combinedCap);
-  const helocStart = Math.min(eligibleBalance, revolvingCap);
-  const termPortion = Math.max(0, eligibleBalance - helocStart);
-  return { helocStart, termPortion };
-}
-
-function pct(n: number): string {
-    return `${(n * 100).toFixed(2)}%`
-}
-
-/**
- * Main function to calculate and compare savings.
- * @param input - The EstimatorInput from the user.
- * @returns An EstimatorOutput with the full comparison.
- */
-export function calculateSavings(input: EstimatorInput): EstimatorOutput {
-  if (input.grossMonthlyIncome <= input.monthlySpendMid) {
-    throw new Error("Income must be greater than average spending to see acceleration benefits.");
   }
   
-  const mortgage = runMortgageBaseline(
-    input.currentLoanBalance,
-    input.currentRateAPR,
-    input.currentTermMonthsRemaining,
-    input.maxMonths
-  );
-
-  if(mortgage.payment <= 0) {
-      throw new Error("Could not calculate a valid monthly mortgage payment from the provided loan details. Please check the balance, rate, and remaining term.")
+  if (baseMonths === Infinity) {
+    baseInterest = Infinity;
   }
 
-  const sharedParams = { ...input, mortgagePayment: mortgage.payment };
 
-  const helocBase = runHelocScenario(sharedParams, input.monthlySpendMid);
-  const helocOpt = runHelocScenario(sharedParams, input.monthlySpendLow);
-  const helocPes = runHelocScenario(sharedParams, input.monthlySpendHigh);
+  // 3) HELOC simulation
+  const movedSavings =
+    inputs.savings.savings +
+    inputs.savings.chequing +
+    inputs.savings.shortTerm;
+  const totalDebtConsolidated =
+    inputs.mortgageBalance + inputs.debts.reduce((s, d) => s + d.balance, 0);
 
-  const notes: string[] = [];
-  if (input.country === "CA") {
-    notes.push("Canadian readvanceable limits enforced: revolving portion is capped at 65% LTV, and the total combined loan is capped at 80% LTV.");
-  } else {
-    notes.push("US lender LTV/DTI requirements vary; this is an educational estimate, not a loan approval.");
+  let helocBalance = Math.max(0, totalDebtConsolidated - movedSavings);
+  const helocI = inputs.helocRateAPR / 12 / 100;
+  const surplus = Math.max(0, inputs.netMonthlyIncome - inputs.monthlyExpenses);
+
+  let hMonths = 0;
+  let hInterest = 0;
+  const helocSeries: Outputs['series'] = [];
+
+  while (helocBalance > 0 && hMonths < 2000) {
+    const interestM = helocBalance * helocI * offsetFactor;
+     if (surplus <= interestM && helocI > 0) {
+        hMonths = Infinity;
+        hInterest = Infinity;
+        break;
+    }
+    const principal = Math.max(0, surplus - interestM);
+    hInterest += interestM;
+    helocBalance = Math.max(0, helocBalance - principal);
+    hMonths++;
+    
+    // find corresponding baseline balance
+    let baselineBalanceForMonth = 0;
+    const basePoint = baselineSeries.find(p => p.month === hMonths);
+    if(basePoint) {
+      baselineBalanceForMonth = basePoint.balance;
+    } else if (hMonths > baseMonths && baseMonths !== Infinity) {
+      baselineBalanceForMonth = 0;
+    } else if (baseMonths === Infinity) {
+      // Estimate baseline balance if it's never paid off
+      let estimatedBase = totalDebtConsolidated;
+      for (let m = 1; m <= hMonths; m++) {
+        let payment = mortPaymentMonthly;
+        inputs.debts.forEach(d => {
+            const minCC = 0.02 * d.balance;
+            const iOnly = (d.rateAPR / 12 / 100) * d.balance + 10;
+            payment += d.paymentMonthly > 0 ? d.paymentMonthly : (d.kind === 'cc' ? Math.max(minCC, iOnly) : Math.max(0, iOnly));
+        });
+        const interest = estimatedBase * (inputs.mortgageRateAPR / 12 / 100); // simplified
+        estimatedBase -= (payment - interest);
+      }
+      baselineBalanceForMonth = estimatedBase;
+    }
+
+
+    helocSeries.push({ month: hMonths, balanceHeloc: helocBalance, balanceBaseline: baselineBalanceForMonth });
   }
-  if (input.introRateAPR && input.introMonths) {
-    notes.push(`An intro APR of ${pct(input.introRateAPR)} for ${input.introMonths} months is assumed, followed by a go-to rate of ${pct(input.helocRateAPR)}.`);
+
+  // Ensure baseline series extends to HELOC payoff month
+  if (baseMonths < hMonths && baseMonths !== Infinity) {
+      for (let m = baseMonths + 1; m <= hMonths; m++) {
+          const point = helocSeries.find(p => p.month === m);
+          if (point && point.balanceBaseline === undefined) {
+              point.balanceBaseline = 0;
+          }
+      }
   }
+
+
+  // 4) Borrowing room
+  const creditLimit = ltv * inputs.homeValue;
+  const borrowingRoomAfterSetup = Math.max(0, creditLimit - totalDebtConsolidated);
 
   return {
-    assumptions: {
-      dailyInterestBasis: 365,
-      sameMonthlyOutlayAsMortgage: mortgage.payment,
-      notes
-    },
-    mortgage: {
-      monthsToZero: mortgage.monthsToZero >= input.maxMonths ? input.maxMonths : mortgage.monthsToZero,
-      totalInterest: mortgage.totalInterest
-    },
-    heloc: {
-      optimistic: helocOpt,
-      base: helocBase,
-      pessimistic: helocPes
-    }
+    debtFreeMonthsBaseline: baseMonths,
+    interestBaseline: Math.round(baseInterest),
+    debtFreeMonthsHeloc: hMonths,
+    interestHeloc: Math.round(hInterest),
+    interestSaved:
+      baseInterest === Infinity || hInterest === Infinity
+        ? Infinity
+        : Math.max(0, Math.round(baseInterest - hInterest)),
+    borrowingRoomAfterSetup: Math.round(borrowingRoomAfterSetup),
+    series: helocSeries,
   };
 }
-
-    
