@@ -44,6 +44,8 @@ const formSchema = z.object({
     .number()
     .positive('Must be a positive number.')
     .optional(),
+  monthlyIncome: z.coerce.number().positive('Must be a positive number.'),
+  monthlyExpenses: z.coerce.number().positive('Must be a positive number.'),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -180,6 +182,32 @@ export function QuestionnaireForm() {
               <FormLabel>Years You've Been in Your Home</FormLabel>
               <FormControl>
                 <Input type="number" placeholder="5" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="monthlyIncome"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Total Monthly Take-Home Income ($)</FormLabel>
+              <FormControl>
+                <Input type="number" step="any" placeholder="6000" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="monthlyExpenses"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Total Monthly Expenses ($)</FormLabel>
+              <FormControl>
+                <Input type="number" step="any" placeholder="4500" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

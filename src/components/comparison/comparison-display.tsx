@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useSearchParams } from 'next/navigation';
@@ -86,14 +87,19 @@ export function ComparisonDisplay() {
     const payment = parseFloat(
       searchParams.get('monthlyMortgagePayment') || '0'
     );
+    const monthlyIncome = parseFloat(searchParams.get('monthlyIncome') || '0');
+    const monthlyExpenses = parseFloat(searchParams.get('monthlyExpenses') || '0');
     const report = searchParams.get('report') || '';
 
-    if (balance && rate && payment) {
+    if (balance && rate && payment && monthlyIncome && monthlyExpenses) {
       const traditional = calculateTraditionalMortgage(balance, rate, payment);
       
-      // HELOC Method Simulation: Assume one extra payment per year
-      const extraYearlyPayment = payment * 1;
-      const cutterPayment = payment + (extraYearlyPayment / 12);
+      const monthlyCashFlow = monthlyIncome - monthlyExpenses;
+      // Ensure cashflow is positive and provides a buffer.
+      // Use 80% of cash flow for accelerated payments for a more conservative estimate.
+      const extraPayment = Math.max(0, monthlyCashFlow) * 0.8;
+      
+      const cutterPayment = payment + extraPayment;
       const cutter = calculateTraditionalMortgage(balance, rate, cutterPayment);
 
       const yearsFaster = traditional.remainingYears - cutter.remainingYears;
@@ -144,7 +150,7 @@ export function ComparisonDisplay() {
   }), []);
 
   if (!data) {
-    return <div className="text-center py-20">Invalid data provided.</div>;
+    return <div className="text-center py-20">Invalid data provided. Please ensure all fields are filled out correctly.</div>;
   }
   
   const yearsSaved = Math.floor(data.cutter.yearsFaster);
