@@ -14,7 +14,7 @@ export default function Header() {
           </span>
         </Link>
         <div className="flex items-center gap-4">
-          <nav className="hidden md:flex items-center gap-2">
+          <nav className="flex items-center gap-2">
             <Button variant="ghost" asChild>
               <Link href="/">Home</Link>
             </Button>
@@ -23,6 +23,9 @@ export default function Header() {
             </Button>
             <Button variant="ghost" asChild>
               <Link href="/blog">Blog</Link>
+            </Button>
+            <Button variant="ghost" asChild>
+              <Link href="/snippets">Snippets</Link>
             </Button>
             <Button variant="ghost" asChild>
               <Link href="#">Contact</Link>
