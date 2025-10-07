@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  AuthError,
   GoogleAuthProvider,
   OAuthProvider,
   signInWithPopup,
@@ -8,6 +9,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { useAuth, useUser } from '@/firebase';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
 
 const GoogleIcon = () => (
   <svg className="h-5 w-5" viewBox="0 0 24 24">
@@ -43,6 +45,7 @@ export function AuthButtons() {
   const auth = useAuth();
   const { user } = useUser();
   const router = useRouter();
+  const { toast } = useToast();
 
   if (user) {
     // Redirect if user is already signed in
@@ -59,7 +62,21 @@ export function AuthButtons() {
       await signInWithPopup(auth, authProvider);
       router.push('/questionnaire');
     } catch (error) {
-      console.error(`Error signing in with ${provider}`, error);
+      const authError = error as AuthError;
+      if (authError.code === 'auth/operation-not-allowed') {
+        toast({
+          variant: 'destructive',
+          title: 'Sign-in method not enabled',
+          description: `Please enable ${provider} sign-in from the Firebase console.`,
+        });
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'Authentication Error',
+          description: authError.message,
+        });
+        console.error(`Error signing in with ${provider}`, error);
+      }
     }
   };
 
