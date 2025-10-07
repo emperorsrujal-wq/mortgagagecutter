@@ -19,7 +19,7 @@ export default function Header() {
               <Link href="/">Home</Link>
             </Button>
             <Button variant="ghost" asChild>
-              <Link href="#">About</Link>
+              <Link href="/learn">Learn</Link>
             </Button>
             <Button variant="ghost" asChild>
               <Link href="#">Benefits</Link>

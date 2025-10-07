@@ -1,0 +1,143 @@
+import Link from 'next/link';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import { Button } from '@/components/ui/button';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Learn About the Mortgage Cutter Method',
+  description: 'Frequently asked questions about the Mortgage Cutter method, HELOCs, and how our mortgage payoff estimator works.',
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is the Mortgage Cutter method?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The Mortgage Cutter method is a financial strategy that uses a Home Equity Line of Credit (HELOC) to help you pay off your mortgage and other debts faster. It works by using your cash flow to reduce your average daily loan balance, which can lower the amount of interest you pay over time.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is this method the same as making extra payments?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No, it is a different approach. While making extra payments reduces your principal, the Mortgage Cutter method changes the fundamental way your interest is calculated—from a traditional amortization schedule to a daily interest calculation on a line of credit. This can lead to significant savings beyond just extra payments.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How does a HELOC help pay off a mortgage faster?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: "A HELOC is a revolving line of credit. By depositing your income into the HELOC, you immediately reduce the principal balance that accrues interest. Your expenses are paid from the HELOC, but for the time your money sits in the account, it's actively working to lower your interest costs.",
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is this a guaranteed way to save money?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'This estimator provides an educational illustration based on the information you provide. Actual savings depend on many factors, including your real income, spending habits, interest rate fluctuations, and the terms offered by a lender. It is not a guarantee of savings or loan approval.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do I need a specific bank to use this strategy?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No, this strategy is not tied to a specific bank. Many financial institutions offer HELOCs or readvanceable mortgages that can be used for this purpose. We recommend researching lenders to find one that offers favorable terms for your situation.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What do I need to get started?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'To get started, you can use our free mortgage payoff estimator. Simply enter your current mortgage details, income, and expenses to get a personalized blueprint showing how this method could work for you.',
+      },
+    },
+  ],
+};
+
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  'itemListElement': [
+    {
+      '@type': 'ListItem',
+      'position': 1,
+      'name': 'Home',
+      'item': 'https://mortgagecutter.com'
+    },
+    {
+      '@type': 'ListItem',
+      'position': 2,
+      'name': 'Learn'
+    }
+  ]
+};
+
+export default function LearnPage() {
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <div className="flex-1 flex flex-col">
+        {/* FAQ Section */}
+        <section id="faq" className="py-16 md:py-24 bg-secondary">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-8">
+              Frequently Asked Questions
+            </h2>
+            <Accordion type="single" collapsible className="w-full">
+              {faqSchema.mainEntity.map((faq, index) => (
+                <AccordionItem value={`item-${index + 1}`} key={index}>
+                  <AccordionTrigger className="text-lg text-left">{faq.name}</AccordionTrigger>
+                  <AccordionContent className="text-base text-muted-foreground">
+                    {faq.acceptedAnswer.text}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        </section>
+
+        {/* Internal Links Section */}
+        <section className="py-16 md:py-24 bg-background">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Explore More
+            </h2>
+            <p className="max-w-3xl mx-auto text-lg text-muted-foreground mb-8">
+              Learn more about the concepts behind the Mortgage Cutter method and how it could work for you.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Button asChild variant="outline" size="lg">
+                <Link href="/questionnaire">Use the Mortgage Payoff Calculator</Link>
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <Link href="#">Learn About HELOCs vs. Mortgages</Link>
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <Link href="#">Understand Daily Interest</Link>
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <Link href="/learn#faq">Read Our FAQ</Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </>
+  );
+}
