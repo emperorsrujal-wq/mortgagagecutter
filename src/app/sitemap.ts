@@ -1,9 +1,17 @@
 import { MetadataRoute } from 'next';
+import { blogPosts } from '@/lib/blog-posts';
 
 const siteUrl = 'https://mortgagecutter.com';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
+  const blogPostUrls = blogPosts.map(post => ({
+    url: `${siteUrl}/blog/${post.slug}`,
+    lastModified: new Date(post.date),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }));
+
+  const staticPages: MetadataRoute.Sitemap = [
     {
       url: siteUrl,
       lastModified: new Date(),
@@ -15,6 +23,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.8,
+    },
+    {
+      url: `${siteUrl}/learn`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${siteUrl}/blog`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
     },
     {
       url: `${siteUrl}/comparison`,
@@ -35,4 +55,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6,
     },
   ];
+
+  return [...staticPages, ...blogPostUrls];
 }
