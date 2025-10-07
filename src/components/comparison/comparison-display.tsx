@@ -4,7 +4,7 @@
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState, useMemo } from 'react';
-import { calculateTraditionalMortgage } from '@/lib/mortgage';
+import { calculateMortgage } from '@/lib/mortgage';
 import {
   Card,
   CardContent,
@@ -16,13 +16,9 @@ import { Button } from '@/components/ui/button';
 import {
   DollarSign,
   Calendar,
-  Zap,
-  TrendingUp,
-  Info,
-  Award,
   Clock,
   Heart,
-  Target,
+  Info,
 } from 'lucide-react';
 import {
   ChartConfig,
@@ -92,23 +88,30 @@ export function ComparisonDisplay() {
     const report = searchParams.get('report') || '';
 
     if (balance && rate && payment && monthlyIncome && monthlyExpenses) {
-      const traditional = calculateTraditionalMortgage(balance, rate, payment);
+      const traditional = calculateMortgage({
+        balance,
+        annualRate: rate,
+        monthlyPayment: payment,
+        method: 'traditional',
+      });
       
-      const monthlyCashFlow = monthlyIncome - monthlyExpenses;
-      // Ensure cashflow is positive and provides a buffer.
-      // Use 80% of cash flow for accelerated payments for a more conservative estimate.
-      const extraPayment = Math.max(0, monthlyCashFlow) * 0.8;
-      
-      const cutterPayment = payment + extraPayment;
-      const cutter = calculateTraditionalMortgage(balance, rate, cutterPayment);
+      const cutter = calculateMortgage({
+        balance,
+        annualRate: rate,
+        monthlyPayment: payment,
+        method: 'heloc',
+        monthlyIncome,
+        monthlyExpenses,
+      });
 
       const yearsFaster = traditional.remainingYears - cutter.remainingYears;
       const interestSaved = traditional.totalInterest - cutter.totalInterest;
 
-      const maxMonths = Math.max(traditional.amortization.length, cutter.amortization.length);
+      const maxMonths = Math.ceil(Math.max(traditional.amortization.length, cutter.amortization.length) / 30 * 12);
       const chartData = Array.from({ length: maxMonths }, (_, i) => {
-        const traditionalPoint = traditional.amortization.find(p => p.month === i);
-        const cutterPoint = cutter.amortization.find(p => p.month === i);
+        const year = i / 12;
+        const traditionalPoint = traditional.amortization.find(p => Math.abs(p.month / 12 - year) < 1/12);
+        const cutterPoint = cutter.amortization.find(p => Math.abs(p.month / 12 - year) < 1/12);
         return {
           month: i,
           Traditional: traditionalPoint ? traditionalPoint.balance : null,
