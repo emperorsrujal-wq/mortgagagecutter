@@ -53,8 +53,6 @@ const formSchema = z.object({
     shortTerm: z.coerce.number().nonnegative().default(0),
   }),
 
-  helocRateAPR: z.coerce.number().min(0.1, '> 0').max(25, '< 25'),
-  ltvLimit: z.coerce.number().min(0.1, '> 10%').max(1, '< 100%').default(0.8),
   cardOffset: z.boolean().default(false),
 });
 
@@ -70,7 +68,6 @@ export function QuestionnaireForm() {
       debts: [],
       savings: { savings: 0, chequing: 0, shortTerm: 0 },
       cardOffset: false,
-      ltvLimit: 0.8,
     },
   });
 
@@ -82,6 +79,8 @@ export function QuestionnaireForm() {
   function onSubmit(values: FormData) {
     setIsSubmitting(true);
     const params = new URLSearchParams();
+    
+    // Add form values to params
     Object.entries(values).forEach(([key, value]) => {
       if (typeof value === 'object' && value !== null) {
         params.append(key, JSON.stringify(value));
@@ -89,6 +88,11 @@ export function QuestionnaireForm() {
         params.append(key, String(value));
       }
     });
+
+    // Add system-defined values
+    params.append('helocRateAPR', '8.5');
+    params.append('ltvLimit', '0.8');
+
     router.push(`/comparison?${params.toString()}`);
   }
 
@@ -220,20 +224,6 @@ export function QuestionnaireForm() {
           <Separator className="my-4"/>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
-            <FormField control={form.control} name="helocRateAPR" render={({ field }) => (
-              <FormItem>
-                <FormLabel>Expected HELOC Rate (APR %)</FormLabel>
-                <FormControl><Input type="number" step="0.01" placeholder="8.5" {...field} /></FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
-            <FormField control={form.control} name="ltvLimit" render={({ field }) => (
-              <FormItem>
-                <FormLabel>HELOC LTV Limit (%)</FormLabel>
-                <FormControl><Input type="number" step="0.01" placeholder="0.8" {...field} /></FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
              <div className="md:col-span-2 flex items-center space-x-2 pt-2">
                 <FormField control={form.control} name="cardOffset" render={({ field }) => (
                     <FormItem className="flex flex-row items-start space-x-3 space-y-0">
