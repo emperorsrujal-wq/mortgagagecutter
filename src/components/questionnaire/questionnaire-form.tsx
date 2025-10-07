@@ -65,16 +65,17 @@ export function QuestionnaireForm() {
 
   async function onSubmit(values: FormData) {
     setIsSubmitting(true);
+    // The AI prompt expects monthlyExpenses to include the mortgage payment.
     const apiValues = {
       ...values,
       currentInterestRate: values.currentInterestRate / 100,
-      // The AI prompt expects monthlyExpenses to include the mortgage payment.
       monthlyExpenses: values.monthlyExpenses + values.monthlyMortgagePayment,
     };
     const result = await getSavingsReport(apiValues);
     setIsSubmitting(false);
 
     if (result.success && result.report) {
+      // Pass the original form values to the comparison page
       const query = new URLSearchParams({
         ...Object.fromEntries(
           Object.entries(values).map(([k, v]) => [k, String(v ?? '')])
