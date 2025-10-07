@@ -91,7 +91,7 @@ export function ComparisonDisplay() {
     // For the HELOC calculation, total expenses must include the mortgage payment.
     const totalMonthlyExpenses = monthlyExpenses + payment;
 
-    if (balance && rate && payment && monthlyIncome && monthlyExpenses) {
+    if (balance && rate && payment && monthlyIncome && totalMonthlyExpenses) {
       const traditional = calculateMortgage({
         balance,
         annualRate: rate,
