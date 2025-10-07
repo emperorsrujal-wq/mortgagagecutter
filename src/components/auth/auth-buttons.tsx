@@ -65,19 +65,27 @@ export function AuthButtons() {
       router.push('/questionnaire');
     } catch (error) {
       const authError = error as AuthError;
+      console.error(`Error signing in with ${provider}:`, authError.code, authError.message);
+      
       if (authError.code === 'auth/operation-not-allowed') {
         toast({
           variant: 'destructive',
           title: 'Sign-in method not enabled',
           description: `Please enable ${provider} sign-in from the Firebase console.`,
         });
-      } else {
+      } else if (authError.code === 'auth/unauthorized-domain') {
+         toast({
+          variant: 'destructive',
+          title: 'Domain Not Authorized',
+          description: `The domain you are using is not authorized for sign-in. Please add it to the list of authorized domains in your Firebase project's Authentication settings.`,
+        });
+      }
+      else {
         toast({
           variant: 'destructive',
           title: 'Authentication Error',
           description: authError.message,
         });
-        console.error(`Error signing in with ${provider}`, error);
       }
     }
   };
