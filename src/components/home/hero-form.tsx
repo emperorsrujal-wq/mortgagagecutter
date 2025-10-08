@@ -91,9 +91,9 @@ export function HeroForm() {
   return (
     <Card className="w-full max-w-md shadow-2xl bg-card/90 backdrop-blur-sm">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Get Your Free Savings Estimate</CardTitle>
+        <CardTitle className="text-2xl">Save Thousands in Interest Payment to Banks</CardTitle>
         <CardDescription>
-          See how much you could save in 60 seconds.
+          Just start saving smartly.
         </CardDescription>
       </CardHeader>
       <CardContent>
