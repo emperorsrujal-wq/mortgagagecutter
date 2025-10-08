@@ -24,10 +24,10 @@ export default function Home() {
           <div className="relative z-10 container mx-auto px-4 text-center text-primary-foreground flex flex-col lg:flex-row items-center justify-between gap-12">
             <div className="max-w-3xl text-center lg:text-left">
               <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter text-white drop-shadow-lg">
-                The Smarter Mortgage Payoff Estimator
+                How to cut your mortgage in half
               </h1>
               <p className="mt-4 text-lg md:text-xl text-gray-200 max-w-2xl">
-                Discover how our HELOC calculator can model a path to pay off your mortgage years sooner. Get a free, personalized estimate in minutes.
+                without sacrificing your life and fun .
               </p>
             </div>
             <HeroForm />
