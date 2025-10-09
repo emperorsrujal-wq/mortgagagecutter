@@ -25,10 +25,10 @@ export default function Home() {
           <div className="relative z-10 container mx-auto px-4 text-center text-primary-foreground flex flex-col lg:flex-row items-center justify-between gap-12">
             <div className="max-w-3xl text-center lg:text-left">
               <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter text-white drop-shadow-lg">
-                Pay Off Your Mortgage Years Faster—Without Raising Your Monthly Budget
+                Pay Off Your Mortgage Years Faster
               </h1>
               <p className="mt-4 text-lg md:text-xl text-gray-200 max-w-2xl">
-                without sacrificing your life and fun .
+                Without Raising Your Monthly Budget.
               </p>
             </div>
             <HeroForm />
