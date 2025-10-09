@@ -22,12 +22,12 @@ export default function Home() {
             />
           )}
           <div className="absolute inset-0 bg-black/70" />
-          <div className="relative z-10 container mx-auto px-4 text-center text-primary-foreground flex flex-col lg:flex-row items-center justify-between gap-12">
-            <div className="max-w-3xl text-center lg:text-left">
+          <div className="relative z-10 container mx-auto px-4 text-center text-primary-foreground flex flex-col items-center justify-center gap-8">
+            <div className="max-w-3xl text-center">
               <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter text-white drop-shadow-lg">
                 Pay Off Your Mortgage Years Faster
               </h1>
-              <p className="mt-4 text-lg md:text-xl text-gray-200 max-w-2xl">
+              <p className="mt-4 text-lg md:text-xl text-gray-200 max-w-2xl mx-auto">
                 Without Raising Your Monthly Budget.
               </p>
             </div>
