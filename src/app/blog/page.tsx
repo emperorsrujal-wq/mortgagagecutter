@@ -5,8 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Blog | Mortgage Cutter',
-    description: 'Explore articles on HELOCs, mortgage strategies, and financial discipline to help you pay off your mortgage faster.',
+    title: 'MortgageCutter Blog — Pay Off Your Mortgage Faster',
+    description: 'Actionable guides, tools, and how-tos to pay off your mortgage faster without raising your monthly spend.',
 };
 
 export default function BlogPage() {
@@ -14,10 +14,10 @@ export default function BlogPage() {
     <div className="container mx-auto py-12 px-4">
       <header className="text-center mb-12">
         <h1 className="text-4xl lg:text-5xl font-bold tracking-tight">
-          The Mortgage Cutter Blog
+          MortgageCutter Blog
         </h1>
         <p className="text-xl text-muted-foreground mt-2 max-w-3xl mx-auto">
-          Insights and strategies to accelerate your journey to financial freedom.
+          Actionable guides to finish your mortgage sooner—with the same budget.
         </p>
       </header>
 
@@ -32,7 +32,7 @@ export default function BlogPage() {
               <CardContent className="flex-grow">
                 <p className="text-muted-foreground mb-4">{post.brief}</p>
                 <div className="flex flex-wrap gap-2">
-                    <Badge variant="secondary">{post.cluster}</Badge>
+                    <Badge variant="secondary">{post.category}</Badge>
                 </div>
               </CardContent>
             </Card>
