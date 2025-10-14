@@ -24,6 +24,8 @@ export default function Home() {
           <div className="absolute inset-0 bg-black/70" />
           <div className="relative z-10 container mx-auto px-4 text-center text-primary-foreground flex flex-col items-center justify-center gap-8">
             <div className="max-w-3xl text-center">
+              {/* Site verification code */}
+              <p className="hidden">Impact-Site-Verification: 9724c87a-2aea-485f-8e2c-afe2e77f5c9f</p>
               <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter text-white drop-shadow-lg">
                 Pay Off Your Mortgage Years Faster
               </h1>
