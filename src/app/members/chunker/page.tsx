@@ -83,8 +83,6 @@ export default function ChunkerCalculatorPage() {
   const router = useRouter();
   const { toast } = useToast();
   
-  const [isCheckingClaims, setIsCheckingClaims] = useState(false);
-  const [isPro, setIsPro] = useState(true); // Set to true for testing
   const [isCalculating, setIsCalculating] = useState(false);
   const [results, setResults] = useState<CalculationResults | null>(null);
 
@@ -95,34 +93,20 @@ export default function ChunkerCalculatorPage() {
       mortgageAPR: 5.5,
       remainingTerm: 25,
       termUnit: 'years',
+      monthlyMortgagePayment: undefined,
+      homeValue: undefined,
+      monthlyMI: undefined,
       helocAPR: 7.5,
       availableHelocNow: 50000,
       netIncome: 8000,
       livingExpenses: 4000,
+      onetimeCashToMortgage: undefined,
       chunkMode: 'AUTO',
+      fixedChunkAmount: undefined,
       billTiming: 'OPTIMIZED',
       readvanceable: true,
     }
   });
-
-  // useEffect(() => {
-  //   if (!isUserLoading) {
-  //     if (!user) {
-  //       router.push('/login');
-  //     } else {
-  //       auth.currentUser?.getIdTokenResult()
-  //         .then((idTokenResult) => {
-  //           if (idTokenResult.claims.pro === true) {
-  //             setIsPro(true);
-  //           } else {
-  //             router.push('/purchase');
-  //           }
-  //         })
-  //         .catch(() => router.push('/purchase'))
-  //         .finally(() => setIsCheckingClaims(false));
-  //     }
-  //   }
-  // }, [user, isUserLoading, router, auth]);
 
   async function onSubmit(data: ChunkerFormData) {
     setIsCalculating(true);
@@ -197,19 +181,6 @@ export default function ChunkerCalculatorPage() {
     }
   };
 
-
-  // if (isUserLoading || isCheckingClaims) {
-  //   return (
-  //     <div className="flex h-screen w-full items-center justify-center">
-  //       <Loader2 className="h-12 w-12 animate-spin" />
-  //     </div>
-  //   );
-  // }
-
-  // if (!isPro) {
-  //   return null; // Redirecting...
-  // }
-
   const balanceChartData = useMemo(() => {
     if (!results) return [];
     const { baseline, chunker } = results;
@@ -268,9 +239,9 @@ export default function ChunkerCalculatorPage() {
                     <FormField control={form.control} name="remainingTerm" render={({ field }) => (<FormItem className="flex-grow"><Label>Remaining Term</Label><FormControl><Input type="number" placeholder="25" {...field} /></FormControl><FormMessage /></FormItem>)} />
                     <FormField control={form.control} name="termUnit" render={({ field }) => (<FormItem className="pb-1"><RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex gap-2 items-center h-10"><FormControl><div className="flex items-center space-x-2"><RadioGroupItem value="years" id="years"/><Label htmlFor="years">Yrs</Label></div></FormControl><FormControl><div className="flex items-center space-x-2"><RadioGroupItem value="months" id="months"/><Label htmlFor="months">Mos</Label></div></FormControl></RadioGroup><FormMessage /></FormItem>)} />
                   </div>
-                  <FormField control={form.control} name="monthlyMortgagePayment" render={({ field }) => (<FormItem><Label>Current Monthly Payment (Optional)</Label><FormControl><Input type="number" placeholder="1850" {...field} /></FormControl><FormMessage /></FormItem>)} />
-                  <FormField control={form.control} name="homeValue" render={({ field }) => (<FormItem><Label>Home Value (Optional, for MI)</Label><FormControl><Input type="number" placeholder="500000" {...field} /></FormControl><FormMessage /></FormItem>)} />
-                  <FormField control={form.control} name="monthlyMI" render={({ field }) => (<FormItem><Label>Monthly Mortgage Insurance (Optional)</Label><FormControl><Input type="number" placeholder="150" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                  <FormField control={form.control} name="monthlyMortgagePayment" render={({ field }) => (<FormItem><Label>Current Monthly Payment (Optional)</Label><FormControl><Input type="number" placeholder="1850" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
+                  <FormField control={form.control} name="homeValue" render={({ field }) => (<FormItem><Label>Home Value (Optional, for MI)</Label><FormControl><Input type="number" placeholder="500000" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
+                  <FormField control={form.control} name="monthlyMI" render={({ field }) => (<FormItem><Label>Monthly Mortgage Insurance (Optional)</Label><FormControl><Input type="number" placeholder="150" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
                 </CardContent>
               </Card>
 
@@ -281,7 +252,7 @@ export default function ChunkerCalculatorPage() {
                   <FormField control={form.control} name="helocAPR" render={({ field }) => (<FormItem><Label>HELOC APR (%)</Label><FormControl><Input type="number" step="0.01" placeholder="7.50" {...field} /></FormControl><FormMessage /></FormItem>)} />
                   <FormField control={form.control} name="netIncome" render={({ field }) => (<FormItem><Label>Monthly Net Income</Label><FormControl><Input type="number" placeholder="8000" {...field} /></FormControl><FormMessage /></FormItem>)} />
                   <FormField control={form.control} name="livingExpenses" render={({ field }) => (<FormItem><Label>Monthly Living Expenses (ex-mortgage)</Label><FormControl><Input type="number" placeholder="4000" {...field} /></FormControl><FormMessage /></FormItem>)} />
-                  <FormField control={form.control} name="onetimeCashToMortgage" render={({ field }) => (<FormItem><Label>One-Time Cash to Apply (Optional)</Label><FormControl><Input type="number" placeholder="10000" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                  <FormField control={form.control} name="onetimeCashToMortgage" render={({ field }) => (<FormItem><Label>One-Time Cash to Apply (Optional)</Label><FormControl><Input type="number" placeholder="10000" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />
                 </CardContent>
               </Card>
               
@@ -297,7 +268,7 @@ export default function ChunkerCalculatorPage() {
                           <FormItem className="flex items-center space-x-2"><FormControl><RadioGroupItem value="FIXED" id="fixed"/></FormControl> <Label htmlFor="fixed" className="font-normal">Fixed Amount</Label></FormItem>
                         </RadioGroup>
                       </FormControl>
-                      {form.watch('chunkMode') === 'FIXED' && <FormField name="fixedChunkAmount" control={form.control} render={({ field }) => (<FormItem><FormControl><Input type="number" placeholder="50000" className="mt-2" {...field} /></FormControl><FormMessage /></FormItem>)} />}
+                      {form.watch('chunkMode') === 'FIXED' && <FormField name="fixedChunkAmount" control={form.control} render={({ field }) => (<FormItem><FormControl><Input type="number" placeholder="50000" className="mt-2" {...field} value={field.value ?? ''} /></FormControl><FormMessage /></FormItem>)} />}
                     </FormItem>
                   )} />
                   <FormField control={form.control} name="billTiming" render={({ field }) => (
