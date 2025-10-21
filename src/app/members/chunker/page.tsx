@@ -77,9 +77,6 @@ function ResultCard({ title, value, description }: { title: string; value: strin
 }
 
 export default function ChunkerCalculatorPage() {
-  const { user, isUserLoading } = useUser();
-  const auth = useAuth();
-  const firestore = useFirestore();
   const router = useRouter();
   const { toast } = useToast();
   
@@ -150,35 +147,8 @@ export default function ChunkerCalculatorPage() {
   }
 
   const handleSaveScenario = async () => {
-    if (!results || !user || !firestore) return;
-    try {
-      const scenarioData = {
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-        type: 'CHUNKER_V1',
-        inputs: form.getValues(),
-        results: {
-          baseline: { 
-            months: results.baseline.months, 
-            totalInterest: results.baseline.totalInterest, 
-            payoffDateISO: results.baseline.payoffDateISO 
-          },
-          chunker: { 
-            months: results.chunker.months, 
-            totalInterestCombined: results.chunker.totalInterestCombined, 
-            payoffDateISO: results.chunker.payoffDateISO 
-          },
-          interestSaved: results.interestSaved,
-          monthsSaved: results.monthsSaved,
-          miSaved: results.miSaved,
-        },
-      };
-      await addDoc(collection(firestore, 'scenarios', user.uid, 'scenarios'), scenarioData);
-      toast({ title: "Scenario Saved!", description: "Your calculation has been saved to your account." });
-    } catch (error) {
-      console.error("Error saving scenario:", error);
-      toast({ variant: "destructive", title: "Error", description: "Could not save the scenario." });
-    }
+    if (!results) return;
+    toast({ title: "Save Scenario", description: "This feature is not yet implemented." });
   };
 
   const balanceChartData = useMemo(() => {
@@ -318,43 +288,57 @@ export default function ChunkerCalculatorPage() {
               <Card>
                 <CardHeader><CardTitle>Balance Over Time</CardTitle></CardHeader>
                 <CardContent className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={balanceChartData} margin={{ top: 5, right: 20, left: 20, bottom: 5 }}>
-                       <defs>
-                          <linearGradient id="colorChunker" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.8}/><stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/></linearGradient>
-                          <linearGradient id="colorBaseline" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="hsl(var(--muted-foreground))" stopOpacity={0.5}/><stop offset="95%" stopColor="hsl(var(--muted-foreground))" stopOpacity={0}/></linearGradient>
-                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" tickFormatter={(tick) => `Yr ${Math.floor(tick / 12)}`} />
-                      <YAxis tickFormatter={formatYAxis} />
-                      <ChartTooltip content={<ChartTooltipContent formatter={(value) => currencyFormatter.format(value as number)} />} />
-                      <Legend />
-                      <Area type="monotone" dataKey="Baseline" stroke="hsl(var(--muted-foreground))" fillOpacity={1} fill="url(#colorBaseline)" />
-                      <Area type="monotone" dataKey="Chunker Method" stroke="hsl(var(--primary))" fillOpacity={1} fill="url(#colorChunker)" />
-                    </AreaChart>
-                  </ResponsiveContainer>
+                  <ChartContainer
+                    config={{
+                      'Baseline': { label: 'Baseline', color: 'hsl(var(--muted-foreground))' },
+                      'Chunker Method': { label: 'Chunker Method', color: 'hsl(var(--primary))' },
+                    }}
+                  >
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={balanceChartData} margin={{ top: 5, right: 20, left: 20, bottom: 5 }}>
+                        <defs>
+                            <linearGradient id="colorChunker" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.8}/><stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/></linearGradient>
+                            <linearGradient id="colorBaseline" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="hsl(var(--muted-foreground))" stopOpacity={0.5}/><stop offset="95%" stopColor="hsl(var(--muted-foreground))" stopOpacity={0}/></linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="month" tickFormatter={(tick) => `Yr ${Math.floor(tick / 12)}`} />
+                        <YAxis tickFormatter={formatYAxis} />
+                        <ChartTooltip content={<ChartTooltipContent formatter={(value) => currencyFormatter.format(value as number)} />} />
+                        <Legend />
+                        <Area type="monotone" dataKey="Baseline" stroke="hsl(var(--muted-foreground))" fillOpacity={1} fill="url(#colorBaseline)" />
+                        <Area type="monotone" dataKey="Chunker Method" stroke="hsl(var(--primary))" fillOpacity={1} fill="url(#colorChunker)" />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader><CardTitle>Total Interest Paid</CardTitle></CardHeader>
                  <CardContent className="h-80">
-                   <ResponsiveContainer width="100%" height="100%">
-                     <BarChart data={interestChartData} layout="vertical" margin={{ top: 5, right: 20, left: 20, bottom: 5 }}>
-                       <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                       <XAxis type="number" tickFormatter={formatYAxis} />
-                       <YAxis type="category" dataKey="name" hide />
-                       <ChartTooltip content={<ChartTooltipContent formatter={(value) => currencyFormatter.format(value as number)} />} />
-                       <Legend />
-                       <Bar dataKey="Baseline" fill="hsl(var(--muted-foreground))" radius={[4, 4, 0, 0]} />
-                       <Bar dataKey="Chunker Method" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                     </BarChart>
-                   </ResponsiveContainer>
+                   <ChartContainer
+                     config={{
+                       'Baseline': { label: 'Baseline', color: 'hsl(var(--muted-foreground))' },
+                       'Chunker Method': { label: 'Chunker Method', color: 'hsl(var(--primary))' },
+                     }}
+                   >
+                     <ResponsiveContainer width="100%" height="100%">
+                       <BarChart data={interestChartData} layout="vertical" margin={{ top: 5, right: 20, left: 20, bottom: 5 }}>
+                         <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                         <XAxis type="number" tickFormatter={formatYAxis} />
+                         <YAxis type="category" dataKey="name" hide />
+                         <ChartTooltip content={<ChartTooltipContent formatter={(value) => currencyFormatter.format(value as number)} />} />
+                         <Legend />
+                         <Bar dataKey="Baseline" fill="var(--color-Baseline)" radius={[4, 4, 0, 0]} />
+                         <Bar dataKey="Chunker Method" fill="var(--color-Chunker Method)" radius={[4, 4, 0, 0]} />
+                       </BarChart>
+                     </ResponsiveContainer>
+                   </ChartContainer>
                  </CardContent>
               </Card>
 
               <div className="flex gap-4">
-                <Button onClick={handleSaveScenario} className="w-full" disabled={!user}><Download className="mr-2 h-4 w-4" /> Save Scenario</Button>
+                <Button onClick={handleSaveScenario} className="w-full"><Download className="mr-2 h-4 w-4" /> Save Scenario</Button>
                 <Button variant="secondary" className="w-full" disabled><Mail className="mr-2 h-4 w-4" /> Email Me</Button>
               </div>
             </div>
