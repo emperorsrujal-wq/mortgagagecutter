@@ -83,8 +83,8 @@ export default function ChunkerCalculatorPage() {
   const router = useRouter();
   const { toast } = useToast();
   
-  const [isCheckingClaims, setIsCheckingClaims] = useState(true);
-  const [isPro, setIsPro] = useState(false);
+  const [isCheckingClaims, setIsCheckingClaims] = useState(false);
+  const [isPro, setIsPro] = useState(true); // Set to true for testing
   const [isCalculating, setIsCalculating] = useState(false);
   const [results, setResults] = useState<CalculationResults | null>(null);
 
@@ -105,24 +105,24 @@ export default function ChunkerCalculatorPage() {
     }
   });
 
-  useEffect(() => {
-    if (!isUserLoading) {
-      if (!user) {
-        router.push('/login');
-      } else {
-        auth.currentUser?.getIdTokenResult()
-          .then((idTokenResult) => {
-            if (idTokenResult.claims.pro === true) {
-              setIsPro(true);
-            } else {
-              router.push('/purchase'); // Changed from /pricing
-            }
-          })
-          .catch(() => router.push('/purchase')) // Changed from /pricing
-          .finally(() => setIsCheckingClaims(false));
-      }
-    }
-  }, [user, isUserLoading, router, auth]);
+  // useEffect(() => {
+  //   if (!isUserLoading) {
+  //     if (!user) {
+  //       router.push('/login');
+  //     } else {
+  //       auth.currentUser?.getIdTokenResult()
+  //         .then((idTokenResult) => {
+  //           if (idTokenResult.claims.pro === true) {
+  //             setIsPro(true);
+  //           } else {
+  //             router.push('/purchase');
+  //           }
+  //         })
+  //         .catch(() => router.push('/purchase'))
+  //         .finally(() => setIsCheckingClaims(false));
+  //     }
+  //   }
+  // }, [user, isUserLoading, router, auth]);
 
   async function onSubmit(data: ChunkerFormData) {
     setIsCalculating(true);
@@ -198,17 +198,17 @@ export default function ChunkerCalculatorPage() {
   };
 
 
-  if (isUserLoading || isCheckingClaims) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Loader2 className="h-12 w-12 animate-spin" />
-      </div>
-    );
-  }
+  // if (isUserLoading || isCheckingClaims) {
+  //   return (
+  //     <div className="flex h-screen w-full items-center justify-center">
+  //       <Loader2 className="h-12 w-12 animate-spin" />
+  //     </div>
+  //   );
+  // }
 
-  if (!isPro) {
-    return null; // Redirecting...
-  }
+  // if (!isPro) {
+  //   return null; // Redirecting...
+  // }
 
   const balanceChartData = useMemo(() => {
     if (!results) return [];
@@ -383,7 +383,7 @@ export default function ChunkerCalculatorPage() {
               </Card>
 
               <div className="flex gap-4">
-                <Button onClick={handleSaveScenario} className="w-full"><Download className="mr-2 h-4 w-4" /> Save Scenario</Button>
+                <Button onClick={handleSaveScenario} className="w-full" disabled={!user}><Download className="mr-2 h-4 w-4" /> Save Scenario</Button>
                 <Button variant="secondary" className="w-full" disabled><Mail className="mr-2 h-4 w-4" /> Email Me</Button>
               </div>
             </div>
@@ -396,5 +396,3 @@ export default function ChunkerCalculatorPage() {
     </div>
   );
 }
-
-    
