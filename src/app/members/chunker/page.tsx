@@ -16,17 +16,18 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, AlertCircle, LineChart, BarChart, Download, Mail } from 'lucide-react';
+import { Loader2, AlertCircle, Download, Mail } from 'lucide-react';
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { Area, AreaChart, Bar, CartesianGrid, XAxis, YAxis, Legend, ResponsiveContainer } from 'recharts';
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis, YAxis, Legend, ResponsiveContainer } from 'recharts';
 
 import type { ChunkInput, BaselineInput, BaselineResult, ChunkResult } from '@/lib/chunker';
-import { simulateBaseline, simulateChunker, mortgagePaymentFromTerms } from '@/lib/chunker';
+import { simulateBaseline, simulateChunker } from '@/lib/chunker';
 import { useToast } from '@/hooks/use-toast';
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 
 const chunkerFormSchema = z.object({
   mortgageBalance: z.coerce.number().positive(),
@@ -114,10 +115,10 @@ export default function ChunkerCalculatorPage() {
             if (idTokenResult.claims.pro === true) {
               setIsPro(true);
             } else {
-              router.push('/pricing');
+              router.push('/purchase'); // Changed from /pricing
             }
           })
-          .catch(() => router.push('/pricing'))
+          .catch(() => router.push('/purchase')) // Changed from /pricing
           .finally(() => setIsCheckingClaims(false));
       }
     }
@@ -254,66 +255,72 @@ export default function ChunkerCalculatorPage() {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Left Column: Inputs */}
         <div className="w-full lg:w-1/3 space-y-6">
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <Card>
-              <CardHeader>
-                <CardTitle>Step 1: Mortgage</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <FormField name="mortgageBalance" control={form.control} render={({ field }) => (<div><Label>Current Mortgage Balance</Label><Input type="number" placeholder="350000" {...field} /></div>)} />
-                <FormField name="mortgageAPR" control={form.control} render={({ field }) => (<div><Label>Mortgage APR (%)</Label><Input type="number" step="0.01" placeholder="5.49" {...field} /></div>)} />
-                <div className="flex gap-2">
-                  <FormField name="remainingTerm" control={form.control} render={({ field }) => (<div className="flex-grow"><Label>Remaining Term</Label><Input type="number" placeholder="25" {...field} /></div>)} />
-                  <FormField name="termUnit" control={form.control} render={({ field }) => (<div className="w-1/3"><Label>&nbsp;</Label><RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex gap-2 items-center h-10"><RadioGroupItem value="years" id="years"/><Label htmlFor="years">Yrs</Label><RadioGroupItem value="months" id="months"/><Label htmlFor="months">Mos</Label></RadioGroup></div>)} />
-                </div>
-                <FormField name="monthlyMortgagePayment" control={form.control} render={({ field }) => (<div><Label>Current Monthly Payment (Optional)</Label><Input type="number" placeholder="1850" {...field} /></div>)} />
-                <FormField name="homeValue" control={form.control} render={({ field }) => (<div><Label>Home Value (Optional, for MI)</Label><Input type="number" placeholder="500000" {...field} /></div>)} />
-                <FormField name="monthlyMI" control={form.control} render={({ field }) => (<div><Label>Monthly Mortgage Insurance (Optional)</Label><Input type="number" placeholder="150" {...field} /></div>)} />
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader><CardTitle>Step 2: HELOC & Cash-Flow</CardTitle></CardHeader>
-              <CardContent className="space-y-4">
-                <FormField name="availableHelocNow" control={form.control} render={({ field }) => (<div><Label>Available HELOC Credit Today</Label><Input type="number" placeholder="50000" {...field} /></div>)} />
-                <FormField name="helocAPR" control={form.control} render={({ field }) => (<div><Label>HELOC APR (%)</Label><Input type="number" step="0.01" placeholder="7.50" {...field} /></div>)} />
-                <FormField name="netIncome" control={form.control} render={({ field }) => (<div><Label>Monthly Net Income</Label><Input type="number" placeholder="8000" {...field} /></div>)} />
-                <FormField name="livingExpenses" control={form.control} render={({ field }) => (<div><Label>Monthly Living Expenses (ex-mortgage)</Label><Input type="number" placeholder="4000" {...field} /></div>)} />
-                <FormField name="onetimeCashToMortgage" control={form.control} render={({ field }) => (<div><Label>One-Time Cash to Apply (Optional)</Label><Input type="number" placeholder="10000" {...field} /></div>)} />
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader><CardTitle>Step 3: Strategy</CardTitle></CardHeader>
-              <CardContent className="space-y-4">
-                <FormField name="chunkMode" control={form.control} render={({ field }) => (
-                  <div>
-                    <Label>Chunk Size Mode</Label>
-                    <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="mt-2">
-                      <div className="flex items-center space-x-2"><RadioGroupItem value="AUTO" id="auto"/> <Label htmlFor="auto">Auto (25% of remaining mortgage)</Label></div>
-                      <div className="flex items-center space-x-2"><RadioGroupItem value="FIXED" id="fixed"/> <Label htmlFor="fixed">Fixed Amount</Label></div>
-                    </RadioGroup>
-                    {form.watch('chunkMode') === 'FIXED' && <FormField name="fixedChunkAmount" control={form.control} render={({ field }) => (<Input type="number" placeholder="50000" className="mt-2" {...field} />)} />}
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Step 1: Mortgage</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <FormField control={form.control} name="mortgageBalance" render={({ field }) => (<FormItem><Label>Current Mortgage Balance</Label><FormControl><Input type="number" placeholder="350000" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                  <FormField control={form.control} name="mortgageAPR" render={({ field }) => (<FormItem><Label>Mortgage APR (%)</Label><FormControl><Input type="number" step="0.01" placeholder="5.49" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                  <div className="flex gap-2 items-end">
+                    <FormField control={form.control} name="remainingTerm" render={({ field }) => (<FormItem className="flex-grow"><Label>Remaining Term</Label><FormControl><Input type="number" placeholder="25" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={form.control} name="termUnit" render={({ field }) => (<FormItem className="pb-1"><RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex gap-2 items-center h-10"><FormControl><div className="flex items-center space-x-2"><RadioGroupItem value="years" id="years"/><Label htmlFor="years">Yrs</Label></div></FormControl><FormControl><div className="flex items-center space-x-2"><RadioGroupItem value="months" id="months"/><Label htmlFor="months">Mos</Label></div></FormControl></RadioGroup><FormMessage /></FormItem>)} />
                   </div>
-                )} />
-                <FormField name="billTiming" control={form.control} render={({ field }) => (
-                  <div>
-                    <Label>Bill Timing</Label>
-                    <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="mt-2">
-                      <div className="flex items-center space-x-2"><RadioGroupItem value="OPTIMIZED" id="optimized"/> <Label htmlFor="optimized">Optimized (Batch bills once/month)</Label></div>
-                      <div className="flex items-center space-x-2"><RadioGroupItem value="TYPICAL" id="typical"/> <Label htmlFor="typical">Typical (Bills spread out)</Label></div>
-                    </RadioGroup>
-                  </div>
-                )} />
-                <FormField name="readvanceable" control={form.control} render={({ field }) => (<div className="flex items-center space-x-2"><Checkbox id="readvanceable" checked={field.value} onCheckedChange={field.onChange} /><Label htmlFor="readvanceable">Re-drawable HELOC (e.g. Canadian readvanceable)</Label></div>)} />
-              </CardContent>
-            </Card>
+                  <FormField control={form.control} name="monthlyMortgagePayment" render={({ field }) => (<FormItem><Label>Current Monthly Payment (Optional)</Label><FormControl><Input type="number" placeholder="1850" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                  <FormField control={form.control} name="homeValue" render={({ field }) => (<FormItem><Label>Home Value (Optional, for MI)</Label><FormControl><Input type="number" placeholder="500000" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                  <FormField control={form.control} name="monthlyMI" render={({ field }) => (<FormItem><Label>Monthly Mortgage Insurance (Optional)</Label><FormControl><Input type="number" placeholder="150" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                </CardContent>
+              </Card>
 
-            <Button type="submit" className="w-full" size="lg" disabled={isCalculating}>
-              {isCalculating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-              Calculate
-            </Button>
-          </form>
+              <Card>
+                <CardHeader><CardTitle>Step 2: HELOC & Cash-Flow</CardTitle></CardHeader>
+                <CardContent className="space-y-4">
+                  <FormField control={form.control} name="availableHelocNow" render={({ field }) => (<FormItem><Label>Available HELOC Credit Today</Label><FormControl><Input type="number" placeholder="50000" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                  <FormField control={form.control} name="helocAPR" render={({ field }) => (<FormItem><Label>HELOC APR (%)</Label><FormControl><Input type="number" step="0.01" placeholder="7.50" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                  <FormField control={form.control} name="netIncome" render={({ field }) => (<FormItem><Label>Monthly Net Income</Label><FormControl><Input type="number" placeholder="8000" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                  <FormField control={form.control} name="livingExpenses" render={({ field }) => (<FormItem><Label>Monthly Living Expenses (ex-mortgage)</Label><FormControl><Input type="number" placeholder="4000" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                  <FormField control={form.control} name="onetimeCashToMortgage" render={({ field }) => (<FormItem><Label>One-Time Cash to Apply (Optional)</Label><FormControl><Input type="number" placeholder="10000" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader><CardTitle>Step 3: Strategy</CardTitle></CardHeader>
+                <CardContent className="space-y-4">
+                  <FormField control={form.control} name="chunkMode" render={({ field }) => (
+                    <FormItem>
+                      <Label>Chunk Size Mode</Label>
+                      <FormControl>
+                        <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="mt-2">
+                          <FormItem className="flex items-center space-x-2"><FormControl><RadioGroupItem value="AUTO" id="auto"/></FormControl> <Label htmlFor="auto" className="font-normal">Auto (25% of remaining mortgage)</Label></FormItem>
+                          <FormItem className="flex items-center space-x-2"><FormControl><RadioGroupItem value="FIXED" id="fixed"/></FormControl> <Label htmlFor="fixed" className="font-normal">Fixed Amount</Label></FormItem>
+                        </RadioGroup>
+                      </FormControl>
+                      {form.watch('chunkMode') === 'FIXED' && <FormField name="fixedChunkAmount" control={form.control} render={({ field }) => (<FormItem><FormControl><Input type="number" placeholder="50000" className="mt-2" {...field} /></FormControl><FormMessage /></FormItem>)} />}
+                    </FormItem>
+                  )} />
+                  <FormField control={form.control} name="billTiming" render={({ field }) => (
+                    <FormItem>
+                      <Label>Bill Timing</Label>
+                      <FormControl>
+                        <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="mt-2">
+                          <FormItem className="flex items-center space-x-2"><FormControl><RadioGroupItem value="OPTIMIZED" id="optimized"/></FormControl> <Label htmlFor="optimized" className="font-normal">Optimized (Batch bills once/month)</Label></FormItem>
+                          <FormItem className="flex items-center space-x-2"><FormControl><RadioGroupItem value="TYPICAL" id="typical"/></FormControl> <Label htmlFor="typical" className="font-normal">Typical (Bills spread out)</Label></FormItem>
+                        </RadioGroup>
+                      </FormControl>
+                    </FormItem>
+                  )} />
+                  <FormField control={form.control} name="readvanceable" render={({ field }) => (<FormItem className="flex items-center space-x-2 pt-2"><FormControl><Checkbox id="readvanceable" checked={field.value} onCheckedChange={field.onChange} /></FormControl><Label htmlFor="readvanceable" className="font-normal">Re-drawable HELOC (e.g. Canadian readvanceable)</Label></FormItem>)} />
+                </CardContent>
+              </Card>
+
+              <Button type="submit" className="w-full" size="lg" disabled={isCalculating}>
+                {isCalculating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                Calculate
+              </Button>
+            </form>
+          </Form>
         </div>
         
         {/* Right Column: Results */}
@@ -377,7 +384,7 @@ export default function ChunkerCalculatorPage() {
 
               <div className="flex gap-4">
                 <Button onClick={handleSaveScenario} className="w-full"><Download className="mr-2 h-4 w-4" /> Save Scenario</Button>
-                <Button variant="secondary" className="w-full"><Mail className="mr-2 h-4 w-4" /> Email Me</Button>
+                <Button variant="secondary" className="w-full" disabled><Mail className="mr-2 h-4 w-4" /> Email Me</Button>
               </div>
             </div>
           )}
@@ -389,3 +396,5 @@ export default function ChunkerCalculatorPage() {
     </div>
   );
 }
+
+    

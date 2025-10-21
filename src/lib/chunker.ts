@@ -54,7 +54,7 @@ export function mortgagePaymentFromTerms(
 
 export function simulateBaseline(input: BaselineInput): BaselineResult {
   let bal = input.mortgageBalance;
-  let n = Math.max(1, Math.round(input.termMonths));
+  const n = Math.max(1, Math.round(input.termMonths));
   const r = monthlyRate(input.mortgageAPR);
   const pmt = input.monthlyMortgagePayment ?? mortgagePaymentFromTerms(bal, input.mortgageAPR, n);
 
@@ -117,6 +117,7 @@ export function simulateChunker(input: ChunkInput): ChunkResult {
   const rH = monthlyRate(input.helocAPR);
   let helocBal = 0;
   let helocCredit = Math.max(0, input.availableHelocNow);
+  const originalHelocCredit = helocCredit; // Store original limit
 
   // One-time cash → best use = instant principal reduction
   const onetime = Math.max(0, input.onetimeCashToMortgage || 0);
@@ -159,7 +160,9 @@ export function simulateChunker(input: ChunkInput): ChunkResult {
 
   for (let m = 1; m <= 480 && (mortgageBal > 0.01 || helocBal > 0.01); m++) {
     // 1) Mortgage month (fixed pmt)
+    let pmtThisMonth = 0;
     if (mortgageBal > 0.01) {
+      pmtThisMonth = pmt;
       const mortInterest = mortgageBal * rM;
       let principal = Math.min(pmt - mortInterest, mortgageBal);
       if (principal < 0) principal = 0;
@@ -177,7 +180,6 @@ export function simulateChunker(input: ChunkInput): ChunkResult {
 
     // 2) Cash-flow available AFTER mortgage payment + MI (they come out of monthly budget)
     const miThisMonth = (hasMI && homeValue > 0 && (mortgageBal / homeValue) > 0.80) ? monthlyMI : 0;
-    const pmtThisMonth = (mortgageBal > 0 || pmt > 0) ? pmt : 0;
     const afterMortgageSurplus = Math.max(0, surplusBeforeDebt - (pmtThisMonth + miThisMonth));
 
     // 3) HELOC month: interest-only first, then surplus*timingFactor goes to principal
@@ -194,21 +196,19 @@ export function simulateChunker(input: ChunkInput): ChunkResult {
         warnings.push("Surplus is too small relative to HELOC interest; consider reducing chunk size or expenses.");
       }
       
-      // If we paid it off, update helocCredit
-      if (newHelocBal <= 0 && input.readvanceable) {
-          helocCredit += helocBal; // add back the remaining balance that was just cleared
-          helocBal = 0;
-      } else {
-          helocBal = newHelocBal;
+      if (input.readvanceable) {
+        // If we paid down balance, that amount becomes available again
+        helocCredit += (helocBal - newHelocBal);
       }
-
-
+      helocBal = newHelocBal;
     }
     
     // Check if we can draw a new chunk
     if (helocBal <= 0.01 && mortgageBal > 0.01) {
+       // HELOC is paid off, so we can draw again if credit is available.
        if (input.readvanceable) {
-          helocCredit = Math.max(helocCredit, input.availableHelocNow - helocBal);
+         // Reset available credit to full, since it's paid off
+         helocCredit = originalHelocCredit;
        }
        drawChunk();
     }
@@ -248,3 +248,5 @@ export function simulateChunker(input: ChunkInput): ChunkResult {
     warnings
   };
 }
+
+    
