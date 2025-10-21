@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Switch } from '@/components/ui/switch';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { ResponsiveContainer, LineChart, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend } from 'recharts';
+import { ResponsiveContainer, LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Info, HelpCircle, PiggyBank, Receipt, Rocket, Repeat } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -481,7 +481,7 @@ export default function ChunkerCalculatorPage() {
                       <CardDescription>{t.results.balanceDescription}</CardDescription>
                   </CardHeader>
                   <CardContent>
-                      <ChartContainer config={{}} className="h-[250px] w-full">
+                      <ChartContainer config={{}}>
                           <ResponsiveContainer>
                               <LineChart data={res.timeline.slice(0, 240)} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
                                 <CartesianGrid strokeDasharray="3 3" />
