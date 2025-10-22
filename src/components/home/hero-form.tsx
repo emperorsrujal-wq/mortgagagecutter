@@ -1,3 +1,4 @@
+
 'use client';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,6 +25,8 @@ import { ArrowRight } from 'lucide-react';
 import { useState } from 'react';
 import { AuthButtons } from '../auth/auth-buttons';
 import { Separator } from '../ui/separator';
+import { sendWelcomeEmail } from '@/app/actions';
+
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -31,37 +34,15 @@ const formSchema = z.object({
 });
 
 async function subscribeToEmailService(values: z.infer<typeof formSchema>) {
-  // DEVELOPER NOTE:
-  // This is where you would integrate with your email marketing service.
-  // 1. You would typically make a POST request to a serverless function
-  //    or an API route that you create.
-  // 2. This backend function would then securely use your email service's
-  //    API key to add the user to your list.
-  //
-  // Example using a hypothetical API route:
-  /*
-  try {
-    const response = await fetch('/api/subscribe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(values),
-    });
+  // This function now triggers the secure server action.
+  // It does not wait for the email to be sent to keep the UI fast.
+  sendWelcomeEmail(values).catch(error => {
+    // The server action already logs errors, but we can log here if needed.
+    console.error("Initiating welcome email failed:", error);
+  });
 
-    if (!response.ok) {
-      // Handle server-side errors
-      console.error('Failed to subscribe user.');
-      return false;
-    }
-    return true;
-  } catch (error) {
-    console.error('Error subscribing user:', error);
-    return false;
-  }
-  */
-
-  // For now, we'll simulate a successful API call.
-  console.log('Simulating email subscription for:', values);
-  return new Promise((resolve) => setTimeout(() => resolve(true), 500));
+  // We immediately return true so the UI can proceed.
+  return Promise.resolve(true);
 }
 
 export function HeroForm() {
