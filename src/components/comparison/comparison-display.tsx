@@ -105,67 +105,69 @@ function ComparisonChart({ data }: { data: Outputs['series'] }) {
   const formatTooltip = (value: number) => currencyFormatter.format(value);
 
   return (
-    <ResponsiveContainer width="100%" height={350}>
-        <ComposedChart data={chartData} margin={{ left: 0, right: 10, top: 10, bottom: 20 }}>
-            <defs>
-                <linearGradient id="colorHeloc" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.4} />
-                    <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
-                </linearGradient>
-                <linearGradient id="colorBaseline" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="hsl(var(--muted-foreground))" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="hsl(var(--muted-foreground))" stopOpacity={0} />
-                </linearGradient>
-            </defs>
-            <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="hsl(var(--border) / 0.5)" />
-            <XAxis
-                dataKey="month"
-                tickFormatter={(tick) => `Yr ${Math.floor(tick / 12)}`}
-                tickLine={false}
-                axisLine={{stroke: "hsl(var(--border))"}}
-                interval="preserveStartEnd"
-                minTickGap={50}
-                className="text-xs"
-                />
-            <YAxis
-                tickFormatter={formatYAxis}
-                tickLine={false}
-                axisLine={{stroke: "hsl(var(--border))"}}
-                width={50}
-                className="text-xs"
-            />
-            <ChartTooltip
-                cursor={true}
-                content={
-                    <ChartTooltipContent
-                        className="bg-card/80 backdrop-blur-sm"
-                        labelFormatter={(label) => `Month: ${label}`}
-                        formatter={(value, name) => [
-                            formatTooltip(value as number),
-                            name === 'balanceHeloc' ? 'Accelerated Path' : 'Old Path',
-                        ]}
-                    />
-                }
-                />
-            <Legend verticalAlign="top" height={40} iconType="circle" />
-            <Area
-                type="monotone"
-                dataKey="balanceBaseline"
-                stroke="hsl(var(--muted-foreground))"
-                fill="url(#colorBaseline)"
-                name="Old Path"
-                stackId="1"
-            />
-            <Area
-                type="monotone"
-                dataKey="balanceHeloc"
-                stroke="hsl(var(--primary))"
-                fill="url(#colorHeloc)"
-                name="Accelerated Path"
-                stackId="2"
-            />
-        </ComposedChart>
-    </ResponsiveContainer>
+    <ChartContainer config={{}}>
+      <ResponsiveContainer width="100%" height={350}>
+          <ComposedChart data={chartData} margin={{ left: 0, right: 10, top: 10, bottom: 20 }}>
+              <defs>
+                  <linearGradient id="colorHeloc" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.4} />
+                      <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                  </linearGradient>
+                  <linearGradient id="colorBaseline" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="hsl(var(--muted-foreground))" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="hsl(var(--muted-foreground))" stopOpacity={0} />
+                  </linearGradient>
+              </defs>
+              <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="hsl(var(--border) / 0.5)" />
+              <XAxis
+                  dataKey="month"
+                  tickFormatter={(tick) => `Yr ${Math.floor(tick / 12)}`}
+                  tickLine={false}
+                  axisLine={{stroke: "hsl(var(--border))"}}
+                  interval="preserveStartEnd"
+                  minTickGap={50}
+                  className="text-xs"
+                  />
+              <YAxis
+                  tickFormatter={formatYAxis}
+                  tickLine={false}
+                  axisLine={{stroke: "hsl(var(--border))"}}
+                  width={50}
+                  className="text-xs"
+              />
+              <ChartTooltip
+                  cursor={true}
+                  content={
+                      <ChartTooltipContent
+                          className="bg-card/80 backdrop-blur-sm"
+                          labelFormatter={(label) => `Month: ${label}`}
+                          formatter={(value, name) => [
+                              formatTooltip(value as number),
+                              name === 'balanceHeloc' ? 'Accelerated Path' : 'Old Path',
+                          ]}
+                      />
+                  }
+                  />
+              <Legend verticalAlign="top" height={40} iconType="circle" />
+              <Area
+                  type="monotone"
+                  dataKey="balanceBaseline"
+                  stroke="hsl(var(--muted-foreground))"
+                  fill="url(#colorBaseline)"
+                  name="Old Path"
+                  stackId="1"
+              />
+              <Area
+                  type="monotone"
+                  dataKey="balanceHeloc"
+                  stroke="hsl(var(--primary))"
+                  fill="url(#colorHeloc)"
+                  name="Accelerated Path"
+                  stackId="2"
+              />
+          </ComposedChart>
+      </ResponsiveContainer>
+    </ChartContainer>
   );
 }
 
