@@ -35,6 +35,9 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { useUser } from '@/firebase';
+import { useToast } from '@/hooks/use-toast';
+
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -153,6 +156,53 @@ function InnerComparison() {
   const [data, setData] = useState<Outputs | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { user } = useUser();
+  const { toast } = useToast();
+
+  const handleCheckout = (plan: string) => {
+    // In a real app, this would trigger a call to Stripe or another payment gateway
+    console.log(`Initiating checkout for plan: ${plan}`);
+    toast({
+      title: 'Checkout Initiated',
+      description: `Redirecting to payment for plan: ${plan}.`,
+    });
+    // router.push(`/api/checkout?plan=${plan}`);
+  };
+
+  const handleCopy = () => {
+    const referralLink = (document.getElementById('ReferralLink') as HTMLInputElement)?.value;
+    if (referralLink) {
+        navigator.clipboard.writeText(referralLink);
+        toast({
+            title: "Copied!",
+            description: "Referral link copied to clipboard.",
+        });
+    }
+  };
+
+  const handleShare = (platform: 'whatsapp' | 'sms' | 'email') => {
+    const referralLinkInput = document.getElementById('ReferralLink') as HTMLInputElement;
+    const refLink = referralLinkInput?.value;
+    if (!refLink) return;
+
+    const message = `I used MortgageCutter to slash years off my mortgage without increasing my monthly spend. Try it with $20 off: ${refLink}`;
+    const encodedMessage = encodeURIComponent(message);
+    let url = '';
+
+    switch(platform) {
+        case 'whatsapp':
+            url = `https://wa.me/?text=${encodedMessage}`;
+            break;
+        case 'sms':
+            url = `sms:?&body=${encodedMessage}`;
+            break;
+        case 'email':
+            url = `mailto:?subject=${encodeURIComponent('Cut years off your mortgage')}&body=${encodedMessage}`;
+            break;
+    }
+    window.open(url, '_blank');
+  }
+
 
   useEffect(() => {
     const params = Object.fromEntries(searchParams.entries());
@@ -219,6 +269,11 @@ function InnerComparison() {
 
   const yearsSaved = Math.floor((data.debtFreeMonthsBaseline - data.debtFreeMonthsHeloc) / 12);
   const monthsSaved = (data.debtFreeMonthsBaseline - data.debtFreeMonthsHeloc) % 12;
+
+  const referralCode = (user as any)?.referralCode || 'YOURCODE';
+  const referralLink = typeof window !== 'undefined' ? `${window.location.origin}/signup?ref=${referralCode}` : '';
+  const confirmedReferrals = (user as any)?.confirmedReferrals || 0;
+  const progressPercent = Math.min(100, (confirmedReferrals / 5) * 100);
 
   return (
     <div className="container mx-auto py-12 px-4">
@@ -308,6 +363,120 @@ function InnerComparison() {
         </Card>
       </div>
 
+       <section id="ResultsSalesSection" className="mt-8">
+        {/* Headline */}
+        <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold">Cut years &amp; interest—without changing your monthly spend</h2>
+            <p className="text-sm text-gray-600">Choose how you want to unlock the full MortgageCutter system.</p>
+        </div>
+
+        {/* Pricing grid: 3 options */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4" id="PricingOptions">
+            {/* Elite */}
+            <div className="border rounded-lg p-5 shadow-sm">
+            <h3 className="font-semibold text-lg">Elite</h3>
+            <p className="text-3xl font-bold my-2">$997</p>
+            <ul className="text-sm space-y-2 mb-4">
+                <li>Lifetime access to all tools &amp; future updates</li>
+                <li>Bank Call Kit (scripts, questionnaires, email templates)</li>
+                <li>3 scenario reviews (async video)</li>
+                <li>Priority email support</li>
+                <li>30-day “Math-Proof” guarantee</li>
+            </ul>
+            <button
+                id="cta-elite-999"
+                className="w-full py-2 rounded bg-black text-white"
+                data-checkout-plan="elite_999"
+                onClick={() => handleCheckout('elite_999')}
+            >
+                I Prefer No Referral – Get Lifetime
+            </button>
+            </div>
+
+            {/* Pro — Most Popular */}
+            <div className="border-2 border-black rounded-lg p-5 shadow-md relative">
+            <div className="absolute -top-3 right-3 bg-black text-white text-xs px-2 py-1 rounded">Most popular</div>
+            <h3 className="font-semibold text-lg">Pro (Referral Unlock)</h3>
+            <p className="text-3xl font-bold my-2">$197</p>
+            <p className="text-xs text-gray-600 mb-2">One time today + unlock lifetime with 5 referrals in 30 days</p>
+            <ul className="text-sm space-y-2 mb-4">
+                <li>Full toolkit access</li>
+                <li>Bank-agnostic guidance (U.S. &amp; Canada)</li>
+                <li>Referral dashboard to track progress</li>
+                <li>Friends get $20 off via your link</li>
+                <li>If you don’t hit 5 in 30 days, it continues at $29/mo until you do—then billing stops forever</li>
+            </ul>
+            <button
+                id="cta-pro-197"
+                className="w-full py-2 rounded bg-black text-white"
+                data-checkout-plan="pro_197"
+                onClick={() => handleCheckout('pro_197')}
+            >
+                Get Lifetime for $197 (Unlock with 5 Friends)
+            </button>
+            </div>
+
+            {/* Basic */}
+            <div className="border rounded-lg p-5 shadow-sm">
+            <h3 className="font-semibold text-lg">Basic</h3>
+            <p className="text-3xl font-bold my-2">$29<span className="text-base font-medium">/mo</span></p>
+            <ul className="text-sm space-y-2 mb-4">
+                <li>Core calculator &amp; strategy planner</li>
+                <li>Monthly “Savings Tune-Up” email</li>
+                <li>Community Q&amp;A access</li>
+                <li>Upgrade any time</li>
+            </ul>
+            <button
+                id="cta-basic-29"
+                className="w-full py-2 rounded bg-black text-white"
+                data-checkout-plan="basic_29"
+                onClick={() => handleCheckout('basic_29')}
+            >
+                Start for $29/month
+            </button>
+            </div>
+        </div>
+
+        {/* Referral panel (always visible) */}
+        <div id="ReferralPanel" className="mt-8 border rounded-lg p-5">
+            <h4 className="font-semibold text-lg mb-2">Unlock Lifetime with 5 friends</h4>
+            <p className="text-sm text-gray-700 mb-4">
+            Share your link. When 5 friends activate a paid plan (or trial that converts) within 30 days, you unlock Lifetime Pro and billing stops forever. Each friend gets <strong>$20 off</strong> their first payment.
+            </p>
+
+            <div className="bg-gray-50 rounded p-3 mb-3">
+                <div className="flex items-center gap-2">
+                    <input
+                    id="ReferralLink"
+                    className="flex-1 border rounded px-2 py-2 text-sm bg-white"
+                    type="text"
+                    readOnly
+                    value={referralLink}
+                    />
+                    <button id="CopyReferralLink" onClick={handleCopy} className="px-3 py-2 rounded bg-black text-white text-sm">
+                    Copy
+                    </button>
+                </div>
+                <p className="text-xs text-gray-500 mt-2">Tip: paste into WhatsApp, SMS, Messenger, or email.</p>
+            </div>
+
+            {/* Quick share buttons (front-end only, use navigator.share if available) */}
+            <div className="flex flex-wrap gap-2 mb-3">
+                <button onClick={() => handleShare('whatsapp')} className="px-3 py-2 border rounded text-sm" id="ShareWhatsApp">Share on WhatsApp</button>
+                <button onClick={() => handleShare('sms')} className="px-3 py-2 border rounded text-sm" id="ShareSMS">Share via SMS</button>
+                <button onClick={() => handleShare('email')} className="px-3 py-2 border rounded text-sm" id="ShareEmail">Share via Email</button>
+            </div>
+
+            <div className="text-xs text-gray-600">
+            <p><strong>What counts?</strong> A friend who activates a paid plan or a trial that converts. Confirmed after 7 days or first successful payment.</p>
+            <p><strong>Your progress:</strong> <span id="ReferralProgressText">{confirmedReferrals}/5 confirmed</span></p>
+            <div className="w-full bg-gray-200 rounded h-2 mt-2">
+                <div id="ReferralProgressBar" className="bg-black h-2 rounded" style={{width: `${progressPercent}%`}}></div>
+            </div>
+            </div>
+        </div>
+        </section>
+
        <Alert className="mt-8 border-primary/50">
            <Info className="h-4 w-4" />
            <AlertTitle className="font-bold">Assumptions & Disclaimers</AlertTitle>
@@ -315,21 +484,6 @@ function InnerComparison() {
             Estimates are for educational purposes and are not a guarantee of savings or loan approval. All debts are assumed to be consolidated into the HELOC. The calculation does not include bank fees, closing costs, or property taxes/insurance. Results depend on your actual income, spending, and final lender terms.
            </AlertDescription>
        </Alert>
-
-      <Card className="mt-8 text-center bg-gradient-to-r from-primary to-accent text-primary-foreground p-8 shadow-2xl">
-        <CardHeader>
-           <CardTitle className="text-3xl font-bold">Ready to Take Control?</CardTitle>
-           <CardDescription className="text-lg text-primary-foreground/90">
-             Get the exact step-by-step system and tools to make these savings a reality.
-           </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button size="lg" asChild className="bg-card text-card-foreground hover:bg-card/90 transform hover:scale-105 transition-transform duration-200">
-            <Link href="/purchase">Get Instant Access for {currencyFormatter.format(79)}</Link>
-          </Button>
-          <p className="text-xs mt-4 opacity-80">One-time payment. Lifetime access. No hidden fees.</p>
-        </CardContent>
-      </Card>
     </div>
   );
 }
@@ -341,3 +495,5 @@ export function ComparisonDisplay() {
     </Suspense>
   )
 }
+
+    
