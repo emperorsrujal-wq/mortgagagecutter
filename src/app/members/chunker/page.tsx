@@ -255,6 +255,476 @@ const i18n: Record<string, LocalePack> = {
       optimized: "Optimisé",
       typical: "Typique",
     }
+  },
+  es: {
+    title: "Estimador de Asistencia HELOC",
+    subtitle: "Convierta el acceso a su HELOC en meses menos de su hipoteca. Sin cambiar de prestamista. Solo use el crédito que ya tiene para reducir el capital.",
+    howTitle: "Cómo funciona esta estrategia",
+    steps: [
+      {icon: PiggyBank, title: "Deposita el sueldo en HELOC", body: "Tu efectivo reduce el saldo diario de la HELOC, disminuyendo el interés."},
+      {icon: Receipt, title: "Paga las facturas desde HELOC", body: "Agrupa las facturas para que el efectivo permanezca más tiempo contra el saldo."},
+      {icon: Rocket, title: "Abona a la hipoteca", body: "Envía un prepago a capital (el pago se mantiene, el plazo se acorta)."},
+      {icon: Repeat, title: "Usa el superávit para reiniciar", body: "Tu superávit mensual paga la HELOC; repite."}
+    ],
+    faqTitle: "Preguntas Frecuentes",
+    faq: [
+      {q: "¿Cambiará mi pago de hipoteca?", a: "No, a menos que le pidas a tu prestamista que recalcule. Generalmente no lo hacemos. El pago se mantiene igual; el plazo se acorta."},
+      {q: "¿Necesito una cuenta especial?", a: "Cualquier HELOC o línea de crédito readmisible funciona. Mantenlo simple e independiente del banco."},
+      {q: "¿Qué pasa si mi superávit es pequeño?", a: "Pequeño también funciona. La calculadora ajusta montos de abono seguros para ti."}
+    ],
+    form: {
+      mortgageTitle: "1. Detalles de la Hipoteca",
+      cashflowTitle: "2. Flujo de Caja y HELOC",
+      strategyTitle: "3. Estrategia",
+      calculate: "Calcular",
+      howChunksWork: "¿Cómo funcionan los abonos?",
+    },
+    results: {
+      title: "Resultados",
+      interestSaved: "Interés Ahorrado",
+      monthsSaved: "Meses Ahorrados",
+      miSaved: "MI/CMHC Ahorrado",
+      baselineTitle: "Línea de Base (Sin hacer nada)",
+      strategyTitle: "Con Estrategia de Abonos",
+      months: "Meses",
+      totalInterest: "Interés Total",
+      totalMI: "MI/CMHC Total",
+      balanceOverTime: "Saldo a lo Largo del Tiempo",
+      balanceDescription: "Hipoteca vs. Deuda Total con Estrategia de Abonos",
+      timelineTitle: "Ver Cronología Mes a Mes",
+      timelineDescription: "(Mostrando los primeros 240 meses para mantener la tabla ligera.)",
+      table: {
+        month: "Mes",
+        mortgageBal: "Saldo Hipoteca",
+        helocBal: "Saldo HELOC",
+        chunk: "Abono",
+        helocInt: "Int. HELOC",
+        mi: "MI",
+        surplusUsed: "Superávit Usado"
+      },
+      placeholderTitle: "Tus resultados aparecerán aquí.",
+      placeholderDescription: "Completa el formulario y haz clic en 'Calcular' para ver tus posibles ahorros.",
+    },
+    disclaimer: "Estimación solo para fines educativos. No incluye comisiones bancarias, promociones o impuestos. Los resultados mejoran con un superávit mensual positivo, líneas readmisibles y pagos de facturas agrupados.",
+    explainers: {
+      mortgageBalance: "Tu capital actual no pagado de la hipoteca (no el préstamo original).\nEjemplo: Si tu estado de cuenta muestra $612,350 restantes, ingresa 612350.",
+      mortgageAPR: "Tu tasa de interés anual para la hipoteca. Si tienes una tasa fija, úsala. Si es variable, usa la TPA declarada hoy.\nEjemplo: 5.49",
+      termRemaining: "Cuánto tiempo queda en tu hipoteca actual. Puedes ingresarlo en años o meses.\nEjemplo: 25 años (o 300 meses).",
+      monthlyMortgagePayment: "Déjalo en blanco para autocalcular. Si tu pago incluye impuestos sobre la propiedad/seguro, ingresa solo la porción del pago del préstamo.\nEjemplo: Déjalo en blanco, o ingresa 3,456.",
+      homeValue: "Valor de mercado actual estimado. Usado solo para estimar cuándo se elimina el seguro hipotecario (MI/CMHC) al 80% de LTV.\nEjemplo: 750000.",
+      monthlyMI: "Seguro hipotecario mensual (EE. UU.) o prima CMHC (Canadá), si pagas uno. Ingresa 0 si no tienes.\nEjemplo: 120.",
+      netIncome: "Pago neto mensual después de impuestos/deducciones (total del hogar).\nEjemplo: Tus recibos de pago suman $8,900 después de impuestos → ingresa 8900.",
+      livingExpenses: "Todos los gastos mensuales excepto el pago de la hipoteca: servicios públicos, comestibles, etc.\nEjemplo: 4300.",
+      helocAPR: "La tasa anual variable o fija de tu HELOC.\nEjemplo: 7.25.",
+      helocLimit: "El máximo que puedes retirar hoy (límite de crédito menos cualquier saldo actual de HELOC).\nEjemplo: Límite de crédito 50,000 y saldo actual 8,500 → ingresa 41500.",
+      helocOpeningBalance: "Tu saldo actual de HELOC antes de comenzar la estrategia. Usa 0 si aún no has retirado.\nEjemplo: 0 o 8500.",
+      readvanceable: "Sí si tu línea se readmite a medida que pagas tu hipoteca (p. ej., STEP/HPP). No para una HELOC básica no readmisible.",
+      chunkMode: "Automático = dimensionamos abonos seguros basados en tu superávit. Fijo = tú eliges el tamaño del abono. Se recomienda Automático.",
+      fixedChunkAmount: "Cuánto retirar de la HELOC cada vez que 'abonamos' al capital de tu hipoteca.\nEjemplo: 10000.",
+      billTiming: "Optimizado = agrupas la mayoría de las facturas a la vez, manteniendo el efectivo estacionado contra la HELOC por más tiempo. Típico = las facturas están dispersas.",
+      chunkModalTitle: "Cómo Funciona la Estrategia de 'Abonos'",
+      chunkModalBody: "Retiramos un pequeño abono de la HELOC para reducir el capital de la hipoteca, luego tu superávit mensual paga la HELOC. Una vez que el saldo de la HELOC está cerca de cero, repetimos. Un capital más bajo antes = menos interés con el tiempo."
+    },
+    labels: {
+      language: "Idioma",
+      years: "Años",
+      months: "Meses",
+      termRemaining: "Plazo Restante",
+      mortgageBalance: "Saldo de Hipoteca",
+      mortgageAPR: "TPA Hipoteca (%)",
+      monthlyMortgagePayment: "Pago Mensual (Opcional)",
+      homeValue: "Valor de la Vivienda (Opcional)",
+      monthlyMI: "MI/CMHC Mensual (Opcional)",
+      netIncome: "Ingreso Mensual Neto",
+      livingExpenses: "Gastos de Vida Mensuales (excl. hipoteca)",
+      helocAPR: "TPA HELOC (%)",
+      helocLimit: "Límite HELOC (Disponible ahora)",
+      helocOpeningBalance: "Saldo Inicial HELOC",
+      chunkMode: "Modo de Abono",
+      fixedChunkAmount: "Monto de Abono Fijo",
+      billTiming: "Programación de Facturas",
+      readvanceable: "¿Readmisible?",
+      auto: "Auto",
+      fixed: "Fijo",
+      optimized: "Optimizado",
+      typical: "Típico",
+    }
+  },
+  "pt-BR": {
+    title: "Estimador de Assistência HELOC",
+    subtitle: "Transforme o acesso ao seu HELOC em meses a menos na sua hipoteca. Sem trocar de credor. Apenas use o crédito que você já tem para abater o principal.",
+    howTitle: "Como a Estratégia Funciona",
+    steps: [
+        {icon: PiggyBank, title: "Deposite o salário no HELOC", body: "Seu dinheiro reduz o saldo diário do HELOC, cortando juros."},
+        {icon: Receipt, title: "Pague contas pelo HELOC", body: "Agrupe contas para que o dinheiro fique mais tempo contra o saldo."},
+        {icon: Rocket, title: "Abata na hipoteca", body: "Envie um pré-pagamento em montante para o principal (o pagamento permanece o mesmo; o prazo encurta)."},
+        {icon: Repeat, title: "Use o superávit para zerar", body: "Seu superávit mensal paga o HELOC; repita."}
+    ],
+    faqTitle: "Perguntas Frequentes",
+    faq: [
+        {q: "Meu pagamento da hipoteca vai mudar?", a: "Não, a menos que você peça ao seu credor para recalcular. Normalmente não fazemos isso. O pagamento permanece o mesmo; o prazo encurta."},
+        {q: "Preciso de uma conta especial?", a: "Qualquer HELOC ou linha de crédito reavançável funciona. Mantenha simples e agnóstico ao banco."},
+        {q: "E se meu superávit for pequeno?", a: "Pequeno ainda funciona. A calculadora dimensiona valores seguros de abatimento para você."}
+    ],
+    form: {
+        mortgageTitle: "1. Detalhes da Hipoteca",
+        cashflowTitle: "2. Fluxo de Caixa & HELOC",
+        strategyTitle: "3. Estratégia",
+        calculate: "Calcular",
+        howChunksWork: "Como funcionam os abatimentos?",
+    },
+    results: {
+        title: "Resultados",
+        interestSaved: "Juros Economizados",
+        monthsSaved: "Meses Economizados",
+        miSaved: "MI/CMHC Economizado",
+        baselineTitle: "Base (Não fazer nada)",
+        strategyTitle: "Com Estratégia de Abatimento",
+        months: "Meses",
+        totalInterest: "Juros Totais",
+        totalMI: "MI/CMHC Total",
+        balanceOverTime: "Saldo ao Longo do Tempo",
+        balanceDescription: "Hipoteca vs. Dívida Total com a Estratégia de Abatimento",
+        timelineTitle: "Ver Linha do Tempo Mês a Mês",
+        timelineDescription: "(Mostrando os primeiros 240 meses para manter a tabela leve.)",
+        table: {
+            month: "Mês",
+            mortgageBal: "Saldo Hipoteca",
+            helocBal: "Saldo HELOC",
+            chunk: "Abatimento",
+            helocInt: "Juros HELOC",
+            mi: "MI",
+            surplusUsed: "Superávit Usado"
+        },
+        placeholderTitle: "Seus resultados aparecerão aqui.",
+        placeholderDescription: "Preencha o formulário e clique em 'Calcular' para ver sua economia potencial.",
+    },
+    disclaimer: "Estimativa apenas para fins educacionais. Não inclui taxas bancárias, promoções ou impostos. Os resultados melhoram com um superávit mensal positivo, linhas reavançáveis e pagamentos de contas agrupados.",
+    explainers: {
+        mortgageBalance: "Seu saldo devedor atual da hipoteca (não o empréstimo original).\nExemplo: Se seu extrato mostra R$612.350 restantes, insira 612350.",
+        mortgageAPR: "Sua taxa de juros anual para a hipoteca. Se você tem uma taxa fixa, use essa. Se for variável, use a TAE de hoje.\nExemplo: 5.49",
+        termRemaining: "Quanto tempo resta na sua hipoteca atual. Você pode inserir em anos ou meses.\nExemplo: 25 anos (ou 300 meses).",
+        monthlyMortgagePayment: "Deixe em branco para autocalcular. Se seu pagamento inclui imposto predial/seguro, insira apenas a parte do pagamento do empréstimo.\nExemplo: Deixe em branco, ou insira 3.456.",
+        homeValue: "Valor de mercado atual estimado. Usado apenas para estimar quando o seguro hipotecário (MI/CMHC) é removido a 80% de LTV.\nExemplo: 750000.",
+        monthlyMI: "Seguro hipotecário mensal (EUA) ou prêmio CMHC (Canadá), se você paga um. Insira 0 se não tiver.\nExemplo: 120.",
+        netIncome: "Salário líquido mensal após impostos/deduções (total da casa).\nExemplo: Seus holerites totalizam R$8.900 após impostos → insira 8900.",
+        livingExpenses: "Todos os gastos mensais, exceto o pagamento da hipoteca: contas de consumo, supermercado, etc.\nExemplo: 4300.",
+        helocAPR: "A taxa anual variável ou fixa do seu HELOC.\nExemplo: 7.25.",
+        helocLimit: "O máximo que você pode sacar hoje (limite de crédito menos qualquer saldo atual do HELOC).\nExemplo: Limite de crédito 50.000 e saldo atual 8.500 → insira 41500.",
+        helocOpeningBalance: "Seu saldo atual do HELOC antes de iniciar a estratégia. Use 0 se ainda não sacou.\nExemplo: 0 ou 8500.",
+        readvanceable: "Sim se sua linha reavança conforme você paga sua hipoteca (ex: STEP/HPP). Não para um HELOC básico não reavançável.",
+        chunkMode: "Auto = dimensionamos abatimentos seguros com base no seu superávit. Fixo = você escolhe o tamanho do abatimento. Auto é recomendado.",
+        fixedChunkAmount: "Quanto sacar do HELOC cada vez que 'abatemos' o principal da sua hipoteca.\nExemplo: 10000.",
+        billTiming: "Otimizado = você agrupa a maioria das contas de uma vez, mantendo o dinheiro parado contra o HELOC por mais tempo. Típico = as contas são espalhadas.",
+        chunkModalTitle: "Como a Estratégia de 'Abatimento' Funciona",
+        chunkModalBody: "Sacamos um pequeno abatimento do HELOC para diminuir o principal da hipoteca, então seu superávit mensal paga o HELOC. Assim que o saldo do HELOC está perto de zero, repetimos. Um principal mais baixo mais cedo = menos juros ao longo do tempo."
+    },
+    labels: {
+        language: "Idioma",
+        years: "Anos",
+        months: "Meses",
+        termRemaining: "Prazo Restante",
+        mortgageBalance: "Saldo da Hipoteca",
+        mortgageAPR: "TAE da Hipoteca (%)",
+        monthlyMortgagePayment: "Pagamento Mensal (Opcional)",
+        homeValue: "Valor do Imóvel (Opcional)",
+        monthlyMI: "MI/CMHC Mensal (Opcional)",
+        netIncome: "Renda Mensal Líquida",
+        livingExpenses: "Despesas Mensais (excl. hipoteca)",
+        helocAPR: "TAE do HELOC (%)",
+        helocLimit: "Limite do HELOC (Disponível agora)",
+        helocOpeningBalance: "Saldo Inicial do HELOC",
+        chunkMode: "Modo de Abatimento",
+        fixedChunkAmount: "Valor Fixo do Abatimento",
+        billTiming: "Programação de Contas",
+        readvanceable: "Reavançável?",
+        auto: "Auto",
+        fixed: "Fixo",
+        optimized: "Otimizado",
+        typical: "Típico",
+    }
+  },
+  hi: {
+    title: "HELOC-सहायता अनुमानक",
+    subtitle: "HELOC एक्सेस को अपनी मॉर्गेज से महीनों कम करने में बदलें। ऋणदाता बदलने की जरूरत नहीं। बस उस क्रेडिट का उपयोग करें जो आपके पास पहले से है।",
+    howTitle: "यह रणनीति कैसे काम करती है",
+    steps: [
+        {icon: PiggyBank, title: "HELOC में वेतन जमा करें", body: "आपका नकद HELOC के दैनिक शेष को कम करता है, जिससे ब्याज में कटौती होती है।"},
+        {icon: Receipt, title: "HELOC से बिलों का भुगतान करें", body: "बिलों को बैच मेंจ่ายें ताकि नकद शेष के खिलाफ अधिक समय तक रहे।"},
+        {icon: Rocket, title: "मॉर्गेज में एकमुश्त भुगतान करें", body: "मूलधन में एकमुश्त पूर्व-भुगतान भेजें (भुगतान वही रहता है; अवधि घट जाती है)।"},
+        {icon: Repeat, title: "रीसेट करने के लिए अधिशेष का उपयोग करें", body: "आपका मासिक अधिशेष HELOC का भुगतान करता है; दोहराएं।"}
+    ],
+    faqTitle: "अक्सर पूछे जाने वाले प्रश्न",
+    faq: [
+        {q: "क्या मेरा मॉर्गेज भुगतान बदलेगा?", a: "नहीं—जब तक आप अपने ऋणदाता से पुनर्गणना करने के लिए नहीं कहते। हम आमतौर पर पुनर्गणना नहीं करते। भुगतान वही रहता है; अवधि घट जाती है।"},
+        {q: "क्या मुझे एक विशेष खाते की आवश्यकता है?", a: "कोई भी HELOC या पुन: अग्रिम योग्य LOC काम करेगा। इसे सरल और बैंक-अज्ञेयवादी रखें।"},
+        {q: "अगर मेरा अधिशेष छोटा है तो क्या होगा?", a: "छोटा भी काम करता है। कैलकुलेटर आपके लिए सुरक्षित एकमुश्त राशि का आकार तय करता है।"}
+    ],
+    form: {
+        mortgageTitle: "1. मॉर्गेज विवरण",
+        cashflowTitle: "2. नकदी प्रवाह और HELOC",
+        strategyTitle: "3. रणनीति",
+        calculate: "गणना करें",
+        howChunksWork: "एकमुश्त भुगतान कैसे काम करते हैं?",
+    },
+    results: {
+        title: "परिणाम",
+        interestSaved: "ब्याज बचाया",
+        monthsSaved: "महीने बचाए",
+        miSaved: "MI/CMHC बचाया",
+        baselineTitle: "आधार रेखा (कुछ न करें)",
+        strategyTitle: "चंकर रणनीति के साथ",
+        months: "महीने",
+        totalInterest: "कुल ब्याज",
+        totalMI: "कुल MI/CMHC",
+        balanceOverTime: "समय के साथ शेष राशि",
+        balanceDescription: "मॉर्गेज बनाम कुल ऋण चंकर रणनीति के साथ",
+        timelineTitle: "महीने-दर-महीने समयरेखा देखें",
+        timelineDescription: "(तालिका को हल्का रखने के लिए पहले 240 महीने दिखा रहा है।)",
+        table: {
+            month: "महीना",
+            mortgageBal: "मॉर्गेज शेष",
+            helocBal: "HELOC शेष",
+            chunk: "एकमुश्त",
+            helocInt: "HELOC ब्याज",
+            mi: "MI",
+            surplusUsed: "प्रयुक्त अधिशेष"
+        },
+        placeholderTitle: "आपके परिणाम यहां दिखाई देंगे।",
+        placeholderDescription: "संभावित बचत देखने के लिए फ़ॉर्म भरें और 'गणना करें' पर क्लिक करें।",
+    },
+    disclaimer: "केवल शैक्षिक अनुमान। कोई बैंक शुल्क, प्रोमो या कर शामिल नहीं है। परिणाम सकारात्मक मासिक अधिशेष, पुन: अग्रिम योग्य लाइनों और बैच किए गए बिल भुगतान के साथ बेहतर होते हैं।",
+    explainers: {
+        mortgageBalance: "मॉर्गेज पर आपका वर्तमान अवैतनिक मूलधन (मूल ऋण नहीं)।\nउदाहरण: यदि आपका विवरण $612,350 शेष दिखाता है, तो 612350 दर्ज करें।",
+        mortgageAPR: "मॉर्गेज के लिए आपकी वार्षिक ब्याज दर। यदि आपके पास एक निश्चित दर है, तो उसका उपयोग करें। यदि चर है, तो आज की बताई गई APR का उपयोग करें।\nउदाहरण: 5.49",
+        termRemaining: "आपकी वर्तमान मॉर्गेज में कितना समय बचा है। आप वर्षों या महीनों में दर्ज कर सकते हैं।\nउदाहरण: 25 वर्ष (या 300 महीने)।",
+        monthlyMortgagePayment: "स्वतः-गणना के लिए खाली छोड़ दें। यदि आपके भुगतान में संपत्ति कर/बीमा शामिल है, तो केवल ऋण भुगतान भाग दर्ज करें।\nउदाहरण: खाली छोड़ दें, या 3,456 दर्ज करें।",
+        homeValue: "अनुमानित वर्तमान बाजार मूल्य। केवल यह अनुमान लगाने के लिए उपयोग किया जाता है कि मॉर्गेज बीमा (MI/CMHC) 80% LTV पर कब समाप्त होता है।\nउदाहरण: 750000।",
+        monthlyMI: "मासिक मॉर्गेज बीमा (U.S.) या CMHC प्रीमियम (कनाडा), यदि आप भुगतान करते हैं। यदि कोई नहीं है तो 0 दर्ज करें।\nउदाहरण: 120।",
+        netIncome: "करों/कटौतियों के बाद हर महीने घर ले जाने वाला वेतन (घरेलू कुल)।\nउदाहरण: आपके वेतन पर्ची कर के बाद कुल $8,900 हैं → 8900 दर्ज करें।",
+        livingExpenses: "मॉर्गेज भुगतान को छोड़कर सभी मासिक खर्च: उपयोगिताएँ, किराने का सामान, आदि।\nउदाहरण: 4300।",
+        helocAPR: "आपके HELOC की परिवर्तनीय या निश्चित वार्षिक दर।\nउदाहरण: 7.25।",
+        helocLimit: "आज आप जो अधिकतम राशि निकाल सकते हैं (क्रेडिट सीमा शून्य कोई वर्तमान HELOC शेष)।\nउदाहरण: क्रेडिट सीमा 50,000 और वर्तमान शेष 8,500 → 41500 दर्ज करें।",
+        helocOpeningBalance: "रणनीति शुरू करने से पहले आपका वर्तमान HELOC शेष। यदि आपने अभी तक नहीं निकाला है तो 0 का उपयोग करें।\nउदाहरण: 0 या 8500।",
+        readvanceable: "हाँ यदि आपकी लाइन आपके मॉर्गेज का भुगतान करते ही फिर से आगे बढ़ जाती है (जैसे, STEP/HPP)। एक मूल गैर-पुन: अग्रिम योग्य HELOC के लिए नहीं।",
+        chunkMode: "ऑटो = हम आपके अधिशेष के आधार पर सुरक्षित एकमुश्त आकार देते हैं। फिक्स्ड = आप एकमुश्त आकार चुनते हैं। ऑटो की सिफारिश की जाती है।",
+        fixedChunkAmount: "हर बार जब हम आपके मॉर्गेज मूलधन को 'एकमुश्त' करते हैं तो HELOC से कितनी राशि निकालनी है।\nउदाहरण: 10000।",
+        billTiming: "अनुकूलित = आप एक बार में अधिकांश बिलों को बैच करते हैं, जिससे नकद HELOC के खिलाफ अधिक समय तक पार्क रहता है। विशिष्ट = बिल बिखरे हुए हैं।",
+        chunkModalTitle: "'एकमुश्त' रणनीति कैसे काम करती है",
+        chunkModalBody: "हम मॉर्गेज मूलधन को कम करने के लिए एक छोटा HELOC एकमुश्त निकालते हैं, फिर आपका मासिक अधिशेष HELOC का भुगतान करता है। एक बार HELOC शेष शून्य के करीब हो जाने पर, हम दोहराते हैं। पहले कम मूलधन = समय के साथ कम ब्याज।"
+    },
+    labels: {
+        language: "भाषा",
+        years: "वर्ष",
+        months: "महीने",
+        termRemaining: "अवधि शेष",
+        mortgageBalance: "मॉर्गेज शेष",
+        mortgageAPR: "मॉर्गेge APR (%)",
+        monthlyMortgagePayment: "मासिक भुगतान (वैकल्पिक)",
+        homeValue: "घर का मूल्य (वैकल्पिक)",
+        monthlyMI: "मासिक MI/CMHC (वैकल्पिक)",
+        netIncome: "शुद्ध मासिक आय",
+        livingExpenses: "मासिक जीवनयापन व्यय (मॉर्गेज को छोड़कर)",
+        helocAPR: "HELOC APR (%)",
+        helocLimit: "HELOC सीमा (अभी उपलब्ध)",
+        helocOpeningBalance: "HELOC प्रारंभिक शेष",
+        chunkMode: "एकमुश्त मोड",
+        fixedChunkAmount: "निश्चित एकमुश्त राशि",
+        billTiming: "बिल समय",
+        readvanceable: "पुन: अग्रिम योग्य?",
+        auto: "ऑटो",
+        fixed: "निश्चित",
+        optimized: "अनुकूलित",
+        typical: "विशिष्ट",
+    }
+  },
+  pa: {
+    title: "HELOC-ਸਹਾਇਤਾ ਅਨੁਮਾਨਕ",
+    subtitle: "HELOC ਪਹੁੰਚ ਨੂੰ ਆਪਣੀ ਮੌਰਗੇਜ ਤੋਂ ਮਹੀਨੇ ਘਟਾਉਣ ਵਿੱਚ ਬਦਲੋ। ਕਰਜ਼ਾਦਾਤਾ ਬਦਲਣ ਦੀ ਲੋੜ ਨਹੀਂ। ਬਸ ਉਸ ਕ੍ਰੈਡਿਟ ਦੀ ਵਰਤੋਂ ਕਰੋ ਜੋ ਤੁਹਾਡੇ ਕੋਲ ਪਹਿਲਾਂ ਹੀ ਹੈ।",
+    howTitle: "ਇਹ ਰਣਨੀਤੀ ਕਿਵੇਂ ਕੰਮ ਕਰਦੀ ਹੈ",
+    steps: [
+        {icon: PiggyBank, title: "HELOC ਵਿੱਚ ਤਨਖਾਹ ਜਮ੍ਹਾਂ ਕਰੋ", body: "ਤੁਹਾਡਾ ਨਕਦ HELOC ਦੇ ਰੋਜ਼ਾਨਾ ਬਕਾਏ ਨੂੰ ਘਟਾਉਂਦਾ ਹੈ, ਜਿਸ ਨਾਲ ਵਿਆਜ ਵਿੱਚ ਕਟੌਤੀ ਹੁੰਦੀ ਹੈ।"},
+        {icon: Receipt, title: "HELOC ਤੋਂ ਬਿੱਲਾਂ ਦਾ ਭੁਗਤਾਨ ਕਰੋ", body: "ਬਿੱਲਾਂ ਨੂੰ ਬੈਚਾਂ ਵਿੱਚ ਭੁਗਤਾਨ ਕਰੋ ਤਾਂ ਜੋ ਨਕਦ ਬਕਾਏ ਦੇ ਵਿਰੁੱਧ ਜ਼ਿਆਦਾ ਦੇਰ ਤੱਕ ਰਹੇ।"},
+        {icon: Rocket, title: "ਮੌਰਗੇਜ ਵਿੱਚ ਇੱਕਮੁਸ਼ਤ ਭੁਗਤਾਨ ਕਰੋ", body: "ਮੂਲਧਨ ਵਿੱਚ ਇੱਕਮੁਸ਼ਤ ਪੂਰਵ-ਭੁਗਤਾਨ ਭੇਜੋ (ਭੁਗਤਾਨ ਉਹੀ ਰਹਿੰਦਾ ਹੈ; ਮਿਆਦ ਘਟ ਜਾਂਦੀ ਹੈ)।"},
+        {icon: Repeat, title: "ਰੀਸੈਟ ਕਰਨ ਲਈ ਵਾਧੂ ਦੀ ਵਰਤੋਂ ਕਰੋ", body: "ਤੁਹਾਡਾ ਮਹੀਨਾਵਾਰ ਵਾਧੂ HELOC ਦਾ ਭੁਗਤਾਨ ਕਰਦਾ ਹੈ; ਦੁਹਰਾਓ।"}
+    ],
+    faqTitle: "ਅਕਸਰ ਪੁੱਛੇ ਜਾਣ ਵਾਲੇ ਸਵਾਲ",
+    faq: [
+        {q: "ਕੀ ਮੇਰਾ ਮੌਰਗੇਜ ਭੁਗਤਾਨ ਬਦਲੇਗਾ?", a: "ਨਹੀਂ—ਜਦੋਂ ਤੱਕ ਤੁਸੀਂ ਆਪਣੇ ਕਰਜ਼ਾਦਾਤਾ ਨੂੰ ਮੁੜ-ਗਣਨਾ ਕਰਨ ਲਈ ਨਹੀਂ ਕਹਿੰਦੇ। ਅਸੀਂ ਆਮ ਤੌਰ 'ਤੇ ਮੁੜ-ਗਣਨਾ ਨਹੀਂ ਕਰਦੇ। ਭੁਗਤਾਨ ਉਹੀ ਰਹਿੰਦਾ ਹੈ; ਮਿਆਦ ਘਟ ਜਾਂਦੀ ਹੈ।"},
+        {q: "ਕੀ ਮੈਨੂੰ ਇੱਕ ਵਿਸ਼ੇਸ਼ ਖਾਤੇ ਦੀ ਲੋੜ ਹੈ?", a: "ਕੋਈ ਵੀ HELOC ਜਾਂ ਮੁੜ-ਅਗਾਊਂਯੋਗ LOC ਕੰਮ ਕਰੇਗਾ। ਇਸਨੂੰ ਸਧਾਰਨ ਅਤੇ ਬੈਂਕ-ਅਗਿਆਤ ਰੱਖੋ।"},
+        {q: "ਜੇ ਮੇਰਾ ਵਾਧੂ ਛੋਟਾ ਹੈ ਤਾਂ ਕੀ ਹੋਵੇਗਾ?", a: "ਛੋਟਾ ਵੀ ਕੰਮ ਕਰਦਾ ਹੈ। ਕੈਲਕੁਲੇਟਰ ਤੁਹਾਡੇ ਲਈ ਸੁਰੱਖਿਅਤ ਇੱਕਮੁਸ਼ਤ ਰਕਮ ਦਾ ਆਕਾਰ ਤੈਅ ਕਰਦਾ ਹੈ।"}
+    ],
+    form: {
+        mortgageTitle: "1. ਮੌਰਗੇਜ ਵੇਰਵੇ",
+        cashflowTitle: "2. ਨਕਦੀ ਪ੍ਰਵਾਹ ਅਤੇ HELOC",
+        strategyTitle: "3. ਰਣਨੀਤੀ",
+        calculate: "ਗਣਨਾ ਕਰੋ",
+        howChunksWork: "ਇੱਕਮੁਸ਼ਤ ਭੁਗਤਾਨ ਕਿਵੇਂ ਕੰਮ ਕਰਦੇ ਹਨ?",
+    },
+    results: {
+        title: "ਨਤੀਜੇ",
+        interestSaved: "ਬਚਾਇਆ ਗਿਆ ਵਿਆਜ",
+        monthsSaved: "ਬਚਾਏ ਗਏ ਮਹੀਨੇ",
+        miSaved: "ਬਚਾਇਆ ਗਿਆ MI/CMHC",
+        baselineTitle: "ਆਧਾਰ-ਰੇਖਾ (ਕੁਝ ਨਾ ਕਰੋ)",
+        strategyTitle: "ਚੰਕਰ ਰਣਨੀਤੀ ਨਾਲ",
+        months: "ਮਹੀਨੇ",
+        totalInterest: "ਕੁੱਲ ਵਿਆਜ",
+        totalMI: "ਕੁੱਲ MI/CMHC",
+        balanceOverTime: "ਸਮੇਂ ਦੇ ਨਾਲ ਬਕਾਇਆ",
+        balanceDescription: "ਮੌਰਗੇਜ ਬਨਾਮ ਕੁੱਲ ਕਰਜ਼ ਚੰਕਰ ਰਣਨੀਤੀ ਨਾਲ",
+        timelineTitle: "ਮਹੀਨਾ-ਦਰ-ਮਹੀਨਾ ਸਮਾਂ-ਰੇਖਾ ਦੇਖੋ",
+        timelineDescription: "(ਸਾਰਣੀ ਨੂੰ ਹਲਕਾ ਰੱਖਣ ਲਈ ਪਹਿਲੇ 240 ਮਹੀਨੇ ਦਿਖਾ ਰਿਹਾ ਹੈ।)",
+        table: {
+            month: "ਮਹੀਨਾ",
+            mortgageBal: "ਮੌਰਗੇਜ ਬਕਾਇਆ",
+            helocBal: "HELOC ਬਕਾਇਆ",
+            chunk: "ਇੱਕਮੁਸ਼ਤ",
+            helocInt: "HELOC ਵਿਆਜ",
+            mi: "MI",
+            surplusUsed: "ਵਰਤਿਆ ਗਿਆ ਵਾਧੂ"
+        },
+        placeholderTitle: "ਤੁਹਾਡੇ ਨਤੀਜੇ ਇੱਥੇ ਦਿਖਾਈ ਦੇਣਗੇ।",
+        placeholderDescription: "ਸੰਭਾਵੀ ਬੱਚਤ ਦੇਖਣ ਲਈ ਫਾਰਮ ਭਰੋ ਅਤੇ 'ਗਣਨਾ ਕਰੋ' 'ਤੇ ਕਲਿੱਕ ਕਰੋ।",
+    },
+    disclaimer: "ਸਿਰਫ ਵਿਦਿਅਕ ਅਨੁਮਾਨ। ਕੋਈ ਬੈਂਕ ਫੀਸ, ਪ੍ਰੋਮੋ ਜਾਂ ਟੈਕਸ ਸ਼ਾਮਲ ਨਹੀਂ ਹਨ। ਨਤੀਜੇ ਸਕਾਰਾਤਮਕ ਮਹੀਨਾਵਾਰ ਵਾਧੂ, ਮੁੜ-ਅਗਾਊਂਯੋਗ ਲਾਈਨਾਂ ਅਤੇ ਬੈਚ ਕੀਤੇ ਬਿੱਲ ਭੁਗਤਾਨ ਨਾਲ ਸੁਧਰਦੇ ਹਨ।",
+    explainers: {
+        mortgageBalance: "ਮੌਰਗੇਜ 'ਤੇ ਤੁਹਾਡਾ ਮੌਜੂਦਾ ਅਣ-ਅਦਾਇਗੀ ਮੂਲਧਨ (ਅਸਲ ਕਰਜ਼ਾ ਨਹੀਂ)।\nਉਦਾਹਰਨ: ਜੇਕਰ ਤੁਹਾਡਾ ਸਟੇਟਮੈਂਟ $612,350 ਬਕਾਇਆ ਦਿਖਾਉਂਦਾ ਹੈ, ਤਾਂ 612350 ਦਰਜ ਕਰੋ।",
+        mortgageAPR: "ਮੌਰਗੇਜ ਲਈ ਤੁਹਾਡੀ ਸਾਲਾਨਾ ਵਿਆਜ ਦਰ। ਜੇਕਰ ਤੁਹਾਡੇ ਕੋਲ ਇੱਕ ਸਥਿਰ ਦਰ ਹੈ, ਤਾਂ ਉਸਦੀ ਵਰਤੋਂ ਕਰੋ। ਜੇਕਰ ਪਰਿਵਰਤਨਸ਼ੀਲ ਹੈ, ਤਾਂ ਅੱਜ ਦੀ ਦੱਸੀ ਗਈ APR ਦੀ ਵਰਤੋਂ ਕਰੋ।\nਉਦਾਹਰਨ: 5.49",
+        termRemaining: "ਤੁਹਾਡੀ ਮੌਜੂਦਾ ਮੌਰਗੇਜ ਵਿੱਚ ਕਿੰਨਾ ਸਮਾਂ ਬਚਿਆ ਹੈ। ਤੁਸੀਂ ਸਾਲਾਂ ਜਾਂ ਮਹੀਨਿਆਂ ਵਿੱਚ ਦਰਜ ਕਰ ਸਕਦੇ ਹੋ।\nਉਦਾਹਰਨ: 25 ਸਾਲ (ਜਾਂ 300 ਮਹੀਨੇ)।",
+        monthlyMortgagePayment: "ਸਵੈ-ਗਣਨਾ ਲਈ ਖਾਲੀ ਛੱਡੋ। ਜੇਕਰ ਤੁਹਾਡੇ ਭੁਗਤਾਨ ਵਿੱਚ ਜਾਇਦਾਦ ਟੈਕਸ/ਬੀਮਾ ਸ਼ਾਮਲ ਹੈ, ਤਾਂ ਸਿਰਫ ਕਰਜ਼ਾ ਭੁਗਤਾਨ ਹਿੱਸਾ ਦਰਜ ਕਰੋ।\nਉਦਾਹਰਨ: ਖਾਲੀ ਛੱਡੋ, ਜਾਂ 3,456 ਦਰਜ ਕਰੋ।",
+        homeValue: "ਅਨੁਮਾਨਿਤ ਮੌਜੂਦਾ ਬਾਜ਼ਾਰ ਮੁੱਲ। ਸਿਰਫ ਇਹ ਅਨੁਮਾਨ ਲਗਾਉਣ ਲਈ ਵਰਤਿਆ ਜਾਂਦਾ ਹੈ ਕਿ ਮੌਰਗੇਜ ਬੀਮਾ (MI/CMHC) 80% LTV 'ਤੇ ਕਦੋਂ ਖਤਮ ਹੁੰਦਾ ਹੈ।\nਉਦਾਹਰਨ: 750000।",
+        monthlyMI: "ਮਹੀਨਾਵਾਰ ਮੌਰਗੇਜ ਬੀਮਾ (U.S.) ਜਾਂ CMHC ਪ੍ਰੀਮੀਅਮ (ਕੈਨੇਡਾ), ਜੇਕਰ ਤੁਸੀਂ ਭੁਗਤਾਨ ਕਰਦੇ ਹੋ। ਜੇਕਰ ਕੋਈ ਨਹੀਂ ਹੈ ਤਾਂ 0 ਦਰਜ ਕਰੋ।\nਉਦਾਹਰਨ: 120।",
+        netIncome: "ਟੈਕਸਾਂ/ਕਟੌਤੀਆਂ ਤੋਂ ਬਾਅਦ ਹਰ ਮਹੀਨੇ ਘਰ ਲੈ ਜਾਣ ਵਾਲੀ ਤਨਖਾਹ (ਪਰਿਵਾਰਕ ਕੁੱਲ)।\nਉਦਾਹਰਨ: ਤੁਹਾਡੀ ਤਨਖਾਹ ਸਲਿੱਪਾਂ ਟੈਕਸ ਤੋਂ ਬਾਅਦ ਕੁੱਲ $8,900 ਹਨ → 8900 ਦਰਜ ਕਰੋ।",
+        livingExpenses: "ਮੌਰਗੇਜ ਭੁਗਤਾਨ ਨੂੰ ਛੱਡ ਕੇ ਸਾਰੇ ਮਹੀਨਾਵਾਰ ਖਰਚੇ: ਸਹੂਲਤਾਂ, ਕਰਿਆਨਾ, ਆਦਿ।\nਉਦਾਹਰਨ: 4300।",
+        helocAPR: "ਤੁਹਾਡੇ HELOC ਦੀ ਪਰਿਵਰਤਨਸ਼ੀਲ ਜਾਂ ਸਥਿਰ ਸਾਲਾਨਾ ਦਰ।\nਉਦਾਹਰਨ: 7.25।",
+        helocLimit: "ਅੱਜ ਤੁਸੀਂ ਜੋ ਵੱਧ ਤੋਂ ਵੱਧ ਰਕਮ ਕਢਵਾ ਸਕਦੇ ਹੋ (ਕ੍ਰੈਡਿਟ ਸੀਮਾ ਘਟਾਓ ਕੋਈ ਮੌਜੂਦਾ HELOC ਬਕਾਇਆ)।\nਉਦਾਹਰਨ: ਕ੍ਰੈਡਿਟ ਸੀਮਾ 50,000 ਅਤੇ ਮੌਜੂਦਾ ਬਕਾਇਆ 8,500 → 41500 ਦਰਜ ਕਰੋ।",
+        helocOpeningBalance: "ਰਣਨੀਤੀ ਸ਼ੁਰੂ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਤੁਹਾਡਾ ਮੌਜੂਦਾ HELOC ਬਕਾਇਆ। ਜੇਕਰ ਤੁਸੀਂ ਅਜੇ ਤੱਕ ਨਹੀਂ ਕਢਵਾਇਆ ਹੈ ਤਾਂ 0 ਦੀ ਵਰਤੋਂ ਕਰੋ।\nਉਦਾਹਰਨ: 0 ਜਾਂ 8500।",
+        readvanceable: "ਹਾਂ ਜੇਕਰ ਤੁਹਾਡੀ ਲਾਈਨ ਤੁਹਾਡੀ ਮੌਰਗੇਜ ਦਾ ਭੁਗਤਾਨ ਕਰਦੇ ਹੀ ਮੁੜ-ਅੱਗੇ ਵਧਦੀ ਹੈ (ਜਿਵੇਂ, STEP/HPP)। ਇੱਕ ਮੂਲ ਗੈਰ-ਮੁੜ-ਅਗਾਊਂਯੋਗ HELOC ਲਈ ਨਹੀਂ।",
+        chunkMode: "ਆਟੋ = ਅਸੀਂ ਤੁਹਾਡੇ ਵਾਧੂ ਦੇ ਆਧਾਰ 'ਤੇ ਸੁਰੱਖਿਅਤ ਇੱਕਮੁਸ਼ਤ ਆਕਾਰ ਦਿੰਦੇ ਹਾਂ। ਫਿਕਸਡ = ਤੁਸੀਂ ਇੱਕਮੁਸ਼ਤ ਆਕਾਰ ਚੁਣਦੇ ਹੋ। ਆਟੋ ਦੀ ਸਿਫਾਰਸ਼ ਕੀਤੀ ਜਾਂਦੀ ਹੈ।",
+        fixedChunkAmount: "ਹਰ ਵਾਰ ਜਦੋਂ ਅਸੀਂ ਤੁਹਾਡੇ ਮੌਰਗੇਜ ਮੂਲਧਨ ਨੂੰ 'ਇੱਕਮੁਸ਼ਤ' ਕਰਦੇ ਹਾਂ ਤਾਂ HELOC ਤੋਂ ਕਿੰਨੀ ਰਕਮ ਕਢਵਾਉਣੀ ਹੈ।\nਉਦਾਹਰਨ: 10000।",
+        billTiming: "ਅਨੁਕੂਲਿਤ = ਤੁਸੀਂ ਇੱਕ ਵਾਰ ਵਿੱਚ ਜ਼ਿਆਦਾਤਰ ਬਿੱਲਾਂ ਨੂੰ ਬੈਚ ਕਰਦੇ ਹੋ, ਜਿਸ ਨਾਲ ਨਕਦ HELOC ਦੇ ਵਿਰੁੱਧ ਜ਼ਿਆਦਾ ਦੇਰ ਤੱਕ ਪਾਰਕ ਰਹਿੰਦਾ ਹੈ। ਆਮ = ਬਿੱਲ ਖਿੰਡੇ ਹੋਏ ਹਨ।",
+        chunkModalTitle: "'ਇੱਕਮੁਸ਼ਤ' ਰਣਨੀਤੀ ਕਿਵੇਂ ਕੰਮ ਕਰਦੀ ਹੈ",
+        chunkModalBody: "ਅਸੀਂ ਮੌਰਗੇਜ ਮੂਲਧਨ ਨੂੰ ਘਟਾਉਣ ਲਈ ਇੱਕ ਛੋਟਾ HELOC ਇੱਕਮੁਸ਼ਤ ਕਢਵਾਉਂਦੇ ਹਾਂ, ਫਿਰ ਤੁਹਾਡਾ ਮਹੀਨਾਵਾਰ ਵਾਧੂ HELOC ਦਾ ਭੁਗਤਾਨ ਕਰਦਾ ਹੈ। ਇੱਕ ਵਾਰ HELOC ਬਕਾਇਆ ਜ਼ੀਰੋ ਦੇ ਨੇੜੇ ਹੋ ਜਾਣ 'ਤੇ, ਅਸੀਂ ਦੁਹਰਾਉਂਦੇ ਹਾਂ। ਪਹਿਲਾਂ ਘੱਟ ਮੂਲਧਨ = ਸਮੇਂ ਦੇ ਨਾਲ ਘੱਟ ਵਿਆਜ।"
+    },
+    labels: {
+        language: "ਭਾਸ਼ਾ",
+        years: "ਸਾਲ",
+        months: "ਮਹੀਨੇ",
+        termRemaining: "ਬਾਕੀ ਮਿਆਦ",
+        mortgageBalance: "ਮੌਰਗੇਜ ਬਕਾਇਆ",
+        mortgageAPR: "ਮੌਰਗੇਜ APR (%)",
+        monthlyMortgagePayment: "ਮਹੀਨਾਵਾਰ ਭੁਗਤਾਨ (ਵਿਕਲਪਿਕ)",
+        homeValue: "ਘਰ ਦਾ ਮੁੱਲ (ਵਿਕਲਪਿਕ)",
+        monthlyMI: "ਮਹੀਨਾਵਾਰ MI/CMHC (ਵਿਕਲਪਿਕ)",
+        netIncome: "ਸ਼ੁੱਧ ਮਹੀਨਾਵਾਰ ਆਮਦਨ",
+        livingExpenses: "ਮਹੀਨਾਵਾਰ ਰਹਿਣ-ਸਹਿਣ ਦੇ ਖਰਚੇ (ਮੌਰਗੇਜ ਨੂੰ ਛੱਡ ਕੇ)",
+        helocAPR: "HELOC APR (%)",
+        helocLimit: "HELOC ਸੀਮਾ (ਹੁਣੇ ਉਪਲਬਧ)",
+        helocOpeningBalance: "HELOC ਸ਼ੁਰੂਆਤੀ ਬਕਾਇਆ",
+        chunkMode: "ਇੱਕਮੁਸ਼ਤ ਮੋਡ",
+        fixedChunkAmount: "ਸਥਿਰ ਇੱਕਮੁਸ਼ਤ ਰਕਮ",
+        billTiming: "ਬਿੱਲ ਦਾ ਸਮਾਂ",
+        readvanceable: "ਮੁੜ-ਅਗਾਊਂਯੋਗ?",
+        auto: "ਆਟੋ",
+        fixed: "ਸਥਿਰ",
+        optimized: "ਅਨੁਕੂਲਿਤ",
+        typical: "ਆਮ",
+    }
+  },
+  ar: {
+    title: "مقدّر المساعدة HELOC",
+    subtitle: "حوّل الوصول إلى HELOC إلى شهور أقل من رهنك العقاري. لا حاجة لتغيير المقرضين. فقط استخدم الائتمان الذي لديك بالفعل لتقليل رأس المال.",
+    howTitle: "كيف تعمل هذه الاستراتيجية",
+    steps: [
+        {icon: PiggyBank, title: "إيداع الراتب في HELOC", body: "يقلل نقدك من الرصيد اليومي لـ HELOC، مما يقلل الفائدة."},
+        {icon: Receipt, title: "دفع الفواتير من HELOC", body: "جمع الفواتير بحيث يبقى النقد مقابل الرصيد لفترة أطول."},
+        {icon: Rocket, title: "سداد دفعة مقدمة للرهن العقاري", body: "أرسل دفعة مقدمة للرأس المال (يبقى الدفع كما هو؛ تقل المدة)."},
+        {icon: Repeat, title: "استخدام الفائض لإعادة التعيين", body: "فائضك الشهري يسدد HELOC؛ كرر."}
+    ],
+    faqTitle: "أسئلة مكررة",
+    faq: [
+        {q: "هل سيتغير دفع الرهن العقاري الخاص بي؟", a: "لا—إلا إذا طلبت من المُقرض إعادة الحساب. نحن عادة لا نعيد الحساب. يبقى الدفع كما هو؛ تقل المدة."},
+        {q: "هل أحتاج إلى حساب خاص؟", a: "أي HELOC أو LOC قابل لإعادة التقدم يعمل. اجعله بسيطًا ومستقلًا عن البنك."},
+        {q: "ماذا لو كان فائضي صغيرًا؟", a: "الصغير لا يزال يعمل. تقوم الآلة الحاسبة بتحديد أحجام دفعات آمنة لك."}
+    ],
+    form: {
+        mortgageTitle: "1. تفاصيل الرهن العقاري",
+        cashflowTitle: "2. التدفق النقدي و HELOC",
+        strategyTitle: "3. الاستراتيجية",
+        calculate: "احسب",
+        howChunksWork: "كيف تعمل الدفعات؟",
+    },
+    results: {
+        title: "النتائج",
+        interestSaved: "الفائدة المحفوظة",
+        monthsSaved: "الأشهر المحفوظة",
+        miSaved: "MI/CMHC المحفوظة",
+        baselineTitle: "خط الأساس (لا تفعل شيئًا)",
+        strategyTitle: "مع استراتيجية Chuncker",
+        months: "أشهر",
+        totalInterest: "إجمالي الفائدة",
+        totalMI: "إجمالي MI/CMHC",
+        balanceOverTime: "الرصيد بمرور الوقت",
+        balanceDescription: "الرهن العقاري مقابل إجمالي الدين مع استراتيجية Chuncker",
+        timelineTitle: "عرض الجدول الزمني شهريًا",
+        timelineDescription: "(إظهار أول 240 شهرًا للحفاظ على الجدول خفيفًا.)",
+        table: {
+            month: "شهر",
+            mortgageBal: "رصيد الرهن العقاري",
+            helocBal: "رصيد HELOC",
+            chunk: "دفعة",
+            helocInt: "فائدة HELOC",
+            mi: "MI",
+            surplusUsed: "الفائض المستخدم"
+        },
+        placeholderTitle: "ستظهر نتائجك هنا.",
+        placeholderDescription: "املأ النموذج وانقر على 'احسب' لرؤية مدخراتك المحتملة.",
+    },
+    disclaimer: "تقدير تعليمي فقط. لا يشمل رسوم البنك أو العروض الترويجية أو الضرائب. تتحسن النتائج مع وجود فائض شهري إيجابي وخطوط قابلة لإعادة التقدم ودفع فواتير مجمعة.",
+    explainers: {
+        mortgageBalance: "رصيدك الأساسي غير المسدد الحالي على الرهن العقاري (وليس القرض الأصلي).\nمثال: إذا كان كشف حسابك يوضح بقاء 612,350 دولارًا، فأدخل 612350.",
+        mortgageAPR: "سعر الفائدة السنوي لرهنك العقاري. إذا كان لديك سعر فائدة ثابت، فاستخدمه. إذا كان متغيرًا، فاستخدم سعر الفائدة السنوي المعلن اليوم.\nمثال: 5.49",
+        termRemaining: "كم من الوقت المتبقي على رهنك العقاري الحالي. يمكنك إدخاله بالسنوات أو الأشهر.\nمثال: 25 عامًا (أو 300 شهر).",
+        monthlyMortgagePayment: "اتركه فارغًا للحساب التلقائي. إذا كان دفعك يشمل ضريبة الأملاك/التأمين، فأدخل جزء دفع القرض فقط.\nمثال: اتركه فارغًا، أو أدخل 3,456.",
+        homeValue: "القيمة السوقية الحالية المقدرة. تستخدم فقط لتقدير متى ينتهي تأمين الرهن العقاري (MI/CMHC) عند 80% LTV.\nمثال: 750000.",
+        monthlyMI: "تأمين الرهن العقاري الشهري (الولايات المتحدة) أو قسط CMHC (كندا)، إذا كنت تدفع واحدًا. أدخل 0 إذا لم يكن هناك.\nمثال: 120.",
+        netIncome: "صافي الأجر الشهري بعد الضرائب/الخصومات (إجمالي الأسرة).\nمثال: إجمالي قسائم الدفع الخاصة بك بعد خصم الضرائب هو 8,900 دولار → أدخل 8900.",
+        livingExpenses: "جميع المصاريف الشهرية باستثناء دفع الرهن العقاري: المرافق، البقالة، إلخ.\nمثال: 4300.",
+        helocAPR: "سعر الفائدة السنوي المتغير أو الثابت لـ HELOC الخاص بك.\nمثال: 7.25.",
+        helocLimit: "الحد الأقصى الذي يمكنك سحبه اليوم (حد الائتمان مطروحًا منه أي رصيد HELOC حالي).\nمثال: حد ائتمان 50,000 ورصيد حالي 8,500 ← أدخل 41500.",
+        helocOpeningBalance: "رصيد HELOC الحالي قبل بدء الاستراتيجية. استخدم 0 إذا لم تكن قد سحبت بعد.\nمثال: 0 أو 8500.",
+        readvanceable: "نعم إذا كان خطك يتقدم مرة أخرى أثناء دفعك لرهنك العقاري (على سبيل المثال، STEP/HPP). لا لـ HELOC أساسي غير قابل لإعادة التقدم.",
+        chunkMode: "تلقائي = نقوم بتحديد أحجام دفعات آمنة بناءً على فائضك. ثابت = تختار حجم الدفعة. يوصى بالتلقائي.",
+        fixedChunkAmount: "كمية السحب من HELOC في كل مرة نقوم فيها 'بدفع' رأس مال رهنك العقاري.\nمثال: 10000.",
+        billTiming: "محسن = تقوم بتجميع معظم الفواتير مرة واحدة، مع إبقاء النقد مركونًا مقابل HELOC لفترة أطول. نموذجي = الفواتير متفرقة.",
+        chunkModalTitle: "كيف تعمل استراتيجية 'الدفعة'",
+        chunkModalBody: "نقوم بسحب دفعة صغيرة من HELOC لخفض رأس مال الرهن العقاري، ثم يقوم فائضك الشهري بسداد HELOC. بمجرد أن يقترب رصيد HELOC من الصفر، نكرر العملية. رأس مال أقل في وقت مبكر = فائدة أقل بمرور الوقت."
+    },
+    labels: {
+        language: "لغة",
+        years: "سنوات",
+        months: "شهور",
+        termRemaining: "المدة المتبقية",
+        mortgageBalance: "رصيد الرهن العقاري",
+        mortgageAPR: "معدل الفائدة السنوية للرهن العقاري (%)",
+        monthlyMortgagePayment: "الدفع الشهري (اختياري)",
+        homeValue: "قيمة المنزل (اختياري)",
+        monthlyMI: "MI/CMHC الشهري (اختياري)",
+        netIncome: "صافي الدخل الشهري",
+        livingExpenses: "نفقات المعيشة الشهرية (باستثناء الرهن العقاري)",
+        helocAPR: "معدل الفائدة السنوية لـ HELOC (%)",
+        helocLimit: "حد HELOC (متوفر الآن)",
+        helocOpeningBalance: "رصيد HELOC الافتتاحي",
+        chunkMode: "وضع الدفعة",
+        fixedChunkAmount: "مبلغ الدفعة الثابتة",
+        billTiming: "توقيت الفاتورة",
+        readvanceable: "قابل لإعادة التقدم؟",
+        auto: "تلقائي",
+        fixed: "ثابت",
+        optimized: "محسن",
+        typical: "نموذجي",
+    }
   }
 };
 
@@ -311,15 +781,18 @@ export default function ChunkerCalculatorPage() {
   const t = i18n[lang] || i18n.en;
 
   useEffect(() => {
-    const detectedLang = localStorage.getItem('mc_lang') || navigator.language.split('-')[0];
-    if (i18n[detectedLang]) {
-      setLang(detectedLang);
-    }
+    const detectedLang = localStorage.getItem('mc_lang') || navigator.language;
+    const supportedLangs = ['en', 'fr-CA', 'es', 'pt-BR', 'hi', 'pa', 'ar'];
+    const finalLang = supportedLangs.includes(detectedLang) ? detectedLang : 'en';
+    setLang(finalLang);
+    document.documentElement.dir = finalLang === 'ar' ? 'rtl' : 'ltr';
   }, []);
 
   const handleLangChange = (newLang: string) => {
+    if (!newLang) return;
     setLang(newLang);
     localStorage.setItem('mc_lang', newLang);
+    document.documentElement.dir = newLang === 'ar' ? 'rtl' : 'ltr';
   }
 
   const onChange = <K extends keyof Inputs>(k: K, v: Inputs[K]) => {
@@ -376,12 +849,17 @@ export default function ChunkerCalculatorPage() {
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{t.title}</h1>
             <div className="flex items-center border rounded-md p-1">
                 <Select value={lang} onValueChange={handleLangChange}>
-                  <SelectTrigger className="w-[120px]">
+                  <SelectTrigger className="w-[140px]">
                     <SelectValue placeholder={t.labels.language} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="en">English</SelectItem>
                     <SelectItem value="fr-CA">Français</SelectItem>
+                    <SelectItem value="es">Español</SelectItem>
+                    <SelectItem value="pt-BR">Português</SelectItem>
+                    <SelectItem value="hi">हिन्दी</SelectItem>
+                    <SelectItem value="pa">ਪੰਜਾਬੀ</SelectItem>
+                    <SelectItem value="ar">العربية</SelectItem>
                   </SelectContent>
                 </Select>
             </div>
@@ -654,3 +1132,5 @@ export default function ChunkerCalculatorPage() {
     </div>
   );
 }
+
+    
