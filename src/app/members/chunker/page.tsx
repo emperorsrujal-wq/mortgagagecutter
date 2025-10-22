@@ -1,3 +1,4 @@
+
 'use client';
 import React, { useState, useMemo, useEffect } from 'react';
 import { simulate, Inputs, Outputs } from '@/lib/chunker';
@@ -545,3 +546,5 @@ export default function ChunkerCalculatorPage() {
     </div>
   );
 }
+
+    
