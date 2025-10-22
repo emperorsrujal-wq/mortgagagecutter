@@ -201,37 +201,44 @@ function InnerComparison() {
       const script = document.createElement('script');
       script.innerHTML = `
         (function(){
-          const PURCHASE_URL = '/purchase';
+          const planMap = {
+            elite_999: { btnId: 'cta-elite-999', fallback: '/purchase?plan=elite_999' },
+            pro_197:   { btnId: 'cta-pro-197',   fallback: '/purchase?plan=pro_197' },
+            basic_29:  { btnId: 'cta-basic-29',  fallback: '/purchase?plan=basic_29' },
+          };
+          
+          let activePlan = null;
 
           function go(plan, extraParams={}) {
-            const params = new URLSearchParams({ plan, ...extraParams });
-            window.location.href = \`\${PURCHASE_URL}?\${params.toString()}\`;
+            const url = new URL('/purchase', window.location.origin);
+            url.searchParams.set('plan', plan);
+            for(const key in extraParams) {
+              url.searchParams.set(key, extraParams[key]);
+            }
+            window.location.href = url.toString();
           }
           function $(id){ return document.getElementById(id); }
+          
+          let uid = '${user?.uid || ''}';
+          let email = '${user?.email || ''}';
+          // In a real app, you would initialize Firebase here if not already done globally
+          // For this snippet, we assume it might be available on window
+          let db = window.firebase?.firestore ? window.firebase.firestore() : null;
 
-          let uid = '${user?.uid || null}';
-          let email = '${user?.email || null}';
-          let db = null;
-
-          if (window.firebase?.auth && window.firebase?.firestore) {
-            db = window.firebase.firestore();
-             window.firebase.auth().onAuthStateChanged((user)=>{
-              if (user){ 
-                uid = user.uid; 
-                email = user.email; 
-                initReferralLink(); 
-              } else { 
-                uid = null;
-                email = null;
-                initReferralLink(); 
+          if (window.firebase?.auth) {
+            window.firebase.auth().onAuthStateChanged((user) => {
+              if (user) {
+                uid = user.uid;
+                email = user.email;
               }
+              initReferralLink();
             });
           } else {
             initReferralLink();
           }
 
-          function initReferralLink(){
-            const key = uid || ('guest-' + Math.random().toString(36).slice(2,10));
+          function initReferralLink() {
+            const key = uid || ('guest-' + Math.random().toString(36).slice(2, 10));
             const link = \`\${window.location.origin}/?ref=\${encodeURIComponent(key)}\`;
             const input = $('mc-ref-link');
             if (input) input.value = link;
@@ -239,92 +246,101 @@ function InnerComparison() {
           
           function attach(id, fn){
             const el = $(id);
-            if (!el) return;
-            el.addEventListener('click', function(e){ e.preventDefault(); fn(); }, false);
+            if (el) el.addEventListener('click', (e) => { e.preventDefault(); fn(); });
+          }
+
+          function openReferral(plan) {
+            activePlan = plan;
+            const modal = $('mc-referral-modal');
+            if (modal) {
+              const title = modal.querySelector('h3');
+              if (title) {
+                title.textContent = \`Share & Unlock \${plan === 'pro_197' ? 'Pro ($197)' : 'Basic ($29/mo)'}\`
+              }
+              modal.classList.add('open');
+              modal.setAttribute('aria-hidden', 'false');
+            }
           }
 
           attach('cta-elite-999', () => go('elite_999'));
-          attach('cta-pro-197', () => openReferral());
-          attach('cta-basic-29', () => go('basic_29'));
-
-
-          function openReferral(){
+          attach('cta-pro-197', () => openReferral('pro_197'));
+          attach('cta-basic-29', () => openReferral('basic_29'));
+          
+          $('mc-ref-close')?.addEventListener('click', () => {
             const modal = $('mc-referral-modal');
-            if (!modal) return;
-            modal.classList.add('open');
-            modal.setAttribute('aria-hidden','false');
+            if (modal) {
+              modal.classList.remove('open');
+              modal.setAttribute('aria-hidden', 'true');
+            }
+          });
+
+          const refForm = $('mc-ref-form');
+          const continueBtn = $('mc-continue');
+          const confirmCheckbox = $('mc-confirm');
+          
+          function validateForm() {
+            if (!refForm || !continueBtn || !confirmCheckbox) return;
+            const emails = Array.from(refForm.querySelectorAll('input[type=email]')).map(i => i.value.trim()).filter(Boolean);
+            continueBtn.disabled = !(emails.length >= 5 && confirmCheckbox.checked);
           }
-          $('mc-ref-close')?.addEventListener('click', ()=> {
-            const m = $('mc-referral-modal'); if(!m) return;
-            m.classList.remove('open'); m.setAttribute('aria-hidden','true');
-          });
+          refForm?.addEventListener('input', validateForm);
+          confirmCheckbox?.addEventListener('change', validateForm);
 
-          $('mc-copy')?.addEventListener('click', ()=> {
-            const input = $('mc-ref-link'); if (!input) return;
-            input.select(); input.setSelectionRange(0, 99999);
-            document.execCommand('copy');
-            $('mc-copy').textContent = 'Copied!';
-            setTimeout(()=>{$('mc-copy').textContent='Copy';}, 1000);
-          });
-
-          $('mc-share')?.addEventListener('click', ()=> {
-            const url = $('mc-ref-link')?.value || window.location.href;
-            if (navigator.share) {
-              navigator.share({ title:'MortgageCutter', text:'Check this mortgage payoff tool', url });
-            } else {
-              window.open(\`mailto:?subject=MortgageCutter&body=Try this tool: \${encodeURIComponent(url)}\`);
-            }
-          });
-
-           const refForm = $('mc-ref-form');
-           const continueBtn = $('mc-continue');
-           const confirmCheckbox = $('mc-confirm');
-
-           function validateForm() {
-              if (!refForm || !continueBtn || !confirmCheckbox) return;
-              const emails = Array.from(refForm.querySelectorAll('input[type=email]'))
-                                  .map(i => i.value.trim())
-                                  .filter(Boolean);
-              const isConfirmed = confirmCheckbox.checked;
-              continueBtn.disabled = !(emails.length >= 5 && isConfirmed);
-           }
-            
-           refForm?.addEventListener('input', validateForm);
-           confirmCheckbox?.addEventListener('change', validateForm);
-
-          refForm?.addEventListener('submit', async (e)=>{
+          refForm?.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const form = e.target;
-            const emails = [form.e1.value, form.e2.value, form.e3.value, form.e4.value, form.e5.value]
-              .map(v => (v||'').trim()).filter(Boolean);
-            const confirmed = $('mc-confirm')?.checked;
-
-            if (emails.length < 5 || !confirmed) {
-              alert('Please enter at least 5 emails and confirm you have shared your link.');
-              return;
-            }
-
-            try {
-              if (db && uid) {
-                await db.collection('referralsSubmissions').add({
-                  uid, userEmail: email || null,
+            if (continueBtn.disabled) return;
+            
+            const emails = Array.from(refForm.querySelectorAll('input[type=email]')).map(i => i.value.trim()).filter(Boolean);
+            
+            if (db && uid) {
+              try {
+                await db.collection('referralSubmissions').add({
+                  uid,
+                  userEmail: email,
                   referrals: emails,
+                  plan: activePlan,
                   link: $('mc-ref-link')?.value || null,
                   createdAt: window.firebase.firestore.FieldValue.serverTimestamp()
                 });
+              } catch (err) {
+                console.warn('Firestore write failed, but continuing to checkout.', err);
               }
-            } catch(err){
-              console.warn('Referral save failed (continuing anyway):', err);
             }
             
-            go('pro_197', { ref: uid || 'guest' });
+            go(activePlan, { ref: uid || 'guest' });
           });
+
+          const copyBtn = $('mc-copy');
+          const refLinkInput = $('mc-ref-link');
+          if (copyBtn && refLinkInput) {
+            copyBtn.addEventListener('click', () => {
+              refLinkInput.select();
+              document.execCommand('copy');
+              copyBtn.textContent = 'Copied!';
+              setTimeout(() => { copyBtn.textContent = 'Copy' }, 1500);
+            });
+          }
+
+          const shareBtn = $('mc-share');
+           if (shareBtn) {
+            shareBtn.addEventListener('click', () => {
+              const url = refLinkInput?.value || window.location.href;
+              const text = 'I used MortgageCutter to slash years off my mortgage without spending more each month. Try it with $20 off my link: ' + url;
+              if (navigator.share) {
+                navigator.share({ title: 'MortgageCutter', text: 'Check this mortgage payoff tool', url });
+              } else {
+                window.open(\`mailto:?subject=MortgageCutter&body=\${encodeURIComponent(text)}\`);
+              }
+            });
+          }
         })();
       `;
       document.body.appendChild(script);
       
       return () => {
-        document.body.removeChild(script);
+        if(script.parentNode) {
+          document.body.removeChild(script);
+        }
       };
     
   }, [isLoading, error, data, user, toast]);
@@ -362,7 +378,6 @@ function InnerComparison() {
   return (
     <>
     <style>{`
-      /* === MortgageCutter Sales Section (scoped) === */
       .mc-offer { margin-top: 28px; }
       .mc-hero { text-align:center; margin-bottom: 18px; }
       .mc-hero h2 { font-size: 28px; margin: 0 0 8px; }
@@ -382,8 +397,8 @@ function InnerComparison() {
       .mc-card h4 { margin:0 0 6px; font-size:18px; }
       .mc-price { font-size:28px; font-weight:700; margin:4px 0 10px; }
       .mc-price span { font-size:12px; font-weight:500; color:#667085; }
-      .mc-includes { padding-left:18px; margin:0 0 12px; }
-      .mc-cta { display:inline-block; padding:12px 16px; border-radius:12px; border:1px solid transparent; cursor:pointer; width: 100%; text-align: center; }
+      .mc-includes { padding-left:18px; margin:0 0 12px; flex-grow: 1; }
+      .mc-cta { display:inline-block; padding:12px 16px; border-radius:12px; border:1px solid transparent; cursor:pointer; width:100%; text-align:center; }
       .mc-cta.primary { background:#0f62fe; color:#fff; }
       .mc-cta.accent { background:#ffd500; color:#1f2937; }
       .mc-cta.outline { background:#fff; color:#0f62fe; border-color:#0f62fe; }
@@ -403,15 +418,16 @@ function InnerComparison() {
       .mc-modal { position:fixed; inset:0; background:rgba(0,0,0,.45); display:none; align-items:center; justify-content:center; z-index:9999; }
       .mc-modal.open { display:flex; }
       .mc-modal__content { width:min(720px, 92vw); background:#fff; border-radius:16px; padding:18px; border:1px solid #e4e7ec; position: relative; }
-      .mc-close { border:none; background:transparent; font-size:20px; float:right; cursor:pointer; position: absolute; top: 10px; right: 10px;}
+      .mc-close { border:none; background:transparent; font-size:20px; position: absolute; top:10px; right: 10px; cursor:pointer; }
       .mc-ref-block { margin:10px 0 12px; }
       .mc-ref-row { display:flex; gap:8px; }
       #mc-ref-link { flex:1; padding:10px; border:1px solid #e4e7ec; border-radius:10px; }
       .mc-grid2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
       @media (max-width:700px){ .mc-grid2{ grid-template-columns:1fr; } }
-      .mc-check { display:flex; align-items:center; gap:8px; margin:10px 0; font-size: 14px;}
+      .mc-check { display:flex; align-items:center; gap:8px; margin:10px 0; }
       .mc-ref-actions { margin-top:8px; }
       .mc-legal { font-size:12px; color:#667085; margin-top:8px; }
+      #mc-ref-form input { border: 1px solid #ccc; padding: 8px; border-radius: 4px; width: 100%;}
     `}</style>
     <div className="container mx-auto py-12 px-4">
       <header className="text-center mb-12">
@@ -544,17 +560,17 @@ function InnerComparison() {
           </article>
 
           <article className="mc-card">
-            <h4>Pro (Referral Unlock)</h4>
+            <h4>Pro</h4>
             <div className="mc-price">$197 <span>one-time</span></div>
-            <p className="text-xs text-gray-600 mb-2">Unlock lifetime with 5 referrals in 30 days</p>
             <ul className="mc-includes">
                 <li>Full toolkit access</li>
                 <li>Bank-agnostic guidance (U.S. & Canada)</li>
                 <li>Referral dashboard to track progress</li>
                 <li>Friends get $20 off via your link</li>
                 <li>If you don’t hit 5 in 30 days, it continues at $29/mo until you do—then billing stops forever</li>
-              </ul>
-            <button id="cta-pro-197" className="mc-cta accent">Get Lifetime for $197</button>
+            </ul>
+            <button id="cta-pro-197" className="mc-cta accent">Unlock with 5 Referrals</button>
+             <p className="mc-small">Referral required to activate checkout.</p>
           </article>
 
           <article className="mc-card">
@@ -565,7 +581,8 @@ function InnerComparison() {
               <li>Community Q&A</li>
               <li>Cancel anytime</li>
             </ul>
-            <button id="cta-basic-29" className="mc-cta primary">Start for $29/month</button>
+            <button id="cta-basic-29" className="mc-cta primary">Unlock with 5 Referrals</button>
+             <p className="mc-small">Referral required to activate checkout.</p>
           </article>
         </div>
 
@@ -603,13 +620,13 @@ function InnerComparison() {
       <div id="mc-referral-modal" className="mc-modal" aria-hidden="true">
         <div className="mc-modal__content">
           <button className="mc-close" id="mc-ref-close" aria-label="Close">×</button>
-          <h3>Share & Unlock Pro ($197)</h3>
-          <p>To activate the Pro plan, enter at least <strong>5</strong> friends’ emails and share your unique link.</p>
+          <h3>Share & Unlock Your Plan</h3>
+          <p>To activate your plan, enter at least <strong>5</strong> friends’ emails and share your unique link.</p>
 
           <div className="mc-ref-block">
             <label>Your unique link</label>
             <div className="mc-ref-row">
-              <input id="mc-ref-link" type="text" readOnly className="flex-1 p-2 border rounded-md" />
+              <input id="mc-ref-link" type="text" readOnly />
               <button id="mc-copy" className="mc-cta small">Copy</button>
             </div>
             <button id="mc-share" className="mc-cta outline small mt-2">Share via device</button>
@@ -617,11 +634,11 @@ function InnerComparison() {
 
           <form id="mc-ref-form">
             <div className="mc-grid2">
-              <input type="email" required placeholder="friend1@email.com" name="e1" className="p-2 border rounded-md" />
-              <input type="email" required placeholder="friend2@email.com" name="e2" className="p-2 border rounded-md" />
-              <input type="email" required placeholder="friend3@email.com" name="e3" className="p-2 border rounded-md" />
-              <input type="email" required placeholder="friend4@email.com" name="e4" className="p-2 border rounded-md" />
-              <input type="email" required placeholder="friend5@email.com" name="e5" className="p-2 border rounded-md" />
+              <input type="email" required placeholder="friend1@email.com" name="e1" />
+              <input type="email" required placeholder="friend2@email.com" name="e2" />
+              <input type="email" required placeholder="friend3@email.com" name="e3" />
+              <input type="email" required placeholder="friend4@email.com" name="e4" />
+              <input type="email" required placeholder="friend5@email.com" name="e5" />
             </div>
             <label className="mc-check">
               <input type="checkbox" id="mc-confirm" /> I confirm I’ve shared this link with these contacts.
