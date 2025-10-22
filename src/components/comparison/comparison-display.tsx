@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState, useMemo, Suspense } from 'react';
 import {
@@ -244,8 +244,9 @@ function InnerComparison() {
           }
 
           attach('cta-elite-999', () => go('elite_999'));
-          attach('cta-pro-197',   () => go('pro_197'));
-          attach('cta-basic-29',  () => openReferral());
+          attach('cta-pro-197', () => openReferral());
+          attach('cta-basic-29', () => go('basic_29'));
+
 
           function openReferral(){
             const modal = $('mc-referral-modal');
@@ -316,7 +317,7 @@ function InnerComparison() {
               console.warn('Referral save failed (continuing anyway):', err);
             }
             
-            go('basic_29', { ref: uid || 'guest' });
+            go('pro_197', { ref: uid || 'guest' });
           });
         })();
       `;
@@ -382,7 +383,7 @@ function InnerComparison() {
       .mc-price { font-size:28px; font-weight:700; margin:4px 0 10px; }
       .mc-price span { font-size:12px; font-weight:500; color:#667085; }
       .mc-includes { padding-left:18px; margin:0 0 12px; }
-      .mc-cta { display:inline-block; padding:12px 16px; border-radius:12px; border:1px solid transparent; cursor:pointer; width: 100%; }
+      .mc-cta { display:inline-block; padding:12px 16px; border-radius:12px; border:1px solid transparent; cursor:pointer; width: 100%; text-align: center; }
       .mc-cta.primary { background:#0f62fe; color:#fff; }
       .mc-cta.accent { background:#ffd500; color:#1f2937; }
       .mc-cta.outline { background:#fff; color:#0f62fe; border-color:#0f62fe; }
@@ -401,15 +402,14 @@ function InnerComparison() {
 
       .mc-modal { position:fixed; inset:0; background:rgba(0,0,0,.45); display:none; align-items:center; justify-content:center; z-index:9999; }
       .mc-modal.open { display:flex; }
-      .mc-modal__content { width:min(720px, 92vw); background:#fff; border-radius:16px; padding:18px; border:1px solid #e4e7ec; }
-      .mc-close { border:none; background:transparent; font-size:20px; float:right; cursor:pointer; }
+      .mc-modal__content { width:min(720px, 92vw); background:#fff; border-radius:16px; padding:18px; border:1px solid #e4e7ec; position: relative; }
+      .mc-close { border:none; background:transparent; font-size:20px; float:right; cursor:pointer; position: absolute; top: 10px; right: 10px;}
       .mc-ref-block { margin:10px 0 12px; }
       .mc-ref-row { display:flex; gap:8px; }
       #mc-ref-link { flex:1; padding:10px; border:1px solid #e4e7ec; border-radius:10px; }
       .mc-grid2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
       @media (max-width:700px){ .mc-grid2{ grid-template-columns:1fr; } }
-      #mc-ref-form input[type=email] { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; }
-      .mc-check { display:flex; align-items:center; gap:8px; margin:10px 0; font-size: 14px; }
+      .mc-check { display:flex; align-items:center; gap:8px; margin:10px 0; font-size: 14px;}
       .mc-ref-actions { margin-top:8px; }
       .mc-legal { font-size:12px; color:#667085; margin-top:8px; }
     `}</style>
@@ -544,14 +544,17 @@ function InnerComparison() {
           </article>
 
           <article className="mc-card">
-            <h4>Pro</h4>
+            <h4>Pro (Referral Unlock)</h4>
             <div className="mc-price">$197 <span>one-time</span></div>
+            <p className="text-xs text-gray-600 mb-2">Unlock lifetime with 5 referrals in 30 days</p>
             <ul className="mc-includes">
-              <li>Core course + calculator</li>
-              <li>Email support (standard)</li>
-              <li>Annual updates</li>
-            </ul>
-            <button id="cta-pro-197" className="mc-cta primary">Get Pro</button>
+                <li>Full toolkit access</li>
+                <li>Bank-agnostic guidance (U.S. & Canada)</li>
+                <li>Referral dashboard to track progress</li>
+                <li>Friends get $20 off via your link</li>
+                <li>If you don’t hit 5 in 30 days, it continues at $29/mo until you do—then billing stops forever</li>
+              </ul>
+            <button id="cta-pro-197" className="mc-cta accent">Get Lifetime for $197</button>
           </article>
 
           <article className="mc-card">
@@ -562,8 +565,7 @@ function InnerComparison() {
               <li>Community Q&A</li>
               <li>Cancel anytime</li>
             </ul>
-            <button id="cta-basic-29" className="mc-cta accent">Unlock with 5 Referrals</button>
-            <p className="mc-small">Referral required to activate checkout.</p>
+            <button id="cta-basic-29" className="mc-cta primary">Start for $29/month</button>
           </article>
         </div>
 
@@ -601,31 +603,31 @@ function InnerComparison() {
       <div id="mc-referral-modal" className="mc-modal" aria-hidden="true">
         <div className="mc-modal__content">
           <button className="mc-close" id="mc-ref-close" aria-label="Close">×</button>
-          <h3>Share & Unlock Basic ($29/mo)</h3>
-          <p>To activate the Basic plan, enter at least <strong>5</strong> friends’ emails and share your unique link.</p>
+          <h3>Share & Unlock Pro ($197)</h3>
+          <p>To activate the Pro plan, enter at least <strong>5</strong> friends’ emails and share your unique link.</p>
 
           <div className="mc-ref-block">
             <label>Your unique link</label>
             <div className="mc-ref-row">
-              <input id="mc-ref-link" type="text" readOnly />
+              <input id="mc-ref-link" type="text" readOnly className="flex-1 p-2 border rounded-md" />
               <button id="mc-copy" className="mc-cta small">Copy</button>
             </div>
-            <button id="mc-share" className="mc-cta outline small">Share via device</button>
+            <button id="mc-share" className="mc-cta outline small mt-2">Share via device</button>
           </div>
 
           <form id="mc-ref-form">
             <div className="mc-grid2">
-              <input type="email" required placeholder="friend1@email.com" name="e1" />
-              <input type="email" required placeholder="friend2@email.com" name="e2" />
-              <input type="email" required placeholder="friend3@email.com" name="e3" />
-              <input type="email" required placeholder="friend4@email.com" name="e4" />
-              <input type="email" required placeholder="friend5@email.com" name="e5" />
+              <input type="email" required placeholder="friend1@email.com" name="e1" className="p-2 border rounded-md" />
+              <input type="email" required placeholder="friend2@email.com" name="e2" className="p-2 border rounded-md" />
+              <input type="email" required placeholder="friend3@email.com" name="e3" className="p-2 border rounded-md" />
+              <input type="email" required placeholder="friend4@email.com" name="e4" className="p-2 border rounded-md" />
+              <input type="email" required placeholder="friend5@email.com" name="e5" className="p-2 border rounded-md" />
             </div>
             <label className="mc-check">
               <input type="checkbox" id="mc-confirm" /> I confirm I’ve shared this link with these contacts.
             </label>
             <div className="mc-ref-actions">
-              <button type="submit" id="mc-continue" className="mc-cta primary" disabled>Continue to Checkout</button>
+              <button type="submit" id="mc-continue" className="mc-cta primary w-full" disabled>Continue to Checkout</button>
             </div>
             <p className="mc-legal">We store referral emails solely to verify eligibility. We never spam.</p>
           </form>
@@ -651,5 +653,3 @@ export function ComparisonDisplay() {
     </Suspense>
   )
 }
-
-    
