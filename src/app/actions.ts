@@ -19,7 +19,7 @@ export async function getSavingsReport(
 
 export async function sendWelcomeEmail(userData: { name: string; email: string }): Promise<{ success: boolean }> {
   const apiKey = process.env.CLEVERLYBOX_API_KEY;
-  const apiEndpoint = `https://app.cleverlybox.com/api/v1/send?api_token=${apiKey}`;
+  const apiEndpoint = `https://app.cleverlybox.com/api/v1/automations/68f968a48909f/execute`;
 
   if (!apiKey) {
     console.error('CleverlyBox API key is not configured.');
@@ -27,13 +27,9 @@ export async function sendWelcomeEmail(userData: { name: string; email: string }
   }
 
   const payload = {
-    // The API might expect 'to' as an object with email and name
-    to: {
-      email: userData.email,
-      name: userData.name,
-    },
-    // Using template_uid as is common for unique identifiers
-    template_uid: 'welcome-email', 
+    api_token: apiKey,
+    email: userData.email,
+    name: userData.name,
   };
 
   try {
@@ -49,16 +45,14 @@ export async function sendWelcomeEmail(userData: { name: string; email: string }
     if (!response.ok) {
       const errorBody = await response.text();
       console.error(`Failed to send welcome email to ${userData.email}. Status: ${response.status}. Body: ${errorBody}`);
-      // Implement retry logic here if needed (e.g., with a queue or another serverless function)
       return { success: false };
     }
     
-    console.log(`Welcome email successfully sent to ${userData.email}`);
+    console.log(`Welcome email automation successfully triggered for ${userData.email}`);
     return { success: true };
 
   } catch (error) {
-    console.error('Error sending welcome email:', error);
-    // Implement retry logic here
+    console.error('Error triggering welcome email automation:', error);
     return { success: false };
   }
 }
