@@ -70,8 +70,8 @@ function StatCard({
         <Icon className={cn('h-6 w-6', color || 'text-primary')} />
       </div>
       <div>
-        <div className="text-sm text-muted-foreground">{label}</div>
-        <div className="text-2xl font-bold">{value}</div>
+        <div id={label.toLowerCase().replace(/\s/g, '-')} className="text-sm text-muted-foreground">{label}</div>
+        <div className="text-2xl font-bold" data-monthly-savings={label === 'Monthly Cash Benefit' ? value : undefined}>{value}</div>
         {description && <p className="text-xs text-muted-foreground mt-1">{description}</p>}
       </div>
     </div>
@@ -156,117 +156,6 @@ function ComparisonChart({ data }: { data: Outputs['series'] }) {
 }
 
 
-function SocialProofBar() {
-  const quotes = [
-    { quote: "“Numbers looked too good—until they matched my bank’s amortization. Saved 6+ years.”", author: "Priya S., Calgary" },
-    { quote: "“Kept my bank. Re-routed cash flow. Plan paid for itself in month one.”", author: "David R., Austin" },
-    { quote: "“The monthly action plan made it simple. We just followed the dates.”", author: "Nisha & Arjun, Brampton" },
-  ];
-  return (
-    <div className="mc-proof-bar">
-      {quotes.map((q, i) => (
-        <div key={i}>
-          <p className="italic">“{q.quote}”</p>
-          <p className="font-semibold text-xs mt-1">— {q.author}</p>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function ReferralPanel({ isOpen, onClose, user, unlockTarget }: { isOpen: boolean, onClose: () => void, user: any, unlockTarget: 'pro' | 'basic' }) {
-  const { toast } = useToast();
-  // Mock data, this would come from Firestore
-  const [referralState, setReferralState] = useState({
-    linkCode: user?.uid ? `ref-${user.uid.substring(0,6)}` : 'YOURCODE',
-    verifiedCount: 0,
-    expiresAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
-    discountEligible: false,
-  });
-
-  const referralLink = `https://mortgagecutter.com/?ref=${referralState.linkCode}`;
-  
-  const daysLeft = useMemo(() => {
-    const diff = referralState.expiresAt.getTime() - Date.now();
-    return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
-  }, [referralState.expiresAt]);
-
-  const progress = Math.min(100, (referralState.verifiedCount / 5) * 100);
-
-  const copyLink = () => {
-    navigator.clipboard.writeText(referralLink);
-    toast({ title: 'Referral link copied!' });
-  };
-  
-  const shareMessage = `I used MortgageCutter to slash years off my mortgage without spending more each month. Try it with $20 off my link: ${referralLink}`;
-
-  const shareTargets = [
-    { label: "WhatsApp", href: `https://wa.me/?text=${encodeURIComponent(shareMessage)}` },
-    { label: "SMS", href: `sms:?&body=${encodeURIComponent(shareMessage)}` },
-    { label: "Messenger", href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralLink)}` },
-    { label: "Email", href: `mailto:?subject=${encodeURIComponent('Cut years off your mortgage')}&body=${encodeURIComponent(shareMessage)}` },
-  ];
-
-  return (
-    <div id="referral-panel" className={cn("fixed inset-0 z-50", isOpen ? "flex" : "hidden")}>
-      {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/60" onClick={onClose}></div>
-      {/* Panel */}
-      <div className="mc-slide-over fixed top-0 right-0 h-full w-full max-w-md bg-card shadow-lg p-6 overflow-y-auto">
-        <button onClick={onClose} className="absolute top-4 right-4 p-1 rounded-full hover:bg-muted"><X /></button>
-        
-        <h3 className="text-xl font-bold mb-2">Unlock your $197 price <span className="text-muted-foreground">(5 verified referrals)</span></h3>
-        
-        <div className="space-y-4 my-6">
-          <label className="text-sm font-medium">Your personal link</label>
-          <div className="flex gap-2">
-            <Input id="ref-link" readOnly value={referralLink} />
-            <Button id="ref-copy" variant="outline" size="icon" onClick={copyLink}><Copy /></Button>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          {shareTargets.map(t => (
-            <Button asChild key={t.label} variant="outline" size="sm">
-              <a href={t.href} target="_blank" rel="noopener noreferrer">{t.label}</a>
-            </Button>
-          ))}
-        </div>
-
-        <div className="my-6">
-            <div className="flex justify-between text-sm mb-1">
-                <span id="ref-progress">Verified: {referralState.verifiedCount}/5</span>
-                <span id="ref-days-left">Days left: {daysLeft}</span>
-            </div>
-            <div className="w-full bg-muted rounded-full h-2.5">
-                <div className="bg-primary h-2.5 rounded-full" style={{ width: `${progress}%` }}></div>
-            </div>
-        </div>
-        
-        <div className="text-sm space-y-3">
-          <h4 className="font-semibold">How it works:</h4>
-          <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-              <li>Your friend clicks your link.</li>
-              <li>They verify their email & run the free estimator.</li>
-              <li>They aren’t a duplicate user (new device/IP).</li>
-          </ul>
-        </div>
-        
-        <div className="mt-6">
-            <Button id="buy-pro-297" className="w-full" onClick={() => window.location.href="/purchase?plan=pro_297"}>
-                Buy at $297 now <ChevronRight />
-            </Button>
-        </div>
-        
-        <div className="mt-6 text-xs text-muted-foreground border-t pt-4">
-             <p>Discount applies when 5 new users verify their email and complete the free estimator via your link within 14 days. Self-referrals or duplicates don’t count. Verification may take up to 48 hours. You may purchase at $297 anytime; once 5 are verified your checkout auto-drops to $197.</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-
 function InnerComparison() {
   const searchParams = useSearchParams();
   const [data, setData] = useState<Outputs | null>(null);
@@ -275,8 +164,13 @@ function InnerComparison() {
   const { user } = useUser();
   const { toast } = useToast();
   const [formInputs, setFormInputs] = useState<Inputs | null>(null);
-  const [isReferralPanelOpen, setIsReferralPanelOpen] = useState(false);
-  const [referralUnlockTarget, setReferralUnlockTarget] = useState<'pro' | 'basic'>('pro');
+  
+  const yearsSaved = data ? (data.debtFreeMonthsBaseline - data.debtFreeMonthsHeloc) / 12 : 0;
+  const yearsSavedTxt = data ? `${Math.floor(yearsSaved)} yrs, ${Math.round((yearsSaved % 1) * 12)} mo` : 'several years';
+  const monthlySavings = useMemo(() => {
+    if (!data || !formInputs) return 150; // Default
+    return Math.max(0, (data.interestBaseline - data.interestHeloc) / data.debtFreeMonthsHeloc);
+  }, [data, formInputs]);
 
 
   useEffect(() => {
@@ -316,12 +210,80 @@ function InnerComparison() {
     runCalculation();
   }, [searchParams]);
 
-  const openReferralPanel = (target: 'pro' | 'basic') => {
-    setReferralUnlockTarget(target);
-    setIsReferralPanelOpen(true);
-  };
-  
-  const closeReferralPanel = () => setIsReferralPanelOpen(false);
+    useEffect(() => {
+        if (isLoading || !data) return;
+
+        // 2) Compute payback
+        const proPaybackDays = Math.max(1, Math.ceil(297 / (monthlySavings / 30)));
+        const elitePaybackWks = Math.max(1, Math.ceil(997 / (monthlySavings * 4.33)));
+
+        // 3) Inject
+        const setText = (id: string, val: string) => {
+            const n = document.getElementById(id);
+            if (n) n.textContent = val;
+        };
+        setText('monthlySavingsText', `$${monthlySavings.toFixed(0)}/mo`);
+        setText('ms', `$${monthlySavings.toFixed(0)}/mo`);
+        setText('yearsSavedText', yearsSavedTxt);
+        setText('proDays', `${proPaybackDays} days`);
+        setText('eliteWeeks', `${elitePaybackWks} weeks`);
+
+        // 4) Wire buttons
+        const go = (id: string, path: string) => {
+            const b = document.getElementById(id);
+            if (b) b.addEventListener('click', () => {
+                window.location.href = path;
+            });
+        };
+        go('btn-elite', '/purchase?plan=elite_999');
+        go('btn-pro', '/purchase?plan=pro297');
+        
+        const modal = document.getElementById('referral-modal');
+        const openModal = (mode: string) => {
+            if (!modal) return;
+            modal.style.display = 'flex';
+            const url = new URL(window.location.href);
+            const ref = `${url.origin}/?r=${user?.uid || 'guest'}`;
+            const inp = document.getElementById('ref-link') as HTMLInputElement | null;
+            if (inp) inp.value = ref + '&mode=' + mode;
+        };
+
+        const wireRef = (id: string, mode: string) => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('click', () => openModal(mode));
+        };
+        wireRef('btn-pro-ref', 'pro197');
+        wireRef('btn-basic', 'basic29');
+
+        document.getElementById('copy-ref')?.addEventListener('click', () => {
+            const inp = document.getElementById('ref-link') as HTMLInputElement | null;
+            if (inp) {
+                inp.select();
+                document.execCommand('copy');
+                toast({ title: "Copied!"})
+            }
+        });
+
+        document.getElementById('close-ref')?.addEventListener('click', () => {
+            if (modal) modal.style.display = 'none';
+        });
+
+        const shareButtons = document.querySelectorAll('.share-btn');
+        shareButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const net = (btn as HTMLElement).dataset.net;
+                const refLink = (document.getElementById('ref-link') as HTMLInputElement)?.value || '';
+                const text = `I used MortgageCutter to slash years off my mortgage without increasing my monthly spend. Try it with $20 off: ${refLink}`;
+                let url = '';
+                if (net === 'whatsapp') url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+                if (net === 'sms') url = `sms:?&body=${encodeURIComponent(text)}`;
+                if (net === 'email') url = `mailto:?subject=Cut%20years%20off%20your%20mortgage&body=${encodeURIComponent(text)}`;
+
+                if(url) window.open(url, '_blank');
+            });
+        });
+
+    }, [isLoading, data, monthlySavings, yearsSavedTxt, user]);
 
   if (isLoading) {
     return (
@@ -350,129 +312,181 @@ function InnerComparison() {
 
   if (!data || !formInputs) return null;
 
-  const yearsSaved = (data.debtFreeMonthsBaseline - data.debtFreeMonthsHeloc) / 12;
-  const monthlyCashBenefit = formInputs.netMonthlyIncome - formInputs.monthlyExpenses - ((data.interestHeloc/data.debtFreeMonthsHeloc) || 0)
-  
   return (
     <>
-      <style>{`
-          .mc-proof-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 2rem 0; padding: 1rem; border-radius: 0.75rem; background-color: hsl(var(--secondary)); border: 1px solid hsl(var(--border)); }
-          @media (max-width: 900px) { .mc-proof-bar { grid-template-columns: 1fr; } }
-          .mc-proof-bar p { margin: 0; font-size: 0.875rem; line-height: 1.25rem; color: hsl(var(--secondary-foreground)); }
-          .mc-pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-          @media (max-width: 1024px) { .mc-pricing-grid { grid-template-columns: 1fr; } }
-          .mc-pricing-card { border: 1px solid hsl(var(--border)); border-radius: 1rem; padding: 1.5rem; display: flex; flex-direction: column; }
-          .mc-pricing-card h4 { font-size: 1.25rem; font-weight: 600; }
-          .mc-pricing-card.pro { border-width: 2px; border-color: hsl(var(--primary)); }
-          .mc-pricing-card ul { list-style-position: inside; list-style-type: disc; margin: 1rem 0; font-size: 0.875rem; color: hsl(var(--muted-foreground)); space-y: 0.5rem; flex-grow: 1; }
-          .mc-slide-over { animation: slide-in-right 0.3s ease-out; }
-          @keyframes slide-in-right { from { transform: translateX(100%); } to { transform: translateX(0); } }
+      <style jsx>{`
+        .offer-wrapper {max-width:1100px;margin:24px auto;padding:0 16px}
+        .offer-hero h2 {font-size:28px;margin-bottom:4px}
+        .payback {background:#f4f7ff;border:1px solid #dfe6ff;padding:10px 12px;border-radius:10px;margin-top:8px}
+        .why-works { margin: 18px 0; }
+        .why-works ul { list-style-type: '✓ '; padding-left: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        @media (max-width: 768px) { .why-works ul { grid-template-columns: 1fr; } }
+        .cards {display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-top:18px}
+        @media (max-width: 1024px) { .cards { grid-template-columns: 1fr; } }
+        .card {border:1px solid #e9e9ee;border-radius:14px;padding:18px;background:#fff;box-shadow:0 6px 20px rgba(0,0,0,0.04); display: flex; flex-direction: column; }
+        .card ul { flex-grow: 1; margin: 12px 0; padding-left: 18px; list-style-type: '✓ '; }
+        .popular {border:2px solid #2563eb; position: relative;}
+        .badge {position: absolute; top: -12px; right: 12px; display:inline-block;background:#2563eb;color:#fff;padding:4px 8px;border-radius:999px;font-size:12px;margin-bottom:8px}
+        .price {font-size:34px;font-weight:700}
+        .sub {font-size:14px;color:#6b7280;margin-left:4px}
+        .cta {width:100%;padding:12px 16px;border-radius:10px;margin-top:10px;border:0;cursor:pointer; font-weight: 600;}
+        .primary {background:#2563eb;color:#fff}
+        .cta:hover { opacity: 0.9; }
+        .ghost {background:#fff;border:1px solid #2563eb;color:#2563eb}
+        .micro {font-size:12px;color:#6b7280;margin-top:6px}
+        .guarantee { background: #f0fdf4; border: 1px solid #bbf7d0; text-align: center; padding: 12px; border-radius: 12px; margin: 18px 0; }
+        .social { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 18px; }
+        @media (max-width: 768px) { .social { grid-template-columns: 1fr; } }
+        .social blockquote { font-style: italic; background: #f8fafc; padding: 12px; border-radius: 8px; border-left: 3px solid #e0e7ff; }
+        #referral-modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:50}
+        #referral-modal.open { display: flex; }
+        #referral-modal .modal-card{background:#fff;border-radius:14px;padding:20px;max-width:520px;width:92%; position: relative;}
+        #close-ref { position: absolute; top: 8px; right: 8px; background: none; border: none; font-size: 24px; cursor: pointer; }
+        .copyrow{display:flex;gap:8px; margin-top: 4px; }
+        .copyrow input{flex:1;padding:10px;border:1px solid #d1d5db;border-radius:8px}
+        .copyrow button { padding: 10px; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer;}
+        .share { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
+        .share-btn { padding: 8px 12px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer; }
       `}</style>
-      <ReferralPanel isOpen={isReferralPanelOpen} onClose={closeReferralPanel} user={user} unlockTarget={referralUnlockTarget} />
+      <div className="container mx-auto py-12 px-4">
+        <header className="text-center mb-12">
+          <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-primary">
+            Your Personalized Savings Blueprint
+          </h1>
+          <p className="text-xl text-muted-foreground mt-2 max-w-3xl mx-auto">
+            Here’s how the Mortgage Cutter Method can accelerate your journey to financial freedom.
+          </p>
+        </header>
 
-    <div className="container mx-auto py-12 px-4">
-      <header className="text-center mb-12">
-        <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-primary">
-          Your Personalized Savings Blueprint
-        </h1>
-        <p className="text-xl text-muted-foreground mt-2 max-w-3xl mx-auto">
-          Here’s how the Mortgage Cutter Method can accelerate your journey to financial freedom.
-        </p>
-      </header>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-        <StatCard 
-          icon={Calendar} 
-          label="Debt-Free Sooner" 
-          value={data.debtFreeMonthsBaseline === Infinity ? "Massively" : `${Math.floor(yearsSaved)} yrs, ${Math.round((yearsSaved % 1) * 12)} mo`}
-          description="Time until all consolidated debt is paid off."
-        />
-        <StatCard 
-          icon={Sparkles} 
-          label="Total Interest Saved" 
-          value={data.interestSaved === Infinity ? "Potentially Unlimited" : currencyFormatter.format(data.interestSaved)}
-          description="The extra money that stays in your pocket."
-        />
-        <StatCard 
-          icon={Wallet} 
-          label="Borrowing Room" 
-          value={currencyFormatter.format(data.borrowingRoomAfterSetup)}
-          description="Initial available credit in your HELOC after setup."
-          color="text-green-500"
-        />
-      </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          <StatCard
+            icon={Calendar}
+            label="Debt-Free Sooner"
+            value={data.debtFreeMonthsBaseline === Infinity ? 'Massively' : yearsSavedTxt}
+            description="Time until all consolidated debt is paid off."
+          />
+          <StatCard
+            icon={Sparkles}
+            label="Total Interest Saved"
+            value={data.interestSaved === Infinity ? 'Potentially Unlimited' : currencyFormatter.format(data.interestSaved)}
+            description="The extra money that stays in your pocket."
+          />
+          <StatCard
+            icon={Wallet}
+            label="Borrowing Room"
+            value={currencyFormatter.format(data.borrowingRoomAfterSetup)}
+            description="Initial available credit in your HELOC after setup."
+            color="text-green-500"
+          />
+        </div>
 
-      <Card className="mb-8">
-        <CardHeader>
+        <Card className="mb-8">
+          <CardHeader>
             <CardTitle>Debt Payoff Timeline</CardTitle>
             <CardDescription>Visualizing your journey to zero debt: Baseline vs. HELOC Method.</CardDescription>
-        </CardHeader>
-        <CardContent>
+          </CardHeader>
+          <CardContent>
             {data.series.length > 0 ? <ComparisonChart data={data.series} /> : <p>Could not generate chart data.</p>}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
 
-      <section id="offer-section" className="mt-12">
-        <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight">Pick your path to mortgage freedom</h2>
-            <p className="mt-2 text-muted-foreground">Buy today or unlock a discount by sharing your link.</p>
+        <div id="offer-copy" className="offer-wrapper">
+          <div className="offer-hero text-center">
+            <h2>Lock in your projected savings in days—not months.</h2>
+            <p id="personal-subhead">Based on your numbers, you can cut <strong id="yearsSavedText">{yearsSavedTxt}</strong> and save about <strong id="monthlySavingsText">${monthlySavings.toFixed(0)}/mo</strong> in interest. Choose a plan to lock it in.</p>
+            <div className="payback" id="paybackStrip">
+              At your projected savings of <strong id="ms">${monthlySavings.toFixed(0)}/mo</strong>, <strong>Pro</strong> pays for itself in ~<strong id="proDays">__ days</strong>. <strong>Elite</strong> pays for itself in ~<strong id="eliteWeeks">__ weeks</strong>.
+            </div>
+          </div>
+
+          <div className="why-works">
+            <ul>
+              <li><strong>Front-loads principal</strong> to choke future interest</li>
+              <li><strong>Automates cash flow</strong> so interest days stay low</li>
+              <li><strong>No product switch required</strong>—use what you already have</li>
+              <li><strong>Math, not hype</strong>—you can verify every step</li>
+            </ul>
+          </div>
+
+          <div className="cards">
+            <div className="card">
+              <h3>Elite</h3>
+              <div className="price">$997 <span className="sub">one-time</span></div>
+              <ul>
+                <li>Full course + tools (lifetime)</li>
+                <li>Priority email support</li>
+                <li>Advanced HELOC strategies + templates</li>
+                <li><strong>30-day “Math Match” guarantee</strong></li>
+              </ul>
+              <button id="btn-elite" className="cta primary">Get Elite (Lifetime)</button>
+            </div>
+
+            <div className="card popular">
+              <div className="badge">Most Popular</div>
+              <h3>Pro</h3>
+              <div className="price">$297 <span className="sub">one-time</span></div>
+              <ul>
+                <li>Full toolkit access</li>
+                <li>Bank-agnostic guidance (U.S. & Canada)</li>
+                <li>Referral dashboard to track progress</li>
+                <li><strong>Auto-drop to $197</strong> with 5 verified referrals in 14 days</li>
+              </ul>
+              <button id="btn-pro" className="cta primary">Buy Pro – $297</button>
+              <button id="btn-pro-ref" className="cta ghost">Get Pro for $197 (with 5 referrals)</button>
+              <div className="micro">Pay now at $297 and we’ll auto-refund $100 when your 5 are verified, or use the referral route first.</div>
+            </div>
+
+            <div className="card">
+              <h3>Basic</h3>
+              <div className="price">$29 <span className="sub">/month</span></div>
+              <ul>
+                <li>Calculator + monthly action plan</li>
+                <li>Community Q&A</li>
+                <li>Cancel anytime</li>
+                <li><strong>Referral required</strong> to activate checkout (5 signups)</li>
+              </ul>
+              <button id="btn-basic" className="cta primary">Unlock with 5 Referrals</button>
+              <div className="micro">Share your link. When 5 join any paid plan in 14 days, your Basic plan activates.</div>
+            </div>
+          </div>
+
+          <div className="guarantee">
+            <strong>30-Day “Math Match” Guarantee.</strong> If our plan doesn’t reconcile with your bank’s amortization math (±2%), email support within 30 days for a full refund.
+          </div>
+
+          <div className="social">
+            <blockquote>“Numbers looked too good—until they matched my bank’s amortization. Saved 6+ years.” — Priya S., Calgary</blockquote>
+            <blockquote>“Kept my bank. Re-routed cash flow. Plan paid for itself in month one.” — David R., Austin</blockquote>
+            <blockquote>“The monthly action plan made it simple. We just followed the dates.” — Nisha & Arjun, Brampton</blockquote>
+          </div>
+
+          <div id="referral-modal" style={{display:'none'}}>
+            <div className="modal-card">
+              <button id="close-ref">×</button>
+              <h3>Unlock your discount by helping friends cut theirs</h3>
+              <p>You’ll get a unique link. Friends get <strong>$20 off</strong>. When <strong>5</strong> join any paid plan in <strong>14 days</strong>, your price drops automatically.</p>
+              <label>Your link</label>
+              <div className="copyrow">
+                <input id="ref-link" type="text" readOnly />
+                <button id="copy-ref">Copy</button>
+              </div>
+              <div className="share">
+                <button className="share-btn" data-net="whatsapp">Share via WhatsApp</button>
+                <button className="share-btn" data-net="sms">Share via SMS</button>
+                <button className="share-btn" data-net="email">Share via Email</button>
+              </div>
+            </div>
+          </div>
         </div>
-        <SocialProofBar />
 
-        <div className="mc-pricing-grid">
-            <div id="pricing-elite" className="mc-pricing-card">
-                <h4 className="font-semibold">Elite</h4>
-                <p className="text-4xl font-bold my-2">$997 <span className="text-sm font-normal text-muted-foreground">one-time</span></p>
-                <ul>
-                    <li>Lifetime course + tools</li>
-                    <li>Priority email support</li>
-                    <li>Advanced HELOC strategies</li>
-                </ul>
-                <Button id="cta-elite-997" variant="outline" className="w-full mt-4" onClick={() => window.location.href="/purchase?plan=elite_997"}>
-                    Get Elite
-                </Button>
-            </div>
-            
-            <div id="pricing-pro" className="mc-pricing-card pro">
-                <div className="flex justify-between items-center">
-                    <h4 className="font-semibold">Pro</h4>
-                    <div className="bg-primary text-primary-foreground text-xs font-semibold px-2 py-1 rounded-full">Most Popular</div>
-                </div>
-                 <p className="text-4xl font-bold my-2">$297 <span className="text-sm font-normal text-muted-foreground">one-time</span></p>
-                 <ul>
-                    <li>Full toolkit</li>
-                    <li>Bank-agnostic guidance (U.S. & Canada)</li>
-                    <li>Referral dashboard</li>
-                </ul>
-                <div className="mt-4 space-y-2">
-                   <Button id="buy-pro-297" className="w-full" onClick={() => window.location.href="/purchase?plan=pro_297"}>Buy Pro – $297</Button>
-                   <Button id="unlock-pro-197" variant="secondary" className="w-full" onClick={() => openReferralPanel('pro')}>Get Pro for $197 <span className="ml-1 text-xs">(with 5 referrals)</span></Button>
-                </div>
-                <p className="text-xs text-muted-foreground mt-2 text-center">You can buy at $297 anytime. Your price drops to $197 automatically when 5 are verified within 14 days.</p>
-            </div>
-            
-            <div id="pricing-basic" className="mc-pricing-card">
-                 <h4 className="font-semibold">Basic</h4>
-                <p className="text-4xl font-bold my-2">$29 <span className="text-sm font-normal text-muted-foreground">/month</span></p>
-                <ul>
-                    <li>Calculator + monthly plan</li>
-                    <li>Community Q&A</li>
-                    <li>Cancel anytime</li>
-                </ul>
-                 <Button id="unlock-basic-29" className="w-full mt-4" onClick={() => openReferralPanel('basic')}>Unlock with 5 Referrals</Button>
-                 <p className="text-xs text-muted-foreground mt-2 text-center">Referral required to activate checkout.</p>
-            </div>
-        </div>
-      </section>
-
-       <Alert className="mt-8 border-primary/50">
-           <Info className="h-4 w-4" />
-           <AlertTitle className="font-bold">Assumptions & Disclaimers</AlertTitle>
-           <AlertDescription className="text-xs mt-2">
+        <Alert className="mt-8 border-primary/50">
+          <Info className="h-4 w-4" />
+          <AlertTitle className="font-bold">Assumptions & Disclaimers</AlertTitle>
+          <AlertDescription className="text-xs mt-2">
             Estimates are for educational purposes and are not a guarantee of savings or loan approval. All debts are assumed to be consolidated into the HELOC. The calculation does not include bank fees, closing costs, or property taxes/insurance. Results depend on your actual income, spending, and final lender terms.
-           </AlertDescription>
-       </Alert>
-    </div>
+          </AlertDescription>
+        </Alert>
+      </div>
     </>
   );
 }
@@ -484,3 +498,5 @@ export function ComparisonDisplay() {
     </Suspense>
   )
 }
+
+    
