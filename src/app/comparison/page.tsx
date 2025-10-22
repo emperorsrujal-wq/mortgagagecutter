@@ -41,9 +41,11 @@ function ComparisonFallback() {
 
 export default function ComparisonPage() {
   return (
-    <Suspense fallback={<ComparisonFallback />}>
-       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      <ComparisonDisplay />
-    </Suspense>
+    <div className="bg-slate-50">
+      <Suspense fallback={<ComparisonFallback />}>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+        <ComparisonDisplay />
+      </Suspense>
+    </div>
   );
 }

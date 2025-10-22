@@ -28,9 +28,13 @@ import {
   Share2,
   ChevronRight,
   CheckCircle,
+  Award,
+  Users,
+  Target,
+  BarChart,
+  MessageCircle,
 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import type { Inputs, Outputs, Debt } from '@/lib/mortgage-types';
 import { getSavingsReport } from '@/app/actions';
 import { cn } from '@/lib/utils';
@@ -39,11 +43,17 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Legend, ResponsiveContainer, Line, ComposedChart } from 'recharts';
 import { useUser } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
-import { Input } from '@/components/ui/input';
-import { firebaseConfig } from '@/firebase/config';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+import Image from 'next/image';
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -66,23 +76,22 @@ function StatCard({
   description?: string;
 }) {
   return (
-    <div className="flex items-start gap-4 rounded-lg bg-card p-4 shadow-sm border">
-      <div className="rounded-full bg-primary/10 p-3">
-        <Icon className={cn('h-6 w-6', color || 'text-primary')} />
-      </div>
-      <div>
-        <div id={label.toLowerCase().replace(/\s/g, '-')} className="text-sm text-muted-foreground">{label}</div>
-        <div className="text-2xl font-bold" data-monthly-savings={label === 'Monthly Cash Benefit' ? value : undefined}>{value}</div>
+    <Card className="shadow-lg">
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
+        <CardTitle className="text-sm font-medium text-muted-foreground">{label}</CardTitle>
+        <Icon className={cn('h-5 w-5', color || 'text-primary')} />
+      </CardHeader>
+      <CardContent>
+        <div className="text-3xl font-bold">{value}</div>
         {description && <p className="text-xs text-muted-foreground mt-1">{description}</p>}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
 
 function ComparisonChart({ data }: { data: Outputs['series'] }) {
     const chartData = useMemo(() => {
      if (data.length === 0) return [];
-     // only show ~120 points for performance
      const step = Math.max(1, Math.floor(data.length / 120));
      return data.filter((_, i) => i % step === 0);
    }, [data]);
@@ -96,479 +105,96 @@ function ComparisonChart({ data }: { data: Outputs['series'] }) {
   const formatTooltip = (value: number) => currencyFormatter.format(value);
 
   return (
-    <ChartContainer config={{}} className="min-h-[300px] w-full">
-      <AreaChart data={chartData} margin={{ left: 10, right: 10, top: 10, bottom: 10 }}>
-        <defs>
-          <linearGradient id="colorHeloc" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.8} />
-            <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0.1} />
-          </linearGradient>
-          <linearGradient id="colorBaseline" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="hsl(var(--muted-foreground))" stopOpacity={0.5} />
-            <stop offset="95%" stopColor="hsl(var(--muted-foreground))" stopOpacity={0.1} />
-          </linearGradient>
-        </defs>
-        <CartesianGrid vertical={false} strokeDasharray="3 3" />
-        <XAxis
-          dataKey="month"
-          tickFormatter={(tick) => `Yr ${Math.floor(tick / 12)}`}
-          tickLine={false}
-          axisLine={false}
-          interval="preserveStartEnd"
-          minTickGap={50}
-        />
-        <YAxis
-          tickFormatter={formatYAxis}
-          tickLine={false}
-          axisLine={false}
-          width={50}
-        />
-        <ChartTooltip
-          cursor={true}
-          content={
-            <ChartTooltipContent
-              labelFormatter={(label) => `Month: ${label}`}
-              formatter={(value, name) => [
-                formatTooltip(value as number),
-                name === 'balanceHeloc' ? 'HELOC Method' : 'Baseline',
-              ]}
+    <ResponsiveContainer width="100%" height={350}>
+        <ComposedChart data={chartData} margin={{ left: 0, right: 10, top: 10, bottom: 20 }}>
+            <defs>
+                <linearGradient id="colorHeloc" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.4} />
+                    <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="colorBaseline" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="hsl(var(--muted-foreground))" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="hsl(var(--muted-foreground))" stopOpacity={0} />
+                </linearGradient>
+            </defs>
+            <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="hsl(var(--border) / 0.5)" />
+            <XAxis
+                dataKey="month"
+                tickFormatter={(tick) => `Yr ${Math.floor(tick / 12)}`}
+                tickLine={false}
+                axisLine={{stroke: "hsl(var(--border))"}}
+                interval="preserveStartEnd"
+                minTickGap={50}
+                className="text-xs"
+                />
+            <YAxis
+                tickFormatter={formatYAxis}
+                tickLine={false}
+                axisLine={{stroke: "hsl(var(--border))"}}
+                width={50}
+                className="text-xs"
             />
-          }
-        />
-        <Area
-          type="monotone"
-          dataKey="balanceBaseline"
-          stackId="1"
-          stroke="hsl(var(--muted-foreground))"
-          fill="url(#colorBaseline)"
-          name="Baseline"
-        />
-        <Area
-          type="monotone"
-          dataKey="balanceHeloc"
-          stackId="2"
-          stroke="hsl(var(--primary))"
-          fill="url(#colorHeloc)"
-          name="HELOC Method"
-        />
-      </AreaChart>
-    </ChartContainer>
-  );
-}
-
-function NewPricingSection() {
-    useEffect(() => {
-    const styleElement = document.createElement('style');
-    styleElement.innerHTML = `
-      #mc-pricing.mcp-wrap{margin-top:28px;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;color:#0f172a}
-      #mc-pricing .mcp-heading{font-size:clamp(22px,3vw,30px);font-weight:800;margin:0 0 6px}
-      #mc-pricing .mcp-sub{color:#64748b;margin:0 0 16px}
-      #mc-pricing .mcp-grid{display:grid;gap:18px;grid-template-columns:repeat(3,minmax(0,1fr))}
-      #mc-pricing .mcp-card{position:relative;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:18px;box-shadow:0 8px 20px rgba(15,23,42,.06)}
-      #mc-pricing .mcp-popular{border-color:#93c5fd}
-      #mc-pricing .mcp-ribbon{position:absolute;top:-10px;right:14px;background:#2563eb;color:#fff;font-weight:800;font-size:12px;padding:5px 8px;border-radius:8px}
-      #mc-pricing .mcp-title{font-weight:800;font-size:18px;margin-bottom:6px}
-      #mc-pricing .mcp-price{font-size:36px;font-weight:900;margin-bottom:8px}
-      #mc-pricing .mcp-price span{font-size:13px;font-weight:600;color:#64748b}
-      #mc-pricing .mcp-list{margin:10px 0 14px;padding-left:18px}
-      #mc-pricing .mcp-list li{margin:6px 0}
-      #mc-pricing .mcp-btn{width:100%;background:#2563eb;color:#fff;border:0;border-radius:10px;padding:12px 14px;font-weight:800;cursor:pointer}
-      #mc-pricing .mcp-btn.alt{background:#0ea5e9;color:#032030}
-      #mc-pricing .mcp-divider{height:1px;background:#eef2f7;margin:14px 0}
-      #mc-pricing .mcp-alt-title{font-weight:800;margin-bottom:8px}
-      #mc-pricing .mcp-note{color:#64748b;font-size:13px;margin:8px 0 0}
-      #mc-pricing .mcp-share{margin-top:16px;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:14px}
-      #mc-pricing .mcp-share-title{font-weight:800;margin-bottom:10px}
-      #mc-pricing .mcp-buttons{display:flex;gap:10px;flex-wrap:wrap}
-      #mc-pricing .mcp-share-btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 12px;border-radius:10px;background:#0ea5e9;color:#001423;font-weight:800;text-decoration:none;cursor:pointer}
-      #mc-pricing .mcp-share-btn.ghost{background:transparent;border:1px solid #cfe0ff;color:#2563eb}
-
-      #mc-pricing .mcp-progress{margin:18px 0;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px}
-      #mc-pricing .mcp-progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-      #mc-pricing .mcp-progress-title{font-weight:800}
-      #mc-pricing .mcp-progress-count{font-weight:900;color:#0ea5e9}
-      #mc-pricing .mcp-progress-bar{height:12px;background:#eef2f7;border-radius:999px;overflow:hidden}
-      #mc-pricing .mcp-progress-fill{height:100%;background:#2563eb;width:0%;transition:width .35s ease;border-radius:999px}
-      #mc-pricing .mcp-progress-note{color:#475569;margin-top:8px}
-      #mc-pricing .mcp-share.mcp-pulse { box-shadow: 0 0 0 3px rgba(6, 182, 212, .35); transition: box-shadow .25s; }
-
-      @media (max-width: 980px){#mc-pricing .mcp-grid{grid-template-columns:1fr}}
-    `;
-    document.head.appendChild(styleElement);
-
-    const loadScript = (src: string, onLoad?: () => void) => {
-      if (document.querySelector(`script[src="${src}"]`)) {
-        onLoad?.();
-        return;
-      }
-      const script = document.createElement('script');
-      script.src = src;
-      script.async = true;
-      if (onLoad) script.onload = onLoad;
-      document.body.appendChild(script);
-    };
-
-    const runScripts = () => {
-      // Logic from the user prompt's <script> tags
-      const scriptElement = document.createElement('script');
-      scriptElement.innerHTML = `
-      (function(){
-        const fbConfig = ${JSON.stringify(firebaseConfig)};
-        if (!window.firebase?.apps?.length) {
-          try {
-            window.firebase.initializeApp(fbConfig);
-          } catch(e) { console.error("Failed to initialize Firebase compat", e); }
-        }
-      })();
-
-      (function(){
-        // -------------- SETTINGS --------------
-        const CHECKOUT_BASE = "/purchase"; // keep using existing purchase page
-        const checkoutFor = (plan) => \`\${CHECKOUT_BASE}?plan=\${encodeURIComponent(plan)}\`;
-
-        const auth = window.firebase.auth();
-
-        // Get ref code from a reliable source if available, otherwise make one up
-        const REF_CODE = (window.USER_REF_CODE || auth.currentUser?.uid || "ABC123");
-        const REF_LINK = (window.USER_REF_LINK || (location.origin + "/r/" + REF_CODE));
-
-        // ---------- BUY/UNLOCK BUTTONS ----------
-        const $ = (id)=>document.getElementById(id);
-        $("#mcp-elite")?.addEventListener("click", ()=> location.href = checkoutFor("elite-997"));
-        $("#mcp-pro-297")?.addEventListener("click", ()=> location.href = checkoutFor("pro-297"));
-        $("#mcp-pro-197")?.addEventListener("click", ()=> {
-          document.querySelector("#mc-pricing .mcp-share")?.scrollIntoView({behavior:"smooth",block:"center"});
-        });
-        $("#mcp-basic-39")?.addEventListener("click", ()=> {
-          document.querySelector("#mc-pricing .mcp-share")?.scrollIntoView({behavior:"smooth",block:"center"});
-        });
-
-        // ---------- SHARE LINKS (persuasive copy) ----------
-        const msg = encodeURIComponent(
-          "Quick heads-up: there’s a bank-agnostic way to cut years off a mortgage without changing your lifestyle. " +
-          "It uses a HELOC + smarter cash-flow timing. My math matched the bank’s amortization—paid for itself fast. " +
-          "Grab $20 off here: " + REF_LINK + " (see your Before/After in 60 seconds)."
-        );
-        const url = encodeURIComponent(REF_LINK);
-
-        // WhatsApp
-        const wa = document.getElementById("mcp-share-wa");
-        wa?.setAttribute("href", \`https://wa.me/?text=\${msg}\`); wa?.setAttribute("target","_blank");
-        // Messenger
-        const fbm = document.getElementById("mcp-share-fbm");
-        fbm?.setAttribute("href", \`https://www.facebook.com/dialog/send?app_id=117923735210579&link=\${url}&redirect_uri=\${encodeURIComponent(location.href)}\`);
-        fbm?.setAttribute("target","_blank");
-        // SMS
-        const smsText = encodeURIComponent("Cut years off a mortgage w/ HELOC + smart cash-flow timing. $20 off: " + REF_LINK);
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-        const sms = document.getElementById("mcp-share-sms");
-        sms?.setAttribute("href", \`sms:\${isIOS ? "&" : "?"}body=\${smsText}\`);
-        // Telegram
-        const tg = document.getElementById("mcp-share-tg");
-        tg?.setAttribute("href", \`https://t.me/share/url?url=\${url}&text=\${msg}\`); tg?.setAttribute("target","_blank");
-        // Copy
-        document.getElementById("mcp-copy")?.addEventListener("click", async ()=>{
-          try{ await navigator.clipboard.writeText(REF_LINK);
-            const btn = document.getElementById("mcp-copy"); const old = btn.textContent;
-            btn.textContent = "Copied!"; setTimeout(()=> btn.textContent = old, 1200);
-          }catch(e){}
-        });
-
-        // ---------- REFERRAL PROGRESS ----------
-        const HAVE = typeof window.USER_REF_HAVE === "number" ? window.USER_REF_HAVE : 0;
-        const NEED = typeof window.USER_REF_NEED === "number" ? window.USER_REF_NEED : 5;
-
-        function setProgress(have = 0, need = 5){
-          const countEl = document.getElementById("mcp-progress-count");
-          const fillEl  = document.getElementById("mcp-progress-fill");
-          if (!countEl || !fillEl) return;
-          const safeHave = Math.max(0, Math.min(have, need));
-          const pct = need > 0 ? (safeHave / need) * 100 : 0;
-          countEl.textContent = \`\${safeHave} / \${need}\`;
-          fillEl.style.width = pct + "%";
-
-          if (safeHave >= need){
-            fillEl.parentElement.classList.add("mcp-unlocked");
-          }
-        }
-        setProgress(HAVE, NEED);
-        
-        window.addEventListener('referral:update', (e)=>{
-          const d = e.detail || {};
-          setProgress(typeof d.have==='number'?d.have:0, typeof d.need==='number'?d.need:5);
-        });
-
-        const db = window.firebase.firestore();
-        let unsubStats = null;
-        
-        function listenToStats(uid){
-            if (typeof unsubStats === 'function') { try { unsubStats(); } catch(e){} }
-            const ref = db.doc(\`users/\${uid}/stats/main\`);
-            unsubStats = ref.onSnapshot(snap => {
-            const d = snap.exists ? snap.data() : {};
-            const have = Number(d.shareCount || 0);
-            const need = Number(d.shareTarget || 5);
-            window.dispatchEvent(new CustomEvent('referral:update', { detail: { have, need }}));
-            }, err => console.error('stats listener error', err));
-        }
-
-        async function ensureStatsDoc(uid){
-            const ref = db.doc(\`users/\${uid}/stats/main\`);
-            const snap = await ref.get();
-            if (!snap.exists) {
-            await ref.set({ shareCount: 0, shareTarget: 5, lastUpdated: window.firebase.firestore.FieldValue.serverTimestamp() });
-            } else if (snap.exists && typeof snap.data().shareTarget === 'undefined') {
-            await ref.set({ shareTarget: 5 }, { merge: true });
-            }
-        }
-
-        auth.onAuthStateChanged(async user => {
-            if (!user) {
-                window.dispatchEvent(new CustomEvent('referral:update', { detail: { have: 0, need: 5 }}));
-                return;
-            }
-            await ensureStatsDoc(user.uid);
-            listenToStats(user.uid);
-        });
-
-        const CHANNEL_IDS = {
-            whatsapp:  'mcp-share-wa',
-            messenger: 'mcp-share-fbm',
-            sms:       'mcp-share-sms',
-            telegram:  'mcp-share-tg',
-            copy:      'mcp-copy'
-        };
-
-        function alreadyCreditedToday(channel){
-            const key = \`mc_shared_\${channel}\`;
-            const today = new Date().toISOString().slice(0,10);
-            try {
-            const val = JSON.parse(localStorage.getItem(key) || 'null');
-            return val && val.day === today;
-            } catch(e){
-            return false;
-            }
-        }
-        function markCreditedToday(channel){
-            const key = \`mc_shared_\${channel}\`;
-            const today = new Date().toISOString().slice(0,10);
-            localStorage.setItem(key, JSON.stringify({ day: today }));
-        }
-
-        async function creditShare(channel){
-            const user = auth.currentUser;
-            if (!user) return;
-            if (alreadyCreditedToday(channel)) return;
-
-            try {
-            const box = document.querySelector('#mc-pricing .mcp-share');
-            if (box) { box.classList.add('mcp-pulse'); setTimeout(()=>box.classList.remove('mcp-pulse'), 800); }
-            } catch(e){}
-
-            try {
-            const ref = db.doc(\`users/\${user.uid}/stats/main\`);
-            await ref.set({
-                shareCount: window.firebase.firestore.FieldValue.increment(1),
-                lastUpdated: window.firebase.firestore.FieldValue.serverTimestamp()
-            }, { merge: true });
-            markCreditedToday(channel);
-            } catch(err){
-            console.error('Failed to credit share', err);
-            }
-        }
-
-        function safeOpen(url){
-            const w = window.open(url, '_blank', 'noopener,noreferrer');
-            if (!w) location.href = url;
-        }
-
-        function getReferralLink(){
-            const el = document.querySelector('[data-referral-link]');
-            if (el && el.dataset.referralLink) return el.dataset.referralLink;
-            return window.location.href.split('#')[0];
-        }
-
-        function attachShareHandlers(){
-            const link = encodeURIComponent(getReferralLink());
-            const text = encodeURIComponent(
-            "I found a smarter way to cut mortgage years using your existing accounts. Run your numbers here:"
-            );
-            const msg  = \`\${text}%0A\${link}\`;
-            const WHATSAPP = \`https://wa.me/?text=\${msg}\`;
-            const TELEGRAM = \`https://t.me/share/url?url=\${link}&text=\${text}\`;
-            const SMS = \`sms:?&body=\${msg}\`;
-            const MESSENGER = \`fb-messenger://share/?link=\${link}\`;
-
-            const w = document.getElementById(CHANNEL_IDS.whatsapp);
-            if (w) w.addEventListener('click', () => { safeOpen(WHATSAPP); setTimeout(()=>creditShare('whatsapp'), 1500); });
-
-            const m = document.getElementById(CHANNEL_IDS.messenger);
-            if (m) m.addEventListener('click', () => { safeOpen(MESSENGER); setTimeout(()=>creditShare('messenger'), 1500); });
-
-            const s = document.getElementById(CHANNEL_IDS.sms);
-            if (s) s.addEventListener('click', () => { location.href = SMS; setTimeout(()=>creditShare('sms'), 1500); });
-
-            const t = document.getElementById(CHANNEL_IDS.telegram);
-            if (t) t.addEventListener('click', () => { safeOpen(TELEGRAM); setTimeout(()=>creditShare('telegram'), 1500); });
-
-            const c = document.getElementById(CHANNEL_IDS.copy);
-            if (c) c.addEventListener('click', async () => {
-                const raw = getReferralLink();
-                try {
-                    await navigator.clipboard.writeText(\`Smarter mortgage payoff calculator (works with your bank): \${raw}\`);
-                    creditShare('copy');
-                    c.textContent = 'Copied!';
-                    setTimeout(()=>c.textContent='Copy link', 1200);
-                } catch(e){
-                    prompt('Copy your link:', raw);
-                    creditShare('copy');
+            <ChartTooltip
+                cursor={true}
+                content={
+                    <ChartTooltipContent
+                        className="bg-card/80 backdrop-blur-sm"
+                        labelFormatter={(label) => `Month: ${label}`}
+                        formatter={(value, name) => [
+                            formatTooltip(value as number),
+                            name === 'balanceHeloc' ? 'Accelerated Path' : 'Old Path',
+                        ]}
+                    />
                 }
-            });
-        }
-        attachShareHandlers();
-      })();
-      `;
-      document.body.appendChild(scriptElement);
-    }
-    
-    // Load Firebase scripts then run the main logic
-    loadScript("https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js", () => {
-        loadScript("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js", () => {
-            loadScript("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js", runScripts)
-        })
-    })
-
-
-    return () => {
-      document.head.removeChild(styleElement);
-    };
-  }, []);
-
-  return (
-    <section id="mc-pricing" className="mcp-wrap" aria-label="Purchase Options">
-      <h2 className="mcp-heading">Pick your path to mortgage freedom</h2>
-      <p className="mcp-sub">Buy today or unlock a discount by sharing your link.</p>
-
-      <div className="mcp-grid">
-        <div className="mcp-card">
-          <div className="mcp-title">Elite</div>
-          <div className="mcp-price">$997 <span>one-time</span></div>
-          <ul className="mcp-list">
-            <li>Lifetime course + tools</li>
-            <li>Priority email support</li>
-            <li>Advanced HELOC strategies</li>
-          </ul>
-          <button id="mcp-elite" className="mcp-btn">Get Elite — $997</button>
-        </div>
-
-        <div className="mcp-card mcp-popular">
-          <div className="mcp-ribbon">Most popular</div>
-          <div className="mcp-title">Pro</div>
-          <div className="mcp-price">$297 <span>one-time</span></div>
-          <ul className="mcp-list">
-            <li>Full toolkit access</li>
-            <li>Bank-agnostic guidance (U.S. & Canada)</li>
-            <li>Referral dashboard to track progress</li>
-          </ul>
-          <button id="mcp-pro-297" className="mcp-btn">Buy Pro — $297</button>
-          <div className="mcp-divider"></div>
-          <div className="mcp-alt">
-            <div className="mcp-alt-title">Or unlock a discount:</div>
-            <button id="mcp-pro-197" className="mcp-btn alt">Get Pro for $197 <span>(with 5 referrals)</span></button>
-            <p className="mcp-note">Price auto-drops to $197 when 5 join any paid plan within 14 days. Already bought Pro? We auto-refund $100.</p>
-          </div>
-        </div>
-
-        <div className="mcp-card">
-          <div className="mcp-title">Basic</div>
-          <div className="mcp-price">$39 <span>/month</span></div>
-          <ul className="mcp-list">
-            <li>Calculator + monthly action plan</li>
-            <li>Community Q&amp;A</li>
-            <li>Cancel anytime</li>
-          </ul>
-          <button id="mcp-basic-39" className="mcp-btn">Unlock with 5 Referrals</button>
-          <p className="mcp-note">Referral required to activate checkout.</p>
-        </div>
-      </div>
-
-      <div className="mcp-progress" aria-live="polite" aria-label="Referral progress">
-        <div className="mcp-progress-top">
-          <span className="mcp-progress-title">Referral progress</span>
-          <span id="mcp-progress-count" className="mcp-progress-count">0 / 5</span>
-        </div>
-        <div className="mcp-progress-bar">
-          <div id="mcp-progress-fill" className="mcp-progress-fill" style={{width: '0%'}}></div>
-        </div>
-        <p className="mcp-progress-note">Friends get <strong>$20 off</strong>. Hit <strong>5 signups</strong> in 14 days to unlock Pro at <strong>$197</strong> or Basic at <strong>$39/mo</strong>.</p>
-      </div>
-
-      <div className="mcp-share">
-        <div className="mcp-share-title">Share your link to unlock savings</div>
-        <div className="mcp-buttons">
-          <a id="mcp-share-wa" className="mcp-share-btn" rel="noopener">WhatsApp</a>
-          <a id="mcp-share-fbm" className="mcp-share-btn" rel="noopener">Messenger</a>
-          <a id="mcp-share-sms" className="mcp-share-btn" rel="noopener">Text</a>
-          <a id="mcp-share-tg" className="mcp-share-btn" rel="noopener">Telegram</a>
-          <button id="mcp-copy" className="mcp-share-btn ghost">Copy link</button>
-        </div>
-      </div>
-    </section>
+                />
+            <Legend verticalAlign="top" height={40} iconType="circle" />
+            <Area
+                type="monotone"
+                dataKey="balanceBaseline"
+                stroke="hsl(var(--muted-foreground))"
+                fill="url(#colorBaseline)"
+                name="Old Path"
+                stackId="1"
+            />
+            <Area
+                type="monotone"
+                dataKey="balanceHeloc"
+                stroke="hsl(var(--primary))"
+                fill="url(#colorHeloc)"
+                name="Accelerated Path"
+                stackId="2"
+            />
+        </ComposedChart>
+    </ResponsiveContainer>
   );
 }
-
 
 function InnerComparison() {
   const searchParams = useSearchParams();
   const [data, setData] = useState<Outputs | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { user } = useUser();
-  const { toast } = useToast();
-  const [formInputs, setFormInputs] = useState<Inputs | null>(null);
   
   const yearsSaved = data ? (data.debtFreeMonthsBaseline - data.debtFreeMonthsHeloc) / 12 : 0;
   const yearsSavedTxt = data ? `${Math.floor(yearsSaved)} yrs, ${Math.round((yearsSaved % 1) * 12)} mo` : 'several years';
   
-  const monthlySavings = useMemo(() => {
-    if (!data || !data.debtFreeMonthsHeloc || data.debtFreeMonthsHeloc === 0) return 150; // Default
-    return Math.max(0, (data.interestBaseline - data.interestHeloc) / data.debtFreeMonthsHeloc);
-  }, [data]);
-
-  useEffect(() => {
-    if (!data) return;
-
-    const now = {
-        debtFreeDate: new Date(Date.now() + data.debtFreeMonthsBaseline * 30.4375 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', year: 'numeric'}),
-        yearsRemainingMonths: data.debtFreeMonthsBaseline,
-        totalInterest: data.interestBaseline,
-        monthlyInterest: data.series[0]?.balanceBaseline * (formInputs!.mortgageRateAPR / 12 / 100)
-    };
-
-    const plan = {
-        debtFreeDate: new Date(Date.now() + data.debtFreeMonthsHeloc * 30.4375 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', year: 'numeric'}),
-        yearsRemainingMonths: data.debtFreeMonthsHeloc,
-        totalInterest: data.interestHeloc,
-        monthlyInterest: data.series[0]?.balanceHeloc * (formInputs!.helocRateAPR / 12 / 100)
-    };
-
-    const referral = { goal: 5, have: 0 };
-    const referralUrl = `${location.origin}/r/${user?.uid || 'ABC123'}`;
-
-    if (window.MCSalesUI) {
-         window.MCSalesUI.mount("mc-sales-ui", {
-            monthlySavings,
-            yearsSaved: yearsSavedTxt,
-            now,
-            plan,
-            prices: { pro: 297, elite: 997 },
-            referral,
-            referralUrl,
-            referralCode: user?.uid || "ABC123"
-        });
-    }
-
-  },[data, monthlySavings, yearsSavedTxt, formInputs, user]);
+  const testimonials = [
+      {
+          quote: "I saved over $44,000 and paid off my home 7 years earlier. My only regret is not finding this sooner.",
+          author: "Priya S., Calgary AB",
+          img: "https://i.pravatar.cc/150?img=1"
+      },
+      {
+          quote: "The math seemed too good to be true, but it matched my bank's amortization schedule perfectly. This is the real deal.",
+          author: "David R., Austin TX",
+          img: "https://i.pravatar.cc/150?img=3"
+      },
+      {
+          quote: "My partner and I were skeptical, but following the simple monthly action plan has already made a huge difference. Highly recommend!",
+          author: "Nisha & Arjun, Brampton ON",
+          img: "https://i.pravatar.cc/150?img=5"
+      },
+  ];
 
   useEffect(() => {
     const params = Object.fromEntries(searchParams.entries());
@@ -585,8 +211,7 @@ function InnerComparison() {
       ltvLimit: params.ltvLimit ? parseFloat(params.ltvLimit) : 0.8,
       cardOffset: params.cardOffset === 'true',
     };
-    setFormInputs(input);
-
+    
     async function runCalculation() {
       setIsLoading(true);
       setError(null);
@@ -632,21 +257,24 @@ function InnerComparison() {
     );
   }
 
-  if (!data || !formInputs) return null;
+  if (!data) return null;
 
   return (
-    <>
-      <div className="container mx-auto py-12 px-4">
-        <header className="text-center mb-12">
-          <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-primary">
-            Your Personalized Savings Blueprint
+    <div className="bg-gray-50/50">
+      <div className="container mx-auto py-12 px-4 space-y-12">
+        
+        {/* --- HERO / HEADLINE --- */}
+        <header className="text-center">
+          <h1 className="text-4xl lg:text-5xl font-extrabold tracking-tight text-primary">
+            Your Personalized Mortgage Savings Blueprint
           </h1>
-          <p className="text-xl text-muted-foreground mt-2 max-w-3xl mx-auto">
-            Here’s how the Mortgage Cutter Method can accelerate your journey to financial freedom.
+          <p className="text-xl text-muted-foreground mt-3 max-w-3xl mx-auto">
+            This is the moment your financial future changes. Here’s how the Mortgage Cutter Method accelerates your journey to becoming debt-free.
           </p>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        {/* --- KEY RESULTS --- */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <StatCard
             icon={Calendar}
             label="Debt-Free Sooner"
@@ -668,29 +296,205 @@ function InnerComparison() {
           />
         </div>
 
-        <Card className="mb-8">
+        {/* --- COMPARISON CHART --- */}
+        <Card className="shadow-xl shadow-slate-200/50">
           <CardHeader>
-            <CardTitle>Debt Payoff Timeline</CardTitle>
-            <CardDescription>Visualizing your journey to zero debt: Baseline vs. HELOC Method.</CardDescription>
+            <CardTitle>Your Payoff Timeline: Old Path vs. Accelerated Path</CardTitle>
+            <CardDescription>This chart shows your total debt balance vanishing years sooner with our method.</CardDescription>
           </CardHeader>
           <CardContent>
             {data.series.length > 0 ? <ComparisonChart data={data.series} /> : <p>Could not generate chart data.</p>}
           </CardContent>
         </Card>
+
+        {/* --- STACK SLIDE --- */}
+        <div className="bg-gradient-to-b from-gray-900 to-gray-800 text-white rounded-xl p-8 lg:p-12 text-center shadow-2xl">
+            <h2 className="text-3xl font-bold mb-4">Here’s Everything You Get...</h2>
+            <div className="max-w-2xl mx-auto text-left space-y-3">
+                <div className="flex items-start gap-3 p-3 bg-white/10 rounded-lg">
+                    <CheckCircle className="h-5 w-5 text-green-400 mt-1 shrink-0" />
+                    <div><span className="font-semibold">The Full Mortgage Cutter Toolkit:</span> Interactive calculators and planners tailored to your numbers.</div>
+                </div>
+                 <div className="flex items-start gap-3 p-3 bg-white/10 rounded-lg">
+                    <CheckCircle className="h-5 w-5 text-green-400 mt-1 shrink-0" />
+                    <div><span className="font-semibold">Step-by-Step Action Plan:</span> A monthly guide telling you exactly what amounts to move and when.</div>
+                </div>
+                 <div className="flex items-start gap-3 p-3 bg-white/10 rounded-lg">
+                    <CheckCircle className="h-5 w-5 text-green-400 mt-1 shrink-0" />
+                    <div><span className="font-semibold">Bank-Agnostic Guidance:</span> Works with your existing Canadian or U.S. mortgage and HELOC products.</div>
+                </div>
+                <div className="flex items-start gap-3 p-3 bg-white/10 rounded-lg">
+                    <CheckCircle className="h-5 w-5 text-green-400 mt-1 shrink-0" />
+                    <div><span className="font-semibold">Members-Only Email Support:</span> Get your specific questions answered by our team. (Tier-dependent)</div>
+                </div>
+                 <div className="flex items-start gap-3 p-3 bg-white/10 rounded-lg">
+                    <CheckCircle className="h-5 w-5 text-green-400 mt-1 shrink-0" />
+                    <div><span className="font-semibold">The Referral Engine:</span> Unlock discounts by sharing your success with friends.</div>
+                </div>
+            </div>
+            <p className="mt-6 text-2xl font-bold text-yellow-300">Total Value: <span className="line-through opacity-70">$1,997</span></p>
+            <p className="text-lg">Get started today for a fraction of that...</p>
+        </div>
+
+
+        {/* --- PRICING / OFFER STACK --- */}
+        <div className="space-y-4">
+             <div className="text-center">
+                <h2 className="text-3xl font-bold tracking-tight">Choose Your Blueprint</h2>
+                <p className="text-muted-foreground mt-2">All plans are a one-time investment for lifetime access.</p>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                {/* Basic */}
+                <Card className="flex flex-col">
+                    <CardHeader>
+                        <CardTitle className="text-xl">Basic</CardTitle>
+                        <CardDescription>The essential toolkit to get started.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-grow space-y-4">
+                        <div className="text-4xl font-bold">$39<span className="text-lg font-normal text-muted-foreground">/mo</span></div>
+                        <ul className="space-y-2 text-sm">
+                            <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Calculator + Monthly Plan</li>
+                            <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Community Q&A</li>
+                            <li className="flex items-center gap-2"><X className="h-4 w-4 text-red-500" /> Email Support</li>
+                        </ul>
+                    </CardContent>
+                    <CardFooter>
+                        <Button variant="secondary" className="w-full">Unlock with 5 Referrals</Button>
+                    </CardFooter>
+                </Card>
+
+                {/* Pro (Most Popular) */}
+                <Card className="border-2 border-primary shadow-2xl relative flex flex-col">
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 text-sm font-semibold rounded-full">MOST POPULAR</div>
+                    <CardHeader>
+                        <CardTitle className="text-2xl pt-4">Pro</CardTitle>
+                        <CardDescription>Everything you need to succeed.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-grow space-y-4">
+                        <div className="text-5xl font-bold">$297</div>
+                        <ul className="space-y-2 text-sm">
+                            <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Full Toolkit Access</li>
+                            <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Bank-Agnostic Guides</li>
+                            <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Priority Email Support</li>
+                            <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Referral Dashboard</li>
+                        </ul>
+                    </CardContent>
+                    <CardFooter className="flex-col gap-2">
+                        <Button asChild size="lg" className="w-full">
+                           <Link href="/purchase?plan=pro_297">Get the Pro Blueprint</Link>
+                        </Button>
+                        <p className="text-xs text-muted-foreground text-center">Auto-drop to $197 with 5 referrals.</p>
+                    </CardFooter>
+                </Card>
+
+                {/* Elite */}
+                <Card className="flex flex-col">
+                    <CardHeader>
+                        <CardTitle className="text-xl">Elite</CardTitle>
+                        <CardDescription>For complex situations &amp; investors.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-grow space-y-4">
+                         <div className="absolute top-2 right-2 bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded">Only 10 spots left!</div>
+                        <div className="text-4xl font-bold">$997</div>
+                        <ul className="space-y-2 text-sm">
+                            <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Everything in Pro, plus...</li>
+                            <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Advanced Investor Strategies</li>
+                            <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> 1-on-1 Onboarding Call</li>
+                            <li className="flex items-center gap-2"><Award className="h-4 w-4 text-yellow-500" /> Direct Founder Access</li>
+                        </ul>
+                    </CardContent>
+                    <CardFooter>
+                        <Button asChild variant="outline" className="w-full">
+                           <Link href="/purchase?plan=elite_997">Claim Elite Spot</Link>
+                        </Button>
+                    </CardFooter>
+                </Card>
+            </div>
+             <div className="flex justify-center pt-4">
+                <div className="flex items-center gap-2 border border-dashed p-2 rounded-lg text-sm text-muted-foreground">
+                    <Award className="h-5 w-5 text-yellow-500"/>
+                    <span><strong>30-Day "Math Match" Guarantee:</strong> If our math doesn't match your bank's, we'll refund you 100%.</span>
+                </div>
+            </div>
+        </div>
+
+        {/* --- TESTIMONIALS --- */}
+        <div className="space-y-4 text-center">
+            <h2 className="text-3xl font-bold tracking-tight">Join Thousands of Homeowners Taking Control</h2>
+            <Carousel className="w-full max-w-4xl mx-auto">
+                <CarouselContent>
+                    {testimonials.map((t, i) => (
+                    <CarouselItem key={i} className="md:basis-1/2 lg:basis-1/3">
+                        <div className="p-1 h-full">
+                        <Card className="flex flex-col h-full">
+                            <CardContent className="flex-grow p-6 flex flex-col items-center text-center">
+                                <Image src={t.img} alt={t.author} width={64} height={64} className="rounded-full mb-4" />
+                                <p className="text-muted-foreground flex-grow">"{t.quote}"</p>
+                                <p className="font-semibold mt-4">{t.author}</p>
+                            </CardContent>
+                        </Card>
+                        </div>
+                    </CarouselItem>
+                    ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+            </Carousel>
+        </div>
         
-        <div id="mc-sales-ui"></div>
-        <NewPricingSection />
+        {/* --- REFERRAL SECTION --- */}
+        <Card className="bg-primary/5">
+            <CardHeader>
+                <CardTitle>Unlock Discounts by Sharing</CardTitle>
+                <CardDescription>Help 5 friends save on interest, and you'll unlock our best price on the Pro plan.</CardDescription>
+            </CardHeader>
+            <CardContent className="grid md:grid-cols-3 gap-6 items-center">
+                <div className="md:col-span-2">
+                    <p className="font-semibold mb-2">Your Progress: <span className="text-primary">0 / 5 Referrals</span></p>
+                    <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                        <div className="bg-primary h-2.5 rounded-full" style={{width: "5%"}}></div>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">Referrals are counted when a friend signs up for any paid plan.</p>
+                </div>
+                <div className="flex gap-2">
+                    <Button variant="outline"><MessageCircle className="h-4 w-4 mr-2" /> Share via Text</Button>
+                    <Button variant="outline"><Share2 className="h-4 w-4" /></Button>
+                </div>
+            </CardContent>
+        </Card>
 
+        {/* --- FOUNDER'S NOTE --- */}
+        <Card className="overflow-hidden">
+            <div className="grid md:grid-cols-3 items-center">
+                <div className="md:col-span-1">
+                    <Image src="https://i.pravatar.cc/150?img=12" alt="Founder of Mortgage Cutter" width={400} height={400} className="object-cover h-full w-full" />
+                </div>
+                <div className="md:col-span-2 p-8">
+                     <h3 className="text-2xl font-bold">A Note From Our Founder</h3>
+                     <p className="text-muted-foreground mt-2 text-sm">"I was tired of seeing families stuck in 30-year debt cycles, paying hundreds of thousands in interest. I knew there had to be a smarter way that didn't require a finance degree. After helping my own family save over $150,000, I created Mortgage Cutter to give every homeowner the same simple, powerful blueprint. This isn't just about math; it's about giving you back your time and your life. I know this will work for you."</p>
+                     <p className="font-semibold mt-4">— John F., Founder</p>
+                </div>
+            </div>
+        </Card>
 
-        <Alert className="mt-8 border-primary/50">
+        {/* --- DISCLAIMER --- */}
+        <Alert className="mt-8 border-primary/50 text-center">
           <Info className="h-4 w-4" />
-          <AlertTitle className="font-bold">Assumptions & Disclaimers</AlertTitle>
+          <AlertTitle className="font-bold">Educational Estimates Only</AlertTitle>
           <AlertDescription className="text-xs mt-2">
-            Estimates are for educational purposes and are not a guarantee of savings or loan approval. All debts are assumed to be consolidated into the HELOC. The calculation does not include bank fees, closing costs, or property taxes/insurance. Results depend on your actual income, spending, and final lender terms.
+            The calculations on this page are for illustrative purposes and are not a guarantee of savings or loan approval. All debts are assumed to be consolidated into the HELOC. The calculation does not include bank fees, closing costs, or property taxes/insurance. Your actual results will depend on your discipline, spending habits, and the final terms provided by your lender.
           </AlertDescription>
         </Alert>
       </div>
-    </>
+      
+      {/* --- STICKY CTA ON MOBILE --- */}
+      <div className="md:hidden sticky bottom-0 bg-background/80 backdrop-blur-sm p-4 border-t w-full">
+         <Button asChild size="lg" className="w-full">
+            <Link href="/purchase?plan=pro_297">Start Your Journey to Freedom</Link>
+         </Button>
+      </div>
+
+    </div>
   );
 }
 
@@ -701,5 +505,3 @@ export function ComparisonDisplay() {
     </Suspense>
   )
 }
-
-    
