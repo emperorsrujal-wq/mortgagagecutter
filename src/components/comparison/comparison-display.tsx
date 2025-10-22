@@ -39,7 +39,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Line } from 'recharts';
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import { useUser } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
@@ -167,10 +167,11 @@ function InnerComparison() {
   
   const yearsSaved = data ? (data.debtFreeMonthsBaseline - data.debtFreeMonthsHeloc) / 12 : 0;
   const yearsSavedTxt = data ? `${Math.floor(yearsSaved)} yrs, ${Math.round((yearsSaved % 1) * 12)} mo` : 'several years';
+  
   const monthlySavings = useMemo(() => {
-    if (!data || !formInputs) return 150; // Default
+    if (!data || !data.debtFreeMonthsHeloc || data.debtFreeMonthsHeloc === 0) return 150; // Default
     return Math.max(0, (data.interestBaseline - data.interestHeloc) / data.debtFreeMonthsHeloc);
-  }, [data, formInputs]);
+  }, [data]);
 
 
   useEffect(() => {
@@ -210,78 +211,237 @@ function InnerComparison() {
     runCalculation();
   }, [searchParams]);
 
-    useEffect(() => {
-        if (isLoading || !data) return;
+  useEffect(() => {
+    // Inject the sales UI script once on component mount
+    if (document.getElementById('mc-sales-ui-script')) return;
 
-        // 2) Compute payback
-        const proPaybackDays = Math.max(1, Math.ceil(297 / (monthlySavings / 30)));
-        const elitePaybackWks = Math.max(1, Math.ceil(997 / (monthlySavings * 4.33)));
+    const styleEl = document.createElement('style');
+    styleEl.id = 'mc-sales-ui-style';
+    styleEl.innerHTML = `
+      #mc-sales-ui { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; color:#0f172a; }
+      #mc-sales-ui .mc-card { background:#fff; border:1px solid #e5e7eb; border-radius:14px; box-shadow: 0 6px 18px rgba(15,23,42,.06); }
+      #mc-sales-ui .mc-hl { color:#0ea5e9; font-weight:700; }
+      #mc-sales-ui .mc-muted { color:#64748b; }
+      #mc-sales-ui .mc-row { display:grid; gap:18px; }
+      #mc-sales-ui .mc-row.cols-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      #mc-sales-ui .mc-row.cols-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      #mc-sales-ui .mc-h1 { font-size: clamp(22px, 3vw, 32px); line-height:1.2; margin: 16px 0 6px; }
+      #mc-sales-ui .mc-h2 { font-size: 18px; font-weight:700; margin:0 0 8px; }
+      #mc-sales-ui .mc-h3 { font-size: 15px; font-weight:600; margin:0 0 8px; }
+      #mc-sales-ui table { width:100%; border-collapse:collapse; }
+      #mc-sales-ui th, #mc-sales-ui td { text-align:left; padding:12px 10px; border-bottom:1px solid #eef2f7; font-size:14px; }
+      #mc-sales-ui th { font-weight:700; color:#334155; background:#f8fafc; }
+      #mc-sales-ui td.mc-good { color:#16a34a; font-weight:700; }
+      #mc-sales-ui .mc-badge { font-size:12px; font-weight:700; padding:4px 8px; border-radius:999px; background:#ecfeff; color:#0891b2; }
+      #mc-sales-ui .mc-sticky { position: sticky; top:0; z-index: 50; background: linear-gradient(180deg,#06121f, #0b2136); color:#e2f3ff; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.08); box-shadow: 0 10px 26px rgba(0,0,0,.18); }
+      #mc-sales-ui .mc-sticky .nums { display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
+      #mc-sales-ui .mc-pill { display:inline-flex; align-items:center; gap:8px; background:#0ea5e9; color:#001423; padding:6px 10px; border-radius:999px; font-weight:700; }
+      #mc-sales-ui .mc-btn { appearance:none; border:0; background:#2563eb; color:#fff; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer; }
+      #mc-sales-ui .mc-btn.alt { background:#0ea5e9; color:#032030; }
+      #mc-sales-ui .mc-btn.ghost { background:transparent; color:#2563eb; border:1px solid #cfe0ff; }
+      #mc-sales-ui .mc-ref { display:flex; gap:10px; align-items:center; }
+      #mc-sales-ui progress { width:180px; height:12px; border:0; border-radius:8px; background:#e2e8f0; }
+      #mc-sales-ui progress::-webkit-progress-bar { background:#e2e8f0; border-radius:8px; }
+      #mc-sales-ui progress::-webkit-progress-value { background:#22c55e; border-radius:8px; }
+      @media (max-width: 900px) {
+        #mc-sales-ui .mc-row.cols-3 { grid-template-columns: 1fr; }
+        #mc-sales-ui .mc-row.cols-2 { grid-template-columns: 1fr; }
+      }
+    `;
+    document.head.appendChild(styleEl);
 
-        // 3) Inject
-        const setText = (id: string, val: string) => {
-            const n = document.getElementById(id);
-            if (n) n.textContent = val;
+    const scriptEl = document.createElement('script');
+    scriptEl.id = 'mc-sales-ui-script';
+    scriptEl.innerHTML = `
+      (function () {
+        const fmtCurrency = (n) =>
+          new Intl.NumberFormat(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n);
+        const fmtMonths = (m) => {
+          if (typeof m === "string") return m;
+          const years = Math.floor(m / 12), months = Math.round(m % 12);
+          let s = [];
+          if (years) s.push(\`\${years} yr\${years>1?'s':''}\`);
+          if (months) s.push(\`\${months} mo\`);
+          return s.join(" ") || "0 mo";
         };
-        setText('monthlySavingsText', `$${monthlySavings.toFixed(0)}/mo`);
-        setText('ms', `$${monthlySavings.toFixed(0)}/mo`);
-        setText('yearsSavedText', yearsSavedTxt);
-        setText('proDays', `${proPaybackDays} days`);
-        setText('eliteWeeks', `${elitePaybackWks} weeks`);
-
-        // 4) Wire buttons
-        const go = (id: string, path: string) => {
-            const b = document.getElementById(id);
-            if (b) b.addEventListener('click', () => {
-                window.location.href = path;
-            });
+        const daysToPayback = (price, monthlySavings) => {
+          if (!monthlySavings || monthlySavings <= 0) return null;
+          const perDay = monthlySavings / 30;
+          return Math.max(1, Math.ceil(price / perDay));
         };
-        go('btn-elite', '/purchase?plan=elite_999');
-        go('btn-pro', '/purchase?plan=pro297');
-        
-        const modal = document.getElementById('referral-modal');
-        const openModal = (mode: string) => {
-            if (!modal) return;
-            modal.style.display = 'flex';
-            const url = new URL(window.location.href);
-            const ref = `${url.origin}/?r=${user?.uid || 'guest'}`;
-            const inp = document.getElementById('ref-link') as HTMLInputElement | null;
-            if (inp) inp.value = ref + '&mode=' + mode;
-        };
+        const weeksFromDays = (d) => (d==null?null:Math.max(1, Math.ceil(d/7)));
 
-        const wireRef = (id: string, mode: string) => {
-            const el = document.getElementById(id);
-            if (el) el.addEventListener('click', () => openModal(mode));
-        };
-        wireRef('btn-pro-ref', 'pro197');
-        wireRef('btn-basic', 'basic29');
+        function mount(elId, data) {
+          const root = document.getElementById(elId);
+          if (!root) return console.warn("[MC Sales UI] mount target not found:", elId);
 
-        document.getElementById('copy-ref')?.addEventListener('click', () => {
-            const inp = document.getElementById('ref-link') as HTMLInputElement | null;
-            if (inp) {
-                inp.select();
-                document.execCommand('copy');
-                toast({ title: "Copied!"})
+          const {
+            monthlySavings, yearsSaved,
+            now = {}, plan = {},
+            prices = { pro: 297, elite: 997 },
+            referral = { goal: 5, have: 0 }
+          } = data;
+
+          const daysPro = daysToPayback(prices.pro, monthlySavings);
+          const daysElite = daysToPayback(prices.elite, monthlySavings);
+          const weeksElite = weeksFromDays(daysElite);
+
+          const diff = {
+            years: (now.yearsRemainingMonths!=null && plan.yearsRemainingMonths!=null)
+              ? fmtMonths(now.yearsRemainingMonths - plan.yearsRemainingMonths) : null,
+            totalInterest: (now.totalInterest!=null && plan.totalInterest!=null)
+              ? fmtCurrency(now.totalInterest - plan.totalInterest) : null,
+            monthlyInterest: (now.monthlyInterest!=null && plan.monthlyInterest!=null)
+              ? fmtCurrency(now.monthlyInterest - plan.monthlyInterest) : null
+          };
+
+          root.innerHTML = \`
+            <div class="mc-sticky mc-card" style="margin-bottom:18px;">
+              <div class="nums">
+                <span class="mc-badge">Based on your numbers</span>
+                <span class="mc-h1" style="margin:0;">
+                  You can save about <span class="mc-hl">\${fmtCurrency(monthlySavings)}/mo</span>
+                  and cut <span class="mc-hl">\${typeof yearsSaved==='number'?fmtMonths(yearsSaved):yearsSaved}</span>.
+                </span>
+                <span class="mc-pill">Pro pays back in ~\${daysPro ?? "—"} days</span>
+                <span class="mc-pill">Elite in ~\${weeksElite ?? "—"} weeks</span>
+              </div>
+            </div>
+            <div class="mc-card" style="padding:18px; margin-bottom:18px;">
+              <div class="mc-row cols-2">
+                <div>
+                  <div class="mc-h2">Why it works</div>
+                  <p class="mc-muted" style="margin-top:8px;">
+                    We front-load principal reduction to lower future interest,
+                    and route your cash to keep interest-accrual days low—all with accounts you already have
+                    (mortgage + HELOC). No bank switch required.
+                  </p>
+                </div>
+                <div>
+                  <div class="mc-h2">Payback math</div>
+                  <div class="mc-row cols-3" style="margin-top:8px;">
+                    <div class="mc-card" style="padding:12px;">
+                      <div class="mc-h3">Your monthly savings</div>
+                      <div class="mc-h1" style="margin:0;">\${fmtCurrency(monthlySavings)}</div>
+                    </div>
+                    <div class="mc-card" style="padding:12px;">
+                      <div class="mc-h3">Pro pays back in</div>
+                      <div class="mc-h1" style="margin:0;">~\${daysPro ?? "—"} days</div>
+                    </div>
+                    <div class="mc-card" style="padding:12px;">
+                      <div class="mc-h3">Elite pays back in</div>
+                      <div class="mc-h1" style="margin:0;">~\${weeksElite ?? "—"} weeks</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mc-card" style="padding:18px; margin-bottom:18px;">
+              <div class="mc-h2" style="margin-bottom:10px;">Before / After (just the math)</div>
+              <div class="mc-row cols-1">
+                <table>
+                  <thead><tr><th></th><th>Now</th><th>With MortgageCutter</th><th>Difference</th></tr></thead>
+                  <tbody>
+                    \${now.debtFreeDate || plan.debtFreeDate ? \`
+                    <tr><td>Debt-Free Date</td><td>\${now.debtFreeDate ?? "—"}</td><td>\${plan.debtFreeDate ?? "—"}</td><td class="mc-good">\${(now.debtFreeDate && plan.debtFreeDate) ? "Sooner" : "—"}</td></tr>\` : ""}
+                    \${now.yearsRemainingMonths!=null || plan.yearsRemainingMonths!=null ? \`
+                    <tr><td>Years to Go</td><td>\${now.yearsRemainingMonths!=null ? fmtMonths(now.yearsRemainingMonths) : "—"}</td><td>\${plan.yearsRemainingMonths!=null ? fmtMonths(plan.yearsRemainingMonths) : "—"}</td><td class="mc-good">\${diff.years ?? "—"}</td></tr>\` : ""}
+                    \${now.totalInterest!=null || plan.totalInterest!=null ? \`
+                    <tr><td>Total Interest Remaining</td><td>\${now.totalInterest!=null ? fmtCurrency(now.totalInterest) : "—"}</td><td>\${plan.totalInterest!=null ? fmtCurrency(plan.totalInterest) : "—"}</td><td class="mc-good">\${diff.totalInterest ?? "—"}</td></tr>\` : ""}
+                    \${now.monthlyInterest!=null || plan.monthlyInterest!=null ? \`
+                    <tr><td>Next 30 Days Interest</td><td>\${now.monthlyInterest!=null ? fmtCurrency(now.monthlyInterest) : "—"}</td><td>\${plan.monthlyInterest!=null ? fmtCurrency(plan.monthlyInterest) : "—"}</td><td class="mc-good">\${diff.monthlyInterest ?? "—"}</td></tr>\` : ""}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="mc-card" style="padding:14px; margin-bottom:18px;">
+              <div class="mc-row cols-2" style="align-items:center;">
+                <div class="mc-ref">
+                  <strong>Referral progress:</strong>
+                  <progress id="mc-ref-progress" max="\${referral.goal}" value="\${referral.have}"></progress>
+                  <span><span id="mc-ref-have">\${referral.have}</span> / \${referral.goal}</span>
+                </div>
+                <div style="text-align:right;">
+                  <button class="mc-btn alt" id="mc-share">Share your link</button>
+                  <button class="mc-btn ghost" id="mc-copy">Copy link</button>
+                </div>
+              </div>
+              <p class="mc-muted" style="margin-top:8px;">
+                Friends get <strong>$20 off</strong>. When <strong>\${referral.goal}</strong> join any paid plan within 14 days,
+                your price <strong>drops to $197</strong> (or Basic at $29/mo unlocks). Already bought Pro? We auto-refund $100.
+              </p>
+            </div>
+          \`;
+
+          const shareBtn = root.querySelector("#mc-share");
+          const copyBtn = root.querySelector("#mc-copy");
+          const progressEl = root.querySelector("#mc-ref-progress");
+          const haveEl = root.querySelector("#mc-ref-have");
+          const referralUrl = data.referralUrl || (location.origin + "/r/" + (data.referralCode || "your-code"));
+
+          shareBtn?.addEventListener("click", async () => {
+            const shareData = { title: "MortgageCutter", text: "Cut your mortgage faster (no bank switch).", url: referralUrl };
+            if (navigator.share) {
+              try { await navigator.share(shareData); } catch {}
+            } else {
+              await navigator.clipboard.writeText(referralUrl);
+              shareBtn.textContent = "Link copied!";
+              setTimeout(()=> shareBtn.textContent = "Share your link", 1500);
             }
+            window.dispatchEvent(new CustomEvent("referral:share_clicked", { detail: { referralUrl }}));
+          });
+          copyBtn?.addEventListener("click", async () => {
+            await navigator.clipboard.writeText(referralUrl);
+            copyBtn.textContent = "Copied!";
+            setTimeout(()=> copyBtn.textContent = "Copy link", 1200);
+            window.dispatchEvent(new CustomEvent("referral:link_copied", { detail: { referralUrl }}));
+          });
+
+          window.addEventListener("referral:update", (e) => {
+            const { have } = e.detail || {};
+            if (typeof have === "number") {
+              progressEl.value = have;
+              haveEl.textContent = have;
+            }
+          });
+        }
+
+        window.MCSalesUI = { mount, updateReferral(have) { window.dispatchEvent(new CustomEvent("referral:update", { detail: { have } })); } };
+      })();
+    `;
+    document.body.appendChild(scriptEl);
+  }, []);
+
+    useEffect(() => {
+        if (isLoading || !data || !window.MCSalesUI) return;
+
+        // Use the new sales UI mount function
+        const now = {
+          yearsRemainingMonths: data.debtFreeMonthsBaseline,
+          totalInterest: data.interestBaseline,
+          // monthlyInterest is not available in the current data structure, so we omit it
+        };
+        const plan = {
+          yearsRemainingMonths: data.debtFreeMonthsHeloc,
+          totalInterest: data.interestHeloc,
+        };
+        
+        // Example referral data. In a real app, this would come from your backend.
+        const referral = { goal: 5, have: 0 };
+        const referralCode = user?.uid ? user.uid.slice(0, 6) : 'ABC123';
+        const referralUrl = `${window.location.origin}/?ref=${referralCode}`;
+
+        window.MCSalesUI.mount("mc-sales-ui", {
+          monthlySavings,
+          yearsSaved: yearsSavedTxt,
+          now,
+          plan,
+          prices: { pro: 297, elite: 997 },
+          referral,
+          referralUrl,
+          referralCode
         });
 
-        document.getElementById('close-ref')?.addEventListener('click', () => {
-            if (modal) modal.style.display = 'none';
-        });
-
-        const shareButtons = document.querySelectorAll('.share-btn');
-        shareButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const net = (btn as HTMLElement).dataset.net;
-                const refLink = (document.getElementById('ref-link') as HTMLInputElement)?.value || '';
-                const text = `I used MortgageCutter to slash years off my mortgage without increasing my monthly spend. Try it with $20 off: ${refLink}`;
-                let url = '';
-                if (net === 'whatsapp') url = `https://wa.me/?text=${encodeURIComponent(text)}`;
-                if (net === 'sms') url = `sms:?&body=${encodeURIComponent(text)}`;
-                if (net === 'email') url = `mailto:?subject=Cut%20years%20off%20your%20mortgage&body=${encodeURIComponent(text)}`;
-
-                if(url) window.open(url, '_blank');
-            });
-        });
 
     }, [isLoading, data, monthlySavings, yearsSavedTxt, user]);
 
@@ -314,40 +474,6 @@ function InnerComparison() {
 
   return (
     <>
-      <style jsx>{`
-        .offer-wrapper {max-width:1100px;margin:24px auto;padding:0 16px}
-        .offer-hero h2 {font-size:28px;margin-bottom:4px}
-        .payback {background:#f4f7ff;border:1px solid #dfe6ff;padding:10px 12px;border-radius:10px;margin-top:8px}
-        .why-works { margin: 18px 0; }
-        .why-works ul { list-style-type: '✓ '; padding-left: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        @media (max-width: 768px) { .why-works ul { grid-template-columns: 1fr; } }
-        .cards {display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-top:18px}
-        @media (max-width: 1024px) { .cards { grid-template-columns: 1fr; } }
-        .card {border:1px solid #e9e9ee;border-radius:14px;padding:18px;background:#fff;box-shadow:0 6px 20px rgba(0,0,0,0.04); display: flex; flex-direction: column; }
-        .card ul { flex-grow: 1; margin: 12px 0; padding-left: 18px; list-style-type: '✓ '; }
-        .popular {border:2px solid #2563eb; position: relative;}
-        .badge {position: absolute; top: -12px; right: 12px; display:inline-block;background:#2563eb;color:#fff;padding:4px 8px;border-radius:999px;font-size:12px;margin-bottom:8px}
-        .price {font-size:34px;font-weight:700}
-        .sub {font-size:14px;color:#6b7280;margin-left:4px}
-        .cta {width:100%;padding:12px 16px;border-radius:10px;margin-top:10px;border:0;cursor:pointer; font-weight: 600;}
-        .primary {background:#2563eb;color:#fff}
-        .cta:hover { opacity: 0.9; }
-        .ghost {background:#fff;border:1px solid #2563eb;color:#2563eb}
-        .micro {font-size:12px;color:#6b7280;margin-top:6px}
-        .guarantee { background: #f0fdf4; border: 1px solid #bbf7d0; text-align: center; padding: 12px; border-radius: 12px; margin: 18px 0; }
-        .social { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 18px; }
-        @media (max-width: 768px) { .social { grid-template-columns: 1fr; } }
-        .social blockquote { font-style: italic; background: #f8fafc; padding: 12px; border-radius: 8px; border-left: 3px solid #e0e7ff; }
-        #referral-modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:50}
-        #referral-modal.open { display: flex; }
-        #referral-modal .modal-card{background:#fff;border-radius:14px;padding:20px;max-width:520px;width:92%; position: relative;}
-        #close-ref { position: absolute; top: 8px; right: 8px; background: none; border: none; font-size: 24px; cursor: pointer; }
-        .copyrow{display:flex;gap:8px; margin-top: 4px; }
-        .copyrow input{flex:1;padding:10px;border:1px solid #d1d5db;border-radius:8px}
-        .copyrow button { padding: 10px; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer;}
-        .share { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
-        .share-btn { padding: 8px 12px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer; }
-      `}</style>
       <div className="container mx-auto py-12 px-4">
         <header className="text-center mb-12">
           <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-primary">
@@ -389,95 +515,10 @@ function InnerComparison() {
             {data.series.length > 0 ? <ComparisonChart data={data.series} /> : <p>Could not generate chart data.</p>}
           </CardContent>
         </Card>
+        
+        {/* New Sales UI Mount Point */}
+        <div id="mc-sales-ui"></div>
 
-        <div id="offer-copy" className="offer-wrapper">
-          <div className="offer-hero text-center">
-            <h2>Lock in your projected savings in days—not months.</h2>
-            <p id="personal-subhead">Based on your numbers, you can cut <strong id="yearsSavedText">{yearsSavedTxt}</strong> and save about <strong id="monthlySavingsText">${monthlySavings.toFixed(0)}/mo</strong> in interest. Choose a plan to lock it in.</p>
-            <div className="payback" id="paybackStrip">
-              At your projected savings of <strong id="ms">${monthlySavings.toFixed(0)}/mo</strong>, <strong>Pro</strong> pays for itself in ~<strong id="proDays">__ days</strong>. <strong>Elite</strong> pays for itself in ~<strong id="eliteWeeks">__ weeks</strong>.
-            </div>
-          </div>
-
-          <div className="why-works">
-            <ul>
-              <li><strong>Front-loads principal</strong> to choke future interest</li>
-              <li><strong>Automates cash flow</strong> so interest days stay low</li>
-              <li><strong>No product switch required</strong>—use what you already have</li>
-              <li><strong>Math, not hype</strong>—you can verify every step</li>
-            </ul>
-          </div>
-
-          <div className="cards">
-            <div className="card">
-              <h3>Elite</h3>
-              <div className="price">$997 <span className="sub">one-time</span></div>
-              <ul>
-                <li>Full course + tools (lifetime)</li>
-                <li>Priority email support</li>
-                <li>Advanced HELOC strategies + templates</li>
-                <li><strong>30-day “Math Match” guarantee</strong></li>
-              </ul>
-              <button id="btn-elite" className="cta primary">Get Elite (Lifetime)</button>
-            </div>
-
-            <div className="card popular">
-              <div className="badge">Most Popular</div>
-              <h3>Pro</h3>
-              <div className="price">$297 <span className="sub">one-time</span></div>
-              <ul>
-                <li>Full toolkit access</li>
-                <li>Bank-agnostic guidance (U.S. & Canada)</li>
-                <li>Referral dashboard to track progress</li>
-                <li><strong>Auto-drop to $197</strong> with 5 verified referrals in 14 days</li>
-              </ul>
-              <button id="btn-pro" className="cta primary">Buy Pro – $297</button>
-              <button id="btn-pro-ref" className="cta ghost">Get Pro for $197 (with 5 referrals)</button>
-              <div className="micro">Pay now at $297 and we’ll auto-refund $100 when your 5 are verified, or use the referral route first.</div>
-            </div>
-
-            <div className="card">
-              <h3>Basic</h3>
-              <div className="price">$29 <span className="sub">/month</span></div>
-              <ul>
-                <li>Calculator + monthly action plan</li>
-                <li>Community Q&A</li>
-                <li>Cancel anytime</li>
-                <li><strong>Referral required</strong> to activate checkout (5 signups)</li>
-              </ul>
-              <button id="btn-basic" className="cta primary">Unlock with 5 Referrals</button>
-              <div className="micro">Share your link. When 5 join any paid plan in 14 days, your Basic plan activates.</div>
-            </div>
-          </div>
-
-          <div className="guarantee">
-            <strong>30-Day “Math Match” Guarantee.</strong> If our plan doesn’t reconcile with your bank’s amortization math (±2%), email support within 30 days for a full refund.
-          </div>
-
-          <div className="social">
-            <blockquote>“Numbers looked too good—until they matched my bank’s amortization. Saved 6+ years.” — Priya S., Calgary</blockquote>
-            <blockquote>“Kept my bank. Re-routed cash flow. Plan paid for itself in month one.” — David R., Austin</blockquote>
-            <blockquote>“The monthly action plan made it simple. We just followed the dates.” — Nisha & Arjun, Brampton</blockquote>
-          </div>
-
-          <div id="referral-modal" style={{display:'none'}}>
-            <div className="modal-card">
-              <button id="close-ref">×</button>
-              <h3>Unlock your discount by helping friends cut theirs</h3>
-              <p>You’ll get a unique link. Friends get <strong>$20 off</strong>. When <strong>5</strong> join any paid plan in <strong>14 days</strong>, your price drops automatically.</p>
-              <label>Your link</label>
-              <div className="copyrow">
-                <input id="ref-link" type="text" readOnly />
-                <button id="copy-ref">Copy</button>
-              </div>
-              <div className="share">
-                <button className="share-btn" data-net="whatsapp">Share via WhatsApp</button>
-                <button className="share-btn" data-net="sms">Share via SMS</button>
-                <button className="share-btn" data-net="email">Share via Email</button>
-              </div>
-            </div>
-          </div>
-        </div>
 
         <Alert className="mt-8 border-primary/50">
           <Info className="h-4 w-4" />
@@ -498,5 +539,3 @@ export function ComparisonDisplay() {
     </Suspense>
   )
 }
-
-    
