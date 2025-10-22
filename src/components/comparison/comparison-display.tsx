@@ -198,24 +198,135 @@ function InnerComparison() {
   useEffect(() => {
     if (isLoading || error || !data) return;
 
-    function go(plan: string) {
-        const url = `/purchase?plan=${encodeURIComponent(plan)}`;
-        window.location.href = url;
-    }
+      const script = document.createElement('script');
+      script.innerHTML = `
+        (function(){
+          const PURCHASE_URL = '/purchase';
 
-    function attach(id: string, plan: string) {
-        var btn = document.getElementById(id);
-        if (btn) btn.addEventListener('click', function(e) {
+          function go(plan, extraParams={}) {
+            const params = new URLSearchParams({ plan, ...extraParams });
+            window.location.href = \`\${PURCHASE_URL}?\${params.toString()}\`;
+          }
+          function $(id){ return document.getElementById(id); }
+
+          let uid = '${user?.uid || null}';
+          let email = '${user?.email || null}';
+          let db = null;
+
+          if (window.firebase?.auth && window.firebase?.firestore) {
+            db = window.firebase.firestore();
+             window.firebase.auth().onAuthStateChanged((user)=>{
+              if (user){ 
+                uid = user.uid; 
+                email = user.email; 
+                initReferralLink(); 
+              } else { 
+                uid = null;
+                email = null;
+                initReferralLink(); 
+              }
+            });
+          } else {
+            initReferralLink();
+          }
+
+          function initReferralLink(){
+            const key = uid || ('guest-' + Math.random().toString(36).slice(2,10));
+            const link = \`\${window.location.origin}/?ref=\${encodeURIComponent(key)}\`;
+            const input = $('mc-ref-link');
+            if (input) input.value = link;
+          }
+          
+          function attach(id, fn){
+            const el = $(id);
+            if (!el) return;
+            el.addEventListener('click', function(e){ e.preventDefault(); fn(); }, false);
+          }
+
+          attach('cta-elite-999', () => go('elite_999'));
+          attach('cta-pro-197',   () => go('pro_197'));
+          attach('cta-basic-29',  () => openReferral());
+
+          function openReferral(){
+            const modal = $('mc-referral-modal');
+            if (!modal) return;
+            modal.classList.add('open');
+            modal.setAttribute('aria-hidden','false');
+          }
+          $('mc-ref-close')?.addEventListener('click', ()=> {
+            const m = $('mc-referral-modal'); if(!m) return;
+            m.classList.remove('open'); m.setAttribute('aria-hidden','true');
+          });
+
+          $('mc-copy')?.addEventListener('click', ()=> {
+            const input = $('mc-ref-link'); if (!input) return;
+            input.select(); input.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            $('mc-copy').textContent = 'Copied!';
+            setTimeout(()=>{$('mc-copy').textContent='Copy';}, 1000);
+          });
+
+          $('mc-share')?.addEventListener('click', ()=> {
+            const url = $('mc-ref-link')?.value || window.location.href;
+            if (navigator.share) {
+              navigator.share({ title:'MortgageCutter', text:'Check this mortgage payoff tool', url });
+            } else {
+              window.open(\`mailto:?subject=MortgageCutter&body=Try this tool: \${encodeURIComponent(url)}\`);
+            }
+          });
+
+           const refForm = $('mc-ref-form');
+           const continueBtn = $('mc-continue');
+           const confirmCheckbox = $('mc-confirm');
+
+           function validateForm() {
+              if (!refForm || !continueBtn || !confirmCheckbox) return;
+              const emails = Array.from(refForm.querySelectorAll('input[type=email]'))
+                                  .map(i => i.value.trim())
+                                  .filter(Boolean);
+              const isConfirmed = confirmCheckbox.checked;
+              continueBtn.disabled = !(emails.length >= 5 && isConfirmed);
+           }
+            
+           refForm?.addEventListener('input', validateForm);
+           confirmCheckbox?.addEventListener('change', validateForm);
+
+          refForm?.addEventListener('submit', async (e)=>{
             e.preventDefault();
-            go(plan);
-        });
-    }
+            const form = e.target;
+            const emails = [form.e1.value, form.e2.value, form.e3.value, form.e4.value, form.e5.value]
+              .map(v => (v||'').trim()).filter(Boolean);
+            const confirmed = $('mc-confirm')?.checked;
 
-    attach('cta-elite-999', 'elite_999');
-    attach('cta-pro-197',   'pro_197');
-    attach('cta-basic-29',  'basic_29');
+            if (emails.length < 5 || !confirmed) {
+              alert('Please enter at least 5 emails and confirm you have shared your link.');
+              return;
+            }
+
+            try {
+              if (db && uid) {
+                await db.collection('referralsSubmissions').add({
+                  uid, userEmail: email || null,
+                  referrals: emails,
+                  link: $('mc-ref-link')?.value || null,
+                  createdAt: window.firebase.firestore.FieldValue.serverTimestamp()
+                });
+              }
+            } catch(err){
+              console.warn('Referral save failed (continuing anyway):', err);
+            }
+            
+            go('basic_29', { ref: uid || 'guest' });
+          });
+        })();
+      `;
+      document.body.appendChild(script);
+      
+      return () => {
+        document.body.removeChild(script);
+      };
     
-  }, [isLoading, error, data, toast]);
+  }, [isLoading, error, data, user, toast]);
 
   if (isLoading) {
     return (
@@ -250,25 +361,57 @@ function InnerComparison() {
   return (
     <>
     <style>{`
-      .mc-pricing-choices {
-        display: grid;
-        gap: 12px;
-        max-width: 520px;
-        margin: 16px auto 8px auto; /* Centered margin */
-      }
-      .mc-cta {
-        display: block;
-        width: 100%;
-        padding: 14px 18px;
-        font-weight: 600;
-        border-radius: 10px;
-        border: 1px solid #e4e7ec;
-        background: #0f62fe;
-        color: #fff;
-        cursor: pointer;
-      }
-      .mc-cta:hover { opacity: 0.92; }
-      .mc-note { font-size: 0.9rem; color: #667085; text-align: center; }
+      /* === MortgageCutter Sales Section (scoped) === */
+      .mc-offer { margin-top: 28px; }
+      .mc-hero { text-align:center; margin-bottom: 18px; }
+      .mc-hero h2 { font-size: 28px; margin: 0 0 8px; }
+      .mc-hero p { color:#475467; margin:0 auto 8px; max-width:720px; }
+      .mc-badges { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+      .mc-badges span { background:#eef4ff; color:#344054; border:1px solid #d6e4ff; padding:6px 10px; border-radius:999px; font-size:12px; }
+
+      .mc-value-grid { display:grid; gap:18px; grid-template-columns: 1fr 1fr; margin: 18px 0; }
+      @media (max-width: 900px){ .mc-value-grid { grid-template-columns: 1fr; } }
+      .mc-value { background:#fff; border:1px solid #e4e7ec; border-radius:14px; padding:14px 16px; }
+      .mc-value h3 { margin:0 0 8px; }
+      .mc-value ul { margin:0; padding-left:18px; }
+
+      .mc-pricing { display:grid; gap:16px; grid-template-columns: repeat(3, 1fr); margin: 12px 0 8px; }
+      @media (max-width: 1100px){ .mc-pricing { grid-template-columns:1fr; } }
+      .mc-card { background:#fff; border:1px solid #e4e7ec; border-radius:16px; padding:18px; display:flex; flex-direction:column; }
+      .mc-card h4 { margin:0 0 6px; font-size:18px; }
+      .mc-price { font-size:28px; font-weight:700; margin:4px 0 10px; }
+      .mc-price span { font-size:12px; font-weight:500; color:#667085; }
+      .mc-includes { padding-left:18px; margin:0 0 12px; }
+      .mc-cta { display:inline-block; padding:12px 16px; border-radius:12px; border:1px solid transparent; cursor:pointer; width: 100%; }
+      .mc-cta.primary { background:#0f62fe; color:#fff; }
+      .mc-cta.accent { background:#ffd500; color:#1f2937; }
+      .mc-cta.outline { background:#fff; color:#0f62fe; border-color:#0f62fe; }
+      .mc-cta.small { padding:8px 12px; font-size:14px; }
+      .mc-small { font-size:12px; color:#667085; margin-top:6px; }
+
+      .mc-proof { display:grid; gap:14px; grid-template-columns:1fr 1fr; margin: 18px 0; }
+      @media (max-width: 900px){ .mc-proof { grid-template-columns:1fr; } }
+      .mc-quote { background:#f9fafb; border:1px solid #eef2f7; border-radius:14px; padding:14px; font-style:italic; }
+      .mc-person { margin-top:6px; color:#475467; font-style:normal; }
+
+      .mc-guarantee { background:#ecfdf3; border:1px solid #a7f3d0; padding:12px 14px; border-radius:12px; margin:12px 0; font-size:14px; }
+
+      .mc-faq details { border:1px solid #e4e7ec; border-radius:10px; padding:10px 12px; margin:8px 0; }
+      .mc-faq summary { cursor:pointer; font-weight:600; }
+
+      .mc-modal { position:fixed; inset:0; background:rgba(0,0,0,.45); display:none; align-items:center; justify-content:center; z-index:9999; }
+      .mc-modal.open { display:flex; }
+      .mc-modal__content { width:min(720px, 92vw); background:#fff; border-radius:16px; padding:18px; border:1px solid #e4e7ec; }
+      .mc-close { border:none; background:transparent; font-size:20px; float:right; cursor:pointer; }
+      .mc-ref-block { margin:10px 0 12px; }
+      .mc-ref-row { display:flex; gap:8px; }
+      #mc-ref-link { flex:1; padding:10px; border:1px solid #e4e7ec; border-radius:10px; }
+      .mc-grid2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+      @media (max-width:700px){ .mc-grid2{ grid-template-columns:1fr; } }
+      #mc-ref-form input[type=email] { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; }
+      .mc-check { display:flex; align-items:center; gap:8px; margin:10px 0; font-size: 14px; }
+      .mc-ref-actions { margin-top:8px; }
+      .mc-legal { font-size:12px; color:#667085; margin-top:8px; }
     `}</style>
     <div className="container mx-auto py-12 px-4">
       <header className="text-center mb-12">
@@ -357,15 +500,138 @@ function InnerComparison() {
         </Card>
       </div>
 
-       <section id="ResultsSalesSection" className="mt-8 text-center">
-         <div id="pricing-choices" className="mc-pricing-choices">
-            <button id="cta-elite-999" className="mc-cta">Elite – One-time $997</button>
-            <button id="cta-pro-197" className="mc-cta">Pro – One-time $197</button>
-            <button id="cta-basic-29" className="mc-cta">Basic – $29/month</button>
+       <section id="mc-offer" className="mc-offer">
+        <header className="mc-hero">
+          <h2>Slash Years Off Your Mortgage—Starting Today</h2>
+          <p>Use your existing mortgage + HELOC the smart way. No lifestyle change. No bank switch. Just smarter cash flow.</p>
+          <div className="mc-badges">
+            <span>Bank-agnostic</span><span>US & Canada</span><span>Private & Secure</span>
+          </div>
+        </header>
+
+        <div className="mc-value-grid">
+          <div className="mc-value">
+            <h3>What you get</h3>
+            <ul>
+              <li>Interactive payoff roadmap tailored to your numbers</li>
+              <li>Monthly action plan (lump-sum timing + amounts)</li>
+              <li>Side-by-side “Do Nothing vs. Smart Flow” comparison</li>
+              <li>Lifetime access to updates (plan tier dependent)</li>
+              <li>Members-only tools & email support (tier dependent)</li>
+            </ul>
+          </div>
+          <div className="mc-value">
+            <h3>Why it works</h3>
+            <ul>
+              <li>Front-loads principal reduction to choke future interest</li>
+              <li>Automates your cash flow to keep interest days low</li>
+              <li>Uses the products you already have (mortgage/HELOC)</li>
+              <li>No promises—just math you can verify any time</li>
+            </ul>
+          </div>
         </div>
-        <p className="mc-note">You’ll complete your purchase on our secure checkout page.</p>
-       </section>
-      
+
+        <div className="mc-pricing">
+          <article className="mc-card">
+            <h4>Elite</h4>
+            <div className="mc-price">$997 <span>one-time</span></div>
+            <ul className="mc-includes">
+              <li>Full course + tools (lifetime)</li>
+              <li>Priority email support</li>
+              <li>Advanced HELOC strategies</li>
+            </ul>
+            <button id="cta-elite-999" className="mc-cta primary">Get Elite</button>
+          </article>
+
+          <article className="mc-card">
+            <h4>Pro</h4>
+            <div className="mc-price">$197 <span>one-time</span></div>
+            <ul className="mc-includes">
+              <li>Core course + calculator</li>
+              <li>Email support (standard)</li>
+              <li>Annual updates</li>
+            </ul>
+            <button id="cta-pro-197" className="mc-cta primary">Get Pro</button>
+          </article>
+
+          <article className="mc-card">
+            <h4>Basic</h4>
+            <div className="mc-price">$29 <span>/month</span></div>
+            <ul className="mc-includes">
+              <li>Calculator + monthly plan</li>
+              <li>Community Q&A</li>
+              <li>Cancel anytime</li>
+            </ul>
+            <button id="cta-basic-29" className="mc-cta accent">Unlock with 5 Referrals</button>
+            <p className="mc-small">Referral required to activate checkout.</p>
+          </article>
+        </div>
+
+        <section className="mc-proof">
+          <div className="mc-quote">
+            “I thought this was too good to be true—until the numbers matched my bank statements. Saved 6+ years.”
+            <div className="mc-person">— Priya S., Calgary</div>
+          </div>
+          <div className="mc-quote">
+            “I kept my bank and just re-routed my cash flow. The plan paid for itself in month one.”
+            <div className="mc-person">— David R., Austin</div>
+          </div>
+        </section>
+
+        <div className="mc-guarantee">
+          <strong>30-Day “Show-Your-Math” Guarantee:</strong> If the numbers in our tool don’t align with your lender’s amortization math, we’ll fix it or refund you.
+        </div>
+
+        <section className="mc-faq">
+          <details>
+            <summary>Do I need to switch banks?</summary>
+            <p>No. Our approach is bank-agnostic. Many members use HELOCs or readvanceable products they already have.</p>
+          </details>
+          <details>
+            <summary>Is this debt consolidation?</summary>
+            <p>No. We focus on interest-timing and principal velocity, not simply rolling balances together.</p>
+          </details>
+          <details>
+            <summary>Will this affect my credit?</summary>
+            <p>Normal use of your existing accounts doesn’t harm credit. Stay on-time with payments and keep utilization healthy.</p>
+          </details>
+        </section>
+      </section>
+
+      <div id="mc-referral-modal" className="mc-modal" aria-hidden="true">
+        <div className="mc-modal__content">
+          <button className="mc-close" id="mc-ref-close" aria-label="Close">×</button>
+          <h3>Share & Unlock Basic ($29/mo)</h3>
+          <p>To activate the Basic plan, enter at least <strong>5</strong> friends’ emails and share your unique link.</p>
+
+          <div className="mc-ref-block">
+            <label>Your unique link</label>
+            <div className="mc-ref-row">
+              <input id="mc-ref-link" type="text" readOnly />
+              <button id="mc-copy" className="mc-cta small">Copy</button>
+            </div>
+            <button id="mc-share" className="mc-cta outline small">Share via device</button>
+          </div>
+
+          <form id="mc-ref-form">
+            <div className="mc-grid2">
+              <input type="email" required placeholder="friend1@email.com" name="e1" />
+              <input type="email" required placeholder="friend2@email.com" name="e2" />
+              <input type="email" required placeholder="friend3@email.com" name="e3" />
+              <input type="email" required placeholder="friend4@email.com" name="e4" />
+              <input type="email" required placeholder="friend5@email.com" name="e5" />
+            </div>
+            <label className="mc-check">
+              <input type="checkbox" id="mc-confirm" /> I confirm I’ve shared this link with these contacts.
+            </label>
+            <div className="mc-ref-actions">
+              <button type="submit" id="mc-continue" className="mc-cta primary" disabled>Continue to Checkout</button>
+            </div>
+            <p className="mc-legal">We store referral emails solely to verify eligibility. We never spam.</p>
+          </form>
+        </div>
+      </div>
+       
        <Alert className="mt-8 border-primary/50">
            <Info className="h-4 w-4" />
            <AlertTitle className="font-bold">Assumptions & Disclaimers</AlertTitle>
