@@ -159,51 +159,6 @@ function InnerComparison() {
   const { user } = useUser();
   const { toast } = useToast();
 
-  const handleCheckout = (plan: string) => {
-    // In a real app, this would trigger a call to Stripe or another payment gateway
-    console.log(`Initiating checkout for plan: ${plan}`);
-    toast({
-      title: 'Checkout Initiated',
-      description: `Redirecting to payment for plan: ${plan}.`,
-    });
-    // router.push(`/api/checkout?plan=${plan}`);
-  };
-
-  const handleCopy = () => {
-    const referralLink = (document.getElementById('ReferralLink') as HTMLInputElement)?.value;
-    if (referralLink) {
-        navigator.clipboard.writeText(referralLink);
-        toast({
-            title: "Copied!",
-            description: "Referral link copied to clipboard.",
-        });
-    }
-  };
-
-  const handleShare = (platform: 'whatsapp' | 'sms' | 'email') => {
-    const referralLinkInput = document.getElementById('ReferralLink') as HTMLInputElement;
-    const refLink = referralLinkInput?.value;
-    if (!refLink) return;
-
-    const message = `I used MortgageCutter to slash years off my mortgage without increasing my monthly spend. Try it with $20 off: ${refLink}`;
-    const encodedMessage = encodeURIComponent(message);
-    let url = '';
-
-    switch(platform) {
-        case 'whatsapp':
-            url = `https://wa.me/?text=${encodedMessage}`;
-            break;
-        case 'sms':
-            url = `sms:?&body=${encodedMessage}`;
-            break;
-        case 'email':
-            url = `mailto:?subject=${encodeURIComponent('Cut years off your mortgage')}&body=${encodedMessage}`;
-            break;
-    }
-    window.open(url, '_blank');
-  }
-
-
   useEffect(() => {
     const params = Object.fromEntries(searchParams.entries());
     const input: Inputs = {
@@ -239,6 +194,110 @@ function InnerComparison() {
 
     runCalculation();
   }, [searchParams]);
+
+    useEffect(() => {
+    if (isLoading || error || !data) return;
+
+    const planMap = {
+      elite_999: { btnId: 'cta-elite-999', fallback: '/checkout?plan=elite_999' },
+      pro_197:   { btnId: 'cta-pro-197',   fallback: '/checkout?plan=pro_197' },
+      basic_29:  { btnId: 'cta-basic-29',  fallback: '/checkout?plan=basic_29' },
+    };
+
+    function attach(btn: HTMLElement | null, planId: string) {
+      if (!btn) return;
+
+      const clickHandler = async (e: MouseEvent) => {
+        e.preventDefault();
+
+        // 1) If you already expose a global handler (e.g., Stripe/Paddle)
+        if (typeof (window as any).startCheckout === 'function') {
+          try {
+            await (window as any).startCheckout(planId);
+            return;
+          } catch (err) {
+            console.warn('startCheckout failed, falling back...', err);
+          }
+        }
+
+        // 2) If you had a server endpoint that creates a checkout session
+        try {
+          const res = await fetch(`/api/createCheckout?plan=${encodeURIComponent(planId)}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ plan: planId, source: 'results_page' })
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.url) {
+              window.location.href = data.url; // Redirect to hosted checkout
+              return;
+            }
+          }
+        } catch (err) {
+          console.warn('API checkout fallback failed, trying simple redirect...', err);
+        }
+
+        // 3) Final fallback: route-based checkout you had before
+        const fb = planMap[planId as keyof typeof planMap]?.fallback || '/checkout';
+        window.location.href = fb;
+      };
+      
+      btn.addEventListener('click', clickHandler);
+      
+      return () => btn.removeEventListener('click', clickHandler);
+    }
+
+    const cleanupElite = attach(document.getElementById('cta-elite-999'), 'elite_999');
+    const cleanupPro = attach(document.getElementById('cta-pro-197'),   'pro_197');
+    const cleanupBasic = attach(document.getElementById('cta-basic-29'),  'basic_29');
+
+    // Referral copy/share helpers
+    const refInput = document.getElementById('ReferralLink') as HTMLInputElement;
+    const copyBtn  = document.getElementById('CopyReferralLink');
+
+    const copyHandler = async () => {
+      if (!refInput) return;
+      try {
+        await navigator.clipboard.writeText(refInput.value);
+        if(copyBtn) copyBtn.textContent = 'Copied!';
+        toast({ title: 'Copied!', description: 'Referral link copied to clipboard.' });
+        setTimeout(() => { if(copyBtn) copyBtn.textContent = 'Copy' }, 1200);
+      } catch {
+        refInput.select(); document.execCommand('copy');
+      }
+    };
+    
+    if (copyBtn) copyBtn.addEventListener('click', copyHandler);
+
+    function openShare(url: string) { window.open(url, '_blank', 'noopener,noreferrer'); }
+
+    const msg = encodeURIComponent(
+      `I used MortgageCutter to slash years off my mortgage without increasing my monthly spend. Try it with $20 off: ${refInput ? refInput.value : window.location.origin + '/signup'}`
+    );
+
+    const wa = document.getElementById('ShareWhatsApp');
+    const sms = document.getElementById('ShareSMS');
+    const em  = document.getElementById('ShareEmail');
+
+    const waHandler = () => openShare(`https://wa.me/?text=${msg}`);
+    const smsHandler = () => openShare(`sms:?&body=${msg}`);
+    const emHandler = () => openShare(`mailto:?subject=${encodeURIComponent('Cut years off your mortgage')}&body=${msg}`);
+
+    if (wa)  wa.addEventListener('click', waHandler);
+    if (sms) sms.addEventListener('click', smsHandler);
+    if (em)  em.addEventListener('click', emHandler);
+
+    return () => {
+        cleanupElite?.();
+        cleanupPro?.();
+        cleanupBasic?.();
+        if (copyBtn) copyBtn.removeEventListener('click', copyHandler);
+        if (wa) wa.removeEventListener('click', waHandler);
+        if (sms) sms.removeEventListener('click', smsHandler);
+        if (em) em.removeEventListener('click', emHandler);
+    }
+  }, [isLoading, error, data, toast]);
 
   if (isLoading) {
     return (
@@ -387,7 +446,6 @@ function InnerComparison() {
                 id="cta-elite-999"
                 className="w-full py-2 rounded bg-black text-white"
                 data-checkout-plan="elite_999"
-                onClick={() => handleCheckout('elite_999')}
             >
                 I Prefer No Referral – Get Lifetime
             </button>
@@ -410,7 +468,6 @@ function InnerComparison() {
                 id="cta-pro-197"
                 className="w-full py-2 rounded bg-black text-white"
                 data-checkout-plan="pro_197"
-                onClick={() => handleCheckout('pro_197')}
             >
                 Get Lifetime for $197 (Unlock with 5 Friends)
             </button>
@@ -430,7 +487,6 @@ function InnerComparison() {
                 id="cta-basic-29"
                 className="w-full py-2 rounded bg-black text-white"
                 data-checkout-plan="basic_29"
-                onClick={() => handleCheckout('basic_29')}
             >
                 Start for $29/month
             </button>
@@ -451,9 +507,9 @@ function InnerComparison() {
                     className="flex-1 border rounded px-2 py-2 text-sm bg-white"
                     type="text"
                     readOnly
-                    value={referralLink}
+                    defaultValue={referralLink}
                     />
-                    <button id="CopyReferralLink" onClick={handleCopy} className="px-3 py-2 rounded bg-black text-white text-sm">
+                    <button id="CopyReferralLink" className="px-3 py-2 rounded bg-black text-white text-sm">
                     Copy
                     </button>
                 </div>
@@ -462,9 +518,9 @@ function InnerComparison() {
 
             {/* Quick share buttons (front-end only, use navigator.share if available) */}
             <div className="flex flex-wrap gap-2 mb-3">
-                <button onClick={() => handleShare('whatsapp')} className="px-3 py-2 border rounded text-sm" id="ShareWhatsApp">Share on WhatsApp</button>
-                <button onClick={() => handleShare('sms')} className="px-3 py-2 border rounded text-sm" id="ShareSMS">Share via SMS</button>
-                <button onClick={() => handleShare('email')} className="px-3 py-2 border rounded text-sm" id="ShareEmail">Share via Email</button>
+                <button id="ShareWhatsApp" className="px-3 py-2 border rounded text-sm">Share on WhatsApp</button>
+                <button id="ShareSMS" className="px-3 py-2 border rounded text-sm">Share via SMS</button>
+                <button id="ShareEmail" className="px-3 py-2 border rounded text-sm">Share via Email</button>
             </div>
 
             <div className="text-xs text-gray-600">
@@ -495,5 +551,3 @@ export function ComparisonDisplay() {
     </Suspense>
   )
 }
-
-    
