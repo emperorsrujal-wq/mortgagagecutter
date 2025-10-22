@@ -19,7 +19,7 @@ export async function getSavingsReport(
 
 export async function sendWelcomeEmail(userData: { name: string; email: string }): Promise<{ success: boolean }> {
   const apiKey = process.env.CLEVERLYBOX_API_KEY;
-  const apiEndpoint = 'https://api.cleverlybox.com/v1/send'; // Assuming a standard endpoint
+  const apiEndpoint = `https://app.cleverlybox.com/api/v1/send?api_token=${apiKey}`;
 
   if (!apiKey) {
     console.error('CleverlyBox API key is not configured.');
@@ -27,9 +27,13 @@ export async function sendWelcomeEmail(userData: { name: string; email: string }
   }
 
   const payload = {
-    email: userData.email,
-    name: userData.name,
-    template_id: 'welcome-email',
+    // The API might expect 'to' as an object with email and name
+    to: {
+      email: userData.email,
+      name: userData.name,
+    },
+    // Using template_uid as is common for unique identifiers
+    template_uid: 'welcome-email', 
   };
 
   try {
@@ -37,7 +41,7 @@ export async function sendWelcomeEmail(userData: { name: string; email: string }
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        'Accept': 'application/json',
       },
       body: JSON.stringify(payload),
     });
