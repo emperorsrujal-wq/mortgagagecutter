@@ -172,14 +172,31 @@ function ComparisonChart({ data }: { data: Outputs['series'] }) {
 }
 
 function InnerComparison() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [data, setData] = useState<Outputs | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+  const [showShareBasic, setShowShareBasic] = useState(false);
+  const [showSharePro, setShowSharePro] = useState(false);
+  const [proReferralCount, setProReferralCount] = useState(0);
+
   const yearsSaved = data ? (data.debtFreeMonthsBaseline - data.debtFreeMonthsHeloc) / 12 : 0;
   const yearsSavedTxt = data ? `${Math.floor(yearsSaved)} yrs, ${Math.round((yearsSaved % 1) * 12)} mo` : 'several years';
   
+  const referralLink = typeof window !== 'undefined' ? `${window.location.origin}/questionnaire?ref=123` : '';
+  const shareMessage = `Unlock mortgage savings now! I found out how to pay off my home faster using Mortgage Cutter. Check out your free savings estimate: ${referralLink}`;
+
+  const handleProShare = () => {
+    setProReferralCount(prev => {
+      const newCount = prev + 1;
+      if (newCount >= 5) {
+        router.push('/purchase?plan=pro_197');
+      }
+      return newCount;
+    });
+  }
+
   const testimonials = [
       {
           quote: "I saved over $44,000 and paid off my home 7 years earlier. My only regret is not finding this sooner.",
@@ -260,6 +277,26 @@ function InnerComparison() {
   }
 
   if (!data) return null;
+
+  const ShareButtons = ({ onShare }: { onShare?: () => void }) => (
+    <div className="flex flex-col gap-2 mt-2">
+      <Button asChild variant="outline" onClick={onShare}>
+        <a href={`https://wa.me/?text=${encodeURIComponent(shareMessage)}`} target="_blank" rel="noopener noreferrer">
+          <MessageCircle className="h-4 w-4 mr-2" /> WhatsApp
+        </a>
+      </Button>
+      <Button asChild variant="outline" onClick={onShare}>
+        <a href={`https://www.facebook.com/messenger/new`} target="_blank" rel="noopener noreferrer">
+         <svg className="h-4 w-4 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.02 2 10.98c0 2.77 1.35 5.27 3.56 6.92v4.1l3.26-1.79c.99.27 2.05.42 3.18.42 5.52 0 10-4.02 10-8.98S17.52 2 12 2zm1.02 10.97l-2.58-2.77-5.14 2.77 5.6-6.02 2.6 2.77 5.1-2.77-5.58 5.99z"/></svg> Facebook Messenger
+        </a>
+      </Button>
+       <Button asChild variant="outline" onClick={onShare}>
+        <a href={`sms:?&body=${encodeURIComponent(shareMessage)}`}>
+           <MessageCircle className="h-4 w-4 mr-2" /> Text Message
+        </a>
+      </Button>
+    </div>
+  );
 
   return (
     <div className="bg-gray-50/50">
@@ -359,9 +396,12 @@ function InnerComparison() {
                             <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Community Q&A</li>
                             <li className="flex items-center gap-2"><X className="h-4 w-4 text-red-500" /> Email Support</li>
                         </ul>
+                        {showShareBasic && <ShareButtons />}
                     </CardContent>
                     <CardFooter>
-                        <Button variant="secondary" className="w-full">Unlock with 5 Referrals</Button>
+                         <Button variant="secondary" className="w-full" onClick={() => setShowShareBasic(!showShareBasic)}>
+                           {showShareBasic ? 'Hide Share Options' : 'Share to Unlock'}
+                         </Button>
                     </CardFooter>
                 </Card>
 
@@ -380,12 +420,23 @@ function InnerComparison() {
                             <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Priority Email Support</li>
                             <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Referral Dashboard</li>
                         </ul>
+                         {showSharePro && (
+                          <div className="pt-4">
+                            <p className="text-sm font-semibold">Referral Progress: {proReferralCount}/5</p>
+                            <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mt-1">
+                              <div className="bg-primary h-2.5 rounded-full" style={{width: `${(proReferralCount / 5) * 100}%`}}></div>
+                            </div>
+                            <ShareButtons onShare={handleProShare} />
+                          </div>
+                        )}
                     </CardContent>
                     <CardFooter className="flex-col gap-2">
                         <Button asChild size="lg" className="w-full">
-                           <Link href="/purchase?plan=pro_297">Get the Pro Blueprint</Link>
+                           <Link href="/purchase?plan=pro_297">Buy Pro for $297</Link>
                         </Button>
-                        <p className="text-xs text-muted-foreground text-center">Auto-drop to $197 with 5 referrals.</p>
+                        <Button variant="outline" className="w-full" onClick={() => setShowSharePro(!showSharePro)}>
+                          {showSharePro ? 'Hide Share Options' : 'Get Pro for $197 (Share with 5 friends)'}
+                        </Button>
                     </CardFooter>
                 </Card>
 
