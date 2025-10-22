@@ -9,14 +9,65 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Switch } from '@/components/ui/switch';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { ResponsiveContainer, LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend } from 'recharts';
+import { ResponsiveContainer, LineChart, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Info, HelpCircle, PiggyBank, Receipt, Rocket, Repeat } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { pmt } from '@/lib/amort';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-const i18n = {
+type Step = { title: string; body: string; icon: React.ElementType };
+type QA = { q: string; a: string };
+
+interface LocalePack {
+  title: string;
+  subtitle: string;
+  howTitle: string;
+  steps: Step[];
+  faqTitle: string;
+  faq: QA[];
+  form: {
+      mortgageTitle: string;
+      cashflowTitle: string;
+      strategyTitle: string;
+      calculate: string;
+      howChunksWork: string;
+  };
+  results: {
+      title: string;
+      interestSaved: string;
+      monthsSaved: string;
+      miSaved: string;
+      baselineTitle: string;
+      strategyTitle: string;
+      months: string;
+      totalInterest: string;
+      totalMI: string;
+      balanceOverTime: string;
+      balanceDescription: string;
+      timelineTitle: string;
+      timelineDescription: string;
+      table: {
+        month: string;
+        mortgageBal: string;
+        helocBal: string;
+        chunk: string;
+        helocInt: string;
+        mi: string;
+        surplusUsed: string;
+      },
+      placeholderTitle: string;
+      placeholderDescription: string;
+  };
+  disclaimer: string;
+  explainers: Record<string, string>;
+  labels: Record<string, string>;
+}
+
+
+const i18n: Record<string, LocalePack> = {
   en: {
     title: "HELOC-Assist Estimator",
     subtitle: "Turn HELOC access into months off your mortgage. No switching lenders. Just use credit you already have to nuke principal.",
@@ -85,6 +136,30 @@ const i18n = {
       billTiming: "Optimized = you batch most bills at once, keeping cash parked against the HELOC longer. Typical = bills are scattered.",
       chunkModalTitle: "How the 'Chunk' Strategy Works",
       chunkModalBody: "We draw a small HELOC chunk to knock down mortgage principal, then your monthly surplus repays the HELOC. Once the HELOC balance is near zero, we repeat. Lower principal sooner = less interest over time."
+    },
+     labels: {
+      language: "Language",
+      years: "Years",
+      months: "Months",
+      termRemaining: "Term Remaining",
+      mortgageBalance: "Mortgage Balance",
+      mortgageAPR: "Mortgage APR (%)",
+      monthlyMortgagePayment: "Monthly Payment (Optional)",
+      homeValue: "Home Value (Optional)",
+      monthlyMI: "Monthly MI/CMHC (Optional)",
+      netIncome: "Net Monthly Income",
+      livingExpenses: "Monthly Living Expenses (excl. mortgage)",
+      helocAPR: "HELOC APR (%)",
+      helocLimit: "HELOC Limit (Available Now)",
+      helocOpeningBalance: "HELOC Opening Balance",
+      chunkMode: "Chunk Mode",
+      fixedChunkAmount: "Fixed Chunk Amount",
+      billTiming: "Bill Timing",
+      readvanceable: "Readvanceable?",
+      auto: "Auto",
+      fixed: "Fixed",
+      optimized: "Optimized",
+      typical: "Typical",
     }
   },
   "fr-CA": {
@@ -155,6 +230,30 @@ const i18n = {
         billTiming: "Optimisé = vous regroupez la plupart des factures en une fois, gardant l'argent plus longtemps sur la MCH. Typique = factures étalées.",
         chunkModalTitle: "Comment fonctionne la stratégie de 'versement'",
         chunkModalBody: "Nous retirons un petit versement de la MCH pour réduire le capital de l'hypothèque, puis votre surplus mensuel rembourse la MCH. Une fois le solde de la MCH proche de zéro, nous répétons. Un capital plus bas plus tôt = moins d'intérêts sur la durée."
+    },
+    labels: {
+      language: "Langue",
+      years: "Années",
+      months: "Mois",
+      termRemaining: "Durée restante",
+      mortgageBalance: "Solde de l'hypothèque",
+      mortgageAPR: "TAEG de l'hypothèque (%)",
+      monthlyMortgagePayment: "Paiement mensuel (Facultatif)",
+      homeValue: "Valeur de la maison (Facultatif)",
+      monthlyMI: "Assurance hypothécaire/SCHL mensuelle (Facultatif)",
+      netIncome: "Revenu mensuel net",
+      livingExpenses: "Dépenses de subsistance mensuelles (sauf hypothèque)",
+      helocAPR: "TAEG de la MCH (%)",
+      helocLimit: "Limite de la MCH (disponible maintenant)",
+      helocOpeningBalance: "Solde d'ouverture de la MCH",
+      chunkMode: "Mode de versement",
+      fixedChunkAmount: "Montant du versement fixe",
+      billTiming: "Calendrier des factures",
+      readvanceable: "Réutilisable ?",
+      auto: "Auto",
+      fixed: "Fixe",
+      optimized: "Optimisé",
+      typical: "Typique",
     }
   }
 };
@@ -177,22 +276,24 @@ const initial: Inputs = {
   billTiming: 'OPTIMIZED',
 };
 
-const InputField = ({ name, label, children, explainer }: { name: string, label: string, children: React.ReactNode, explainer: string }) => (
+const InputField = ({ name, label, children, explainer }: { name: string, label: string, children: React.ReactNode, explainer?: string }) => (
   <div className="space-y-2">
     <div className="flex items-center gap-2">
       <Label htmlFor={name}>{label}</Label>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button type="button" aria-label={`Help for ${label}`}>
-              <Info className="h-4 w-4 text-muted-foreground" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent className="max-w-xs whitespace-pre-wrap">
-            <p>{explainer}</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      {explainer && (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button type="button" aria-label={`Help for ${label}`}>
+                <Info className="h-4 w-4 text-muted-foreground" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent className="max-w-xs whitespace-pre-wrap">
+              <p>{explainer}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
     </div>
     {children}
   </div>
@@ -200,26 +301,26 @@ const InputField = ({ name, label, children, explainer }: { name: string, label:
 
 
 export default function ChunkerCalculatorPage() {
-  const [lang, setLang] = useState<'en' | 'fr-CA'>('en');
+  const [lang, setLang] = useState('en');
   const [form, setForm] = useState<Inputs>(initial);
   const [res, setRes] = useState<Outputs | null>(null);
   const [termMode, setTermMode] = useState<'YEARS' | 'MONTHS'>('YEARS');
   const [termYears, setTermYears] = useState<number>(initial.termMonthsRemaining / 12);
   const [termMonths, setTermMonths] = useState<number>(initial.termMonthsRemaining);
 
-  const t = i18n[lang];
+  const t = i18n[lang] || i18n.en;
 
   useEffect(() => {
-    const storedLang = localStorage.getItem('mc_lang');
-    if (storedLang === 'fr-CA') {
-      setLang('fr-CA');
+    const detectedLang = localStorage.getItem('mc_lang') || navigator.language.split('-')[0];
+    if (i18n[detectedLang]) {
+      setLang(detectedLang);
     }
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem('mc_lang', lang);
-  }, [lang]);
-
+  const handleLangChange = (newLang: string) => {
+    setLang(newLang);
+    localStorage.setItem('mc_lang', newLang);
+  }
 
   const onChange = <K extends keyof Inputs>(k: K, v: Inputs[K]) => {
     setForm((f) => ({ ...f, [k]: v }));
@@ -259,8 +360,8 @@ export default function ChunkerCalculatorPage() {
   const currencyFormatter = (value: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value);
 
   const isSurplusNegative = useMemo(() => {
-    const pmt = form.monthlyMortgagePayment || 0; // Simplified for UI check
-    return form.netIncome > 0 && (form.livingExpenses + pmt + (form.monthlyMI || 0)) >= form.netIncome;
+    const monthlyPayment = form.monthlyMortgagePayment || pmt(form.mortgageAPR, form.termMonthsRemaining, form.mortgageBalance);
+    return form.netIncome > 0 && (form.livingExpenses + monthlyPayment + (form.monthlyMI || 0)) >= form.netIncome;
   }, [form]);
 
   const isChunkTooLarge = useMemo(() => {
@@ -270,12 +371,19 @@ export default function ChunkerCalculatorPage() {
 
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8">
-      <header className="text-center mb-8">
+       <header className="text-center mb-8">
         <div className="flex justify-center items-center gap-4 mb-2">
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{t.title}</h1>
             <div className="flex items-center border rounded-md p-1">
-                <Button variant={lang === 'en' ? 'secondary' : 'ghost'} size="sm" onClick={() => setLang('en')}>EN</Button>
-                <Button variant={lang === 'fr-CA' ? 'secondary' : 'ghost'} size="sm" onClick={() => setLang('fr-CA')}>FR</Button>
+                <Select value={lang} onValueChange={handleLangChange}>
+                  <SelectTrigger className="w-[120px]">
+                    <SelectValue placeholder={t.labels.language} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="fr-CA">Français</SelectItem>
+                  </SelectContent>
+                </Select>
             </div>
         </div>
         <p className="text-muted-foreground mt-2 max-w-3xl mx-auto">
@@ -322,15 +430,15 @@ export default function ChunkerCalculatorPage() {
           <Card>
             <CardHeader><CardTitle>{t.form.mortgageTitle}</CardTitle></CardHeader>
             <CardContent className="space-y-4">
-              <InputField name="mortgageBalance" label="Mortgage Balance" explainer={t.explainers.mortgageBalance}>
+              <InputField name="mortgageBalance" label={t.labels.mortgageBalance} explainer={t.explainers.mortgageBalance}>
                   <Input id="mortgageBalance" type="number" value={form.mortgageBalance} onChange={e => onChange("mortgageBalance", Number(e.target.value))}/>
               </InputField>
-              <InputField name="mortgageAPR" label="Mortgage APR (%)" explainer={t.explainers.mortgageAPR}>
+              <InputField name="mortgageAPR" label={t.labels.mortgageAPR} explainer={t.explainers.mortgageAPR}>
                   <Input id="mortgageAPR" type="number" step="0.01" value={form.mortgageAPR} onChange={e => onChange("mortgageAPR", Number(e.target.value))}/>
               </InputField>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                    <Label>Term Remaining</Label>
+                    <Label>{t.labels.termRemaining}</Label>
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
@@ -340,8 +448,8 @@ export default function ChunkerCalculatorPage() {
                       </Tooltip>
                     </TooltipProvider>
                     <div className="flex items-center gap-1 ml-auto border rounded-md p-0.5">
-                        <Button type="button" size="sm" variant={termMode === 'YEARS' ? 'secondary' : 'ghost'} className="h-7 px-2" onClick={() => handleTermModeChange('YEARS')}>Years</Button>
-                        <Button type="button" size="sm" variant={termMode === 'MONTHS' ? 'secondary' : 'ghost'} className="h-7 px-2" onClick={() => handleTermModeChange('MONTHS')}>Months</Button>
+                        <Button type="button" size="sm" variant={termMode === 'YEARS' ? 'secondary' : 'ghost'} className="h-7 px-2" onClick={() => handleTermModeChange('YEARS')}>{t.labels.years}</Button>
+                        <Button type="button" size="sm" variant={termMode === 'MONTHS' ? 'secondary' : 'ghost'} className="h-7 px-2" onClick={() => handleTermModeChange('MONTHS')}>{t.labels.months}</Button>
                     </div>
                 </div>
                 {termMode === 'YEARS' ? (
@@ -350,13 +458,13 @@ export default function ChunkerCalculatorPage() {
                      <Input type="number" value={termMonths} onChange={handleTermMonthsChange} />
                 )}
               </div>
-              <InputField name="monthlyMortgagePayment" label="Monthly Payment (Optional)" explainer={t.explainers.monthlyMortgagePayment}>
+              <InputField name="monthlyMortgagePayment" label={t.labels.monthlyMortgagePayment} explainer={t.explainers.monthlyMortgagePayment}>
                   <Input id="monthlyMortgagePayment" type="number" value={form.monthlyMortgagePayment ?? ""} onChange={e => onChange("monthlyMortgagePayment", e.target.value === "" ? undefined : Number(e.target.value))}/>
               </InputField>
-              <InputField name="homeValue" label="Home Value (Optional)" explainer={t.explainers.homeValue}>
+              <InputField name="homeValue" label={t.labels.homeValue} explainer={t.explainers.homeValue}>
                   <Input id="homeValue" type="number" value={form.homeValue ?? 0} onChange={e => onChange("homeValue", e.target.value === "" ? 0 : Number(e.target.value))}/>
               </InputField>
-              <InputField name="monthlyMI" label="Monthly MI/CMHC (Optional)" explainer={t.explainers.monthlyMI}>
+              <InputField name="monthlyMI" label={t.labels.monthlyMI} explainer={t.explainers.monthlyMI}>
                   <Input id="monthlyMI" type="number" value={form.monthlyMI ?? 0} onChange={e => onChange("monthlyMI", Number(e.target.value))}/>
               </InputField>
             </CardContent>
@@ -365,20 +473,20 @@ export default function ChunkerCalculatorPage() {
           <Card>
             <CardHeader><CardTitle>{t.form.cashflowTitle}</CardTitle></CardHeader>
             <CardContent className="space-y-4">
-              <InputField name="netIncome" label="Net Monthly Income" explainer={t.explainers.netIncome}>
+              <InputField name="netIncome" label={t.labels.netIncome} explainer={t.explainers.netIncome}>
                 <Input id="netIncome" type="number" value={form.netIncome} onChange={e => onChange("netIncome", Number(e.target.value))}/>
               </InputField>
-              <InputField name="livingExpenses" label="Monthly Living Expenses (excl. mortgage)" explainer={t.explainers.livingExpenses}>
+              <InputField name="livingExpenses" label={t.labels.livingExpenses} explainer={t.explainers.livingExpenses}>
                 <Input id="livingExpenses" type="number" value={form.livingExpenses} onChange={e => onChange("livingExpenses", Number(e.target.value))}/>
               </InputField>
               {isSurplusNegative && <Alert variant="destructive" className="text-xs"><AlertDescription>Your monthly surplus is zero or negative. Results will be limited.</AlertDescription></Alert>}
-              <InputField name="helocAPR" label="HELOC APR (%)" explainer={t.explainers.helocAPR}>
+              <InputField name="helocAPR" label={t.labels.helocAPR} explainer={t.explainers.helocAPR}>
                 <Input id="helocAPR" type="number" step="0.01" value={form.helocAPR} onChange={e => onChange("helocAPR", Number(e.target.value))}/>
               </InputField>
-              <InputField name="helocLimit" label="HELOC Limit (Available Now)" explainer={t.explainers.helocLimit}>
+              <InputField name="helocLimit" label={t.labels.helocLimit} explainer={t.explainers.helocLimit}>
                 <Input id="helocLimit" type="number" value={form.helocLimit} onChange={e => onChange("helocLimit", Number(e.target.value))}/>
               </InputField>
-              <InputField name="helocOpeningBalance" label="HELOC Opening Balance" explainer={t.explainers.helocOpeningBalance}>
+              <InputField name="helocOpeningBalance" label={t.labels.helocOpeningBalance} explainer={t.explainers.helocOpeningBalance}>
                 <Input id="helocOpeningBalance" type="number" value={form.helocOpeningBalance ?? 0} onChange={e => onChange("helocOpeningBalance", Number(e.target.value))}/>
               </InputField>
             </CardContent>
@@ -387,29 +495,29 @@ export default function ChunkerCalculatorPage() {
           <Card>
             <CardHeader><CardTitle>{t.form.strategyTitle}</CardTitle></CardHeader>
             <CardContent className="space-y-4">
-              <InputField name="chunkMode" label="Chunk Mode" explainer={t.explainers.chunkMode}>
+              <InputField name="chunkMode" label={t.labels.chunkMode} explainer={t.explainers.chunkMode}>
                   <RadioGroup value={form.chunkMode} onValueChange={(v: "AUTO" | "FIXED") => onChange("chunkMode", v)} className="flex gap-4">
-                      <div className="flex items-center space-x-2"><RadioGroupItem value="AUTO" id="auto"/><Label htmlFor="auto">Auto</Label></div>
-                      <div className="flex items-center space-x-2"><RadioGroupItem value="FIXED" id="fixed"/><Label htmlFor="fixed">Fixed</Label></div>
+                      <div className="flex items-center space-x-2"><RadioGroupItem value="AUTO" id="auto"/><Label htmlFor="auto">{t.labels.auto}</Label></div>
+                      <div className="flex items-center space-x-2"><RadioGroupItem value="FIXED" id="fixed"/><Label htmlFor="fixed">{t.labels.fixed}</Label></div>
                   </RadioGroup>
               </InputField>
 
               {form.chunkMode === 'FIXED' && (
-                <InputField name="fixedChunkAmount" label="Fixed Chunk Amount" explainer={t.explainers.fixedChunkAmount}>
+                <InputField name="fixedChunkAmount" label={t.labels.fixedChunkAmount} explainer={t.explainers.fixedChunkAmount}>
                   <Input type="number" value={form.fixedChunkAmount ?? 10000} onChange={e => onChange("fixedChunkAmount", Number(e.target.value))} />
                    {isChunkTooLarge && <p className="text-xs text-destructive mt-1">Your fixed chunk exceeds HELOC availability. Reduce amount or use Auto mode.</p>}
                 </InputField>
               )}
 
-              <InputField name="billTiming" label="Bill Timing" explainer={t.explainers.billTiming}>
+              <InputField name="billTiming" label={t.labels.billTiming} explainer={t.explainers.billTiming}>
                   <RadioGroup value={form.billTiming} onValueChange={(v: "OPTIMIZED" | "TYPICAL") => onChange("billTiming", v)} className="flex gap-4">
-                      <div className="flex items-center space-x-2"><RadioGroupItem value="OPTIMIZED" id="optimized"/><Label htmlFor="optimized">Optimized</Label></div>
-                      <div className="flex items-center space-x-2"><RadioGroupItem value="TYPICAL" id="typical"/><Label htmlFor="typical">Typical</Label></div>
+                      <div className="flex items-center space-x-2"><RadioGroupItem value="OPTIMIZED" id="optimized"/><Label htmlFor="optimized">{t.labels.optimized}</Label></div>
+                      <div className="flex items-center space-x-2"><RadioGroupItem value="TYPICAL" id="typical"/><Label htmlFor="typical">{t.labels.typical}</Label></div>
                   </RadioGroup>
               </InputField>
               <div className="flex items-center justify-between pt-2">
                 <div className="flex items-center gap-2">
-                    <Label htmlFor="readvanceable">Readvanceable?</Label>
+                    <Label htmlFor="readvanceable">{t.labels.readvanceable}</Label>
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild><button type="button"><Info className="h-4 w-4 text-muted-foreground" /></button></TooltipTrigger>
@@ -483,7 +591,7 @@ export default function ChunkerCalculatorPage() {
                   </CardHeader>
                   <CardContent>
                       <ChartContainer config={{}}>
-                          <ResponsiveContainer>
+                        <ResponsiveContainer width="100%" height={300}>
                               <LineChart data={res.timeline.slice(0, 240)} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="month" tickFormatter={(v) => `Yr ${Math.floor(v/12)}`} minTickGap={30}/>
@@ -546,5 +654,3 @@ export default function ChunkerCalculatorPage() {
     </div>
   );
 }
-
-    
