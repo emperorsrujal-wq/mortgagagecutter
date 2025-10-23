@@ -192,7 +192,7 @@ export default function Home() {
                 <h2 className="text-3xl font-bold">Ready to See Your Savings?</h2>
                  <div className="mt-6">
                     <Button size="lg" asChild>
-                        <Link href="/questionnaire">Get My Free Savings Blueprint</Link>
+                        <Link href="#hero">Get My Free Savings Blueprint</Link>
                     </Button>
                     <p className="text-sm text-muted-foreground mt-2">Takes about 60 seconds — no credit check, no obligation.</p>
                 </div>
