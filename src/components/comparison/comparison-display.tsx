@@ -187,14 +187,10 @@ function InnerComparison() {
   const referralLink = typeof window !== 'undefined' ? `${window.location.origin}/questionnaire?ref=123` : '';
   const shareMessage = `Unlock mortgage savings now! I found out how to pay off my home faster using Mortgage Cutter. Check out your free savings estimate: ${referralLink}`;
 
+  const proPlanUnlocked = useMemo(() => proReferralCount >= 5, [proReferralCount]);
+
   const handleProShare = () => {
-    setProReferralCount(prev => {
-      const newCount = prev + 1;
-      if (newCount >= 5) {
-        router.push('/purchase?plan=pro_197');
-      }
-      return newCount;
-    });
+    setProReferralCount(prev => Math.min(5, prev + 1));
   }
 
   const testimonials = [
@@ -413,7 +409,7 @@ function InnerComparison() {
                         <CardDescription>Everything you need to succeed.</CardDescription>
                     </CardHeader>
                     <CardContent className="flex-grow space-y-4">
-                        <div className="text-5xl font-bold">$297</div>
+                        <div className="text-5xl font-bold">{proPlanUnlocked ? '$197' : '$297'}</div>
                         <ul className="space-y-2 text-sm">
                             <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Full Toolkit Access</li>
                             <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Bank-Agnostic Guides</li>
@@ -432,7 +428,7 @@ function InnerComparison() {
                     </CardContent>
                     <CardFooter className="flex-col gap-2">
                         <Button asChild size="lg" className="w-full">
-                           <Link href="/purchase?plan=pro_297">Buy Pro for $297</Link>
+                           <Link href={`/purchase?plan=${proPlanUnlocked ? 'pro_197' : 'pro_297'}`}>Buy Pro for {proPlanUnlocked ? '$197' : '$297'}</Link>
                         </Button>
                         <Button variant="outline" className="w-full" onClick={() => setShowSharePro(!showSharePro)}>
                           {showSharePro ? 'Hide Share Options' : 'Want an unbeatable price? Help 5 friends save and get $100 off instantly!'}
@@ -536,7 +532,7 @@ function InnerComparison() {
           <AlertTitle className="font-bold">Educational Estimates Only</AlertTitle>
           <AlertDescription className="text-xs mt-2">
             The calculations on this page are for illustrative purposes and are not a guarantee of savings or loan approval. All debts are assumed to be consolidated into the HELOC. The calculation does not include bank fees, closing costs, or property taxes/insurance. Your actual results will depend on your discipline, spending habits, and the final terms provided by your lender.
-          </AlertDescription>
+          </Aler tDescription>
         </Alert>
       </div>
       

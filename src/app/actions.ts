@@ -15,7 +15,7 @@ const getStripe = () => {
 };
 
 
-export async function createStripeCheckoutSession() {
+export async function createStripeCheckoutSession(product: { name: string; description: string; priceInCents: number }) {
   const stripe = getStripe();
   const headersList = headers();
   const origin = headersList.get('origin') || 'https://mortgagecutter.com';
@@ -28,10 +28,10 @@ export async function createStripeCheckoutSession() {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: 'Mortgage Cutter Method',
-              description: 'Lifetime access to the complete Mortgage Cutter toolkit and guides.',
+              name: product.name,
+              description: product.description,
             },
-            unit_amount: 7900, // $79.00 in cents
+            unit_amount: product.priceInCents,
           },
           quantity: 1,
         },
