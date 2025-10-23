@@ -435,7 +435,7 @@ function InnerComparison() {
                            <Link href="/purchase?plan=pro_297">Buy Pro for $297</Link>
                         </Button>
                         <Button variant="outline" className="w-full" onClick={() => setShowSharePro(!showSharePro)}>
-                          {showSharePro ? 'Hide Share Options' : 'Get Pro for $197 (Share with 5 friends)'}
+                          {showSharePro ? 'Hide Share Options' : 'Want an unbeatable price? Help 5 friends save and get $100 off instantly!'}
                         </Button>
                     </CardFooter>
                 </Card>
