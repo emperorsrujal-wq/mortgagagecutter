@@ -3,6 +3,59 @@
 
 import { estimate } from '@/lib/mortgage';
 import type { Inputs, Outputs } from '@/lib/mortgage-types';
+import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
+import Stripe from 'stripe';
+
+const getStripe = () => {
+  // Ensure the Stripe secret key is set in your environment variables.
+  // The exclamation mark tells TypeScript that we are sure this value is not null.
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+  return stripe;
+};
+
+
+export async function createStripeCheckoutSession() {
+  const stripe = getStripe();
+  const headersList = headers();
+  const origin = headersList.get('origin') || 'https://mortgagecutter.com';
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: 'Mortgage Cutter Method',
+              description: 'Lifetime access to the complete Mortgage Cutter toolkit and guides.',
+            },
+            unit_amount: 7900, // $79.00 in cents
+          },
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      success_url: `${origin}/method-access`,
+      cancel_url: `${origin}/purchase`,
+    });
+
+    if (session.url) {
+      redirect(session.url);
+    } else {
+      throw new Error('Stripe session URL not found.');
+    }
+
+  } catch (error) {
+    console.error('Error creating Stripe checkout session:', error);
+    const message = error instanceof Error ? error.message : 'An unknown error occurred.';
+    // In a real app, you might redirect to an error page.
+    // For now, we'll redirect back to purchase with an error query.
+    redirect(`/purchase?error=${encodeURIComponent(message)}`);
+  }
+}
+
 
 export async function getSavingsReport(
   data: Inputs
@@ -20,16 +73,12 @@ export async function getSavingsReport(
 export async function sendWelcomeEmail(userData: { name: string; email: string }): Promise<{ success: boolean }> {
   const apiEndpoint = 'https://app.cleverlybox.com/lists/68f97758d594c/embedded-form-subscribe';
 
-  // Extract first name and last name from the displayName
   const nameParts = userData.name?.split(' ') || [];
   const firstName = nameParts.shift() || '';
-  const lastName = nameParts.join(' '); // Keep for now, but won't be sent
 
-  // Create the URL-encoded form data
   const formData = new URLSearchParams();
   formData.append('EMAIL', userData.email);
   formData.append('FIRST_NAME', firstName);
-  // No longer sending LAST_NAME as per new requirement.
 
   try {
     const response = await fetch(apiEndpoint, {
@@ -45,15 +94,12 @@ export async function sendWelcomeEmail(userData: { name: string; email: string }
       return { success: true };
     }
 
-    // Handle non-ok responses
     const errorBody = await response.text();
     console.error(`Failed to add user to CleverlyBox list for ${userData.email}. Status: ${response.status}. Body: ${errorBody}`);
-    // Even if it fails, we return success to avoid blocking the user flow.
     return { success: false };
 
   } catch (error) {
     console.error('Error submitting user to CleverlyBox list form:', error);
-    // Do not block the user flow on email failure.
     return { success: false };
   }
 }
