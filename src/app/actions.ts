@@ -19,8 +19,8 @@ export async function getSavingsReport(
 
 export async function sendWelcomeEmail(userData: { name: string; email: string }): Promise<{ success: boolean }> {
   const apiKey = process.env.CLEVERLYBOX_API_KEY;
-  // Note: The list ID was corrected from the user's prompt as per previous iterations.
-  const apiEndpoint = `https://app.cleverlybox.com/api/v1/lists/68f9f758d594c/add`;
+  // Note: The list ID was corrected from the user's prompt.
+  const apiEndpoint = `https://app.cleverlybox.com/api/v1/lists/68f97758d594c/add`;
 
   if (!apiKey) {
     console.error('CleverlyBox API key is not configured.');
