@@ -17,9 +17,6 @@ import {
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from '@/components/ui/card';
 import { ArrowRight } from 'lucide-react';
 import { useState } from 'react';
@@ -71,13 +68,7 @@ export function HeroForm() {
 
   return (
     <Card className="w-full max-w-md shadow-2xl bg-card/90 backdrop-blur-sm">
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Save Thousands in Interest Payment to Banks</CardTitle>
-        <CardDescription>
-          Just start saving smartly.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
+      <CardContent className="pt-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
@@ -121,12 +112,9 @@ export function HeroForm() {
               size="lg"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Submitting...' : 'Show Me My Savings'}
+              {isSubmitting ? 'Generating...' : 'Get My FREE Savings Blueprint'}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <p className="text-center text-xs text-muted-foreground pt-2">
-              100% Free. No obligation.
-            </p>
           </form>
         </Form>
         <div className="relative my-4">
