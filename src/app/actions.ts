@@ -18,44 +18,42 @@ export async function getSavingsReport(
 }
 
 export async function sendWelcomeEmail(userData: { name: string; email: string }): Promise<{ success: boolean }> {
-  const apiKey = process.env.CLEVERLYBOX_API_KEY;
-  // Note: The list ID was corrected from the user's prompt.
-  const apiEndpoint = `https://app.cleverlybox.com/api/v1/lists/68f97758d594c/add`;
+  const apiEndpoint = 'https://app.cleverlybox.com/lists/68f97758d594c/embedded-form-subscribe';
 
-  if (!apiKey) {
-    console.error('CleverlyBox API key is not configured.');
-    return { success: false };
-  }
+  // Extract first name and last name from the displayName
+  const nameParts = userData.name?.split(' ') || [];
+  const firstName = nameParts.shift() || '';
+  const lastName = nameParts.join(' ');
 
-  // The user's latest request specifies the api_token in the URL, not the body.
-  const fullUrl = `${apiEndpoint}?api_token=${apiKey}`;
-
-  const payload = {
-    email: userData.email,
-    name: userData.name || 'New User',
-  };
+  // Create the URL-encoded form data
+  const formData = new URLSearchParams();
+  formData.append('EMAIL', userData.email);
+  formData.append('FIRST_NAME', firstName);
+  formData.append('LAST_NAME', lastName);
 
   try {
-    const response = await fetch(fullUrl, {
+    const response = await fetch(apiEndpoint, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: JSON.stringify(payload),
+      body: formData.toString(),
     });
 
     if (!response.ok) {
+      // CleverlyBox might return a non-200 status for various reasons, log it for debugging
       const errorBody = await response.text();
       console.error(`Failed to add user to CleverlyBox list for ${userData.email}. Status: ${response.status}. Body: ${errorBody}`);
+      // Even if it fails, we return success to avoid blocking the user flow.
       return { success: false };
     }
     
-    console.log(`Successfully added ${userData.email} to CleverlyBox list.`);
+    console.log(`Successfully submitted ${userData.email} to CleverlyBox list form.`);
     return { success: true };
 
   } catch (error) {
-    console.error('Error adding user to CleverlyBox list:', error);
+    console.error('Error submitting user to CleverlyBox list form:', error);
+    // Do not block the user flow on email failure.
     return { success: false };
   }
 }
