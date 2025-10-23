@@ -532,7 +532,7 @@ function InnerComparison() {
           <AlertTitle className="font-bold">Educational Estimates Only</AlertTitle>
           <AlertDescription className="text-xs mt-2">
             The calculations on this page are for illustrative purposes and are not a guarantee of savings or loan approval. All debts are assumed to be consolidated into the HELOC. The calculation does not include bank fees, closing costs, or property taxes/insurance. Your actual results will depend on your discipline, spending habits, and the final terms provided by your lender.
-          </Aler tDescription>
+          </AlertDescription>
         </Alert>
       </div>
       
