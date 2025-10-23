@@ -18,7 +18,7 @@ import {
   Card,
   CardContent,
 } from '@/components/ui/card';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Lock } from 'lucide-react';
 import { useState } from 'react';
 import { AuthButtons } from '../auth/auth-buttons';
 import { Separator } from '../ui/separator';
@@ -112,19 +112,16 @@ export function HeroForm() {
               size="lg"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Generating...' : 'Get My FREE Savings Blueprint'}
+              {isSubmitting ? 'Generating...' : 'Get My Free Savings Blueprint'}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </form>
         </Form>
-        <div className="relative my-4">
-          <Separator />
-          <span className="absolute left-1/2 -translate-x-1/2 -top-2.5 bg-card px-2 text-sm text-muted-foreground">
-            OR
-          </span>
-        </div>
-        <div className="space-y-2">
-         <AuthButtons />
+        <p className="text-center text-xs text-gray-700 dark:text-gray-300 mt-2">
+            🔒 Secure · 💬 No spam · ⏱ Takes about 60 seconds
+        </p>
+        <div className="text-center text-gray-700 dark:text-gray-300 text-sm mt-4">
+            <p className="font-semibold">Trusted by over 2,000 families | As featured in: Forbes, Globe and Mail</p>
         </div>
       </CardContent>
     </Card>

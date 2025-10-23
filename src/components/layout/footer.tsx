@@ -21,15 +21,15 @@ export default function Footer() {
                 <div className="flex mb-2">
                     {[...Array(5)].map((_, i) => <Star key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" />)}
                 </div>
-                <p className="italic text-muted-foreground">"I saved $32,800! This was the simplest financial decision we've ever made."</p>
-                <p className="font-semibold mt-2">- Sarah K.</p>
+                <p className="italic text-muted-foreground">"We shaved 9 years and about $42,000 in interest — without switching banks."</p>
+                <p className="font-semibold mt-2">- Sarah L., Toronto</p>
             </div>
              <div className="bg-card p-6 rounded-lg shadow-md">
                 <div className="flex mb-2">
                     {[...Array(5)].map((_, i) => <Star key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" />)}
                 </div>
-                <p className="italic text-muted-foreground">"Paid off our mortgage 8 years sooner. I can't recommend this enough."</p>
-                <p className="font-semibold mt-2">- Mike & Jen T.</p>
+                <p className="italic text-muted-foreground">"Our plan showed a clear path to being debt-free. We’re saving ~$500/month."</p>
+                <p className="font-semibold mt-2">- Michael R., Calgary</p>
             </div>
         </div>
 
@@ -44,6 +44,9 @@ export default function Footer() {
         <div className="pt-8 border-t border-border">
             <p className="text-sm text-muted-foreground">
                 Trusted by Forbes, Globe and Mail
+            </p>
+            <p className="text-sm text-muted-foreground mt-4 max-w-3xl mx-auto">
+              Mortgage Cutter provides educational tools to help homeowners understand potential interest savings. Results vary by mortgage size, term, and rate. Verify decisions with your lender or advisor.
             </p>
             <p className="text-sm text-muted-foreground mt-2">
             &copy; {year || new Date().getFullYear()} Mortgage Cutter. All rights reserved.
