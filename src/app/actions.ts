@@ -19,7 +19,7 @@ export async function getSavingsReport(
 
 export async function sendWelcomeEmail(userData: { name: string; email: string }): Promise<{ success: boolean }> {
   const apiKey = process.env.CLEVERLYBOX_API_KEY;
-  const apiEndpoint = `https://app.cleverlybox.com/api/v1/automations/68f968a48909f/execute`;
+  const apiEndpoint = `https://app.cleverlybox.com/api/v1/lists/68f9f758d594c/add`;
 
   if (!apiKey) {
     console.error('CleverlyBox API key is not configured.');
@@ -29,7 +29,7 @@ export async function sendWelcomeEmail(userData: { name: string; email: string }
   const payload = {
     api_token: apiKey,
     email: userData.email,
-    name: userData.name,
+    name: userData.name || 'New User',
   };
 
   try {
@@ -44,15 +44,15 @@ export async function sendWelcomeEmail(userData: { name: string; email: string }
 
     if (!response.ok) {
       const errorBody = await response.text();
-      console.error(`Failed to send welcome email to ${userData.email}. Status: ${response.status}. Body: ${errorBody}`);
+      console.error(`Failed to add user to CleverlyBox list for ${userData.email}. Status: ${response.status}. Body: ${errorBody}`);
       return { success: false };
     }
     
-    console.log(`Welcome email automation successfully triggered for ${userData.email}`);
+    console.log(`Successfully added ${userData.email} to CleverlyBox list.`);
     return { success: true };
 
   } catch (error) {
-    console.error('Error triggering welcome email automation:', error);
+    console.error('Error adding user to CleverlyBox list:', error);
     return { success: false };
   }
 }
