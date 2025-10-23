@@ -19,6 +19,7 @@ export async function getSavingsReport(
 
 export async function sendWelcomeEmail(userData: { name: string; email: string }): Promise<{ success: boolean }> {
   const apiKey = process.env.CLEVERLYBOX_API_KEY;
+  // Note: The list ID was corrected from the user's prompt as per previous iterations.
   const apiEndpoint = `https://app.cleverlybox.com/api/v1/lists/68f9f758d594c/add`;
 
   if (!apiKey) {
@@ -26,14 +27,16 @@ export async function sendWelcomeEmail(userData: { name: string; email: string }
     return { success: false };
   }
 
+  // The user's latest request specifies the api_token in the URL, not the body.
+  const fullUrl = `${apiEndpoint}?api_token=${apiKey}`;
+
   const payload = {
-    api_token: apiKey,
     email: userData.email,
     name: userData.name || 'New User',
   };
 
   try {
-    const response = await fetch(apiEndpoint, {
+    const response = await fetch(fullUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
