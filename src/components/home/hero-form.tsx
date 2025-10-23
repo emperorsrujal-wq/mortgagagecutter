@@ -18,7 +18,7 @@ import {
   Card,
   CardContent,
 } from '@/components/ui/card';
-import { ArrowRight, Lock } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useState } from 'react';
 import { AuthButtons } from '../auth/auth-buttons';
 import { Separator } from '../ui/separator';
@@ -45,7 +45,6 @@ async function subscribeToEmailService(values: z.infer<typeof formSchema>) {
 export function HeroForm() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [step, setStep] = useState<'collectEmail' | 'auth'>('collectEmail');
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -58,80 +57,75 @@ export function HeroForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     await subscribeToEmailService(values);
-    setIsSubmitting(false);
-    setStep('auth');
+    router.push('/questionnaire');
   }
 
   return (
     <Card className="w-full max-w-md shadow-2xl bg-card/90 backdrop-blur-sm">
       <CardContent className="pt-6">
-        {step === 'collectEmail' ? (
-          <>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="sr-only">Your Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Your Name"
-                          {...field}
-                          disabled={isSubmitting}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="sr-only">Email Address</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="email"
-                          placeholder="Email Address"
-                          {...field}
-                          disabled={isSubmitting}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button
-                  type="submit"
-                  className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
-                  size="lg"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? 'Generating...' : 'Get My Free Savings Blueprint'}
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </form>
-            </Form>
-            <p className="text-center text-xs text-gray-700 dark:text-gray-300 mt-2">
-                🔒 Secure · 💬 No spam · ⏱ Takes about 60 seconds
-            </p>
-            <div className="text-center text-gray-700 dark:text-gray-300 text-sm mt-4">
-                <p className="font-semibold">Trusted by over 2,000 families | As featured in: Forbes, Globe and Mail</p>
-            </div>
-          </>
-        ) : (
-          <div className="space-y-4">
-            <p className="text-center font-semibold">Almost there! Sign up to see your results.</p>
-            <AuthButtons />
-            <Separator className="my-4" />
-            <p className="text-xs text-muted-foreground text-center">
-              By signing up, you agree to our Terms of Service. Your personalized results will be available immediately after.
-            </p>
-          </div>
-        )}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="sr-only">Your Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Your Name"
+                      {...field}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="sr-only">Email Address</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="Email Address"
+                      {...field}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button
+              type="submit"
+              className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
+              size="lg"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Generating...' : 'Get My Free Savings Blueprint'}
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </form>
+        </Form>
+        
+        <div className="flex items-center my-4">
+            <div className="flex-grow border-t border-muted-foreground/20"></div>
+            <span className="flex-shrink mx-4 text-xs font-semibold text-muted-foreground">OR</span>
+            <div className="flex-grow border-t border-muted-foreground/20"></div>
+        </div>
+
+        <AuthButtons />
+
+        <p className="text-center text-xs text-gray-700 dark:text-gray-300 mt-4">
+            (no credit card needed, no obligation)
+        </p>
+        <div className="text-center text-gray-700 dark:text-gray-300 text-sm mt-4">
+            <p className="font-semibold">Trusted by over 2,000 families | As featured in: Forbes, Globe and Mail</p>
+        </div>
       </CardContent>
     </Card>
   );
