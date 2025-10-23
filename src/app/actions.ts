@@ -3,62 +3,6 @@
 
 import { estimate } from '@/lib/mortgage';
 import type { Inputs, Outputs } from '@/lib/mortgage-types';
-import { headers } from 'next/headers';
-import { redirect } from 'next/navigation';
-import Stripe from 'stripe';
-
-const getStripe = () => {
-  const secretKey = process.env.STRIPE_SECRET_KEY;
-  if (!secretKey) {
-    // This will provide a more informative error if the environment variable is missing.
-    throw new Error('The Stripe secret key is not set. Please set the STRIPE_SECRET_KEY environment variable.');
-  }
-  const stripe = new Stripe(secretKey);
-  return stripe;
-};
-
-
-export async function createStripeCheckoutSession(product: { name: string; description: string; priceInCents: number }) {
-  const stripe = getStripe();
-  const headersList = headers();
-  const origin = headersList.get('origin') || 'https://mortgagecutter.com';
-
-  try {
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: [
-        {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: product.name,
-              description: product.description,
-            },
-            unit_amount: product.priceInCents,
-          },
-          quantity: 1,
-        },
-      ],
-      mode: 'payment',
-      success_url: `${origin}/method-access`,
-      cancel_url: `${origin}/purchase`,
-    });
-
-    if (session.url) {
-      redirect(session.url);
-    } else {
-      throw new Error('Stripe session URL not found.');
-    }
-
-  } catch (error) {
-    console.error('Error creating Stripe checkout session:', error);
-    const message = error instanceof Error ? error.message : 'An unknown error occurred.';
-    // In a real app, you might redirect to an error page.
-    // For now, we'll redirect back to purchase with an error query.
-    redirect(`/purchase?error=${encodeURIComponent(message)}`);
-  }
-}
-
 
 export async function getSavingsReport(
   data: Inputs

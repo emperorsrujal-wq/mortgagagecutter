@@ -1,7 +1,6 @@
 
 'use client';
 
-import { Suspense, useMemo } from 'react';
 import {
   Card,
   CardContent,
@@ -12,10 +11,7 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Lock } from 'lucide-react';
-import { createStripeCheckoutSession } from '@/app/actions';
-import { useSearchParams } from 'next/navigation';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react';
+import Link from 'next/link';
 
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
@@ -35,59 +31,14 @@ const breadcrumbSchema = {
   ],
 };
 
-const productPlans: Record<string, { name: string; description: string; priceInCents: number }> = {
-  'pro_197': {
-    name: 'Mortgage Cutter Pro (Discounted)',
-    description: 'Lifetime access to the complete Mortgage Cutter toolkit and guides.',
-    priceInCents: 19700,
-  },
-  'pro_297': {
-    name: 'Mortgage Cutter Pro',
-    description: 'Lifetime access to the complete Mortgage Cutter toolkit and guides.',
-    priceInCents: 29700,
-  },
-  'elite_997': {
-    name: 'Mortgage Cutter Elite',
-    description: 'All of Pro, plus a private onboarding call and priority support.',
-    priceInCents: 99700,
-  },
-  'default': {
-    name: 'Mortgage Cutter Method',
-    description: 'Lifetime access to the complete Mortgage Cutter toolkit and guides.',
-    priceInCents: 7900,
-  },
-};
-
-function PurchaseError() {
-    const searchParams = useSearchParams();
-    const error = searchParams.get('error');
-
-    if (!error) {
-        return null;
-    }
-
-    return (
-        <Alert variant="destructive" className="mb-4">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Payment Error</AlertTitle>
-            <AlertDescription>
-                Something went wrong. Please try again.
-            </AlertDescription>
-        </Alert>
-    );
-}
+const PAYMENT_LINK = 'https://buy.stripe.com/test_9B6bJ33Jd4FFeAfdbVfUQ00';
 
 function PurchaseForm() {
-    const searchParams = useSearchParams();
-    const plan = searchParams.get('plan') || 'default';
-    const product = useMemo(() => {
-        return productPlans[plan] || productPlans['default'];
-    }, [plan]);
-
-    const priceFormatted = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-    }).format(product.priceInCents / 100);
+    const product = {
+        name: 'Mortgage Cutter Method',
+        description: 'Lifetime access to the complete Mortgage Cutter toolkit and guides.',
+        priceFormatted: '$79'
+    };
 
     return (
         <Card className="max-w-lg mx-auto shadow-lg">
@@ -99,25 +50,22 @@ function PurchaseForm() {
                     {product.description}
                 </CardDescription>
             </CardHeader>
-            <form action={() => createStripeCheckoutSession(product)}>
-                <CardContent>
-                    <Suspense fallback={null}>
-                        <PurchaseError />
-                    </Suspense>
-                    <p className="text-sm text-center text-muted-foreground">
-                        You will be redirected to our secure payment partner, Stripe, to complete your purchase.
-                    </p>
-                </CardContent>
-                <CardFooter className="flex flex-col gap-4">
-                    <Button type="submit" size="lg" className="w-full">
-                        <Lock className="mr-2 h-4 w-4" />
-                        Get Instant Access for {priceFormatted}
-                    </Button>
-                    <p className="text-xs text-muted-foreground">
-                        100% Secure Payment. Instant Access.
-                    </p>
-                </CardFooter>
-            </form>
+            <CardContent>
+                <p className="text-sm text-center text-muted-foreground">
+                    You will be redirected to our secure payment partner, Stripe, to complete your purchase.
+                </p>
+            </CardContent>
+            <CardFooter className="flex flex-col gap-4">
+                <Button asChild size="lg" className="w-full">
+                  <Link href={PAYMENT_LINK}>
+                    <Lock className="mr-2 h-4 w-4" />
+                    Get Instant Access for {product.priceFormatted}
+                  </Link>
+                </Button>
+                <p className="text-xs text-muted-foreground">
+                    100% Secure Payment. Instant Access.
+                </p>
+            </CardFooter>
         </Card>
     );
 }
@@ -130,9 +78,7 @@ export default function PurchasePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <div className="container mx-auto py-12 px-4">
-        <Suspense fallback={<div>Loading...</div>}>
-            <PurchaseForm />
-        </Suspense>
+        <PurchaseForm />
       </div>
     </>
   );
