@@ -8,9 +8,12 @@ import { redirect } from 'next/navigation';
 import Stripe from 'stripe';
 
 const getStripe = () => {
-  // Ensure the Stripe secret key is set in your environment variables.
-  // The exclamation mark tells TypeScript that we are sure this value is not null.
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+  const secretKey = process.env.STRIPE_SECRET_KEY;
+  if (!secretKey) {
+    // This will provide a more informative error if the environment variable is missing.
+    throw new Error('The Stripe secret key is not set. Please set the STRIPE_SECRET_KEY environment variable.');
+  }
+  const stripe = new Stripe(secretKey);
   return stripe;
 };
 
