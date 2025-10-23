@@ -23,13 +23,13 @@ export async function sendWelcomeEmail(userData: { name: string; email: string }
   // Extract first name and last name from the displayName
   const nameParts = userData.name?.split(' ') || [];
   const firstName = nameParts.shift() || '';
-  const lastName = nameParts.join(' ');
+  const lastName = nameParts.join(' '); // Keep for now, but won't be sent
 
   // Create the URL-encoded form data
   const formData = new URLSearchParams();
   formData.append('EMAIL', userData.email);
   formData.append('FIRST_NAME', firstName);
-  formData.append('LAST_NAME', lastName);
+  // No longer sending LAST_NAME as per new requirement.
 
   try {
     const response = await fetch(apiEndpoint, {
@@ -40,16 +40,16 @@ export async function sendWelcomeEmail(userData: { name: string; email: string }
       body: formData.toString(),
     });
 
-    if (!response.ok) {
-      // CleverlyBox might return a non-200 status for various reasons, log it for debugging
-      const errorBody = await response.text();
-      console.error(`Failed to add user to CleverlyBox list for ${userData.email}. Status: ${response.status}. Body: ${errorBody}`);
-      // Even if it fails, we return success to avoid blocking the user flow.
-      return { success: false };
+    if (response.ok) {
+      console.log(`Successfully submitted ${userData.email} to CleverlyBox list form.`);
+      return { success: true };
     }
-    
-    console.log(`Successfully submitted ${userData.email} to CleverlyBox list form.`);
-    return { success: true };
+
+    // Handle non-ok responses
+    const errorBody = await response.text();
+    console.error(`Failed to add user to CleverlyBox list for ${userData.email}. Status: ${response.status}. Body: ${errorBody}`);
+    // Even if it fails, we return success to avoid blocking the user flow.
+    return { success: false };
 
   } catch (error) {
     console.error('Error submitting user to CleverlyBox list form:', error);
