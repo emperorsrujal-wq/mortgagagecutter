@@ -395,8 +395,8 @@ function InnerComparison() {
                         {showShareBasic && <ShareButtons />}
                     </CardContent>
                     <CardFooter>
-                         <Button variant="secondary" className="w-full" onClick={() => setShowShareBasic(!showShareBasic)}>
-                           {showShareBasic ? 'Hide Share Options' : 'Share to Unlock'}
+                         <Button asChild variant="secondary" className="w-full">
+                           <Link href="/purchase?plan=basic_39_monthly">Buy Basic</Link>
                          </Button>
                     </CardFooter>
                 </Card>
@@ -499,15 +499,14 @@ function InnerComparison() {
             </CardHeader>
             <CardContent className="grid md:grid-cols-3 gap-6 items-center">
                 <div className="md:col-span-2">
-                    <p className="font-semibold mb-2">Your Progress: <span className="text-primary">0 / 5 Referrals</span></p>
+                    <p className="font-semibold mb-2">Your Progress: <span className="text-primary">{proReferralCount} / 5 Referrals</span></p>
                     <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                        <div className="bg-primary h-2.5 rounded-full" style={{width: "5%"}}></div>
+                        <div className="bg-primary h-2.5 rounded-full" style={{width: `${(proReferralCount/5)*100}%`}}></div>
                     </div>
                     <p className="text-xs text-muted-foreground mt-2">Referrals are counted when a friend signs up for any paid plan.</p>
                 </div>
                 <div className="flex gap-2">
-                    <Button variant="outline"><MessageCircle className="h-4 w-4 mr-2" /> Share via Text</Button>
-                    <Button variant="outline"><Share2 className="h-4 w-4" /></Button>
+                    <Button variant="outline" onClick={() => setShowSharePro(true)}><Share2 className="h-4 w-4 mr-2" /> Share Now</Button>
                 </div>
             </CardContent>
         </Card>
@@ -539,7 +538,7 @@ function InnerComparison() {
       {/* --- STICKY CTA ON MOBILE --- */}
       <div className="md:hidden sticky bottom-0 bg-background/80 backdrop-blur-sm p-4 border-t w-full">
          <Button asChild size="lg" className="w-full">
-            <Link href="/purchase?plan=pro_297">Start Your Journey to Freedom</Link>
+            <Link href={`/purchase?plan=${proPlanUnlocked ? 'pro_197' : 'pro_297'}`}>Start Your Journey to Freedom</Link>
          </Button>
       </div>
 
