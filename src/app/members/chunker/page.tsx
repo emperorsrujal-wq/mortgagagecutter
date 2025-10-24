@@ -11,12 +11,14 @@ import { Switch } from '@/components/ui/switch';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ResponsiveContainer, LineChart, BarChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { Info, HelpCircle, PiggyBank, Receipt, Rocket, Repeat } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Info, HelpCircle, PiggyBank, Receipt, Rocket, Repeat, Loader2 } from 'lucide-react';
+import { Tooltip, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { pmt } from '@/lib/amort';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useUser } from '@/firebase';
+import { useRouter } from 'next/navigation';
 
 type Step = { title: string; body: string; icon: React.ElementType };
 type QA = { q: string; a: string };
@@ -777,8 +779,17 @@ export default function ChunkerCalculatorPage() {
   const [termMode, setTermMode] = useState<'YEARS' | 'MONTHS'>('YEARS');
   const [termYears, setTermYears] = useState<number>(initial.termMonthsRemaining / 12);
   const [termMonths, setTermMonths] = useState<number>(initial.termMonthsRemaining);
+  const { user, isUserLoading } = useUser();
+  const router = useRouter();
+
 
   const t = i18n[lang] || i18n.en;
+
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      router.push('/');
+    }
+  }, [user, isUserLoading, router]);
 
   useEffect(() => {
     const detectedLang = localStorage.getItem('mc_lang') || navigator.language;
@@ -840,6 +851,14 @@ export default function ChunkerCalculatorPage() {
   const isChunkTooLarge = useMemo(() => {
       return form.chunkMode === 'FIXED' && (form.fixedChunkAmount || 0) > form.helocLimit;
   }, [form]);
+
+  if (isUserLoading || !user) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </div>
+    );
+  }
 
 
   return (
