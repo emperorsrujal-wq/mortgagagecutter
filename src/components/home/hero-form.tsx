@@ -22,10 +22,10 @@ import { ArrowRight, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { AuthButtons } from '../auth/auth-buttons';
 import { Separator } from '../ui/separator';
-import { useAuth, useFirestore } from '@/firebase';
+import { useAuth, initializeFirebase } from '@/firebase';
 import { createUserWithEmailAndPassword, updateProfile, AuthError } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, getFirestore } from 'firebase/firestore';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -36,7 +36,6 @@ export function HeroForm() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const auth = useAuth();
-  const firestore = useFirestore();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -49,27 +48,36 @@ export function HeroForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
+    if (!auth) {
+        toast({
+            variant: "destructive",
+            title: "Authentication service not available",
+            description: "Please try again in a moment.",
+        });
+        setIsSubmitting(false);
+        return;
+    }
     const tempPassword = Math.random().toString(36).slice(-10);
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, tempPassword);
       const user = userCredential.user;
       
-      if (user) {
-        await updateProfile(user, {
-          displayName: values.name,
-        });
+      await updateProfile(user, {
+        displayName: values.name,
+      });
 
-        // Directly trigger the firestore-send-email extension
-        const mailCollection = collection(firestore, 'mail');
-        await addDoc(mailCollection, {
-          to: [values.email],
-          message: {
-            subject: 'Welcome to Mortgage Cutter!',
-            html: `Hi ${values.name || 'there'},<br><br>Thanks for joining Mortgage Cutter. We're excited to help you on your journey to financial freedom.<br><br>You can start by using our free estimator to see your potential savings: <a href="https://mortgagecutter.com/questionnaire">Run Your Numbers Now</a>.<br><br>Best,<br>The Mortgage Cutter Team`,
-          },
-        });
-      }
+      // Direct Firestore initialization to guarantee instance is available
+      const { firestore } = initializeFirebase();
+      const mailCollection = collection(firestore, 'mail');
+      
+      await addDoc(mailCollection, {
+        to: [values.email],
+        message: {
+          subject: 'Welcome to Mortgage Cutter!',
+          html: `Hi ${values.name || 'there'},<br><br>Thanks for joining Mortgage Cutter. We're excited to help you on your journey to financial freedom.<br><br>You can start by using our free estimator to see your potential savings: <a href="https://mortgagecutter.com/questionnaire">Run Your Numbers Now</a>.<br><br>Best,<br>The Mortgage Cutter Team`,
+        },
+      });
       
       router.push('/questionnaire');
 
