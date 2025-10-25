@@ -771,6 +771,7 @@ const InputField = ({ name, label, children, explainer }: { name: string, label:
   </div>
 );
 
+const ADMIN_EMAIL = 'emperorsrujal@gmail.com';
 
 export default function ChunkerCalculatorPage() {
   const [lang, setLang] = useState('en');
@@ -786,6 +787,11 @@ export default function ChunkerCalculatorPage() {
   const t = i18n[lang] || i18n.en;
 
   useEffect(() => {
+    // Super admin check
+    if (user?.email === ADMIN_EMAIL) {
+      return;
+    }
+    
     if (!isUserLoading && !user) {
       router.push('/');
     }
@@ -852,7 +858,7 @@ export default function ChunkerCalculatorPage() {
       return form.chunkMode === 'FIXED' && (form.fixedChunkAmount || 0) > form.helocLimit;
   }, [form]);
 
-  if (isUserLoading || !user) {
+  if (isUserLoading || (!user && user?.email !== ADMIN_EMAIL)) {
     return (
       <div className="flex h-screen items-center justify-center">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -1151,7 +1157,3 @@ export default function ChunkerCalculatorPage() {
     </div>
   );
 }
-
-    
-
-    
