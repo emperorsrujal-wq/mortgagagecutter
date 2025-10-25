@@ -18,33 +18,24 @@ import {
   Card,
   CardContent,
 } from '@/components/ui/card';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { AuthButtons } from '../auth/auth-buttons';
 import { Separator } from '../ui/separator';
-import { sendWelcomeEmail } from '@/app/actions';
-
+import { useAuth } from '@/firebase';
+import { createUserWithEmailAndPassword, updateProfile, AuthError } from 'firebase/auth';
+import { useToast } from '@/hooks/use-toast';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
   email: z.string().email({ message: 'Please enter a valid email.' }),
 });
 
-async function subscribeToEmailService(values: z.infer<typeof formSchema>) {
-  // This function now triggers the secure server action.
-  // It does not wait for the email to be sent to keep the UI fast.
-  sendWelcomeEmail(values).catch(error => {
-    // The server action already logs errors, but we can log here if needed.
-    console.error("Initiating welcome email failed:", error);
-  });
-
-  // We immediately return true so the UI can proceed.
-  return Promise.resolve(true);
-}
-
 export function HeroForm() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const auth = useAuth();
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -56,8 +47,48 @@ export function HeroForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
-    await subscribeToEmailService(values);
-    router.push('/questionnaire');
+    // Generate a secure temporary password for the user.
+    // They can change this later if a password-change flow is implemented.
+    const tempPassword = Math.random().toString(36).slice(-10);
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, values.email, tempPassword);
+      
+      // The `sendWelcomeEmail` Cloud Function will be triggered automatically by user creation.
+      // We can update the user's profile with their name here.
+      if (userCredential.user) {
+        await updateProfile(userCredential.user, {
+          displayName: values.name,
+        });
+      }
+      
+      // Redirect to the next step
+      router.push('/questionnaire');
+
+    } catch (error) {
+      const authError = error as AuthError;
+      console.error("Firebase Auth Error:", authError.code, authError.message);
+      
+      let title = "An error occurred";
+      let description = "There was an issue creating your account. Please try again.";
+
+      if (authError.code === 'auth/email-already-in-use') {
+        title = "Email already in use";
+        description = "This email is already registered. Please sign in or use a different email.";
+      } else if (authError.code === 'auth/invalid-email') {
+        title = "Invalid Email";
+        description = "Please enter a valid email address.";
+      }
+
+      toast({
+        variant: "destructive",
+        title: title,
+        description: description,
+      });
+
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -106,7 +137,7 @@ export function HeroForm() {
               size="lg"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Generating...' : 'Get My Free Savings Blueprint'}
+              {isSubmitting ? <Loader2 className="animate-spin" /> : 'Get My Free Savings Blueprint'}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </form>

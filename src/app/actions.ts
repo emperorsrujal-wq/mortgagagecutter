@@ -17,6 +17,8 @@ export async function getSavingsReport(
   }
 }
 
+// This function is no longer directly called by the form for the welcome email,
+// as the Cloud Function handles it. It can be kept for other purposes or removed.
 export async function sendWelcomeEmail(userData: { name: string; email: string }): Promise<{ success: boolean }> {
   const apiEndpoint = 'https://app.cleverlybox.com/lists/68f97758d594c/embedded-form-subscribe';
 
