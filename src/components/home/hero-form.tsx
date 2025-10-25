@@ -16,6 +16,7 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { sendWelcomeEmail } from '@/app/actions';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -54,8 +55,10 @@ export function HeroForm() {
       const user = userCredential.user;
 
       // 2. Update the user's profile with their name
-      // This is the event that will trigger our Cloud Function
       await updateProfile(user, { displayName: values.name });
+
+      // 3. Trigger the welcome email via server action
+      await sendWelcomeEmail({ name: values.name, email: values.email });
 
       toast({
         title: 'Account Created!',

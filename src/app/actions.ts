@@ -3,6 +3,8 @@
 
 import { estimate } from '@/lib/mortgage';
 import type { Inputs, Outputs } from '@/lib/mortgage-types';
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { initializeFirebase } from '@/firebase';
 
 export async function getSavingsReport(
   data: Inputs
@@ -17,38 +19,33 @@ export async function getSavingsReport(
   }
 }
 
-// This function is no longer directly called by the form for the welcome email,
-// as the Cloud Function handles it. It can be kept for other purposes or removed.
-export async function sendWelcomeEmail(userData: { name: string; email: string }): Promise<{ success: boolean }> {
-  const apiEndpoint = 'https://app.cleverlybox.com/lists/68f97758d594c/embedded-form-subscribe';
-
-  const nameParts = userData.name?.split(' ') || [];
-  const firstName = nameParts.shift() || '';
-
-  const formData = new URLSearchParams();
-  formData.append('EMAIL', userData.email);
-  formData.append('FIRST_NAME', firstName);
-
+export async function sendWelcomeEmail(userData: { name: string; email: string }): Promise<{ success: boolean; error?: string }> {
+  console.log('Server Action: sendWelcomeEmail triggered for', userData.email);
   try {
-    const response = await fetch(apiEndpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+    // We must get a new instance of firestore for server-side actions.
+    const { firestore } = initializeFirebase();
+    
+    const mailData = {
+      to: [userData.email],
+      template: {
+        name: 'welcome',
+        data: {
+          name: userData.name || 'Homeowner',
+          questionnaire_url: 'https://mortgagecutter.com/questionnaire',
+        },
       },
-      body: formData.toString(),
+    };
+
+    const mailCollection = collection(firestore, 'mail');
+    const writeResult = await addDoc(mailCollection, mailData);
+    
+    console.log(`Successfully created email document ${writeResult.id} for: ${userData.email}`);
+    return { success: true };
+  } catch (error: any) {
+    console.error(`FATAL: Server action could not create email document for ${userData.email}. Error: ${error.message}`, {
+      structuredData: true,
+      error: error
     });
-
-    if (response.ok) {
-      console.log(`Successfully submitted ${userData.email} to CleverlyBox list form.`);
-      return { success: true };
-    }
-
-    const errorBody = await response.text();
-    console.error(`Failed to add user to CleverlyBox list for ${userData.email}. Status: ${response.status}. Body: ${errorBody}`);
-    return { success: false };
-
-  } catch (error) {
-    console.error('Error submitting user to CleverlyBox list form:', error);
-    return { success: false };
+    return { success: false, error: error.message };
   }
 }
