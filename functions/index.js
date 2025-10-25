@@ -20,16 +20,15 @@ exports.sendWelcomeEmail = onUserCreated(async (event) => {
   const mailData = {
     to: [userEmail],
     template: {
-      name: "welcome", // Make sure this matches the template name in your "Trigger Email" extension config
+      name: "welcome",
       data: {
         name: displayName,
-        questionnaire_url: "https://mortgagecutter.com/questionnaire", // Or your actual URL
+        questionnaire_url: "https://mortgagecutter.com/questionnaire",
       },
     },
   };
 
   try {
-    // Add the document to the "mail" collection
     const writeResult = await admin.firestore().collection("mail").add(mailData);
     functions.logger.log(`Successfully created email document ${writeResult.id} for: ${userEmail}`);
   } catch (error) {
