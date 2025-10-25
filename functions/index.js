@@ -4,10 +4,13 @@
 const functions = require("firebase-functions");
 
 /**
- * Triggers when a new user signs up.
- * This is a simplified test function to confirm deployment.
+ * A simple test function to confirm deployment.
+ * This function logs a message when a new user is created.
  */
-exports.sendWelcomeEmail = functions.auth.user().onCreate(async (user) => {
-  functions.logger.log("SUCCESS: sendWelcomeEmail function was triggered for user:", { uid: user.uid, email: user.email });
+exports.sendWelcomeEmail = functions.auth.user().onCreate((user) => {
+  functions.logger.log("SUCCESS: sendWelcomeEmail function was triggered for user:", {
+    uid: user.uid,
+    email: user.email,
+  });
   return null;
 });
