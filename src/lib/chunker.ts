@@ -190,8 +190,8 @@ export function simulate(inputs: Inputs): Outputs {
 
     let chunkApplied = 0;
 
-    // 5) Consider a new chunk only when HELOC is light
-    if (mortgageBal > 0.01 && inputs.readvanceable && (helocLimit - helocBal) > 1000 && helocBal < 100) {
+    // 5) Consider a new chunk only when HELOC is light AND readvanceable
+    if (inputs.readvanceable && mortgageBal > 0.01 && (helocLimit - helocBal) > 1000 && helocBal < 100) {
       const chunk = safeChunkAmount({
         mortgageBal,
         helocBal,
