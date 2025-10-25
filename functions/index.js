@@ -27,11 +27,13 @@ admin.initializeApp();
  * "Trigger Email" Firebase Extension listens to this collection and sends
  * the actual email.
  */
-exports.sendWelcomeEmail = functions.auth.user().onCreate((user) => {
+exports.sendWelcomeEmail = functions.auth.user().onCreate(async (user) => {
+  functions.logger.log("New user signup:", user.uid, "Email:", user.email);
+
   const { email, displayName } = user;
 
   if (!email) {
-    console.log(`User ${user.uid} has no email address. Cannot send welcome email.`);
+    functions.logger.warn(`User ${user.uid} has no email address. Cannot send welcome email.`);
     return null;
   }
 
@@ -51,6 +53,12 @@ exports.sendWelcomeEmail = functions.auth.user().onCreate((user) => {
     },
   };
 
-  // Add the email document to the 'mail' collection.
-  return admin.firestore().collection("mail").add(mailEntry);
+  try {
+    const writeResult = await admin.firestore().collection("mail").add(mailEntry);
+    functions.logger.log("Successfully created mail document:", writeResult.id, "for user:", user.uid);
+    return writeResult;
+  } catch (error) {
+    functions.logger.error("Error creating mail document for user:", user.uid, error);
+    return null;
+  }
 });
