@@ -24,16 +24,15 @@ admin.initializeApp();
  * Triggers when a new user signs up and creates an email document in Firestore.
  */
 exports.sendWelcomeEmail = functions.auth.user().onCreate(async (user) => {
-  functions.logger.log("Function triggered for new user:", user.uid, "Email:", user.email);
+  functions.logger.log("Function triggered for new user:", { uid: user.uid, email: user.email });
 
-  const { email, displayName } = user;
-
-  if (!email) {
+  if (!user.email) {
     functions.logger.warn(`User ${user.uid} has no email address. Cannot create mail document.`);
     return null;
   }
 
-  // Define the email content that the "Trigger Email" extension will use.
+  const { email, displayName } = user;
+
   const mailEntry = {
     to: [email],
     message: {
@@ -51,11 +50,11 @@ exports.sendWelcomeEmail = functions.auth.user().onCreate(async (user) => {
 
   try {
     const writeResult = await admin.firestore().collection("mail").add(mailEntry);
-    functions.logger.log("Successfully created mail document:", writeResult.id, "for user:", user.uid);
+    functions.logger.log("SUCCESS: Mail document created successfully.", { docId: writeResult.id, userId: user.uid });
     return writeResult;
   } catch (error) {
-    functions.logger.error("Error creating mail document for user:", user.uid, error);
-    // Throwing the error can make it more visible in logs
-    throw new functions.https.HttpsError('internal', 'Failed to create mail document.', error);
+    functions.logger.error("FATAL ERROR: Failed to create mail document in Firestore.", { userId: user.uid, error: error.message });
+    // This error is critical because if this fails, the extension will never see the email request.
+    throw new functions.https.HttpsError('internal', 'Failed to write to Firestore.', error);
   }
 });
