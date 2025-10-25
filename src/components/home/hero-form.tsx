@@ -22,9 +22,10 @@ import { ArrowRight, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { AuthButtons } from '../auth/auth-buttons';
 import { Separator } from '../ui/separator';
-import { useAuth } from '@/firebase';
+import { useAuth, useFirestore } from '@/firebase';
 import { createUserWithEmailAndPassword, updateProfile, AuthError } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
+import { collection, addDoc } from 'firebase/firestore';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -35,6 +36,7 @@ export function HeroForm() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const auth = useAuth();
+  const firestore = useFirestore();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -47,22 +49,28 @@ export function HeroForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
-    // Generate a secure temporary password for the user.
-    // They can change this later if a password-change flow is implemented.
     const tempPassword = Math.random().toString(36).slice(-10);
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, tempPassword);
+      const user = userCredential.user;
       
-      // The `sendWelcomeEmail` Cloud Function will be triggered automatically by user creation.
-      // We can update the user's profile with their name here.
-      if (userCredential.user) {
-        await updateProfile(userCredential.user, {
+      if (user) {
+        await updateProfile(user, {
           displayName: values.name,
+        });
+
+        // Directly trigger the firestore-send-email extension
+        const mailCollection = collection(firestore, 'mail');
+        await addDoc(mailCollection, {
+          to: [values.email],
+          message: {
+            subject: 'Welcome to Mortgage Cutter!',
+            html: `Hi ${values.name || 'there'},<br><br>Thanks for joining Mortgage Cutter. We're excited to help you on your journey to financial freedom.<br><br>You can start by using our free estimator to see your potential savings: <a href="https://mortgagecutter.com/questionnaire">Run Your Numbers Now</a>.<br><br>Best,<br>The Mortgage Cutter Team`,
+          },
         });
       }
       
-      // Redirect to the next step
       router.push('/questionnaire');
 
     } catch (error) {
@@ -78,6 +86,9 @@ export function HeroForm() {
       } else if (authError.code === 'auth/invalid-email') {
         title = "Invalid Email";
         description = "Please enter a valid email address.";
+      } else if (authError.code === 'auth/network-request-failed') {
+        title = "Network Error";
+        description = "Could not connect to Firebase. Please check your internet connection.";
       }
 
       toast({
