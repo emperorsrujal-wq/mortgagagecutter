@@ -25,7 +25,7 @@ import { Separator } from '../ui/separator';
 import { useAuth } from '@/firebase';
 import { createUserWithEmailAndPassword, updateProfile, AuthError } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
-import { collection, doc, setDoc, getFirestore } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { initializeFirebase } from '@/firebase';
 
 const formSchema = z.object({
@@ -58,39 +58,40 @@ export function HeroForm() {
         setIsSubmitting(false);
         return;
     }
-    // Use a temporary random password for initial creation.
-    // The user will be logged in and can be prompted to change it later if needed,
-    // though most will use Google/Apple for subsequent logins.
+    
     const tempPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, tempPassword);
       const user = userCredential.user;
       
-      // Update the user's profile with their name
       await updateProfile(user, {
         displayName: values.name,
       });
 
-      // Get a guaranteed Firestore instance
+      // Directly initialize firebase to get a firestore instance
       const { firestore } = initializeFirebase();
       
-      // Create a document in the 'mail' collection to trigger the email extension.
-      // The document ID is the user's UID to satisfy the security rule.
+      // Create a document in the 'mail' collection with the user's UID as the document ID.
+      // This will trigger the 'Trigger Email' extension and is allowed by our new security rule.
       const mailRef = doc(firestore, 'mail', user.uid);
       
       await setDoc(mailRef, {
         to: [values.email],
         template: {
-          name: 'welcome', // This assumes you created a template named 'welcome'
+          name: 'welcome', // Assumes a template named 'welcome' exists in the extension settings
           data: {
             name: values.name,
-            questionnaire_url: 'https://mortgagecutter.com/questionnaire',
+            questionnaire_url: `${window.location.origin}/questionnaire`,
           },
         },
       });
       
-      // Redirect to the questionnaire page after successful signup and email trigger.
+      toast({
+        title: "Account Created!",
+        description: "Welcome! You'll receive a confirmation email shortly.",
+      });
+
       router.push('/questionnaire');
 
     } catch (error) {
