@@ -22,10 +22,11 @@ import { ArrowRight, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { AuthButtons } from '../auth/auth-buttons';
 import { Separator } from '../ui/separator';
-import { useAuth, initializeFirebase } from '@/firebase';
+import { useAuth } from '@/firebase';
 import { createUserWithEmailAndPassword, updateProfile, AuthError } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
-import { collection, addDoc, getFirestore } from 'firebase/firestore';
+import { collection, doc, setDoc, getFirestore } from 'firebase/firestore';
+import { initializeFirebase } from '@/firebase';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -57,28 +58,39 @@ export function HeroForm() {
         setIsSubmitting(false);
         return;
     }
-    const tempPassword = Math.random().toString(36).slice(-10);
+    // Use a temporary random password for initial creation.
+    // The user will be logged in and can be prompted to change it later if needed,
+    // though most will use Google/Apple for subsequent logins.
+    const tempPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, tempPassword);
       const user = userCredential.user;
       
+      // Update the user's profile with their name
       await updateProfile(user, {
         displayName: values.name,
       });
 
-      // Direct Firestore initialization to guarantee instance is available
+      // Get a guaranteed Firestore instance
       const { firestore } = initializeFirebase();
-      const mailCollection = collection(firestore, 'mail');
       
-      await addDoc(mailCollection, {
+      // Create a document in the 'mail' collection to trigger the email extension.
+      // The document ID is the user's UID to satisfy the security rule.
+      const mailRef = doc(firestore, 'mail', user.uid);
+      
+      await setDoc(mailRef, {
         to: [values.email],
-        message: {
-          subject: 'Welcome to Mortgage Cutter!',
-          html: `Hi ${values.name || 'there'},<br><br>Thanks for joining Mortgage Cutter. We're excited to help you on your journey to financial freedom.<br><br>You can start by using our free estimator to see your potential savings: <a href="https://mortgagecutter.com/questionnaire">Run Your Numbers Now</a>.<br><br>Best,<br>The Mortgage Cutter Team`,
+        template: {
+          name: 'welcome', // This assumes you created a template named 'welcome'
+          data: {
+            name: values.name,
+            questionnaire_url: 'https://mortgagecutter.com/questionnaire',
+          },
         },
       });
       
+      // Redirect to the questionnaire page after successful signup and email trigger.
       router.push('/questionnaire');
 
     } catch (error) {
