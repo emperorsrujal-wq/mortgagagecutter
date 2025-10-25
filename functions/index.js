@@ -9,38 +9,33 @@ admin.initializeApp();
 
 exports.sendWelcomeEmail = onUserCreated(async (event) => {
   const user = event.data;
+  const userEmail = user.email;
+  const displayName = user.displayName || 'Homeowner';
 
-  functions.logger.log("v2: Attempting to send welcome email for user:", {
-    uid: user.uid,
-    email: user.email,
-  });
-
-  if (!user.email) {
-    functions.logger.log("No email found for user, cannot send welcome email.");
+  if (!userEmail) {
+    functions.logger.log(`Welcome email not sent for UID ${user.uid} because email is missing.`);
     return;
   }
 
-  const recipientName = user.displayName || 'Homeowner';
-
   const mailData = {
-    to: [user.email],
+    to: [userEmail],
     template: {
-      name: "welcome",
+      name: "welcome", // Make sure this matches the template name in your "Trigger Email" extension config
       data: {
-        name: recipientName,
-        questionnaire_url: "https://mortgagecutter.com/questionnaire",
+        name: displayName,
+        questionnaire_url: "https://mortgagecutter.com/questionnaire", // Or your actual URL
       },
     },
   };
 
   try {
-    await admin.firestore().collection("mail").add(mailData);
-    functions.logger.log("SUCCESS: v2: Welcome email document created in Firestore for:", user.email);
+    // Add the document to the "mail" collection
+    const writeResult = await admin.firestore().collection("mail").add(mailData);
+    functions.logger.log(`Successfully created email document ${writeResult.id} for: ${userEmail}`);
   } catch (error) {
-    functions.logger.error("FATAL ERROR: v2: Could not create email document in Firestore:", {
-      email: user.email,
-      error: error.message,
-      stack: error.stack,
+    functions.logger.error(`FATAL: Could not create email document for ${userEmail}. Error: ${error.message}`, {
+      structuredData: true,
+      error: error
     });
   }
 });
