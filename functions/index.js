@@ -1,4 +1,3 @@
-
 "use strict";
 
 const functions = require("firebase-functions");
@@ -23,7 +22,7 @@ exports.sendWelcomeEmail = functions.auth.user().onCreate(async (user) => {
   const mailData = {
     to: [user.email],
     template: {
-      name: "welcome",
+      name: "welcome", // This matches the "welcome" template in the mail collection
       data: {
         name: recipientName,
         questionnaire_url: "https://mortgagecutter.com/questionnaire",

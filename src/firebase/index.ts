@@ -1,23 +1,22 @@
-
 'use client';
 
 import { firebaseConfig } from '@/firebase/config';
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore'
+import { getAuth, Auth } from 'firebase/auth';
+import { getFirestore, Firestore } from 'firebase/firestore';
 
 // IMPORTANT: DO NOT MODIFY THIS FUNCTION
-export function initializeFirebase() {
-  if (!getApps().length) {
-    // We are not in an App Hosting environment, so we initialize with the config object
-    const firebaseApp = initializeApp(firebaseConfig);
-    return getSdks(firebaseApp);
-  }
-
-  // If already initialized (e.g. in App Hosting), return the SDKs with the already initialized App
-  return getSdks(getApp());
+export function initializeFirebase(): { firebaseApp: FirebaseApp; auth: Auth; firestore: Firestore } {
+  // This is the idiomatic way to initialize Firebase in Next.js.
+  // It ensures that we don't try to initialize the app more than once.
+  const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+  const auth = getAuth(app);
+  const firestore = getFirestore(app);
+  
+  return { firebaseApp: app, auth, firestore };
 }
 
+// This function is kept for legacy compatibility but should not be used directly.
 export function getSdks(firebaseApp: FirebaseApp) {
   return {
     firebaseApp,
@@ -25,6 +24,7 @@ export function getSdks(firebaseApp: FirebaseApp) {
     firestore: getFirestore(firebaseApp)
   };
 }
+
 
 export * from './provider';
 export * from './client-provider';
