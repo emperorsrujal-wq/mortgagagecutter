@@ -1,3 +1,4 @@
+
 /**
  * Copyright 2022 Google Inc. All Rights Reserved.
  *
@@ -20,24 +21,19 @@ const admin = require("firebase-admin");
 admin.initializeApp();
 
 /**
- * Triggers when a new user signs up and sends them a welcome email.
- *
- * This function is triggered by Firebase Authentication's `onCreate` event.
- * It creates a new document in the `mail` collection in Firestore. The
- * "Trigger Email" Firebase Extension listens to this collection and sends
- * the actual email.
+ * Triggers when a new user signs up and creates an email document in Firestore.
  */
 exports.sendWelcomeEmail = functions.auth.user().onCreate(async (user) => {
-  functions.logger.log("New user signup:", user.uid, "Email:", user.email);
+  functions.logger.log("Function triggered for new user:", user.uid, "Email:", user.email);
 
   const { email, displayName } = user;
 
   if (!email) {
-    functions.logger.warn(`User ${user.uid} has no email address. Cannot send welcome email.`);
+    functions.logger.warn(`User ${user.uid} has no email address. Cannot create mail document.`);
     return null;
   }
 
-  // The email document to be saved in the `mail` collection.
+  // Define the email content that the "Trigger Email" extension will use.
   const mailEntry = {
     to: [email],
     message: {
@@ -59,6 +55,7 @@ exports.sendWelcomeEmail = functions.auth.user().onCreate(async (user) => {
     return writeResult;
   } catch (error) {
     functions.logger.error("Error creating mail document for user:", user.uid, error);
-    return null;
+    // Throwing the error can make it more visible in logs
+    throw new functions.https.HttpsError('internal', 'Failed to create mail document.', error);
   }
 });
