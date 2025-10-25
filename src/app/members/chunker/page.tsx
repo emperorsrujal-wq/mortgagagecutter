@@ -8,10 +8,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Switch } from '@/components/ui/switch';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { ResponsiveContainer, LineChart, BarChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { Info, HelpCircle, PiggyBank, Receipt, Rocket, Repeat, Loader2 } from 'lucide-react';
+import { Info, HelpCircle, PiggyBank, Receipt, Rocket, Repeat, Loader2, Zap } from 'lucide-react';
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -62,6 +62,9 @@ interface LocalePack {
       },
       placeholderTitle: string;
       placeholderDescription: string;
+      strategyCardTitle: string;
+      arbitrageAlertTitle: string;
+      arbitrageAlertDescription: string;
   };
   disclaimer: string;
   explainers: Record<string, string>;
@@ -118,6 +121,9 @@ const i18n: Record<string, LocalePack> = {
       },
       placeholderTitle: "Your results will appear here.",
       placeholderDescription: "Fill out the form and click 'Calculate' to see your potential savings.",
+      strategyCardTitle: "Strategy Used",
+      arbitrageAlertTitle: "HELOC Arbitrage Mode Activated!",
+      arbitrageAlertDescription: "Your HELOC rate is lower than your mortgage rate. We've automatically engaged a more aggressive strategy, using your cheaper HELOC to pay down your expensive mortgage faster."
     },
     disclaimer: "Educational estimate only. No bank fees, promos, or taxes included. Results improve with positive monthly surplus, readvanceable lines, and batched bill pay.",
     explainers: {
@@ -212,6 +218,9 @@ const i18n: Record<string, LocalePack> = {
       },
       placeholderTitle: "Vos résultats apparaîtront ici.",
       placeholderDescription: "Remplissez le formulaire et cliquez sur 'Calculer' pour voir vos économies potentielles.",
+      strategyCardTitle: "Stratégie utilisée",
+      arbitrageAlertTitle: "Mode d'arbitrage MCH activé !",
+      arbitrageAlertDescription: "Votre taux MCH est inférieur à votre taux hypothécaire. Nous avons automatiquement engagé une stratégie plus agressive, en utilisant votre MCH moins chère pour rembourser plus rapidement votre hypothèque coûteuse."
     },
     disclaimer: "Estimation à titre éducatif uniquement. N'inclut pas les frais bancaires, promotions ou taxes. Les résultats s'améliorent avec un surplus mensuel positif, des marges réutilisables et des paiements de factures groupés.",
     explainers: {
@@ -306,6 +315,9 @@ const i18n: Record<string, LocalePack> = {
       },
       placeholderTitle: "Tus resultados aparecerán aquí.",
       placeholderDescription: "Completa el formulario y haz clic en 'Calcular' para ver tus posibles ahorros.",
+      strategyCardTitle: "Estrategia Utilizada",
+      arbitrageAlertTitle: "¡Modo de Arbitraje HELOC Activado!",
+      arbitrageAlertDescription: "La tasa de su HELOC es más baja que la de su hipoteca. Hemos activado automáticamente una estrategia más agresiva, utilizando su HELOC más barata para pagar su hipoteca más cara más rápido."
     },
     disclaimer: "Estimación solo para fines educativos. No incluye comisiones bancarias, promociones o impuestos. Los resultados mejoran con un superávit mensual positivo, líneas readmisibles y pagos de facturas agrupados.",
     explainers: {
@@ -400,6 +412,9 @@ const i18n: Record<string, LocalePack> = {
         },
         placeholderTitle: "Seus resultados aparecerão aqui.",
         placeholderDescription: "Preencha o formulário e clique em 'Calcular' para ver sua economia potencial.",
+        strategyCardTitle: "Estratégia Utilizada",
+        arbitrageAlertTitle: "Modo de Arbitragem HELOC Ativado!",
+        arbitrageAlertDescription: "Sua taxa HELOC é menor que a taxa da sua hipoteca. Ativamos automaticamente uma estratégia mais agressiva, usando seu HELOC mais barato para quitar sua hipoteca cara mais rápido."
     },
     disclaimer: "Estimativa apenas para fins educacionais. Não inclui taxas bancárias, promoções ou impostos. Os resultados melhoram com um superávit mensal positivo, linhas reavançáveis e pagamentos de contas agrupados.",
     explainers: {
@@ -494,6 +509,9 @@ const i18n: Record<string, LocalePack> = {
         },
         placeholderTitle: "आपके परिणाम यहां दिखाई देंगे।",
         placeholderDescription: "संभावित बचत देखने के लिए फ़ॉर्म भरें और 'गणना करें' पर क्लिक करें।",
+        strategyCardTitle: "प्रयुक्त रणनीति",
+        arbitrageAlertTitle: "HELOC आर्बिट्रेज मोड सक्रिय!",
+        arbitrageAlertDescription: "आपकी HELOC दर आपकी मॉर्गेज दर से कम है। हमने स्वचालित रूप से एक अधिक आक्रामक रणनीति अपनाई है, आपकी सस्ती HELOC का उपयोग करके आपकी महंगी मॉर्गेज को तेजी से चुकाने के लिए।"
     },
     disclaimer: "केवल शैक्षिक अनुमान। कोई बैंक शुल्क, प्रोमो या कर शामिल नहीं है। परिणाम सकारात्मक मासिक अधिशेष, पुन: अग्रिम योग्य लाइनों और बैच किए गए बिल भुगतान के साथ बेहतर होते हैं।",
     explainers: {
@@ -526,7 +544,7 @@ const i18n: Record<string, LocalePack> = {
         homeValue: "घर का मूल्य (वैकल्पिक)",
         monthlyMI: "मासिक MI/CMHC (वैकल्पिक)",
         netIncome: "शुद्ध मासिक आय",
-        livingExpenses: "मासिक जीवनयापन व्यय (मॉर्गेज को छोड़कर)",
+        livingExpenses: "मासिक जीवनयापन व्यय (मॉर्geज को छोड़कर)",
         helocAPR: "HELOC APR (%)",
         helocLimit: "HELOC सीमा (अभी उपलब्ध)",
         helocOpeningBalance: "HELOC प्रारंभिक शेष",
@@ -588,6 +606,9 @@ const i18n: Record<string, LocalePack> = {
         },
         placeholderTitle: "ਤੁਹਾਡੇ ਨਤੀਜੇ ਇੱਥੇ ਦਿਖਾਈ ਦੇਣਗੇ।",
         placeholderDescription: "ਸੰਭਾਵੀ ਬੱਚਤ ਦੇਖਣ ਲਈ ਫਾਰਮ ਭਰੋ ਅਤੇ 'ਗਣਨਾ ਕਰੋ' 'ਤੇ ਕਲਿੱਕ ਕਰੋ।",
+        strategyCardTitle: "ਵਰਤੀ ਗਈ ਰਣਨੀਤੀ",
+        arbitrageAlertTitle: "HELOC ਆਰਬਿਟਰੇਜ ਮੋਡ ਐਕਟੀਵੇਟਿਡ!",
+        arbitrageAlertDescription: "ਤੁਹਾਡੀ HELOC ਦਰ ਤੁਹਾਡੀ ਮੌਰਗੇਜ ਦਰ ਤੋਂ ਘੱਟ ਹੈ। ਅਸੀਂ ਸਵੈਚਲਿਤ ਤੌਰ 'ਤੇ ਇੱਕ ਹੋਰ ਹਮਲਾਵਰ ਰਣਨੀਤੀ ਅਪਣਾਈ ਹੈ, ਤੁਹਾਡੀ ਸਸਤੀ HELOC ਦੀ ਵਰਤੋਂ ਕਰਕੇ ਤੁਹਾਡੀ ਮਹਿੰਗੀ ਮੌਰਗੇਜ ਨੂੰ ਤੇਜ਼ੀ ਨਾਲ ਅਦਾ ਕਰਨ ਲਈ।"
     },
     disclaimer: "ਸਿਰਫ ਵਿਦਿਅਕ ਅਨੁਮਾਨ। ਕੋਈ ਬੈਂਕ ਫੀਸ, ਪ੍ਰੋਮੋ ਜਾਂ ਟੈਕਸ ਸ਼ਾਮਲ ਨਹੀਂ ਹਨ। ਨਤੀਜੇ ਸਕਾਰਾਤਮਕ ਮਹੀਨਾਵਾਰ ਵਾਧੂ, ਮੁੜ-ਅਗਾਊਂਯੋਗ ਲਾਈਨਾਂ ਅਤੇ ਬੈਚ ਕੀਤੇ ਬਿੱਲ ਭੁਗਤਾਨ ਨਾਲ ਸੁਧਰਦੇ ਹਨ।",
     explainers: {
@@ -596,8 +617,8 @@ const i18n: Record<string, LocalePack> = {
         termRemaining: "ਤੁਹਾਡੀ ਮੌਜੂਦਾ ਮੌਰਗੇਜ ਵਿੱਚ ਕਿੰਨਾ ਸਮਾਂ ਬਚਿਆ ਹੈ। ਤੁਸੀਂ ਸਾਲਾਂ ਜਾਂ ਮਹੀਨਿਆਂ ਵਿੱਚ ਦਰਜ ਕਰ ਸਕਦੇ ਹੋ।\nਉਦਾਹਰਨ: 25 ਸਾਲ (ਜਾਂ 300 ਮਹੀਨੇ)।",
         monthlyMortgagePayment: "ਸਵੈ-ਗਣਨਾ ਲਈ ਖਾਲੀ ਛੱਡੋ। ਜੇਕਰ ਤੁਹਾਡੇ ਭੁਗਤਾਨ ਵਿੱਚ ਜਾਇਦਾਦ ਟੈਕਸ/ਬੀਮਾ ਸ਼ਾਮਲ ਹੈ, ਤਾਂ ਸਿਰਫ ਕਰਜ਼ਾ ਭੁਗਤਾਨ ਹਿੱਸਾ ਦਰਜ ਕਰੋ।\nਉਦਾਹਰਨ: ਖਾਲੀ ਛੱਡੋ, ਜਾਂ 3,456 ਦਰਜ ਕਰੋ।",
         homeValue: "ਅਨੁਮਾਨਿਤ ਮੌਜੂਦਾ ਬਾਜ਼ਾਰ ਮੁੱਲ। ਸਿਰਫ ਇਹ ਅਨੁਮਾਨ ਲਗਾਉਣ ਲਈ ਵਰਤਿਆ ਜਾਂਦਾ ਹੈ ਕਿ ਮੌਰਗੇਜ ਬੀਮਾ (MI/CMHC) 80% LTV 'ਤੇ ਕਦੋਂ ਖਤਮ ਹੁੰਦਾ ਹੈ।\nਉਦਾਹਰਨ: 750000।",
-        monthlyMI: "ਮਹੀਨਾਵਾਰ ਮੌਰਗੇਜ ਬੀਮਾ (U.S.) ਜਾਂ CMHC ਪ੍ਰੀਮੀਅਮ (ਕੈਨੇਡਾ), ਜੇਕਰ ਤੁਸੀਂ ਭੁਗਤਾਨ ਕਰਦੇ ਹੋ। ਜੇਕਰ ਕੋਈ ਨਹੀਂ ਹੈ ਤਾਂ 0 ਦਰਜ ਕਰੋ।\nਉਦਾਹਰਨ: 120।",
-        netIncome: "ਟੈਕਸਾਂ/ਕਟੌਤੀਆਂ ਤੋਂ ਬਾਅਦ ਹਰ ਮਹੀਨੇ ਘਰ ਲੈ ਜਾਣ ਵਾਲੀ ਤਨਖਾਹ (ਪਰਿਵਾਰਕ ਕੁੱਲ)।\nਉਦਾਹਰਨ: ਤੁਹਾਡੀ ਤਨਖਾਹ ਸਲਿੱਪਾਂ ਟੈਕਸ ਤੋਂ ਬਾਅਦ ਕੁੱਲ $8,900 ਹਨ → 8900 ਦਰਜ ਕਰੋ।",
+        monthlyMI: "ਮਹੀਨਾਵਾਰ ਮੌਰਗੇਜ ਬੀਮਾ (U.S.) ਜਾਂ CMHC ਪ੍ਰੀਮੀਅਮ (ਕੈਨੇਡਾ), ਜੇਕਰ ਤੁਸੀਂ ਭੁਗਤਾਨ ਕਰਦੇ ਹੋ। ਜੇਕਰ ਕੋਈ ਨਹੀਂ ਹੈ ਤਾਂ 0 ਦਰਜ करो।\nਉਦਾਹਰਨ: 120।",
+        netIncome: "ਟੈਕਸਾਂ/ਕਟੌਤੀਆਂ ਤੋਂ ਬਾਅਦ ਹਰ ਮਹੀਨੇ ਘਰ ਲੈ ਜਾਣ ਵਾਲੀ ਤਨਖਾਹ (ਪਰਿਵਾਰਕ ਕੁੱਲ)।\nਉਦਾਹਰਨ: ਤੁਹਾਡੀ ਤਨਖਾਹ ਸਲਿੱਪਾਂ ਟੈਕਸ ਤੋਂ ਬਾਅਦ ਕੁੱਲ $8,900 ਹਨ → 8900 ਦਰਜ करो।",
         livingExpenses: "ਮੌਰਗੇਜ ਭੁਗਤਾਨ ਨੂੰ ਛੱਡ ਕੇ ਸਾਰੇ ਮਹੀਨਾਵਾਰ ਖਰਚੇ: ਸਹੂਲਤਾਂ, ਕਰਿਆਨਾ, ਆਦਿ।\nਉਦਾਹਰਨ: 4300।",
         helocAPR: "ਤੁਹਾਡੇ HELOC ਦੀ ਪਰਿਵਰਤਨਸ਼ੀਲ ਜਾਂ ਸਥਿਰ ਸਾਲਾਨਾ ਦਰ।\nਉਦਾਹਰਨ: 7.25।",
         helocLimit: "ਅੱਜ ਤੁਸੀਂ ਜੋ ਵੱਧ ਤੋਂ ਵੱਧ ਰਕਮ ਕਢਵਾ ਸਕਦੇ ਹੋ (ਕ੍ਰੈਡਿਟ ਸੀਮਾ ਘਟਾਓ ਕੋਈ ਮੌਜੂਦਾ HELOC ਬਕਾਇਆ)।\nਉਦਾਹਰਨ: ਕ੍ਰੈਡਿਟ ਸੀਮਾ 50,000 ਅਤੇ ਮੌਜੂਦਾ ਬਕਾਇਆ 8,500 → 41500 ਦਰਜ ਕਰੋ।",
@@ -607,7 +628,7 @@ const i18n: Record<string, LocalePack> = {
         fixedChunkAmount: "ਹਰ ਵਾਰ ਜਦੋਂ ਅਸੀਂ ਤੁਹਾਡੇ ਮੌਰਗੇਜ ਮੂਲਧਨ ਨੂੰ 'ਇੱਕਮੁਸ਼ਤ' ਕਰਦੇ ਹਾਂ ਤਾਂ HELOC ਤੋਂ ਕਿੰਨੀ ਰਕਮ ਕਢਵਾਉਣੀ ਹੈ।\nਉਦਾਹਰਨ: 10000।",
         billTiming: "ਅਨੁਕੂਲਿਤ = ਤੁਸੀਂ ਇੱਕ ਵਾਰ ਵਿੱਚ ਜ਼ਿਆਦਾਤਰ ਬਿੱਲਾਂ ਨੂੰ ਬੈਚ ਕਰਦੇ ਹੋ, ਜਿਸ ਨਾਲ ਨਕਦ HELOC ਦੇ ਵਿਰੁੱਧ ਜ਼ਿਆਦਾ ਦੇਰ ਤੱਕ ਪਾਰਕ ਰਹਿੰਦਾ ਹੈ। ਆਮ = ਬਿੱਲ ਖਿੰਡੇ ਹੋਏ ਹਨ।",
         chunkModalTitle: "'ਇੱਕਮੁਸ਼ਤ' ਰਣਨੀਤੀ ਕਿਵੇਂ ਕੰਮ ਕਰਦੀ ਹੈ",
-        chunkModalBody: "ਅਸੀਂ ਮੌਰਗੇਜ ਮੂਲਧਨ ਨੂੰ ਘਟਾਉਣ ਲਈ ਇੱਕ ਛੋਟਾ HELOC ਇੱਕਮੁਸ਼ਤ ਕਢਵਾਉਂਦੇ ਹਾਂ, ਫਿਰ ਤੁਹਾਡਾ ਮਹੀਨਾਵਾਰ ਵਾਧੂ HELOC ਦਾ ਭੁਗਤਾਨ ਕਰਦਾ ਹੈ। ਇੱਕ ਵਾਰ HELOC ਬਕਾਇਆ ਜ਼ੀਰੋ ਦੇ ਨੇੜੇ ਹੋ ਜਾਣ 'ਤੇ, ਅਸੀਂ ਦੁਹਰਾਉਂਦੇ ਹਾਂ। ਪਹਿਲਾਂ ਘੱਟ ਮੂਲਧਨ = ਸਮੇਂ ਦੇ ਨਾਲ ਘੱਟ ਵਿਆਜ।"
+        chunkModalBody: "ਅਸੀਂ ਮौरਗੇਜ ਮੂਲਧਨ ਨੂੰ ਘਟਾਉਣ ਲਈ ਇੱਕ ਛੋਟਾ HELOC ਇੱਕਮੁਸ਼ਤ ਕਢਵਾਉਂਦੇ ਹਾਂ, ਫਿਰ ਤੁਹਾਡਾ ਮਹੀਨਾਵਾਰ ਵਾਧੂ HELOC ਦਾ ਭੁਗਤਾਨ ਕਰਦਾ ਹੈ। ਇੱਕ ਵਾਰ HELOC ਬਕਾਇਆ ਜ਼ੀਰੋ ਦੇ ਨੇੜੇ ਹੋ ਜਾਣ 'ਤੇ, ਅਸੀਂ ਦੁਹਰਾਉਂਦੇ ਹਾਂ। ਪਹਿਲਾਂ ਘੱଟ ਮੂਲਧਨ = ਸਮੇਂ ਦੇ ਨਾਲ ਘੱਟ ਵਿਆਜ।"
     },
     labels: {
         language: "ਭਾਸ਼ਾ",
@@ -620,7 +641,7 @@ const i18n: Record<string, LocalePack> = {
         homeValue: "ਘਰ ਦਾ ਮੁੱਲ (ਵਿਕਲਪਿਕ)",
         monthlyMI: "ਮਹੀਨਾਵਾਰ MI/CMHC (ਵਿਕਲਪਿਕ)",
         netIncome: "ਸ਼ੁੱਧ ਮਹੀਨਾਵਾਰ ਆਮਦਨ",
-        livingExpenses: "ਮਹੀਨਾਵਾਰ ਰਹਿਣ-ਸਹਿਣ ਦੇ ਖਰਚੇ (ਮੌਰਗੇਜ ਨੂੰ ਛੱਡ ਕੇ)",
+        livingExpenses: "ਮਹੀਨਾਵਾਰ ਰਹਿਣ-ਸਹਿਣ ਦੇ ਖਰਚੇ (ਮौरਗੇਜ ਨੂੰ ਛੱਡ ਕੇ)",
         helocAPR: "HELOC APR (%)",
         helocLimit: "HELOC ਸੀਮਾ (ਹੁਣੇ ਉਪਲਬਧ)",
         helocOpeningBalance: "HELOC ਸ਼ੁਰੂਆਤੀ ਬਕਾਇਆ",
@@ -682,6 +703,9 @@ const i18n: Record<string, LocalePack> = {
         },
         placeholderTitle: "ستظهر نتائجك هنا.",
         placeholderDescription: "املأ النموذج وانقر على 'احسب' لرؤية مدخراتك المحتملة.",
+        strategyCardTitle: "الاستراتيجية المستخدمة",
+        arbitrageAlertTitle: "تم تفعيل وضع المراجحة HELOC!",
+        arbitrageAlertDescription: "سعر فائدة HELOC الخاص بك أقل من سعر فائدة الرهن العقاري الخاص بك. لقد قمنا تلقائيًا بتطبيق استراتيجية أكثر جرأة، باستخدام HELOC الأرخص الخاص بك لسداد رهنك العقاري الباهظ بشكل أسرع."
     },
     disclaimer: "تقدير تعليمي فقط. لا يشمل رسوم البنك أو العروض الترويجية أو الضرائب. تتحسن النتائج مع وجود فائض شهري إيجابي وخطوط قابلة لإعادة التقدم ودفع فواتير مجمعة.",
     explainers: {
@@ -694,7 +718,7 @@ const i18n: Record<string, LocalePack> = {
         netIncome: "صافي الأجر الشهري بعد الضرائب/الخصومات (إجمالي الأسرة).\nمثال: إجمالي قسائم الدفع الخاصة بك بعد خصم الضرائب هو 8,900 دولار → أدخل 8900.",
         livingExpenses: "جميع المصاريف الشهرية باستثناء دفع الرهن العقاري: المرافق، البقالة، إلخ.\nمثال: 4300.",
         helocAPR: "سعر الفائدة السنوي المتغير أو الثابت لـ HELOC الخاص بك.\nمثال: 7.25.",
-        helocLimit: "الحد الأقصى الذي يمكنك سحبه اليوم (حد الائتمان مطروحًا منه أي رصيد HELOC حالي).\nمثال: حد ائتمان 50,000 ورصيد حالي 8,500 ← أدخل 41500.",
+        helocLimit: "الحد الأقصى الذي يمكنك سحبه اليوم (حد الائتمان مطروحًا منه أي رصيد HELOC حالي).\nمثال: حد ائتمan 50,000 ورصيد حالي 8,500 ← أدخل 41500.",
         helocOpeningBalance: "رصيد HELOC الحالي قبل بدء الاستراتيجية. استخدم 0 إذا لم تكن قد سحبت بعد.\nمثال: 0 أو 8500.",
         readvanceable: "نعم إذا كان خطك يتقدم مرة أخرى أثناء دفعك لرهنك العقاري (على سبيل المثال، STEP/HPP). لا لـ HELOC أساسي غير قابل لإعادة التقدم.",
         chunkMode: "تلقائي = نقوم بتحديد أحجام دفعات آمنة بناءً على فائضك. ثابت = تختار حجم الدفعة. يوصى بالتلقائي.",
@@ -1054,6 +1078,16 @@ export default function ChunkerCalculatorPage() {
         <div className="lg:col-span-3">
           {res ? (
              <div className="space-y-6">
+                {res.strategyType === 'HELOC Arbitrage' && (
+                    <Alert className="bg-primary/10 border-primary/50 text-primary-foreground">
+                        <Zap className="h-4 w-4 text-primary" />
+                        <AlertTitle className="text-primary">{t.results.arbitrageAlertTitle}</AlertTitle>
+                        <AlertDescription className="text-primary/90">
+                           {t.results.arbitrageAlertDescription}
+                        </AlertDescription>
+                    </Alert>
+                )}
+
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <Card className="bg-primary/10 border-primary">
                         <CardHeader className="pb-2"><CardTitle className="text-sm font-medium">{t.results.interestSaved}</CardTitle></CardHeader>
@@ -1087,6 +1121,17 @@ export default function ChunkerCalculatorPage() {
                         </CardContent>
                     </Card>
                 </div>
+                 <Card>
+                  <CardHeader>
+                      <CardTitle>{t.results.strategyCardTitle}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-sm space-y-2">
+                      <p>Mode: <span className="font-semibold">{res.strategyType}</span></p>
+                      {(res.optimalChunkSize && res.optimalChunkSize > 0) && (
+                          <p>Optimal First Chunk: <span className="font-semibold">{currencyFormatter(res.optimalChunkSize)}</span></p>
+                      )}
+                  </CardContent>
+                </Card>
                  <Card>
                   <CardHeader>
                       <CardTitle>{t.results.balanceOverTime}</CardTitle>

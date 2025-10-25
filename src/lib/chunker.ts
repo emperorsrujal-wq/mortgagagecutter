@@ -38,6 +38,8 @@ export interface Inputs {
 
 export interface Outputs {
   months: number;
+  strategyType: 'Standard Chunker' | 'HELOC Arbitrage';
+  optimalChunkSize?: number;
   baseline: { months: number; totalInterest: number; totalMI: number };
   strategy: { months: number; totalInterest: number; totalMI: number };
   totals: {
@@ -62,38 +64,62 @@ function safeChunkAmount({
   helocBal,
   helocLimit,
   helocAPR,
+  mortgageAPR,
   monthlySurplus,
   maxChunkUser,
+  isArbitrage,
 }: {
   mortgageBal: number;
   helocBal: number;
   helocLimit: number;
   helocAPR: number;
+  mortgageAPR: number;
   monthlySurplus: number;
   maxChunkUser?: number | null;
+  isArbitrage: boolean;
 }): number {
   const helocAvail = Math.max(0, helocLimit - helocBal);
   if (mortgageBal < 1000 || helocAvail < 1000) return 0;
 
-  // AUTO = 10% of remaining mortgage (conservative). FIXED uses user amount.
-  const target = Math.min(
-    mortgageBal,
-    helocAvail,
-    maxChunkUser && maxChunkUser > 0 ? maxChunkUser : Math.max(1000, mortgageBal * 0.10)
-  );
-
-  // Safety: next month's HELOC interest must be comfortably covered by surplus
-  const rH = (helocAPR / 100) / 12;
-  let test = target;
-  for (let i = 0; i < 10; i++) {
-    const nextHelocBal = helocBal + test;
-    const nextInterest = nextHelocBal * rH;
-    if (monthlySurplus >= 1.25 * nextInterest) return test; // 25% cushion
-    test = test * 0.7;
-    if (test < 1000) return 0; // too small to be meaningful
+  let target;
+  if (isArbitrage) {
+    // Arbitrage mode: use as much of the available HELOC as is safe.
+    target = helocAvail;
+  } else if (maxChunkUser && maxChunkUser > 0) {
+    // Fixed mode: use the user's amount.
+    target = maxChunkUser;
+  } else {
+    // Auto mode (standard): optimal chunk is often 3-6x the monthly surplus.
+    // This pays it down reasonably quickly without letting interest get out of hand.
+    target = monthlySurplus * 4;
   }
+  
+  const finalChunk = Math.min(mortgageBal, helocAvail, target);
+
+  // Safety check: ensure next month's total interest is covered by surplus with a cushion.
+  const rH = (helocAPR / 100) / 12;
+  const rM = (mortgageAPR / 100) / 12;
+  
+  const nextHelocBal = helocBal + finalChunk;
+  const nextHelocInterest = nextHelocBal * rH;
+  const nextMortgageInterest = (mortgageBal - finalChunk) * rM;
+  
+  // For arbitrage, we allow dipping into surplus more heavily. For standard, we are more conservative.
+  const requiredSurplus = isArbitrage ? nextHelocInterest : (nextHelocInterest + nextMortgageInterest);
+
+  if (monthlySurplus > requiredSurplus * 1.25) { // 25% safety cushion
+    return finalChunk >= 1000 ? finalChunk : 0;
+  }
+  
+  // If the ideal chunk is too aggressive, scale it back.
+  if (isArbitrage || (maxChunkUser === undefined)) {
+     const scaledDownChunk = monthlySurplus / (rH * 1.25) - helocBal;
+     return scaledDownChunk >= 1000 ? scaledDownChunk : 0;
+  }
+
   return 0;
 }
+
 
 function baselineOnly(
   mortgageBalance: number,
@@ -125,6 +151,10 @@ function baselineOnly(
 export function simulate(inputs: Inputs): Outputs {
   const maxMonths = inputs.maxMonths ?? 480;
 
+  // Determine which strategy to use
+  const isArbitrageMode = inputs.helocAPR < inputs.mortgageAPR;
+  const strategyType = isArbitrageMode ? 'HELOC Arbitrage' : 'Standard Chunker';
+
   // Baseline (mortgage only)
   const miBaseline = inputs.monthlyMI ?? 0;
   const base = baselineOnly(
@@ -154,6 +184,7 @@ export function simulate(inputs: Inputs): Outputs {
   const timeline: Outputs["timeline"] = [];
 
   let months = 0;
+  let firstChunkSize = 0;
 
   while ((mortgageBal > 0.01 || helocBal > 0.01) && months < maxMonths) {
     months++;
@@ -167,7 +198,7 @@ export function simulate(inputs: Inputs): Outputs {
     totalInterestMortgage += mi;
     mortgageBal = newBalance;
 
-    // 2) MI only while LTV > 80% (conservative: vs original homeValue)
+    // 2) MI only while LTV > 80%
     let thisMI = 0;
     if (inputs.homeValue && inputs.monthlyMI) {
       const ltv = mortgageBal / inputs.homeValue;
@@ -176,7 +207,6 @@ export function simulate(inputs: Inputs): Outputs {
     totalMI += thisMI;
 
     // 3) Surplus: netIncome - livingExpenses - (mortgage payment + MI)
-    // (If mortgage is zero, don't subtract fixedPmt)
     const mortgageOutflow = mortgageBal > 0 ? fixedPmt : 0;
     const rawSurplus = inputs.netIncome - inputs.livingExpenses - mortgageOutflow - thisMI;
     const effectiveSurplus = Math.max(0, rawSurplus) * timing;
@@ -190,19 +220,24 @@ export function simulate(inputs: Inputs): Outputs {
 
     let chunkApplied = 0;
 
-    // 5) Consider a new chunk only when HELOC is light AND readvanceable
-    if (inputs.readvanceable && mortgageBal > 0.01 && (helocLimit - helocBal) > 1000 && helocBal < 100) {
+    // 5) Consider a new chunk only when HELOC is light
+    const canChunk = inputs.readvanceable ? true : (months === 1 && (inputs.helocOpeningBalance ?? 0) === 0);
+    if (canChunk && mortgageBal > 0.01 && (helocLimit - helocBal) > 1000 && helocBal < 100) {
       const chunk = safeChunkAmount({
         mortgageBal,
         helocBal,
         helocLimit,
         helocAPR: inputs.helocAPR,
+        mortgageAPR: inputs.mortgageAPR,
         monthlySurplus: effectiveSurplus,
         maxChunkUser: inputs.chunkMode === "FIXED" ? (inputs.fixedChunkAmount ?? 0) : undefined,
+        isArbitrage: isArbitrageMode
       });
+
       if (chunk > 0) {
-        helocBal += chunk;           // draw from HELOC
-        mortgageBal = Math.max(0, mortgageBal - chunk); // slam mortgage principal
+        if(months === 1) firstChunkSize = chunk;
+        helocBal += chunk;
+        mortgageBal = Math.max(0, mortgageBal - chunk);
         chunkApplied = chunk;
       }
     }
@@ -224,6 +259,8 @@ export function simulate(inputs: Inputs): Outputs {
 
   const result: Outputs = {
     months: stratMonths,
+    strategyType,
+    optimalChunkSize: (inputs.chunkMode === 'AUTO' || isArbitrageMode) ? firstChunkSize : undefined,
     baseline: { months: base.months, totalInterest: base.totalInterest, totalMI: base.totalMI },
     strategy: { months: stratMonths, totalInterest: stratInterest, totalMI },
     totals: {
