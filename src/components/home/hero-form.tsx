@@ -13,8 +13,6 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/firebase';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
-import { useFirestore } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -27,7 +25,6 @@ const formSchema = z.object({
 
 export function HeroForm() {
   const auth = useAuth();
-  const firestore = useFirestore();
   const { toast } = useToast();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +39,14 @@ export function HeroForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!auth || !firestore) return;
+    if (!auth) {
+        toast({
+            variant: 'destructive',
+            title: 'Authentication service not available.',
+            description: 'Please try again in a moment.',
+        });
+        return;
+    };
     setIsLoading(true);
     try {
       // 1. Create the user
@@ -50,24 +54,12 @@ export function HeroForm() {
       const user = userCredential.user;
 
       // 2. Update the user's profile with their name
+      // This is the event that will trigger our Cloud Function
       await updateProfile(user, { displayName: values.name });
-
-      // 3. Trigger the welcome email by writing to the 'mail' collection
-      const mailDocRef = doc(firestore, 'mail', user.uid);
-      await setDoc(mailDocRef, {
-        to: [user.email],
-        template: {
-          name: 'welcome',
-          data: {
-            name: values.name,
-            questionnaire_url: 'https://mortgagecutter.com/questionnaire',
-          },
-        },
-      });
 
       toast({
         title: 'Account Created!',
-        description: 'You have been successfully signed up.',
+        description: "Welcome! We're redirecting you to the questionnaire.",
       });
 
       // Redirect to the questionnaire page upon successful sign-up
@@ -78,7 +70,9 @@ export function HeroForm() {
       toast({
         variant: 'destructive',
         title: 'Uh oh! Something went wrong.',
-        description: error.message || 'There was an issue creating your account.',
+        description: error.code === 'auth/email-already-in-use'
+          ? 'This email is already in use. Please sign in or use a different email.'
+          : error.message || 'There was an issue creating your account.',
       });
     } finally {
       setIsLoading(false);
