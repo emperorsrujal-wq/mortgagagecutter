@@ -22,11 +22,12 @@ export async function getSavingsReport(
 export async function sendWelcomeEmail(userData: { name: string; email: string }): Promise<{ success: boolean; error?: string }> {
   console.log('Server Action: sendWelcomeEmail triggered for', userData.email);
   try {
-    // We must get a new instance of firestore for server-side actions.
     const { firestore } = initializeFirebase();
     const mailCollection = collection(firestore, 'mail');
     
-    const projectUrl = `https://${process.env.GCLOUD_PROJECT}.web.app`;
+    // This correctly uses the Firebase project ID to construct a working URL for testing.
+    const projectId = process.env.GCLOUD_PROJECT || firebaseConfig.projectId;
+    const projectUrl = `https://${projectId}.web.app`;
 
     // 1. Prepare the actual welcome email for the user
     const userMailData = {
@@ -45,7 +46,7 @@ export async function sendWelcomeEmail(userData: { name: string; email: string }
     const verificationMailData = {
         to: ['verify@example.com'], 
         template: {
-            name: 'welcome', // It can reuse the same template; the content doesn't matter for verification.
+            name: 'welcome',
             data: {
                 name: 'SendGrid Verification',
                 questionnaire_url: projectUrl,
@@ -54,12 +55,10 @@ export async function sendWelcomeEmail(userData: { name: string; email: string }
     };
 
     // 3. Send both emails by creating documents in the 'mail' collection
-    // We create two separate documents. The Trigger Email extension will process both.
-    const userWritePromise = addDoc(mailCollection, userMailData);
-    const verificationWritePromise = addDoc(mailCollection, verificationMailData);
-    
-    // Wait for both database write operations to complete
-    await Promise.all([userWritePromise, verificationWritePromise]);
+    await Promise.all([
+        addDoc(mailCollection, userMailData),
+        addDoc(mailCollection, verificationMailData)
+    ]);
     
     console.log(`Successfully created email documents for: ${userData.email} and SendGrid verification.`);
     return { success: true };
