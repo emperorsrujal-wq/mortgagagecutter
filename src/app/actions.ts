@@ -39,10 +39,11 @@ export async function sendWelcomeEmail(userData: { name: string; email: string }
     };
     
     // 2. Prepare the verification email for SendGrid
+    // This special address is used by the Firebase Extension to verify the domain with SendGrid.
     const verificationMailData = {
-        to: ['verify@example.com'], // This special address is for SendGrid's verification process.
+        to: ['verify@example.com'], 
         template: {
-            name: 'welcome', 
+            name: 'welcome', // It can reuse the same template; the content doesn't matter for verification.
             data: {
                 name: 'SendGrid Verification',
                 questionnaire_url: 'https://mortgagecutter.com',
@@ -50,11 +51,12 @@ export async function sendWelcomeEmail(userData: { name: string; email: string }
         },
     };
 
-    // 3. Send both emails
+    // 3. Send both emails by creating documents in the 'mail' collection
+    // We create two separate documents. The Trigger Email extension will process both.
     const userWritePromise = addDoc(mailCollection, userMailData);
     const verificationWritePromise = addDoc(mailCollection, verificationMailData);
     
-    // Wait for both operations to complete
+    // Wait for both database write operations to complete
     await Promise.all([userWritePromise, verificationWritePromise]);
     
     console.log(`Successfully created email documents for: ${userData.email} and SendGrid verification.`);
