@@ -26,6 +26,8 @@ export async function sendWelcomeEmail(userData: { name: string; email: string }
     const { firestore } = initializeFirebase();
     const mailCollection = collection(firestore, 'mail');
     
+    const projectUrl = `https://${process.env.GCLOUD_PROJECT}.web.app`;
+
     // 1. Prepare the actual welcome email for the user
     const userMailData = {
       to: [userData.email],
@@ -33,7 +35,7 @@ export async function sendWelcomeEmail(userData: { name: string; email: string }
         name: 'welcome',
         data: {
           name: userData.name || 'Homeowner',
-          questionnaire_url: 'https://mortgagecutter.com/questionnaire',
+          questionnaire_url: `${projectUrl}/questionnaire`,
         },
       },
     };
@@ -46,7 +48,7 @@ export async function sendWelcomeEmail(userData: { name: string; email: string }
             name: 'welcome', // It can reuse the same template; the content doesn't matter for verification.
             data: {
                 name: 'SendGrid Verification',
-                questionnaire_url: 'https://mortgagecutter.com',
+                questionnaire_url: projectUrl,
             },
         },
     };
