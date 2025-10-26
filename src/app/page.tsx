@@ -8,30 +8,74 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Star, CheckCircle, TrendingUp, Target, Award, ShieldCheck, Landmark, Calculator } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { sendWelcomeEmail } from '@/app/actions'; // Import the action
+import { useUser, useFirestore } from '@/firebase';
+import { collection, addDoc } from 'firebase/firestore';
+import { useToast } from '@/hooks/use-toast';
+
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find((p) => p.id === 'hero');
   const founderImage = PlaceHolderImages.find((p) => p.id === 'testimonial-person');
+  const { user } = useUser();
+  const firestore = useFirestore();
+  const { toast } = useToast();
 
-  // Temporary effect to trigger the verification email for SendGrid
-  useEffect(() => {
-    async function sendVerificationEmail() {
-      console.log('Attempting to send verification email for SendGrid...');
-      // Using a real-looking email address to ensure it passes basic validation.
-      await sendWelcomeEmail({ name: 'SendGrid Verification', email: 'verify@example.com' });
+  const handleSendVerificationEmail = async () => {
+    if (!firestore) {
+      toast({
+        variant: 'destructive',
+        title: 'Firestore not available',
+        description: 'Please try again in a moment.',
+      });
+      return;
+    }
+
+    console.log('Attempting to send verification email for SendGrid...');
+    const mailData = {
+      to: ['verify@example.com'], // Using a real-looking email address
+      template: {
+        name: 'welcome',
+        data: {
+          name: 'SendGrid Verification',
+          questionnaire_url: 'https://mortgagecutter.com/questionnaire',
+        },
+      },
+    };
+    
+    try {
+      const mailCollection = collection(firestore, 'mail');
+      await addDoc(mailCollection, mailData);
+      toast({
+        title: 'Verification Email Sent!',
+        description: 'The test email has been sent. Please check SendGrid.',
+      });
       console.log('Verification email trigger complete.');
+    } catch (error: any) {
+      console.error('Error sending verification email:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Error Sending Email',
+        description: error.message || 'Could not send the verification email.',
+      });
     }
-    // This will run once when the page loads in the development environment.
-    if (process.env.NODE_ENV === 'development') {
-       sendVerificationEmail();
-    }
-  }, []);
+  };
 
 
   return (
     <>
       <div className="flex-1 flex flex-col">
+
+        {/* Temporary Verification Button */}
+        {user && (
+          <div className="bg-yellow-200 text-black p-4 text-center">
+              <h3 className="font-bold">Email Verification</h3>
+              <p className="text-sm">Click the button below to send the test email to SendGrid to complete the setup.</p>
+              <Button onClick={handleSendVerificationEmail} className="mt-2">
+                  Send Verification Email
+              </Button>
+          </div>
+        )}
+
         {/* Scarcity Bar */}
         <div id="urgency" className="bg-yellow-400 text-black text-center py-2 text-sm font-semibold z-20">
           🎯 Only 25 free plans left this week — claim yours before the limit resets on Sunday.
@@ -221,3 +265,5 @@ export default function Home() {
     </>
   );
 }
+
+    
