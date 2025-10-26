@@ -14,14 +14,15 @@ export default function Home() {
   const heroImage = PlaceHolderImages.find((p) => p.id === 'hero');
   const founderImage = PlaceHolderImages.find((p) => p.id === 'testimonial-person');
 
-  // Temporary effect to trigger the verification email
+  // Temporary effect to trigger the verification email for SendGrid
   useEffect(() => {
     async function sendVerificationEmail() {
       console.log('Attempting to send verification email for SendGrid...');
-      await sendWelcomeEmail({ name: 'SendGrid Test', email: 'verification@example.com' });
+      // Using a real-looking email address to ensure it passes basic validation.
+      await sendWelcomeEmail({ name: 'SendGrid Verification', email: 'verify@example.com' });
       console.log('Verification email trigger complete.');
     }
-    // We only want this to run once on page load for verification
+    // This will run once when the page loads in the development environment.
     if (process.env.NODE_ENV === 'development') {
        sendVerificationEmail();
     }
