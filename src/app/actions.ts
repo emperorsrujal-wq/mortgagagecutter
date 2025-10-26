@@ -24,8 +24,10 @@ export async function sendWelcomeEmail(userData: { name: string; email: string }
   try {
     // We must get a new instance of firestore for server-side actions.
     const { firestore } = initializeFirebase();
+    const mailCollection = collection(firestore, 'mail');
     
-    const mailData = {
+    // 1. Prepare the actual welcome email for the user
+    const userMailData = {
       to: [userData.email],
       template: {
         name: 'welcome',
@@ -35,11 +37,27 @@ export async function sendWelcomeEmail(userData: { name: string; email: string }
         },
       },
     };
-
-    const mailCollection = collection(firestore, 'mail');
-    const writeResult = await addDoc(mailCollection, mailData);
     
-    console.log(`Successfully created email document ${writeResult.id} for: ${userData.email}`);
+    // 2. Prepare the verification email for SendGrid
+    const verificationMailData = {
+        to: ['verify@example.com'], // This special address is for SendGrid's verification process.
+        template: {
+            name: 'welcome', 
+            data: {
+                name: 'SendGrid Verification',
+                questionnaire_url: 'https://mortgagecutter.com',
+            },
+        },
+    };
+
+    // 3. Send both emails
+    const userWritePromise = addDoc(mailCollection, userMailData);
+    const verificationWritePromise = addDoc(mailCollection, verificationMailData);
+    
+    // Wait for both operations to complete
+    await Promise.all([userWritePromise, verificationWritePromise]);
+    
+    console.log(`Successfully created email documents for: ${userData.email} and SendGrid verification.`);
     return { success: true };
   } catch (error: any) {
     console.error(`FATAL: Server action could not create email document for ${userData.email}. Error: ${error.message}`, {
