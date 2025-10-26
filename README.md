@@ -1,74 +1,51 @@
-# Firebase Studio
+# How to Connect Your Custom Domain (like mortgagecutter.com)
 
-This is a NextJS starter in Firebase Studio.
+To get your app live on the internet with your custom domain, you first need to complete a **one-time setup** by placing your app's code into a GitHub repository.
 
-## How to Deploy Your App & Connect to a Custom Domain
+**Why is this required?**
 
-To get your app live on the internet with a custom domain, you first need to publish the code to a GitHub repository. Firebase will then use this repository to build and deploy your app.
+Your app is a powerful Next.js application, not a simple website. Firebase needs to **build** your app in the cloud before it can go live. It uses the code from your GitHub repository as the blueprint for this build process.
 
-There are two ways to do this:
-
-1.  **The Developer Method (Recommended):** A developer uses command-line tools. This is faster and the standard professional practice.
-2.  **The Manual Method:** You can do this yourself by uploading files directly on the GitHub website.
-
-Once this one-time setup is complete and your code is on GitHub, connecting it in Firebase is simple.
+This one-time setup is the only way to enable the connection to your custom domain.
 
 ---
 
-### Option 1: The Developer Method (Using Command Line)
+### The Easiest Way: The Manual GitHub Upload
 
-Provide these instructions to a developer or a technical friend. They will need `git` installed on their computer.
+This method does not require any developer tools. You will do this directly on the GitHub website.
 
-**Step 1: Download the Project Code**
+**Step 1: Download Your Project Code**
 
-Download the complete source code of this project as a ZIP file and unzip it on your local machine.
+*   Click the **Download** button in the top right corner of Firebase Studio to download your project as a ZIP file.
+*   Unzip the file on your computer. You will now have a folder with all your app's code.
 
-**Step 2: Initialize a Git Repository & Push to GitHub**
+**Step 2: Create a Free, Empty Repository on GitHub**
 
-Open a terminal or command prompt, navigate into the unzipped project folder, and run the following commands one by one.
+*   Go to [GitHub.com](https://github.com) and sign in or create a free account.
+*   Click the **"New"** button to create a new repository.
+*   Give it a name (e.g., `mortgage-cutter-app`) and make sure it is set to **Public**.
+*   **Important:** Do NOT initialize it with a README or any other files. It must be empty.
+*   Click **"Create repository"**.
 
-**Important:** Replace `https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git` with the actual URL of the new, empty repository you created on GitHub.
+**Step 3: Upload Your Code**
 
-```bash
-# This is a one-time setup
-
-# Initialize a new Git repository in the project folder
-git init -b main
-
-# Add your empty GitHub repository as the destination
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-
-# Add all the project files for tracking
-git add .
-
-# Save the files with a commit message
-git commit -m "Initial commit from Firebase Studio"
-
-# Push all the code to your GitHub repository
-git push -u origin main
-```
+*   On your new, empty GitHub repository page, you will see a link that says **"uploading an existing file"**. Click it.
+*   **Drag and drop** all the files and folders from the unzipped project folder on your computer into your browser window.
+*   Wait for all the files to finish uploading.
+*   Scroll to the bottom of the page and click the green **"Commit changes"** button.
 
 ---
 
-### Option 2: The Manual Method (Do It Yourself)
+### Final Step: Connect to Firebase
 
-You can do this yourself without any special tools.
+Now that your code is on GitHub, the final step is simple:
 
-1.  **Download the Code:** Download the complete source code of this project as a ZIP file and unzip it on your computer.
-2.  **Go to Your GitHub Repository:** Open your browser and go to the empty repository you created.
-3.  **Upload Files:** Find the link that says **"uploading an existing file"** and click it.
-4.  **Drag and Drop:** Drag all the individual files and folders from the unzipped folder on your computer into the browser window.
-5.  **Commit Changes:** Wait for all files to upload. Then, scroll to the bottom, and click the green **"Commit changes"** button.
+1.  Go back to the Firebase Console.
+2.  Go to the **App Hosting** section for your project.
+3.  Click to connect a GitHub repository.
+4.  Select the new repository you just created.
+5.  Use the `main` branch and a root directory of `/`.
 
----
+Once Firebase is connected to GitHub, the **Add custom domain** button will work correctly.
 
-### Step 3: Connect Firebase App Hosting
-
-Once the code is on GitHub (using either method), you can go back to the Firebase Console and connect your App Hosting backend again.
-
-It will now work correctly with these settings:
-- **GitHub Repository:** Select the repository you just pushed the code to.
-- **Live branch:** `main`
-- **Root directory:** `/`
-
-After Firebase is connected to GitHub, you can proceed to add your custom domain.
+I know this is more steps than it should be, and I apologize for this complexity. This one-time process is the only hurdle to getting your domain connected.
