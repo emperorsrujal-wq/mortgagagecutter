@@ -1,14 +1,32 @@
 
+'use client'; // Add 'use client' to use hooks
+
+import { useEffect } from 'react';
 import Image from 'next/image';
 import { HeroForm } from '@/components/home/hero-form';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Star, CheckCircle, TrendingUp, Target, Award, ShieldCheck, Landmark, Calculator } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { sendWelcomeEmail } from '@/app/actions'; // Import the action
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find((p) => p.id === 'hero');
   const founderImage = PlaceHolderImages.find((p) => p.id === 'testimonial-person');
+
+  // Temporary effect to trigger the verification email
+  useEffect(() => {
+    async function sendVerificationEmail() {
+      console.log('Attempting to send verification email for SendGrid...');
+      await sendWelcomeEmail({ name: 'SendGrid Test', email: 'verification@example.com' });
+      console.log('Verification email trigger complete.');
+    }
+    // We only want this to run once on page load for verification
+    if (process.env.NODE_ENV === 'development') {
+       sendVerificationEmail();
+    }
+  }, []);
+
 
   return (
     <>
