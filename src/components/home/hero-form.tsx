@@ -1,19 +1,19 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import emailjs from '@emailjs/browser';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { AuthButtons } from '../auth/auth-buttons';
 import { Separator } from '../ui/separator';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useAuth, useFirestore } from '@/firebase';
+import { useAuth } from '@/firebase';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { collection, addDoc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -26,10 +26,14 @@ const formSchema = z.object({
 
 export function HeroForm() {
   const auth = useAuth();
-  const firestore = useFirestore();
   const { toast } = useToast();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+
+  // Add refs for EmailJS credentials. Remind user to fill these out.
+  const serviceId = 'YOUR_SERVICE_ID';
+  const templateId = 'YOUR_TEMPLATE_ID';
+  const publicKey = 'YOUR_PUBLIC_KEY';
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -41,14 +45,24 @@ export function HeroForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!auth || !firestore) {
+    if (!auth) {
         toast({
             variant: 'destructive',
-            title: 'Services not available.',
+            title: 'Auth service not available.',
             description: 'Please try again in a moment.',
         });
         return;
     };
+    
+    if (serviceId === 'YOUR_SERVICE_ID' || templateId === 'YOUR_TEMPLATE_ID' || publicKey === 'YOUR_PUBLIC_KEY') {
+       toast({
+            variant: 'destructive',
+            title: 'EmailJS Not Configured',
+            description: 'Please replace placeholder credentials in hero-form.tsx.',
+        });
+        return;
+    }
+
     setIsLoading(true);
     try {
       // 1. Create the user
@@ -58,21 +72,15 @@ export function HeroForm() {
       // 2. Update the user's profile with their name
       await updateProfile(user, { displayName: values.name });
 
-      // 3. Trigger the welcome email by writing to the 'mail' collection
-      const mailCollection = collection(firestore, 'mail');
-      await addDoc(mailCollection, {
-        to: [values.email],
-        message: {
-          subject: `Welcome to Mortgage Cutter, ${values.name}!`,
-          text: `Hi ${values.name},\n\nThank you for registering with Mortgage Cutter. We're excited to help you on your journey to financial freedom.\n\nYou can get started by filling out our questionnaire on the site.\n\nSincerely,\nThe Mortgage Cutter Team`,
-          html: `
-            <p>Hi ${values.name},</p>
-            <p>Thank you for registering with Mortgage Cutter. We're excited to help you on your journey to financial freedom.</p>
-            <p>You can get started by filling out our questionnaire on the site to see your personalized savings blueprint.</p>
-            <p>Sincerely,<br/>The Mortgage Cutter Team</p>
-          `,
-        },
-      });
+      // 3. Send welcome email using EmailJS
+      const templateParams = {
+        to_name: values.name,
+        to_email: values.email,
+        from_name: 'Mortgage Cutter',
+        message: 'Welcome to your financial freedom journey. Get started by filling out our questionnaire.'
+      };
+      
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
 
       toast({
         title: 'Account Created!',
@@ -84,13 +92,23 @@ export function HeroForm() {
 
     } catch (error: any) {
       console.error('Error during sign-up:', error);
-      toast({
-        variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
-        description: error.code === 'auth/email-already-in-use'
-          ? 'This email is already in use. Please sign in or use a different email.'
-          : error.message || 'There was an issue creating your account.',
-      });
+      
+      // Handle EmailJS error
+      if (error?.status) {
+         toast({
+            variant: 'destructive',
+            title: 'Email Sending Failed',
+            description: `Could not send welcome email. EmailJS Error: ${error.text}`,
+         });
+      } else { // Handle Firebase auth error
+         toast({
+            variant: 'destructive',
+            title: 'Uh oh! Something went wrong.',
+            description: error.code === 'auth/email-already-in-use'
+              ? 'This email is already in use. Please sign in or use a different email.'
+              : error.message || 'There was an issue creating your account.',
+          });
+      }
     } finally {
       setIsLoading(false);
     }
