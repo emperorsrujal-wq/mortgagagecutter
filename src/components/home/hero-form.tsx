@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import emailjs from '@emailjs/browser';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { AuthButtons } from '../auth/auth-buttons';
 import { Separator } from '../ui/separator';
@@ -30,10 +29,6 @@ export function HeroForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  const serviceId = 'service_p8lcxos';
-  const templateId = 'template_10wbszi';
-  const publicKey = 'w6aZ3uubR3H1yhVwO';
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,15 +48,6 @@ export function HeroForm() {
         return;
     };
     
-    if (serviceId === 'YOUR_SERVICE_ID' || templateId === 'YOUR_TEMPLATE_ID' || publicKey === 'YOUR_PUBLIC_KEY') {
-       toast({
-            variant: 'destructive',
-            title: 'EmailJS Not Configured',
-            description: 'Please replace placeholder credentials in src/components/home/hero-form.tsx.',
-        });
-        return;
-    }
-
     setIsLoading(true);
     try {
       // 1. Create the user
@@ -71,17 +57,8 @@ export function HeroForm() {
       // 2. Update the user's profile with their name
       await updateProfile(user, { displayName: values.name });
 
-      // 3. Send welcome email using EmailJS
-      const templateParams = {
-        to_name: values.name,
-        to_email: values.email,
-        from_name: 'Mortgage Cutter',
-        message: 'Welcome to your financial freedom journey. Get started by filling out our questionnaire.'
-      };
-      
-      console.log('Sending email with params:', templateParams); // Added for debugging
-      
-      await emailjs.send(serviceId, templateId, templateParams, publicKey);
+      // NOTE: Email sending is now handled globally in layout.tsx via onAuthStateChanged.
+      // This makes the logic robust for all sign-up methods (email, google, apple).
 
       toast({
         title: 'Account Created!',
@@ -93,23 +70,13 @@ export function HeroForm() {
 
     } catch (error: any) {
       console.error('Error during sign-up:', error);
-      
-      // Handle EmailJS error
-      if (error?.status) {
-         toast({
-            variant: 'destructive',
-            title: 'Email Sending Failed',
-            description: `Could not send welcome email. EmailJS Error: ${error.text}`,
-         });
-      } else { // Handle Firebase auth error
-         toast({
-            variant: 'destructive',
-            title: 'Uh oh! Something went wrong.',
-            description: error.code === 'auth/email-already-in-use'
-              ? 'This email is already in use. Please sign in or use a different email.'
-              : error.message || 'There was an issue creating your account.',
-          });
-      }
+      toast({
+        variant: 'destructive',
+        title: 'Uh oh! Something went wrong.',
+        description: error.code === 'auth/email-already-in-use'
+            ? 'This email is already in use. Please sign in or use a different email.'
+            : error.message || 'There was an issue creating your account.',
+      });
     } finally {
       setIsLoading(false);
     }
