@@ -4,7 +4,6 @@
 import { estimate } from '@/lib/mortgage';
 import type { Inputs, Outputs } from '@/lib/mortgage-types';
 
-
 export async function getSavingsReport(
   data: Inputs
 ): Promise<{ success: true; report: Outputs } | { success: false; error: string }> {

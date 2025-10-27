@@ -59,7 +59,8 @@ export function HeroForm() {
       await updateProfile(user, { displayName: values.name });
 
       // 3. Trigger the welcome email by writing to the 'mail' collection
-      const mailDocument = {
+      const mailCollection = collection(firestore, 'mail');
+      await addDoc(mailCollection, {
         to: [values.email],
         message: {
           subject: `Welcome to Mortgage Cutter, ${values.name}!`,
@@ -71,9 +72,7 @@ export function HeroForm() {
             <p>Sincerely,<br/>The Mortgage Cutter Team</p>
           `,
         },
-      };
-
-      await addDoc(collection(firestore, 'mail'), mailDocument);
+      });
 
       toast({
         title: 'Account Created!',
