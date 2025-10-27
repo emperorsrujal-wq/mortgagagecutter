@@ -11,12 +11,13 @@ import { Separator } from '../ui/separator';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/firebase';
+import { useAuth, useFirestore } from '@/firebase';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { collection, addDoc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { sendWelcomeEmail } from '@/app/actions';
+import { firebaseConfig } from '@/firebase/config';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -26,6 +27,7 @@ const formSchema = z.object({
 
 export function HeroForm() {
   const auth = useAuth();
+  const firestore = useFirestore();
   const { toast } = useToast();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -40,10 +42,10 @@ export function HeroForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!auth) {
+    if (!auth || !firestore) {
         toast({
             variant: 'destructive',
-            title: 'Authentication service not available.',
+            title: 'Services not available.',
             description: 'Please try again in a moment.',
         });
         return;
@@ -57,8 +59,23 @@ export function HeroForm() {
       // 2. Update the user's profile with their name
       await updateProfile(user, { displayName: values.name });
 
-      // 3. Trigger the welcome email via server action
-      await sendWelcomeEmail({ name: values.name, email: values.email });
+      // 3. Trigger the welcome email by writing to the 'mail' collection
+      const mailDocument = {
+        to: [values.email],
+        message: {
+          subject: `Welcome to Mortgage Cutter, ${values.name}!`,
+          text: `Hi ${values.name},\n\nThank you for registering with Mortgage Cutter. We're excited to help you on your journey to financial freedom.\n\nYou can get started by filling out our questionnaire here: https://${firebaseConfig.authDomain}/questionnaire\n\nSincerely,\nThe Mortgage Cutter Team`,
+          html: `
+            <p>Hi ${values.name},</p>
+            <p>Thank you for registering with Mortgage Cutter. We're excited to help you on your journey to financial freedom.</p>
+            <p>You can get started by filling out our questionnaire to see your personalized savings blueprint:</p>
+            <p><a href="https://${firebaseConfig.authDomain}/questionnaire"><strong>Complete Your Questionnaire Now</strong></a></p>
+            <p>Sincerely,<br/>The Mortgage Cutter Team</p>
+          `,
+        },
+      };
+
+      await addDoc(collection(firestore, 'mail'), mailDocument);
 
       toast({
         title: 'Account Created!',
