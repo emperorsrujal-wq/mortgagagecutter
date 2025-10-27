@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -30,10 +30,10 @@ export function HeroForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  // Add refs for EmailJS credentials. Remind user to fill these out.
-  const serviceId = 'service_p8lcxos';
-  const templateId = 'template_10wbszi';
-  const publicKey = 'w6aZ3uubR3H1yhVwO';
+  // IMPORTANT: Replace these with your actual EmailJS credentials
+  const serviceId = 'YOUR_SERVICE_ID';
+  const templateId = 'YOUR_TEMPLATE_ID';
+  const publicKey = 'YOUR_PUBLIC_KEY';
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -58,7 +58,7 @@ export function HeroForm() {
        toast({
             variant: 'destructive',
             title: 'EmailJS Not Configured',
-            description: 'Please replace placeholder credentials in hero-form.tsx.',
+            description: 'Please replace placeholder credentials in src/components/home/hero-form.tsx.',
         });
         return;
     }
