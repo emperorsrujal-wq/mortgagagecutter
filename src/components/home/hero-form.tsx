@@ -30,7 +30,6 @@ export function HeroForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  // IMPORTANT: Replace these with your actual EmailJS credentials
   const serviceId = 'service_p8lcxos';
   const templateId = 'template_10wbszi';
   const publicKey = 'w6aZ3uubR3H1yhVwO';
@@ -79,6 +78,8 @@ export function HeroForm() {
         from_name: 'Mortgage Cutter',
         message: 'Welcome to your financial freedom journey. Get started by filling out our questionnaire.'
       };
+      
+      console.log('Sending email with params:', templateParams); // Added for debugging
       
       await emailjs.send(serviceId, templateId, templateParams, publicKey);
 
