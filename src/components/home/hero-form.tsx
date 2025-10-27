@@ -17,7 +17,6 @@ import { collection, addDoc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { firebaseConfig } from '@/firebase/config';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -64,12 +63,11 @@ export function HeroForm() {
         to: [values.email],
         message: {
           subject: `Welcome to Mortgage Cutter, ${values.name}!`,
-          text: `Hi ${values.name},\n\nThank you for registering with Mortgage Cutter. We're excited to help you on your journey to financial freedom.\n\nYou can get started by filling out our questionnaire here: https://${firebaseConfig.authDomain}/questionnaire\n\nSincerely,\nThe Mortgage Cutter Team`,
+          text: `Hi ${values.name},\n\nThank you for registering with Mortgage Cutter. We're excited to help you on your journey to financial freedom.\n\nYou can get started by filling out our questionnaire on the site.\n\nSincerely,\nThe Mortgage Cutter Team`,
           html: `
             <p>Hi ${values.name},</p>
             <p>Thank you for registering with Mortgage Cutter. We're excited to help you on your journey to financial freedom.</p>
-            <p>You can get started by filling out our questionnaire to see your personalized savings blueprint:</p>
-            <p><a href="https://${firebaseConfig.authDomain}/questionnaire"><strong>Complete Your Questionnaire Now</strong></a></p>
+            <p>You can get started by filling out our questionnaire on the site to see your personalized savings blueprint.</p>
             <p>Sincerely,<br/>The Mortgage Cutter Team</p>
           `,
         },
