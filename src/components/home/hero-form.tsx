@@ -33,7 +33,7 @@ export function HeroForm() {
   // Add refs for EmailJS credentials. Remind user to fill these out.
   const serviceId = 'YOUR_SERVICE_ID';
   const templateId = 'YOUR_TEMPLATE_ID';
-  const publicKey = 'YOUR_PUBLIC_KEY';
+  const publicKey = 'w6aZ3uubR3H1yhVwO';
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
