@@ -31,7 +31,7 @@ export function HeroForm() {
   const [isLoading, setIsLoading] = useState(false);
 
   // Add refs for EmailJS credentials. Remind user to fill these out.
-  const serviceId = 'YOUR_SERVICE_ID';
+  const serviceId = 'service_p8lcxos';
   const templateId = 'YOUR_TEMPLATE_ID';
   const publicKey = 'w6aZ3uubR3H1yhVwO';
 
