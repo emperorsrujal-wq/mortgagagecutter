@@ -32,8 +32,8 @@ export function HeroForm() {
 
   // IMPORTANT: Replace these with your actual EmailJS credentials
   const serviceId = 'service_p8lcxos';
-  const templateId = 'template_10wbszi';
-  const publicKey = '891Oq_w5eS3AGo1js';
+  const templateId = 'YOUR_TEMPLATE_ID';
+  const publicKey = 'w6aZ3uubR3H1yhVwO';
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
