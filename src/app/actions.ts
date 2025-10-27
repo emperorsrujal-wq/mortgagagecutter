@@ -5,6 +5,7 @@ import { estimate } from '@/lib/mortgage';
 import type { Inputs, Outputs } from '@/lib/mortgage-types';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { initializeFirebase } from '@/firebase';
+import { firebaseConfig } from '@/firebase/config';
 
 export async function getSavingsReport(
   data: Inputs
@@ -22,45 +23,30 @@ export async function getSavingsReport(
 export async function sendWelcomeEmail(userData: { name: string; email: string }): Promise<{ success: boolean; error?: string }> {
   console.log('Server Action: sendWelcomeEmail triggered for', userData.email);
   try {
+    // Initialize Firebase Admin SDK to interact with Firestore from the server.
     const { firestore } = initializeFirebase();
     const mailCollection = collection(firestore, 'mail');
     
-    // This correctly uses the Firebase project ID to construct a working URL for testing.
-    const projectId = process.env.GCLOUD_PROJECT || firebaseConfig.projectId;
-    const projectUrl = `https://${projectId}.web.app`;
-
-    // 1. Prepare the actual welcome email for the user
-    const userMailData = {
+    // Define the email document structure as required by the Trigger Email Extension.
+    const mailDocument = {
       to: [userData.email],
-      template: {
-        name: 'welcome',
-        data: {
-          name: userData.name || 'Homeowner',
-          questionnaire_url: `${projectUrl}/questionnaire`,
-        },
+      message: {
+        subject: `Welcome to Mortgage Cutter, ${userData.name}!`,
+        text: `Hi ${userData.name},\n\nThank you for registering with Mortgage Cutter. We're excited to help you on your journey to financial freedom.\n\nYou can get started by filling out our questionnaire here: https://${firebaseConfig.authDomain}/questionnaire\n\nSincerely,\nThe Mortgage Cutter Team`,
+        html: `
+          <p>Hi ${userData.name},</p>
+          <p>Thank you for registering with Mortgage Cutter. We're excited to help you on your journey to financial freedom.</p>
+          <p>You can get started by filling out our questionnaire to see your personalized savings blueprint:</p>
+          <p><a href="https://${firebaseConfig.authDomain}/questionnaire"><strong>Complete Your Questionnaire Now</strong></a></p>
+          <p>Sincerely,<br/>The Mortgage Cutter Team</p>
+        `,
       },
     };
-    
-    // 2. Prepare the verification email for SendGrid
-    // This special address is used by the Firebase Extension to verify the domain with SendGrid.
-    const verificationMailData = {
-        to: ['verify@example.com'], 
-        template: {
-            name: 'welcome',
-            data: {
-                name: 'SendGrid Verification',
-                questionnaire_url: projectUrl,
-            },
-        },
-    };
 
-    // 3. Send both emails by creating documents in the 'mail' collection
-    await Promise.all([
-        addDoc(mailCollection, userMailData),
-        addDoc(mailCollection, verificationMailData)
-    ]);
+    // Create the new document in the 'mail' collection.
+    await addDoc(mailCollection, mailDocument);
     
-    console.log(`Successfully created email documents for: ${userData.email} and SendGrid verification.`);
+    console.log(`Successfully created welcome email document for: ${userData.email}`);
     return { success: true };
   } catch (error: any) {
     console.error(`FATAL: Server action could not create email document for ${userData.email}. Error: ${error.message}`, {
