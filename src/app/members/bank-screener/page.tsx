@@ -14,7 +14,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { useUser } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
-import { FormField as ShadcnFormField, FormItem, FormControl, FormMessage } from '@/components/ui/form';
+import { Form, FormField as ShadcnFormField, FormItem, FormControl, FormMessage } from '@/components/ui/form';
 
 const ADMIN_EMAIL = 'emperorsrujal@gmail.com';
 
@@ -96,7 +96,7 @@ const YesNoField = ({ control, name, label, explainer }: { control: any, name: a
 
 
 export default function BankScreenerPage() {
-  const { register, handleSubmit, control, watch } = useForm();
+  const form = useForm();
   const { user, isUserLoading } = useUser();
   const router = useRouter();
 
@@ -135,253 +135,257 @@ export default function BankScreenerPage() {
         </p>
       </header>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Card>
-          <CardHeader>
-            <CardTitle>Lender Information</CardTitle>
-            <CardDescription>Start by recording the basic details of the bank or lender you are evaluating.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <InputField name="bankName" label="Bank Name" explainer="The full legal name of the financial institution.">
-                <Input {...register("bankName")} placeholder="e.g., Acme National Bank" />
-              </InputField>
-              <InputField name="bankWebsite" label="Website Address" explainer="The lender's main website.">
-                <Input {...register("bankWebsite")} placeholder="e.g., www.acmebank.com" />
-              </InputField>
-              <InputField name="bankPhone" label="Main Phone Number" explainer="The general customer service or loan department phone number.">
-                <Input {...register("bankPhone")} placeholder="e.g., 800-555-1234" />
-              </InputField>
-            </div>
-            <Separator />
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <InputField name="loanOfficerName" label="Loan Officer's Name" explainer="The name of your specific contact person, if you have one.">
-                <Input {...register("loanOfficerName")} placeholder="e.g., Jane Doe" />
-              </InputField>
-              <InputField name="loanOfficerPhone" label="Direct Phone Number" explainer="The direct line for your contact person.">
-                <Input {...register("loanOfficerPhone")} placeholder="e.g., 800-555-5678" />
-              </InputField>
-              <InputField name="loanOfficerEmail" label="Direct Email Address" explainer="The direct email for your contact person.">
-                <Input {...register("loanOfficerEmail")} placeholder="e.g., jane.doe@acmebank.com" />
-              </InputField>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Accordion type="multiple" className="w-full space-y-4 mt-6">
-          
-          <AccordionItem value="item-1">
-            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">1. First Lien Position</AccordionTrigger>
-            <AccordionContent className="p-4 space-y-4">
-                <YesNoField control={control} name="offersFirstLien" label="Do you offer a first lien position HELOC?" explainer="A 'first lien' means the HELOC is the primary loan on the property, not a secondary one. This is key for the Mortgage Cutter method." />
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="item-2">
-            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">2. Loan To Value (LTV) Limits</AccordionTrigger>
-            <AccordionContent className="p-4 space-y-6">
-              <InputField name="ltvMaxLoanAmount" label="What is your maximum loan amount on a first lien HELOC?" explainer="Is there a dollar cap, e.g., $1,000,000?">
-                  <Input type="number" {...register("ltvMaxLoanAmount")} placeholder="e.g., 1000000" />
-              </InputField>
-               <InputField name="ltvMinLoanAmount" label="Any minimum loan amount?" explainer="Some banks require a minimum loan, e.g., $10,000.">
-                  <Input type="number" {...register("ltvMinLoanAmount")} placeholder="e.g., 10000" />
-              </InputField>
-              <div>
-                  <Label>What are the minimum credit score requirements for those LTVs?</Label>
-                  <div className="grid grid-cols-3 gap-2 mt-2">
-                     <InputField name="ltvLow" label="Low (e.g. 70%)" explainer="Minimum credit score for a 70% LTV.">
-                       <Input {...register("ltvLow")} placeholder="e.g., 680" />
-                     </InputField>
-                     <InputField name="ltvAvg" label="Average (e.g. 80%)" explainer="Minimum credit score for an 80% LTV.">
-                       <Input {...register("ltvAvg")} placeholder="e.g., 720" />
-                     </InputField>
-                     <InputField name="ltvHigh" label="High (e.g. 90%)" explainer="Minimum credit score for a 90% LTV.">
-                       <Input {...register("ltvHigh")} placeholder="e.g., 780" />
-                     </InputField>
-                  </div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <Card>
+            <CardHeader>
+              <CardTitle>Lender Information</CardTitle>
+              <CardDescription>Start by recording the basic details of the bank or lender you are evaluating.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <InputField name="bankName" label="Bank Name" explainer="The full legal name of the financial institution.">
+                  <Input {...form.register("bankName")} placeholder="e.g., Acme National Bank" />
+                </InputField>
+                <InputField name="bankWebsite" label="Website Address" explainer="The lender's main website.">
+                  <Input {...form.register("bankWebsite")} placeholder="e.g., www.acmebank.com" />
+                </InputField>
+                <InputField name="bankPhone" label="Main Phone Number" explainer="The general customer service or loan department phone number.">
+                  <Input {...form.register("bankPhone")} placeholder="e.g., 800-555-1234" />
+                </InputField>
               </div>
-              <YesNoField control={control} name="ltvCanRenew" label="Can I renew my HELOC's LTV to a lower or higher rate down the line?" explainer="Can you refinance or modify the LTV percentage during the loan's life?"/>
-              <InputField name="ltvLimitations" label="Are there any specific limitations as to who can apply for a HELOC?" explainer="e.g., residency requirements, property type restrictions.">
-                  <Textarea {...register("ltvLimitations")} />
-              </InputField>
-            </AccordionContent>
-          </AccordionItem>
+              <Separator />
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <InputField name="loanOfficerName" label="Loan Officer's Name" explainer="The name of your specific contact person, if you have one.">
+                  <Input {...form.register("loanOfficerName")} placeholder="e.g., Jane Doe" />
+                </InputField>
+                <InputField name="loanOfficerPhone" label="Direct Phone Number" explainer="The direct line for your contact person.">
+                  <Input {...form.register("loanOfficerPhone")} placeholder="e.g., 800-555-5678" />
+                </InputField>
+                <InputField name="loanOfficerEmail" label="Direct Email Address" explainer="The direct email for your contact person.">
+                  <Input {...form.register("loanOfficerEmail")} placeholder="e.g., jane.doe@acmebank.com" />
+                </InputField>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Accordion type="multiple" className="w-full space-y-4 mt-6">
+            
+            <AccordionItem value="item-1">
+              <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">1. First Lien Position</AccordionTrigger>
+              <AccordionContent className="p-4 space-y-4">
+                  <YesNoField control={form.control} name="offersFirstLien" label="Do you offer a first lien position HELOC?" explainer="A 'first lien' means the HELOC is the primary loan on the property, not a secondary one. This is key for the Mortgage Cutter method." />
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-2">
+              <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">2. Loan To Value (LTV) Limits</AccordionTrigger>
+              <AccordionContent className="p-4 space-y-6">
+                <InputField name="ltvMaxLoanAmount" label="What is your maximum loan amount on a first lien HELOC?" explainer="Is there a dollar cap, e.g., $1,000,000?">
+                    <Input type="number" {...form.register("ltvMaxLoanAmount")} placeholder="e.g., 1000000" />
+                </InputField>
+                 <InputField name="ltvMinLoanAmount" label="Any minimum loan amount?" explainer="Some banks require a minimum loan, e.g., $10,000.">
+                    <Input type="number" {...form.register("ltvMinLoanAmount")} placeholder="e.g., 10000" />
+                </InputField>
+                <div>
+                    <Label>What are the minimum credit score requirements for those LTVs?</Label>
+                    <div className="grid grid-cols-3 gap-2 mt-2">
+                       <InputField name="ltvLow" label="Low (e.g. 70%)" explainer="Minimum credit score for a 70% LTV.">
+                         <Input {...form.register("ltvLow")} placeholder="e.g., 680" />
+                       </InputField>
+                       <InputField name="ltvAvg" label="Average (e.g. 80%)" explainer="Minimum credit score for an 80% LTV.">
+                         <Input {...form.register("ltvAvg")} placeholder="e.g., 720" />
+                       </InputField>
+                       <InputField name="ltvHigh" label="High (e.g. 90%)" explainer="Minimum credit score for a 90% LTV.">
+                         <Input {...form.register("ltvHigh")} placeholder="e.g., 780" />
+                       </InputField>
+                    </div>
+                </div>
+                <YesNoField control={form.control} name="ltvCanRenew" label="Can I renew my HELOC's LTV to a lower or higher rate down the line?" explainer="Can you refinance or modify the LTV percentage during the loan's life?"/>
+                <InputField name="ltvLimitations" label="Are there any specific limitations as to who can apply for a HELOC?" explainer="e.g., residency requirements, property type restrictions.">
+                    <Textarea {...form.register("ltvLimitations")} />
+                </InputField>
+              </AccordionContent>
+            </AccordionItem>
+            
+             <AccordionItem value="item-3">
+              <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">3. Purchase &amp; Refinancing</AccordionTrigger>
+              <AccordionContent className="p-4 space-y-6">
+                  <YesNoField control={form.control} name="helocForPurchaseRefi" label="Do you offer HELOCs for both purchases &amp; refinancing?" explainer="Can the HELOC be used to buy a new home, or only to refinance an existing mortgage?" />
+                  <YesNoField control={form.control} name="cashReserveRequirements" label="Are there any cash reserve requirements to qualify?" explainer="Do you need to have a certain amount of cash saved after closing?" />
+              </AccordionContent>
+            </AccordionItem>
+            
+             <AccordionItem value="item-4">
+              <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">4. Investment Properties</AccordionTrigger>
+              <AccordionContent className="p-4 space-y-6">
+                  <YesNoField control={form.control} name="helocForInvestment" label="Do you offer HELOCs for investment / rental properties?" />
+                  <InputField name="investmentLtv" label="If yes, what is the maximum LTV for that? Any limits?" explainer="LTV for investment properties is often lower than for primary residences.">
+                    <Input {...form.register("investmentLtv")} placeholder="e.g., 75%" />
+                  </InputField>
+              </AccordionContent>
+            </AccordionItem>
+
+             <AccordionItem value="item-5">
+              <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">5. Second Homes</AccordionTrigger>
+              <AccordionContent className="p-4 space-y-6">
+                  <YesNoField control={form.control} name="helocForSecondHome" label="Do you offer HELOCs for second homes / vacation properties?" />
+                  <InputField name="secondHomeLtv" label="If yes, what is the maximum LTV for that? Any limits?" explainer="LTV for second homes may also be lower.">
+                    <Input {...form.register("secondHomeLtv")} placeholder="e.g., 80%" />
+                  </InputField>
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-6">
+              <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">6. Seasoning &amp; Rates</AccordionTrigger>
+              <AccordionContent className="p-4 space-y-6">
+                <InputField name="seasoningPeriod" label="What's your seasoning period before I can refinance into a HELOC?" explainer="How long must you own a property before they'll refinance it with a HELOC? (e.g., 6 months)">
+                    <Input {...form.register("seasoningPeriod")} placeholder="e.g., 6 months" />
+                </InputField>
+                <YesNoField control={form.control} name="canFixRate" label="Can I get a fixed rate on a portion of the HELOC or even all of it?" explainer="Some HELOCs allow you to 'lock in' a fixed rate on a part of your balance."/>
+              </AccordionContent>
+            </AccordionItem>
+            
+            <AccordionItem value="item-7">
+              <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">7. Payments &amp; Draw Period</AccordionTrigger>
+              <AccordionContent className="p-4 space-y-6">
+                 <InputField name="paymentType" label="Are the monthly payments interest-only, interest + principal, or a percentage of the balance?" explainer="This is crucial. Interest-only payments during the draw period are common.">
+                    <Input {...form.register("paymentType")} placeholder="Interest-only" />
+                 </InputField>
+                  <YesNoField control={form.control} name="canRedrawPrincipal" label="If a percent, can I withdraw the portion of the principal that I paid down?" explainer="This is the 're-advanceable' feature. As you pay down principal, does your available credit go back up?" />
+                  <InputField name="drawPeriodLength" label="How long is the draw period?" explainer="The time you can borrow funds (e.g., 10 years).">
+                    <Input {...form.register("drawPeriodLength")} placeholder="e.g., 10 years" />
+                  </InputField>
+                  <InputField name="minDrawAmount" label="Is there a minimum draw amount?" explainer="e.g., some banks in Texas require a $4,000 minimum draw.">
+                    <Input {...form.register("minDrawAmount")} placeholder="e.g., None, or $4000" />
+                  </InputField>
+                  <InputField name="afterDrawPeriod" label="What happens after the draw period expires?" explainer="Often, the remaining balance converts to a loan that must be paid off over a set term (e.g., 20 years).">
+                    <Textarea {...form.register("afterDrawPeriod")} placeholder="e.g., balance converts to a 20-year amortized repayment plan." />
+                  </InputField>
+                  <YesNoField control={form.control} name="canRenew" label="Do you offer a renewal if there is a balance at the end of the draw period and is there any cost?"/>
+              </AccordionContent>
+            </AccordionItem>
+
+             <AccordionItem value="item-8">
+              <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">8. Qualification Criteria</AccordionTrigger>
+              <AccordionContent className="p-4 space-y-6">
+                  <InputField name="stressTest" label="Is your stress test based on 15, 20 or 30 year projections OR a percentage of the credit line?" >
+                     <Input {...form.register("stressTest")} />
+                  </InputField>
+                  <InputField name="dtiRequirements" label="What are your DTI (Debt To Income) requirements?" explainer="What is the maximum allowed ratio of your monthly debt payments to your monthly gross income? (e.g., 43%)">
+                    <Input {...form.register("dtiRequirements")} placeholder="e.g., 43%" />
+                  </InputField>
+              </AccordionContent>
+            </AccordionItem>
+
+             <AccordionItem value="item-9">
+              <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">9. Account Functionality</AccordionTrigger>
+              <AccordionContent className="p-4 space-y-6">
+                  <YesNoField control={form.control} name="directDeposit" label="Can I deposit my income directly into the HELOC operating account?" explainer="This is essential for making the strategy work efficiently." />
+                  <YesNoField control={form.control} name="onlineBillPay" label="Can I set up online bill pay so it is linked to the HELOC?" explainer="You need to be able to pay all your monthly expenses from this account." />
+                  <InputField name="sweepAccount" label="Do you offer a sweep account to transfer my balance to my HELOC?" explainer="A sweep automatically moves funds from a checking account to the HELOC to pay down the balance. (e.g., sweep, one-way sweep, manual)">
+                    <Input {...form.register("sweepAccount")} placeholder="e.g., Manual transfer only"/>
+                  </InputField>
+                  <YesNoField control={form.control} name="canSetupSweep" label="Is there something we can do to set up a sweep account to push my checking / savings funds into the HELOC's operating account?" />
+                   <YesNoField control={form.control} name="overdraftProtection" label="Do you have overdraft protection for checking accounts?" />
+                   <InputField name="overdraftFee" label="If yes, is it unlimited or is there a fee after so many uses in a month?">
+                    <Input {...form.register("overdraftFee")} />
+                  </InputField>
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-10">
+              <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">10. Interest Rate Details</AccordionTrigger>
+              <AccordionContent className="p-4 space-y-6">
+                 <InputField name="rateIndex" label="What index is the HELOC tied to?" explainer="The benchmark rate used to set your variable rate (e.g., Prime, SOFR).">
+                    <Input {...form.register("rateIndex")} placeholder="e.g., Wall Street Journal Prime Rate" />
+                 </InputField>
+                 <YesNoField control={form.control} name="introductoryRates" label="Do you offer any introductory rates?" />
+                 <YesNoField control={form.control} name="promoRateStacking" label="Do you offer promo rate stacking?" />
+                  <InputField name="minApr" label="Minimum APR?" explainer="What is the lowest the rate can ever go (the 'floor')?">
+                    <Input type="number" step="0.01" {...form.register("minApr")} />
+                  </InputField>
+                   <InputField name="maxApr" label="Maximum APR?" explainer="What is the highest the rate can ever go (the 'ceiling')?">
+                    <Input type="number" step="0.01" {...form.register("maxApr")} />
+                  </InputField>
+                  <InputField name="interestCalculation" label="Is the HELOC interest calculated on the actual daily principal balance or the average monthly balance?" explainer="CRITICAL: Must be 'actual daily balance' for the strategy to be most effective.">
+                    <Input {...form.register("interestCalculation")} placeholder="Actual daily balance"/>
+                  </InputField>
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-11">
+              <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">11. Fees &amp; Costs</AccordionTrigger>
+              <AccordionContent className="p-4 space-y-6">
+                  <InputField name="closingCosts" label="What are the closing costs or do you cover them?">
+                      <Input {...form.register("closingCosts")} />
+                  </InputField>
+                  <InputField name="annualFee" label="Is there an annual fee for the HELOC?">
+                      <Input {...form.register("annualFee")} />
+                  </InputField>
+                  <InputField name="transactionFees" label="Are there any transaction fees?">
+                      <Input {...form.register("transactionFees")} />
+                  </InputField>
+                  <InputField name="prepaymentPenalty" label="Is there a pre-payment penalty? If yes, what are the terms there?">
+                      <Textarea {...form.register("prepaymentPenalty")} />
+                  </InputField>
+                  <InputField name="otherFees" label="Are there any other fees involved - application, origination, appraisal?">
+                      <Textarea {...form.register("otherFees")} />
+                  </InputField>
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-12">
+              <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">12. Application &amp; Closing</AccordionTrigger>
+              <AccordionContent className="p-4 space-y-6">
+                  <YesNoField control={form.control} name="discounts" label="Do you offer any discounts, like for setting up automated payments?" />
+                  <InputField name="mobileDepositLimit" label="Do you have a maximum mobile deposit limit?">
+                    <Input {...form.register("mobileDepositLimit")} />
+                  </InputField>
+                   <InputField name="statesOffered" label="What states do you provide HELOCs for?">
+                    <Input {...form.register("statesOffered")} />
+                  </InputField>
+                   <InputField name="requiredDocs" label="What documentation do you require to apply?">
+                    <Textarea {...form.register("requiredDocs")} />
+                  </InputField>
+                   <YesNoField control={form.control} name="remoteClosing" label="Do you require we close at a bank branch or can we close remotely?" />
+                   <InputField name="avgCompletionTime" label="What's the average completion time for this type of transaction?">
+                    <Input {...form.register("avgCompletionTime")} />
+                  </InputField>
+                   <InputField name="bankruptcyGuidelines" label="What are your guidelines for bankruptcy (Chapter 7 or 13)?">
+                    <Textarea {...form.register("bankruptcyGuidelines")} />
+                  </InputField>
+                  <InputField name="foreclosureGuidelines" label="What are your guidelines for foreclosures?">
+                    <Textarea {...form.register("foreclosureGuidelines")} />
+                  </InputField>
+                  <InputField name="shortSaleGuidelines" label="What are your guidelines for short sales?">
+                    <Textarea {...form.register("shortSaleGuidelines")} />
+                  </InputField>
+                  <InputField name="valuationType" label="Do you perform an AVM / Desktop valuation or a standard appraisal?">
+                    <Input {...form.register("valuationType")} placeholder="e.g., Standard Appraisal" />
+                  </InputField>
+              </AccordionContent>
+            </AccordionItem>
+
+             <AccordionItem value="item-13">
+              <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">13. Notes</AccordionTrigger>
+              <AccordionContent className="p-4 space-y-4">
+                   <InputField name="notes" label="Additional Notes" explainer="Use this space for any other questions, comments, or details about this lender.">
+                      <Textarea {...form.register("notes")} rows={5} />
+                  </InputField>
+              </AccordionContent>
+            </AccordionItem>
+            
+          </Accordion>
           
-           <AccordionItem value="item-3">
-            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">3. Purchase &amp; Refinancing</AccordionTrigger>
-            <AccordionContent className="p-4 space-y-6">
-                <YesNoField control={control} name="helocForPurchaseRefi" label="Do you offer HELOCs for both purchases &amp; refinancing?" explainer="Can the HELOC be used to buy a new home, or only to refinance an existing mortgage?" />
-                <YesNoField control={control} name="cashReserveRequirements" label="Are there any cash reserve requirements to qualify?" explainer="Do you need to have a certain amount of cash saved after closing?" />
-            </AccordionContent>
-          </AccordionItem>
-          
-           <AccordionItem value="item-4">
-            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">4. Investment Properties</AccordionTrigger>
-            <AccordionContent className="p-4 space-y-6">
-                <YesNoField control={control} name="helocForInvestment" label="Do you offer HELOCs for investment / rental properties?" />
-                <InputField name="investmentLtv" label="If yes, what is the maximum LTV for that? Any limits?" explainer="LTV for investment properties is often lower than for primary residences.">
-                  <Input {...register("investmentLtv")} placeholder="e.g., 75%" />
-                </InputField>
-            </AccordionContent>
-          </AccordionItem>
-
-           <AccordionItem value="item-5">
-            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">5. Second Homes</AccordionTrigger>
-            <AccordionContent className="p-4 space-y-6">
-                <YesNoField control={control} name="helocForSecondHome" label="Do you offer HELOCs for second homes / vacation properties?" />
-                <InputField name="secondHomeLtv" label="If yes, what is the maximum LTV for that? Any limits?" explainer="LTV for second homes may also be lower.">
-                  <Input {...register("secondHomeLtv")} placeholder="e.g., 80%" />
-                </InputField>
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="item-6">
-            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">6. Seasoning &amp; Rates</AccordionTrigger>
-            <AccordionContent className="p-4 space-y-6">
-              <InputField name="seasoningPeriod" label="What's your seasoning period before I can refinance into a HELOC?" explainer="How long must you own a property before they'll refinance it with a HELOC? (e.g., 6 months)">
-                  <Input {...register("seasoningPeriod")} placeholder="e.g., 6 months" />
-              </InputField>
-              <YesNoField control={control} name="canFixRate" label="Can I get a fixed rate on a portion of the HELOC or even all of it?" explainer="Some HELOCs allow you to 'lock in' a fixed rate on a part of your balance."/>
-            </AccordionContent>
-          </AccordionItem>
-          
-          <AccordionItem value="item-7">
-            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">7. Payments &amp; Draw Period</AccordionTrigger>
-            <AccordionContent className="p-4 space-y-6">
-               <InputField name="paymentType" label="Are the monthly payments interest-only, interest + principal, or a percentage of the balance?" explainer="This is crucial. Interest-only payments during the draw period are common.">
-                  <Input {...register("paymentType")} placeholder="Interest-only" />
-               </InputField>
-                <YesNoField control={control} name="canRedrawPrincipal" label="If a percent, can I withdraw the portion of the principal that I paid down?" explainer="This is the 're-advanceable' feature. As you pay down principal, does your available credit go back up?" />
-                <InputField name="drawPeriodLength" label="How long is the draw period?" explainer="The time you can borrow funds (e.g., 10 years).">
-                  <Input {...register("drawPeriodLength")} placeholder="e.g., 10 years" />
-                </InputField>
-                <InputField name="minDrawAmount" label="Is there a minimum draw amount?" explainer="e.g., some banks in Texas require a $4,000 minimum draw.">
-                  <Input {...register("minDrawAmount")} placeholder="e.g., None, or $4000" />
-                </InputField>
-                <InputField name="afterDrawPeriod" label="What happens after the draw period expires?" explainer="Often, the remaining balance converts to a loan that must be paid off over a set term (e.g., 20 years).">
-                  <Textarea {...register("afterDrawPeriod")} placeholder="e.g., balance converts to a 20-year amortized repayment plan." />
-                </InputField>
-                <YesNoField control={control} name="canRenew" label="Do you offer a renewal if there is a balance at the end of the draw period and is there any cost?"/>
-            </AccordionContent>
-          </AccordionItem>
-
-           <AccordionItem value="item-8">
-            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">8. Qualification Criteria</AccordionTrigger>
-            <AccordionContent className="p-4 space-y-6">
-                <InputField name="stressTest" label="Is your stress test based on 15, 20 or 30 year projections OR a percentage of the credit line?" >
-                   <Input {...register("stressTest")} />
-                </InputField>
-                <InputField name="dtiRequirements" label="What are your DTI (Debt To Income) requirements?" explainer="What is the maximum allowed ratio of your monthly debt payments to your monthly gross income? (e.g., 43%)">
-                  <Input {...register("dtiRequirements")} placeholder="e.g., 43%" />
-                </InputField>
-            </AccordionContent>
-          </AccordionItem>
-
-           <AccordionItem value="item-9">
-            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">9. Account Functionality</AccordionTrigger>
-            <AccordionContent className="p-4 space-y-6">
-                <YesNoField control={control} name="directDeposit" label="Can I deposit my income directly into the HELOC operating account?" explainer="This is essential for making the strategy work efficiently." />
-                <YesNoField control={control} name="onlineBillPay" label="Can I set up online bill pay so it is linked to the HELOC?" explainer="You need to be able to pay all your monthly expenses from this account." />
-                <InputField name="sweepAccount" label="Do you offer a sweep account to transfer my balance to my HELOC?" explainer="A sweep automatically moves funds from a checking account to the HELOC to pay down the balance. (e.g., sweep, one-way sweep, manual)">
-                  <Input {...register("sweepAccount")} placeholder="e.g., Manual transfer only"/>
-                </InputField>
-                <YesNoField control={control} name="canSetupSweep" label="Is there something we can do to set up a sweep account to push my checking / savings funds into the HELOC's operating account?" />
-                 <YesNoField control={control} name="overdraftProtection" label="Do you have overdraft protection for checking accounts?" />
-                 <InputField name="overdraftFee" label="If yes, is it unlimited or is there a fee after so many uses in a month?">
-                  <Input {...register("overdraftFee")} />
-                </InputField>
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="item-10">
-            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">10. Interest Rate Details</AccordionTrigger>
-            <AccordionContent className="p-4 space-y-6">
-               <InputField name="rateIndex" label="What index is the HELOC tied to?" explainer="The benchmark rate used to set your variable rate (e.g., Prime, SOFR).">
-                  <Input {...register("rateIndex")} placeholder="e.g., Wall Street Journal Prime Rate" />
-               </InputField>
-               <YesNoField control={control} name="introductoryRates" label="Do you offer any introductory rates?" />
-               <YesNoField control={control} name="promoRateStacking" label="Do you offer promo rate stacking?" />
-                <InputField name="minApr" label="Minimum APR?" explainer="What is the lowest the rate can ever go (the 'floor')?">
-                  <Input type="number" step="0.01" {...register("minApr")} />
-                </InputField>
-                 <InputField name="maxApr" label="Maximum APR?" explainer="What is the highest the rate can ever go (the 'ceiling')?">
-                  <Input type="number" step="0.01" {...register("maxApr")} />
-                </InputField>
-                <InputField name="interestCalculation" label="Is the HELOC interest calculated on the actual daily principal balance or the average monthly balance?" explainer="CRITICAL: Must be 'actual daily balance' for the strategy to be most effective.">
-                  <Input {...register("interestCalculation")} placeholder="Actual daily balance"/>
-                </InputField>
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="item-11">
-            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">11. Fees &amp; Costs</AccordionTrigger>
-            <AccordionContent className="p-4 space-y-6">
-                <InputField name="closingCosts" label="What are the closing costs or do you cover them?">
-                    <Input {...register("closingCosts")} />
-                </InputField>
-                <InputField name="annualFee" label="Is there an annual fee for the HELOC?">
-                    <Input {...register("annualFee")} />
-                </InputField>
-                <InputField name="transactionFees" label="Are there any transaction fees?">
-                    <Input {...register("transactionFees")} />
-                </InputField>
-                <InputField name="prepaymentPenalty" label="Is there a pre-payment penalty? If yes, what are the terms there?">
-                    <Textarea {...register("prepaymentPenalty")} />
-                </InputField>
-                <InputField name="otherFees" label="Are there any other fees involved - application, origination, appraisal?">
-                    <Textarea {...register("otherFees")} />
-                </InputField>
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="item-12">
-            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">12. Application &amp; Closing</AccordionTrigger>
-            <AccordionContent className="p-4 space-y-6">
-                <YesNoField control={control} name="discounts" label="Do you offer any discounts, like for setting up automated payments?" />
-                <InputField name="mobileDepositLimit" label="Do you have a maximum mobile deposit limit?">
-                  <Input {...register("mobileDepositLimit")} />
-                </InputField>
-                 <InputField name="statesOffered" label="What states do you provide HELOCs for?">
-                  <Input {...register("statesOffered")} />
-                </InputField>
-                 <InputField name="requiredDocs" label="What documentation do you require to apply?">
-                  <Textarea {...register("requiredDocs")} />
-                </InputField>
-                 <YesNoField control={control} name="remoteClosing" label="Do you require we close at a bank branch or can we close remotely?" />
-                 <InputField name="avgCompletionTime" label="What's the average completion time for this type of transaction?">
-                  <Input {...register("avgCompletionTime")} />
-                </InputField>
-                 <InputField name="bankruptcyGuidelines" label="What are your guidelines for bankruptcy (Chapter 7 or 13)?">
-                  <Textarea {...register("bankruptcyGuidelines")} />
-                </InputField>
-                <InputField name="foreclosureGuidelines" label="What are your guidelines for foreclosures?">
-                  <Textarea {...register("foreclosureGuidelines")} />
-                </InputField>
-                <InputField name="shortSaleGuidelines" label="What are your guidelines for short sales?">
-                  <Textarea {...register("shortSaleGuidelines")} />
-                </InputField>
-                <InputField name="valuationType" label="Do you perform an AVM / Desktop valuation or a standard appraisal?">
-                  <Input {...register("valuationType")} placeholder="e.g., Standard Appraisal" />
-                </InputField>
-            </AccordionContent>
-          </AccordionItem>
-
-           <AccordionItem value="item-13">
-            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">13. Notes</AccordionTrigger>
-            <AccordionContent className="p-4 space-y-4">
-                 <InputField name="notes" label="Additional Notes" explainer="Use this space for any other questions, comments, or details about this lender.">
-                    <Textarea {...register("notes")} rows={5} />
-                </InputField>
-            </AccordionContent>
-          </AccordionItem>
-          
-        </Accordion>
-        
-        <div className="mt-8 flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => window.print()}><Printer className="mr-2 h-4 w-4" /> Print / Save as PDF</Button>
-            <Button type="submit"><Save className="mr-2 h-4 w-4" /> Save Screener</Button>
-        </div>
-      </form>
+          <div className="mt-8 flex justify-end gap-2">
+              <Button type="button" variant="outline" onClick={() => window.print()}><Printer className="mr-2 h-4 w-4" /> Print / Save as PDF</Button>
+              <Button type="submit"><Save className="mr-2 h-4 w-4" /> Save Screener</Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 }
+
+    
