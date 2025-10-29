@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Home, Gem } from 'lucide-react';
+import { Home, Gem, Banknote } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { UserProfileButton } from '@/components/auth/user-profile-button';
 
@@ -26,6 +26,9 @@ export default function Header() {
             </Button>
              <Button variant="ghost" asChild>
               <Link href="/members/chunker"><Gem className="mr-2 h-4 w-4" /> Chunker</Link>
+            </Button>
+            <Button variant="ghost" asChild>
+              <Link href="/members/bank-screener"><Banknote className="mr-2 h-4 w-4" /> Bank Screener</Link>
             </Button>
             <Button variant="ghost" asChild>
               <Link href="/snippets">Snippets</Link>
