@@ -1,7 +1,7 @@
 
 'use client';
 import React, { useState, useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, FormProvider } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -14,7 +14,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { useUser } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
-import { Form, FormField as ShadcnFormField, FormItem, FormControl, FormMessage } from '@/components/ui/form';
+import { Form, FormField, FormItem, FormControl, FormMessage, FormLabel } from '@/components/ui/form';
 
 const ADMIN_EMAIL = 'emperorsrujal@gmail.com';
 
@@ -41,59 +41,32 @@ const InputField = ({ name, label, children, explainer }: { name: string, label:
   </div>
 );
 
-const YesNoField = ({ control, name, label, explainer }: { control: any, name: any, label: string, explainer?: string }) => (
-    <ShadcnFormField
-        control={control}
-        name={name}
-        render={({ field }) => (
-            <FormItem className="space-y-3">
-                 <div className="flex items-center gap-2 mb-2">
-                    <Label>{label}</Label>
-                    {explainer && (
-                        <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                            <button type="button" aria-label={`Help for ${label}`} onClick={(e) => e.preventDefault()}>
-                                <Info className="h-4 w-4 text-muted-foreground" />
-                            </button>
-                            </TooltipTrigger>
-                            <TooltipContent className="max-w-xs whitespace-pre-wrap"><p>{explainer}</p></TooltipContent>
-                        </Tooltip>
-                        </TooltipProvider>
-                    )}
-                </div>
-                <FormControl>
-                    <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        className="flex gap-4"
-                    >
-                        <FormItem className="flex items-center space-x-2">
-                            <FormControl>
-                                <RadioGroupItem value="yes" id={`${name}-yes`} />
-                            </FormControl>
-                            <Label htmlFor={`${name}-yes`}>Yes</Label>
-                        </FormItem>
-                        <FormItem className="flex items-center space-x-2">
-                             <FormControl>
-                                <RadioGroupItem value="no" id={`${name}-no`} />
-                            </FormControl>
-                            <Label htmlFor={`${name}-no`}>No</Label>
-                        </FormItem>
-                         <FormItem className="flex items-center space-x-2">
-                             <FormControl>
-                                <RadioGroupItem value="na" id={`${name}-na`} />
-                            </FormControl>
-                            <Label htmlFor={`${name}-na`}>N/A</Label>
-                        </FormItem>
-                    </RadioGroup>
-                </FormControl>
-                <FormMessage />
-            </FormItem>
-     )}
-    />
+const YesNoRadioGroup = ({ field }: { field: any }) => (
+  <RadioGroup
+    onValueChange={field.onChange}
+    defaultValue={field.value}
+    className="flex gap-4"
+  >
+    <FormItem className="flex items-center space-x-2">
+      <FormControl>
+        <RadioGroupItem value="yes" id={`${field.name}-yes`} />
+      </FormControl>
+      <FormLabel htmlFor={`${field.name}-yes`} className="font-normal">Yes</FormLabel>
+    </FormItem>
+    <FormItem className="flex items-center space-x-2">
+      <FormControl>
+        <RadioGroupItem value="no" id={`${field.name}-no`} />
+      </FormControl>
+      <FormLabel htmlFor={`${field.name}-no`} className="font-normal">No</FormLabel>
+    </FormItem>
+    <FormItem className="flex items-center space-x-2">
+      <FormControl>
+        <RadioGroupItem value="na" id={`${field.name}-na`} />
+      </FormControl>
+      <FormLabel htmlFor={`${field.name}-na`} className="font-normal">N/A</FormLabel>
+    </FormItem>
+  </RadioGroup>
 );
-
 
 export default function BankScreenerPage() {
   const form = useForm();
@@ -101,7 +74,6 @@ export default function BankScreenerPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Super admin check
     if (user?.email === ADMIN_EMAIL) {
       return;
     }
@@ -113,8 +85,6 @@ export default function BankScreenerPage() {
 
   const onSubmit = (data: any) => {
     console.log(data);
-    // Here you would typically save the data to Firestore or another backend.
-    // For now, we just log it.
     alert('Bank screening data saved (see console).');
   };
 
@@ -174,7 +144,25 @@ export default function BankScreenerPage() {
             <AccordionItem value="item-1">
               <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">1. First Lien Position</AccordionTrigger>
               <AccordionContent className="p-4 space-y-4">
-                  <YesNoField control={form.control} name="offersFirstLien" label="Do you offer a first lien position HELOC?" explainer="A 'first lien' means the HELOC is the primary loan on the property, not a secondary one. This is key for the Mortgage Cutter method." />
+                <FormField
+                  control={form.control}
+                  name="offersFirstLien"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-2 mb-2">
+                        <FormLabel>Do you offer a first lien position HELOC?</FormLabel>
+                         <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild><button type="button" aria-label="Help for offersFirstLien" onClick={(e) => e.preventDefault()}><Info className="h-4 w-4 text-muted-foreground" /></button></TooltipTrigger>
+                              <TooltipContent className="max-w-xs whitespace-pre-wrap"><p>A 'first lien' means the HELOC is the primary loan on the property, not a secondary one. This is key for the Mortgage Cutter method.</p></TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                      </div>
+                      <FormControl><YesNoRadioGroup field={field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </AccordionContent>
             </AccordionItem>
 
@@ -201,7 +189,25 @@ export default function BankScreenerPage() {
                        </InputField>
                     </div>
                 </div>
-                <YesNoField control={form.control} name="ltvCanRenew" label="Can I renew my HELOC's LTV to a lower or higher rate down the line?" explainer="Can you refinance or modify the LTV percentage during the loan's life?"/>
+                <FormField
+                  control={form.control}
+                  name="ltvCanRenew"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-2 mb-2">
+                        <FormLabel>Can I renew my HELOC's LTV to a lower or higher rate down the line?</FormLabel>
+                         <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild><button type="button" aria-label="Help for ltvCanRenew" onClick={(e) => e.preventDefault()}><Info className="h-4 w-4 text-muted-foreground" /></button></TooltipTrigger>
+                              <TooltipContent className="max-w-xs whitespace-pre-wrap"><p>Can you refinance or modify the LTV percentage during the loan's life?</p></TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                      </div>
+                      <FormControl><YesNoRadioGroup field={field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <InputField name="ltvLimitations" label="Are there any specific limitations as to who can apply for a HELOC?" explainer="e.g., residency requirements, property type restrictions.">
                     <Textarea {...form.register("ltvLimitations")} />
                 </InputField>
@@ -211,15 +217,63 @@ export default function BankScreenerPage() {
              <AccordionItem value="item-3">
               <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">3. Purchase &amp; Refinancing</AccordionTrigger>
               <AccordionContent className="p-4 space-y-6">
-                  <YesNoField control={form.control} name="helocForPurchaseRefi" label="Do you offer HELOCs for both purchases &amp; refinancing?" explainer="Can the HELOC be used to buy a new home, or only to refinance an existing mortgage?" />
-                  <YesNoField control={form.control} name="cashReserveRequirements" label="Are there any cash reserve requirements to qualify?" explainer="Do you need to have a certain amount of cash saved after closing?" />
+                <FormField
+                  control={form.control}
+                  name="helocForPurchaseRefi"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-2 mb-2">
+                        <FormLabel>Do you offer HELOCs for both purchases &amp; refinancing?</FormLabel>
+                         <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild><button type="button" aria-label="Help for helocForPurchaseRefi" onClick={(e) => e.preventDefault()}><Info className="h-4 w-4 text-muted-foreground" /></button></TooltipTrigger>
+                              <TooltipContent className="max-w-xs whitespace-pre-wrap"><p>Can the HELOC be used to buy a new home, or only to refinance an existing mortgage?</p></TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                      </div>
+                      <FormControl><YesNoRadioGroup field={field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="cashReserveRequirements"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-2 mb-2">
+                        <FormLabel>Are there any cash reserve requirements to qualify?</FormLabel>
+                         <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild><button type="button" aria-label="Help for cashReserveRequirements" onClick={(e) => e.preventDefault()}><Info className="h-4 w-4 text-muted-foreground" /></button></TooltipTrigger>
+                              <TooltipContent className="max-w-xs whitespace-pre-wrap"><p>Do you need to have a certain amount of cash saved after closing?</p></TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                      </div>
+                      <FormControl><YesNoRadioGroup field={field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </AccordionContent>
             </AccordionItem>
             
              <AccordionItem value="item-4">
               <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">4. Investment Properties</AccordionTrigger>
               <AccordionContent className="p-4 space-y-6">
-                  <YesNoField control={form.control} name="helocForInvestment" label="Do you offer HELOCs for investment / rental properties?" />
+                <FormField
+                  control={form.control}
+                  name="helocForInvestment"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-2 mb-2">
+                        <FormLabel>Do you offer HELOCs for investment / rental properties?</FormLabel>
+                      </div>
+                      <FormControl><YesNoRadioGroup field={field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                   <InputField name="investmentLtv" label="If yes, what is the maximum LTV for that? Any limits?" explainer="LTV for investment properties is often lower than for primary residences.">
                     <Input {...form.register("investmentLtv")} placeholder="e.g., 75%" />
                   </InputField>
@@ -229,7 +283,19 @@ export default function BankScreenerPage() {
              <AccordionItem value="item-5">
               <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">5. Second Homes</AccordionTrigger>
               <AccordionContent className="p-4 space-y-6">
-                  <YesNoField control={form.control} name="helocForSecondHome" label="Do you offer HELOCs for second homes / vacation properties?" />
+                <FormField
+                  control={form.control}
+                  name="helocForSecondHome"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-2 mb-2">
+                        <FormLabel>Do you offer HELOCs for second homes / vacation properties?</FormLabel>
+                      </div>
+                      <FormControl><YesNoRadioGroup field={field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                   <InputField name="secondHomeLtv" label="If yes, what is the maximum LTV for that? Any limits?" explainer="LTV for second homes may also be lower.">
                     <Input {...form.register("secondHomeLtv")} placeholder="e.g., 80%" />
                   </InputField>
@@ -242,7 +308,25 @@ export default function BankScreenerPage() {
                 <InputField name="seasoningPeriod" label="What's your seasoning period before I can refinance into a HELOC?" explainer="How long must you own a property before they'll refinance it with a HELOC? (e.g., 6 months)">
                     <Input {...form.register("seasoningPeriod")} placeholder="e.g., 6 months" />
                 </InputField>
-                <YesNoField control={form.control} name="canFixRate" label="Can I get a fixed rate on a portion of the HELOC or even all of it?" explainer="Some HELOCs allow you to 'lock in' a fixed rate on a part of your balance."/>
+                <FormField
+                  control={form.control}
+                  name="canFixRate"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-2 mb-2">
+                        <FormLabel>Can I get a fixed rate on a portion of the HELOC or even all of it?</FormLabel>
+                        <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild><button type="button" aria-label="Help for canFixRate" onClick={(e) => e.preventDefault()}><Info className="h-4 w-4 text-muted-foreground" /></button></TooltipTrigger>
+                              <TooltipContent className="max-w-xs whitespace-pre-wrap"><p>Some HELOCs allow you to 'lock in' a fixed rate on a part of your balance.</p></TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                      </div>
+                      <FormControl><YesNoRadioGroup field={field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </AccordionContent>
             </AccordionItem>
             
@@ -252,7 +336,25 @@ export default function BankScreenerPage() {
                  <InputField name="paymentType" label="Are the monthly payments interest-only, interest + principal, or a percentage of the balance?" explainer="This is crucial. Interest-only payments during the draw period are common.">
                     <Input {...form.register("paymentType")} placeholder="Interest-only" />
                  </InputField>
-                  <YesNoField control={form.control} name="canRedrawPrincipal" label="If a percent, can I withdraw the portion of the principal that I paid down?" explainer="This is the 're-advanceable' feature. As you pay down principal, does your available credit go back up?" />
+                  <FormField
+                  control={form.control}
+                  name="canRedrawPrincipal"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-2 mb-2">
+                        <FormLabel>If a percent, can I withdraw the portion of the principal that I paid down?</FormLabel>
+                         <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild><button type="button" aria-label="Help for canRedrawPrincipal" onClick={(e) => e.preventDefault()}><Info className="h-4 w-4 text-muted-foreground" /></button></TooltipTrigger>
+                              <TooltipContent className="max-w-xs whitespace-pre-wrap"><p>This is the 're-advanceable' feature. As you pay down principal, does your available credit go back up?</p></TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                      </div>
+                      <FormControl><YesNoRadioGroup field={field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                   <InputField name="drawPeriodLength" label="How long is the draw period?" explainer="The time you can borrow funds (e.g., 10 years).">
                     <Input {...form.register("drawPeriodLength")} placeholder="e.g., 10 years" />
                   </InputField>
@@ -262,7 +364,19 @@ export default function BankScreenerPage() {
                   <InputField name="afterDrawPeriod" label="What happens after the draw period expires?" explainer="Often, the remaining balance converts to a loan that must be paid off over a set term (e.g., 20 years).">
                     <Textarea {...form.register("afterDrawPeriod")} placeholder="e.g., balance converts to a 20-year amortized repayment plan." />
                   </InputField>
-                  <YesNoField control={form.control} name="canRenew" label="Do you offer a renewal if there is a balance at the end of the draw period and is there any cost?"/>
+                  <FormField
+                  control={form.control}
+                  name="canRenew"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-2 mb-2">
+                        <FormLabel>Do you offer a renewal if there is a balance at the end of the draw period and is there any cost?</FormLabel>
+                      </div>
+                      <FormControl><YesNoRadioGroup field={field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </AccordionContent>
             </AccordionItem>
 
@@ -281,13 +395,73 @@ export default function BankScreenerPage() {
              <AccordionItem value="item-9">
               <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">9. Account Functionality</AccordionTrigger>
               <AccordionContent className="p-4 space-y-6">
-                  <YesNoField control={form.control} name="directDeposit" label="Can I deposit my income directly into the HELOC operating account?" explainer="This is essential for making the strategy work efficiently." />
-                  <YesNoField control={form.control} name="onlineBillPay" label="Can I set up online bill pay so it is linked to the HELOC?" explainer="You need to be able to pay all your monthly expenses from this account." />
+                <FormField
+                  control={form.control}
+                  name="directDeposit"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-2 mb-2">
+                        <FormLabel>Can I deposit my income directly into the HELOC operating account?</FormLabel>
+                        <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild><button type="button" aria-label="Help for directDeposit" onClick={(e) => e.preventDefault()}><Info className="h-4 w-4 text-muted-foreground" /></button></TooltipTrigger>
+                              <TooltipContent className="max-w-xs whitespace-pre-wrap"><p>This is essential for making the strategy work efficiently.</p></TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                      </div>
+                      <FormControl><YesNoRadioGroup field={field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="onlineBillPay"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-2 mb-2">
+                        <FormLabel>Can I set up online bill pay so it is linked to the HELOC?</FormLabel>
+                        <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild><button type="button" aria-label="Help for onlineBillPay" onClick={(e) => e.preventDefault()}><Info className="h-4 w-4 text-muted-foreground" /></button></TooltipTrigger>
+                              <TooltipContent className="max-w-xs whitespace-pre-wrap"><p>You need to be able to pay all your monthly expenses from this account.</p></TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                      </div>
+                      <FormControl><YesNoRadioGroup field={field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                   <InputField name="sweepAccount" label="Do you offer a sweep account to transfer my balance to my HELOC?" explainer="A sweep automatically moves funds from a checking account to the HELOC to pay down the balance. (e.g., sweep, one-way sweep, manual)">
                     <Input {...form.register("sweepAccount")} placeholder="e.g., Manual transfer only"/>
                   </InputField>
-                  <YesNoField control={form.control} name="canSetupSweep" label="Is there something we can do to set up a sweep account to push my checking / savings funds into the HELOC's operating account?" />
-                   <YesNoField control={form.control} name="overdraftProtection" label="Do you have overdraft protection for checking accounts?" />
+                <FormField
+                  control={form.control}
+                  name="canSetupSweep"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-2 mb-2">
+                        <FormLabel>Is there something we can do to set up a sweep account to push my checking / savings funds into the HELOC's operating account?</FormLabel>
+                      </div>
+                      <FormControl><YesNoRadioGroup field={field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="overdraftProtection"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-2 mb-2">
+                        <FormLabel>Do you have overdraft protection for checking accounts?</FormLabel>
+                      </div>
+                      <FormControl><YesNoRadioGroup field={field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                    <InputField name="overdraftFee" label="If yes, is it unlimited or is there a fee after so many uses in a month?">
                     <Input {...form.register("overdraftFee")} />
                   </InputField>
@@ -300,8 +474,28 @@ export default function BankScreenerPage() {
                  <InputField name="rateIndex" label="What index is the HELOC tied to?" explainer="The benchmark rate used to set your variable rate (e.g., Prime, SOFR).">
                     <Input {...form.register("rateIndex")} placeholder="e.g., Wall Street Journal Prime Rate" />
                  </InputField>
-                 <YesNoField control={form.control} name="introductoryRates" label="Do you offer any introductory rates?" />
-                 <YesNoField control={form.control} name="promoRateStacking" label="Do you offer promo rate stacking?" />
+                 <FormField
+                  control={form.control}
+                  name="introductoryRates"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-2 mb-2"><FormLabel>Do you offer any introductory rates?</FormLabel></div>
+                      <FormControl><YesNoRadioGroup field={field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                 <FormField
+                  control={form.control}
+                  name="promoRateStacking"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-2 mb-2"><FormLabel>Do you offer promo rate stacking?</FormLabel></div>
+                      <FormControl><YesNoRadioGroup field={field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                   <InputField name="minApr" label="Minimum APR?" explainer="What is the lowest the rate can ever go (the 'floor')?">
                     <Input type="number" step="0.01" {...form.register("minApr")} />
                   </InputField>
@@ -338,7 +532,17 @@ export default function BankScreenerPage() {
             <AccordionItem value="item-12">
               <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">12. Application &amp; Closing</AccordionTrigger>
               <AccordionContent className="p-4 space-y-6">
-                  <YesNoField control={form.control} name="discounts" label="Do you offer any discounts, like for setting up automated payments?" />
+                 <FormField
+                  control={form.control}
+                  name="discounts"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-2 mb-2"><FormLabel>Do you offer any discounts, like for setting up automated payments?</FormLabel></div>
+                      <FormControl><YesNoRadioGroup field={field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                   <InputField name="mobileDepositLimit" label="Do you have a maximum mobile deposit limit?">
                     <Input {...form.register("mobileDepositLimit")} />
                   </InputField>
@@ -348,7 +552,17 @@ export default function BankScreenerPage() {
                    <InputField name="requiredDocs" label="What documentation do you require to apply?">
                     <Textarea {...form.register("requiredDocs")} />
                   </InputField>
-                   <YesNoField control={form.control} name="remoteClosing" label="Do you require we close at a bank branch or can we close remotely?" />
+                   <FormField
+                  control={form.control}
+                  name="remoteClosing"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-2 mb-2"><FormLabel>Do you require we close at a bank branch or can we close remotely?</FormLabel></div>
+                      <FormControl><YesNoRadioGroup field={field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                    <InputField name="avgCompletionTime" label="What's the average completion time for this type of transaction?">
                     <Input {...form.register("avgCompletionTime")} />
                   </InputField>
@@ -387,5 +601,3 @@ export default function BankScreenerPage() {
     </div>
   );
 }
-
-    
