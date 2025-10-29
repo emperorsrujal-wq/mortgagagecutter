@@ -1,6 +1,7 @@
+
 'use client';
 import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -13,6 +14,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { useUser } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
+import { FormField as ShadcnFormField, FormItem, FormControl, FormMessage } from '@/components/ui/form';
 
 const ADMIN_EMAIL = 'emperorsrujal@gmail.com';
 
@@ -40,28 +42,56 @@ const InputField = ({ name, label, children, explainer }: { name: string, label:
 );
 
 const YesNoField = ({ control, name, label, explainer }: { control: any, name: any, label: string, explainer?: string }) => (
-  <div className="space-y-2">
-     <div className="flex items-center gap-2 mb-2">
-      <Label>{label}</Label>
-      {explainer && (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button type="button" aria-label={`Help for ${label}`} onClick={(e) => e.preventDefault()}>
-                <Info className="h-4 w-4 text-muted-foreground" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent className="max-w-xs whitespace-pre-wrap"><p>{explainer}</p></TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      )}
-    </div>
-    <RadioGroup onValueChange={(value) => control.setValue(name, value)} className="flex gap-4">
-        <div className="flex items-center space-x-2"><RadioGroupItem value="yes" id={`${name}-yes`}/><Label htmlFor={`${name}-yes`}>Yes</Label></div>
-        <div className="flex items-center space-x-2"><RadioGroupItem value="no" id={`${name}-no`}/><Label htmlFor={`${name}-no`}>No</Label></div>
-        <div className="flex items-center space-x-2"><RadioGroupItem value="na" id={`${name}-na`}/><Label htmlFor={`${name}-na`}>N/A</Label></div>
-    </RadioGroup>
-  </div>
+    <ShadcnFormField
+        control={control}
+        name={name}
+        render={({ field }) => (
+            <FormItem className="space-y-3">
+                 <div className="flex items-center gap-2 mb-2">
+                    <Label>{label}</Label>
+                    {explainer && (
+                        <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                            <button type="button" aria-label={`Help for ${label}`} onClick={(e) => e.preventDefault()}>
+                                <Info className="h-4 w-4 text-muted-foreground" />
+                            </button>
+                            </TooltipTrigger>
+                            <TooltipContent className="max-w-xs whitespace-pre-wrap"><p>{explainer}</p></TooltipContent>
+                        </Tooltip>
+                        </TooltipProvider>
+                    )}
+                </div>
+                <FormControl>
+                    <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        className="flex gap-4"
+                    >
+                        <FormItem className="flex items-center space-x-2">
+                            <FormControl>
+                                <RadioGroupItem value="yes" id={`${name}-yes`} />
+                            </FormControl>
+                            <Label htmlFor={`${name}-yes`}>Yes</Label>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-2">
+                             <FormControl>
+                                <RadioGroupItem value="no" id={`${name}-no`} />
+                            </FormControl>
+                            <Label htmlFor={`${name}-no`}>No</Label>
+                        </FormItem>
+                         <FormItem className="flex items-center space-x-2">
+                             <FormControl>
+                                <RadioGroupItem value="na" id={`${name}-na`} />
+                            </FormControl>
+                            <Label htmlFor={`${name}-na`}>N/A</Label>
+                        </FormItem>
+                    </RadioGroup>
+                </FormControl>
+                <FormMessage />
+            </FormItem>
+     )}
+    />
 );
 
 
@@ -178,9 +208,9 @@ export default function BankScreenerPage() {
           </AccordionItem>
           
            <AccordionItem value="item-3">
-            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">3. Purchase & Refinancing</AccordionTrigger>
+            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">3. Purchase &amp; Refinancing</AccordionTrigger>
             <AccordionContent className="p-4 space-y-6">
-                <YesNoField control={control} name="helocForPurchaseRefi" label="Do you offer HELOCs for both purchases & refinancing?" explainer="Can the HELOC be used to buy a new home, or only to refinance an existing mortgage?" />
+                <YesNoField control={control} name="helocForPurchaseRefi" label="Do you offer HELOCs for both purchases &amp; refinancing?" explainer="Can the HELOC be used to buy a new home, or only to refinance an existing mortgage?" />
                 <YesNoField control={control} name="cashReserveRequirements" label="Are there any cash reserve requirements to qualify?" explainer="Do you need to have a certain amount of cash saved after closing?" />
             </AccordionContent>
           </AccordionItem>
@@ -206,7 +236,7 @@ export default function BankScreenerPage() {
           </AccordionItem>
 
           <AccordionItem value="item-6">
-            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">6. Seasoning & Rates</AccordionTrigger>
+            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">6. Seasoning &amp; Rates</AccordionTrigger>
             <AccordionContent className="p-4 space-y-6">
               <InputField name="seasoningPeriod" label="What's your seasoning period before I can refinance into a HELOC?" explainer="How long must you own a property before they'll refinance it with a HELOC? (e.g., 6 months)">
                   <Input {...register("seasoningPeriod")} placeholder="e.g., 6 months" />
@@ -216,7 +246,7 @@ export default function BankScreenerPage() {
           </AccordionItem>
           
           <AccordionItem value="item-7">
-            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">7. Payments & Draw Period</AccordionTrigger>
+            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">7. Payments &amp; Draw Period</AccordionTrigger>
             <AccordionContent className="p-4 space-y-6">
                <InputField name="paymentType" label="Are the monthly payments interest-only, interest + principal, or a percentage of the balance?" explainer="This is crucial. Interest-only payments during the draw period are common.">
                   <Input {...register("paymentType")} placeholder="Interest-only" />
@@ -238,7 +268,9 @@ export default function BankScreenerPage() {
            <AccordionItem value="item-8">
             <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">8. Qualification Criteria</AccordionTrigger>
             <AccordionContent className="p-4 space-y-6">
-                <InputField name="stressTest" label="Is your stress test based on 15, 20 or 30 year projections OR a percentage of the credit line?" />
+                <InputField name="stressTest" label="Is your stress test based on 15, 20 or 30 year projections OR a percentage of the credit line?" >
+                   <Input {...register("stressTest")} />
+                </InputField>
                 <InputField name="dtiRequirements" label="What are your DTI (Debt To Income) requirements?" explainer="What is the maximum allowed ratio of your monthly debt payments to your monthly gross income? (e.g., 43%)">
                   <Input {...register("dtiRequirements")} placeholder="e.g., 43%" />
                 </InputField>
@@ -282,7 +314,7 @@ export default function BankScreenerPage() {
           </AccordionItem>
 
           <AccordionItem value="item-11">
-            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">11. Fees & Costs</AccordionTrigger>
+            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">11. Fees &amp; Costs</AccordionTrigger>
             <AccordionContent className="p-4 space-y-6">
                 <InputField name="closingCosts" label="What are the closing costs or do you cover them?">
                     <Input {...register("closingCosts")} />
@@ -303,7 +335,7 @@ export default function BankScreenerPage() {
           </AccordionItem>
 
           <AccordionItem value="item-12">
-            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">12. Application & Closing</AccordionTrigger>
+            <AccordionTrigger className="font-bold text-lg p-4 bg-gray-50 rounded-lg">12. Application &amp; Closing</AccordionTrigger>
             <AccordionContent className="p-4 space-y-6">
                 <YesNoField control={control} name="discounts" label="Do you offer any discounts, like for setting up automated payments?" />
                 <InputField name="mobileDepositLimit" label="Do you have a maximum mobile deposit limit?">
