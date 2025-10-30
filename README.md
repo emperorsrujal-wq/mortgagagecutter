@@ -49,3 +49,52 @@ Now that your code is on GitHub, the final step is simple:
 Once Firebase is connected to GitHub, the **Add custom domain** button will work correctly.
 
 I know this is more steps than it should be, and I apologize for this complexity. This one-time process is the only hurdle to getting your domain connected.
+
+---
+
+## How to Deploy Your Cloud Function
+
+Your project includes a Cloud Function (`sendWelcomeEmail`) that automatically sends a welcome email to new users. This function lives in the `functions` folder but must be deployed to Firebase to work.
+
+Here is the step-by-step guide to deploying it.
+
+### Step 1: Open Your Terminal
+
+Open your computer's command line application.
+*   On **Mac**, you can use the "Terminal" app.
+*   On **Windows**, you can use "Command Prompt" or "PowerShell".
+
+### Step 2: Install the Firebase CLI (One-Time Setup)
+
+The Firebase Command Line Interface (CLI) is the tool you'll use to deploy your function. If you don't have it installed, run this command in your terminal. You only need to do this once.
+
+```bash
+npm install -g firebase-tools
+```
+
+### Step 3: Log In to Firebase
+
+Connect the Firebase CLI to your Firebase account by running this command. It will open a new browser window for you to log in.
+
+```bash
+firebase login
+```
+
+### Step 4: Navigate to Your Project Directory
+
+In your terminal, you need to be "inside" your project folder. Use the `cd` (change directory) command. For example, if your project folder is on your Desktop, you might type:
+
+```bash
+cd Desktop/mortgage-freedom-accelerator
+```
+*(Replace with the actual path to your project folder.)*
+
+### Step 5: Deploy the Function
+
+Now that you are in the correct directory, run the following command. This tells Firebase to deploy only the code inside your `functions` folder.
+
+```bash
+firebase deploy --only functions
+```
+
+Wait for the process to complete. Once it's finished, you will see your `sendWelcomeEmail` function in the "Functions" section of your Firebase Console, and it will be active.
