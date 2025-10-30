@@ -3,7 +3,7 @@ import type { Inputs, Outputs, Debt } from './mortgage-types';
 
 export function estimate(inputs: Inputs): Outputs {
   const ltv = inputs.ltvLimit ?? 0.8;
-  const offsetFactor = inputs.cardOffset ? 0.8 : 1.0;
+  const offsetFactor = inputs.cardOffset ? 1.0 : 0.8; // Correctly apply the logic: offset means more cash available, so factor is 1. No offset means less effective cash, factor is 0.8
 
   // 1) Baseline mortgage payment
   const mortPaymentMonthly = (() => {
@@ -73,15 +73,14 @@ export function estimate(inputs: Inputs): Outputs {
   // Amortize other debts
   for (const d of inputs.debts) {
     if (d.balance > 0) {
-      // FIX: Ensure minimum payment for credit cards covers interest.
       const iOnly = (d.rateAPR / 12 / 100) * d.balance;
-      const minPrincipal = d.balance * 0.01; // 1% of balance as principal
+      const minPrincipal = d.balance * 0.01;
       const pay =
-        d.paymentMonthly > 0
+        d.paymentMonthly > iOnly + 1
           ? d.paymentMonthly
           : d.kind === 'cc'
-          ? Math.max(25, iOnly + minPrincipal) // Common minimum payment logic
-          : Math.max(0, iOnly);
+          ? Math.max(25, iOnly + minPrincipal)
+          : iOnly + 1; // Ensure payment is always > interest
 
       if (pay > 0 && pay > iOnly) {
         const res = amortize(d.balance, d.rateAPR, pay, baselineSeries);
@@ -109,14 +108,14 @@ export function estimate(inputs: Inputs): Outputs {
 
   let helocBalance = Math.max(0, totalDebtConsolidated - movedSavings);
   const helocI = inputs.helocRateAPR / 12 / 100;
-  const surplus = Math.max(0, inputs.netMonthlyIncome - inputs.monthlyExpenses);
+  const surplus = Math.max(0, inputs.netMonthlyIncome - inputs.monthlyExpenses) * offsetFactor;
 
   let hMonths = 0;
   let hInterest = 0;
   const helocSeries: Outputs['series'] = [];
 
   while (helocBalance > 0 && hMonths < 2000) {
-    const interestM = helocBalance * helocI * offsetFactor;
+    const interestM = helocBalance * helocI;
      if (surplus <= interestM && helocI > 0) {
         hMonths = Infinity;
         hInterest = Infinity;
