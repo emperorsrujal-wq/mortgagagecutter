@@ -63,58 +63,40 @@ function safeChunkAmount({
   mortgageBal,
   helocBal,
   helocLimit,
-  helocAPR,
-  mortgageAPR,
   monthlySurplus,
-  maxChunkUser,
   isArbitrage,
+  fixedChunkAmount,
 }: {
   mortgageBal: number;
   helocBal: number;
   helocLimit: number;
-  helocAPR: number;
-  mortgageAPR: number;
   monthlySurplus: number;
-  maxChunkUser?: number | null;
   isArbitrage: boolean;
+  fixedChunkAmount?: number;
 }): number {
-  const helocAvail = Math.max(0, helocLimit - helocBal);
-  if (mortgageBal < 1000 || helocAvail < 1000) return 0;
+  if (mortgageBal < 1000 || monthlySurplus <= 0) return 0;
+  
+  const helocAvail = helocLimit - helocBal;
+  if (helocAvail < 1000) return 0;
 
-  let target;
+  let targetChunk: number;
   if (isArbitrage) {
-    // Arbitrage mode: use as much of the available HELOC as is safe.
-    target = helocAvail;
-  } else if (maxChunkUser && maxChunkUser > 0) {
-    // Fixed mode: use the user's amount.
-    target = maxChunkUser;
+    // Arbitrage mode: be aggressive, use most of available HELOC.
+    targetChunk = helocAvail * 0.9; // Use 90% of available.
+  } else if (fixedChunkAmount) {
+    // Fixed mode: use the user's defined amount.
+    targetChunk = fixedChunkAmount;
   } else {
     // Auto mode (standard): optimal chunk is often 3-6x the monthly surplus.
     // This pays it down reasonably quickly without letting interest get out of hand.
-    target = monthlySurplus * 4;
-  }
-  
-  let finalChunk = Math.min(mortgageBal, helocAvail, target);
-
-  // Safety check: ensure next month's total interest is covered by surplus with a cushion.
-  const rH = (helocAPR / 100) / 12;
-  const nextHelocInterest = (helocBal + finalChunk) * rH;
-  
-  // For arbitrage, we allow dipping into surplus more heavily. For standard, we are more conservative.
-  const requiredSurplus = nextHelocInterest;
-
-  if (monthlySurplus > requiredSurplus * 1.25) { // 25% safety cushion
-    return finalChunk >= 1000 ? finalChunk : 0;
-  }
-  
-  // If the ideal chunk is too aggressive, scale it back.
-  if (isArbitrage || (maxChunkUser === undefined)) {
-     const scaledDownChunk = (monthlySurplus / (rH * 1.25)) - helocBal;
-     const safeScaledChunk = Math.min(scaledDownChunk, helocAvail, mortgageBal);
-     return safeScaledChunk >= 1000 ? safeScaledChunk : 0;
+    targetChunk = monthlySurplus * 4;
   }
 
-  return 0;
+  // Ensure chunk is not more than available HELOC or remaining mortgage.
+  const finalChunk = Math.min(mortgageBal, helocAvail, targetChunk);
+
+  // Return chunk if it's a meaningful amount, otherwise 0.
+  return finalChunk >= 1000 ? finalChunk : 0;
 }
 
 
@@ -125,6 +107,7 @@ function baselineOnly(
   monthlyMI: number,
   homeValue?: number
 ) {
+  if (mortgageBalance <= 0) return { months: 0, totalInterest: 0, totalMI: 0, fixedPmt: 0 };
   const fixed = pmt(mortgageAPR, termMonths, mortgageBalance);
   let bal = mortgageBalance;
   let interest = 0;
@@ -164,11 +147,7 @@ export function simulate(inputs: Inputs): Outputs {
 
   // Strategy init
   let mortgageBal = inputs.mortgageBalance;
-  const fixedPmt = inputs.monthlyMortgagePayment ?? pmt(
-    inputs.mortgageAPR,
-    inputs.termMonthsRemaining,
-    inputs.mortgageBalance
-  );
+  const fixedPmt = inputs.monthlyMortgagePayment ?? base.fixedPmt;
 
   let helocBal = inputs.helocOpeningBalance ?? 0;
   const helocLimit = Math.max(0, inputs.helocLimit);
@@ -177,7 +156,8 @@ export function simulate(inputs: Inputs): Outputs {
   let totalInterestHeloc = 0;
   let totalMI = 0;
 
-  const timing = inputs.billTiming === "OPTIMIZED" ? 0.9 : 0.6;
+  // Effective surplus timing factor
+  const timingFactor = inputs.billTiming === "OPTIMIZED" ? 0.9 : 0.6;
   const timeline: Outputs["timeline"] = [];
 
   let months = 0;
@@ -187,12 +167,12 @@ export function simulate(inputs: Inputs): Outputs {
     months++;
 
     // 1) Mortgage step
-    const { interest: mi, newBalance } = splitMortgagePayment(
+    const { interest: mortInterest, newBalance } = splitMortgagePayment(
       mortgageBal,
       inputs.mortgageAPR,
       mortgageBal > 0 ? fixedPmt : 0 // once paid off, 0
     );
-    totalInterestMortgage += mi;
+    totalInterestMortgage += mortInterest;
     mortgageBal = newBalance;
 
     // 2) MI only while LTV > 80%
@@ -206,33 +186,34 @@ export function simulate(inputs: Inputs): Outputs {
     // 3) Surplus: netIncome - livingExpenses - (mortgage payment + MI)
     const mortgageOutflow = mortgageBal > 0 ? fixedPmt : 0;
     const rawSurplus = inputs.netIncome - inputs.livingExpenses - mortgageOutflow - thisMI;
-    const effectiveSurplus = Math.max(0, rawSurplus) * timing;
 
-    // 4) HELOC interest, then principal
+    // 4) HELOC interest, then principal paydown from surplus
     const helocInterest = helocBal * ((inputs.helocAPR / 100) / 12);
     totalInterestHeloc += helocInterest;
-    let principalToHeloc = Math.max(0, effectiveSurplus - helocInterest);
-    if (principalToHeloc > helocBal) principalToHeloc = helocBal;
+    
+    const surplusAfterHelocInterest = rawSurplus - helocInterest;
+    let principalToHeloc = surplusAfterHelocInterest * timingFactor;
+    
+    if (principalToHeloc > helocBal) {
+      principalToHeloc = helocBal;
+    }
     helocBal -= principalToHeloc;
 
     let chunkApplied = 0;
 
     // 5) Consider a new chunk only when HELOC is light
-    const canChunk = inputs.readvanceable ? true : (months === 1 && (inputs.helocOpeningBalance ?? 0) === 0);
-    if (canChunk && mortgageBal > 0.01 && (helocLimit - helocBal) > 1000 && helocBal < 100) {
+    if (mortgageBal > 0.01 && helocBal < 100) {
       const chunk = safeChunkAmount({
         mortgageBal,
         helocBal,
         helocLimit,
-        helocAPR: inputs.helocAPR,
-        mortgageAPR: inputs.mortgageAPR,
-        monthlySurplus: effectiveSurplus,
-        maxChunkUser: inputs.chunkMode === "FIXED" ? (inputs.fixedChunkAmount ?? 0) : undefined,
-        isArbitrage: isArbitrageMode
+        monthlySurplus: rawSurplus,
+        isArbitrage: isArbitrageMode,
+        fixedChunkAmount: inputs.chunkMode === "FIXED" ? inputs.fixedChunkAmount : undefined,
       });
 
       if (chunk > 0) {
-        if(months === 1) firstChunkSize = chunk;
+        if (months === 1) firstChunkSize = chunk;
         helocBal += chunk;
         mortgageBal = Math.max(0, mortgageBal - chunk);
         chunkApplied = chunk;
@@ -243,11 +224,11 @@ export function simulate(inputs: Inputs): Outputs {
       month: months,
       mortgageBal: Math.max(0, mortgageBal),
       helocBal: Math.max(0, helocBal),
-      mortInterest: mi,
+      mortInterest,
       helocInterest,
       mi: thisMI,
       chunkApplied,
-      surplusUsed: effectiveSurplus,
+      surplusUsed: rawSurplus > 0 ? rawSurplus : 0,
     });
   }
 
