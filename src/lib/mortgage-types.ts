@@ -1,26 +1,28 @@
 
 export type Debt = {
   id: string;
+  kind: 'cc' | 'car' | 'loc' | 'other';
   balance: number;
   rateAPR: number;
   paymentMonthly: number;
-  kind: 'cc' | 'car' | 'loc' | 'other';
 };
 
 export type Inputs = {
   homeValue: number;
-  ltvLimit?: number;
+  ltvLimit?: number;                 // default 0.80
   mortgageBalance: number;
   mortgageRateAPR: number;
   amortYearsRemaining: number;
-  helocRateAPR: number; // Restored as a required field
+  paymentMonthly?: number;
+  paymentFrequency?: 'monthly'|'biweekly'|'weekly';
 
   debts: Debt[];
   netMonthlyIncome: number;
   monthlyExpenses: number;
 
   savings: { savings: number; chequing: number; shortTerm: number };
-  cardOffset?: boolean;
+  helocRateAPR: number;
+  cardOffset?: boolean;              // default false
 };
 
 export type Outputs = {
