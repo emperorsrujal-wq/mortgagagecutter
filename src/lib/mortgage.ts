@@ -73,16 +73,17 @@ export function estimate(inputs: Inputs): Outputs {
   // Amortize other debts
   for (const d of inputs.debts) {
     if (d.balance > 0) {
-      const minCC = 0.02 * d.balance;
-      const iOnly = (d.rateAPR / 12 / 100) * d.balance + 10;
+      // FIX: Ensure minimum payment for credit cards covers interest.
+      const iOnly = (d.rateAPR / 12 / 100) * d.balance;
+      const minPrincipal = d.balance * 0.01; // 1% of balance as principal
       const pay =
         d.paymentMonthly > 0
           ? d.paymentMonthly
           : d.kind === 'cc'
-          ? Math.max(minCC, iOnly)
+          ? Math.max(25, iOnly + minPrincipal) // Common minimum payment logic
           : Math.max(0, iOnly);
 
-      if (pay > 0) {
+      if (pay > 0 && pay > iOnly) {
         const res = amortize(d.balance, d.rateAPR, pay, baselineSeries);
         baseInterest += res.interest;
         baseMonths = Math.max(baseMonths, res.months);
@@ -139,9 +140,10 @@ export function estimate(inputs: Inputs): Outputs {
       for (let m = 1; m <= hMonths; m++) {
         let payment = mortPaymentMonthly;
         inputs.debts.forEach(d => {
-            const minCC = 0.02 * d.balance;
-            const iOnly = (d.rateAPR / 12 / 100) * d.balance + 10;
-            payment += d.paymentMonthly > 0 ? d.paymentMonthly : (d.kind === 'cc' ? Math.max(minCC, iOnly) : Math.max(0, iOnly));
+            const iOnly = (d.rateAPR / 12 / 100) * d.balance;
+            const minPrincipal = d.balance * 0.01;
+            const debtPayment = d.paymentMonthly > 0 ? d.paymentMonthly : (d.kind === 'cc' ? Math.max(25, iOnly + minPrincipal) : Math.max(0, iOnly));
+            payment += debtPayment;
         });
         const interest = estimatedBase * (inputs.mortgageRateAPR / 12 / 100); // simplified
         estimatedBase -= (payment - interest);
