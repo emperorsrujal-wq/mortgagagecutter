@@ -12,7 +12,6 @@ import { useAuth, useUser } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect } from 'react';
-import { useSendWelcomeEmail } from '@/hooks/use-send-welcome-email';
 
 const GoogleIcon = () => (
   <svg className="h-5 w-5" viewBox="0 0 24 24">
@@ -49,16 +48,12 @@ export function AuthButtons() {
   const { user } = useUser();
   const router = useRouter();
   const { toast } = useToast();
-  const { sendWelcomeEmail, isNewUser } = useSendWelcomeEmail();
 
   useEffect(() => {
     if (user) {
-      if (isNewUser(user)) {
-        sendWelcomeEmail(user);
-      }
       router.push('/questionnaire');
     }
-  }, [user, router, isNewUser, sendWelcomeEmail]);
+  }, [user, router]);
 
   const handleSignIn = async (provider: 'google' | 'apple') => {
     if (!auth) return;

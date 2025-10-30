@@ -12,11 +12,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useAuth, useUser } from '@/firebase';
-import { createUserWithEmailAndPassword, updateProfile, User } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useSendWelcomeEmail } from '@/hooks/use-send-welcome-email';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -30,7 +29,6 @@ export function HeroForm() {
   const { toast } = useToast();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const { sendWelcomeEmail } = useSendWelcomeEmail();
 
   useEffect(() => {
     if (user) {
@@ -65,9 +63,6 @@ export function HeroForm() {
 
       // 2. Update the user's profile with their name
       await updateProfile(newUser, { displayName: values.name });
-
-      // 3. Send welcome email via Firestore trigger
-      await sendWelcomeEmail(newUser);
 
       toast({
         title: 'Account Created!',
