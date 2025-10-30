@@ -85,7 +85,7 @@ firebase login
 In your terminal, you need to be "inside" your project folder. Use the `cd` (change directory) command. For example, if your project folder is on your Desktop, you might type:
 
 ```bash
-cd Desktop/mortgage-freedom-accelerator
+cd Desktop/mortgage-cutter-app
 ```
 *(Replace with the actual path to your project folder.)*
 
