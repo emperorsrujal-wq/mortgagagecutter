@@ -1,4 +1,3 @@
-
 'use client';
 
 import Image from 'next/image';
@@ -7,7 +6,6 @@ import { Star, CheckCircle, TrendingUp, ShieldCheck, Calculator } from 'lucide-r
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function TestFormPage() {
@@ -15,28 +13,8 @@ export default function TestFormPage() {
   const founderImage = PlaceHolderImages.find((p) => p.id === 'testimonial-person');
   const router = useRouter();
 
-  useEffect(() => {
-    const form = document.querySelector('.sg-form');
-    const handleSubmit = (e: Event) => {
-      // We don't prevent the default submission.
-      // Instead, we just set a timer to redirect AFTER the submission has likely started.
-      setTimeout(() => {
-        router.push('/questionnaire');
-      }, 500); // 500ms delay to allow form submission to go through
-    };
-
-    if (form) {
-      form.addEventListener('submit', handleSubmit);
-    }
-
-    // Cleanup the event listener when the component unmounts
-    return () => {
-      if (form) {
-        form.removeEventListener('submit', handleSubmit);
-      }
-    };
-  }, [router]);
-
+  // The redirect is now handled by a hidden input in the form pointing to `/form-submitted`.
+  // No complex useEffect is needed, which prevents interference with the form submission.
 
   return (
     <>
@@ -81,6 +59,8 @@ export default function TestFormPage() {
                                   <p class="sg-form-description">Instantly see your potential savings. No credit card required.</p>
                               </div>
                               <form>
+                                  <!-- This hidden input tells SendGrid where to redirect after a successful submission. -->
+                                  <input type="hidden" name="_redirect" value="/form-submitted" />
                                   <div class="sg-form-fields">
                                       <div class="sg-form-field">
                                           <label class="sg-form-label">First Name</label>
