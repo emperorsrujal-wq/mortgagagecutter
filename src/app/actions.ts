@@ -6,10 +6,11 @@ import type { Inputs as ChunkerInputs } from '@/lib/chunker';
 import type { Inputs as ComparisonInputs, Outputs as ComparisonOutputs } from '@/lib/mortgage-types';
 
 export async function getSavingsReport(
-  data: ComparisonInputs
+  data: Omit<ComparisonInputs, 'helocRateAPR'>
 ): Promise<{ success: true; report: ComparisonOutputs } | { success: false; error: string }> {
   try {
     // Map the inputs from the questionnaire to the chunker simulation inputs
+    // Provide a default HELOC rate for the initial estimate.
     const chunkerInputs: ChunkerInputs = {
       mortgageBalance: data.mortgageBalance,
       mortgageAPR: data.mortgageRateAPR,
@@ -19,7 +20,7 @@ export async function getSavingsReport(
       monthlyMI: 0, // Chunker doesn't model MI, can be added later
       netIncome: data.netMonthlyIncome,
       livingExpenses: data.monthlyExpenses,
-      helocAPR: data.helocRateAPR,
+      helocAPR: 8.5, // Use a reasonable default for the initial estimate
       // Assume the HELOC limit is the LTV of the home value minus the mortgage
       helocLimit: (data.homeValue * (data.ltvLimit ?? 0.8)) - data.mortgageBalance,
       helocOpeningBalance: 0,

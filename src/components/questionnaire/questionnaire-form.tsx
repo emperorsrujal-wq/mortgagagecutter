@@ -42,8 +42,6 @@ const formSchema = z.object({
   mortgageRateAPR: z.coerce.number().min(0.1, '> 0').max(25, '< 25'),
   amortYearsRemaining: z.coerce.number().int().min(1, '> 0').max(50, '< 50'),
   
-  helocRateAPR: z.coerce.number().min(0.1, '> 0').max(25, '< 25'),
-
   netMonthlyIncome: z.coerce.number().positive('Must be positive.'),
   monthlyExpenses: z.coerce.number().nonnegative('Must be non-negative.'),
 
@@ -71,7 +69,6 @@ export function QuestionnaireForm() {
       mortgageBalance: 400000,
       mortgageRateAPR: 6.5,
       amortYearsRemaining: 25,
-      helocRateAPR: 8.5,
       netMonthlyIncome: 8000,
       monthlyExpenses: 3500,
       debts: [],
@@ -216,19 +213,7 @@ export function QuestionnaireForm() {
         {/* Savings & HELOC Config */}
         <div className="space-y-4">
           <h3 className="text-lg font-medium border-b pb-2">Strategy & Assumptions</h3>
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-             <FormField control={form.control} name="helocRateAPR" render={({ field }) => (
-                <FormItem>
-                  <FormLabel>HELOC Interest Rate (APR %)</FormLabel>
-                  <FormControl><Input type="number" step="0.01" placeholder="8.5" {...field} /></FormControl>
-                  <FormMessage />
-                </FormItem>
-              )} />
-          </div>
-          <AlertDescription className="text-xs text-muted-foreground">This is the interest rate for the HELOC you'll use for the accelerated strategy. Use an estimate if you're unsure.</AlertDescription>
-          
-          <Separator className="my-6"/>
-
+           
           <h4 className="text-base font-medium">Assets to Consolidate (Optional)</h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <FormField control={form.control} name="savings.savings" render={({ field }) => (
