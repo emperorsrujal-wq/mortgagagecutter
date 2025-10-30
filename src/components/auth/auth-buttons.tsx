@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -62,7 +63,7 @@ export function AuthButtons() {
         : new OAuthProvider('apple.com');
     try {
       await signInWithPopup(auth, authProvider);
-      router.push('/questionnaire');
+      // No need to redirect here, the useEffect hook will handle it
     } catch (error) {
       const authError = error as AuthError;
       console.error(`Error signing in with ${provider}:`, authError.code, authError.message);

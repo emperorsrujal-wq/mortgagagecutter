@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -11,7 +11,7 @@ import { Separator } from '../ui/separator';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/firebase';
+import { useAuth, useUser } from '@/firebase';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
@@ -25,9 +25,16 @@ const formSchema = z.object({
 
 export function HeroForm() {
   const auth = useAuth();
+  const { user } = useUser();
   const { toast } = useToast();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      router.push('/questionnaire');
+    }
+  }, [user, router]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -65,8 +72,8 @@ export function HeroForm() {
         description: "Welcome! We're redirecting you to the questionnaire.",
       });
 
-      // Redirect to the questionnaire page upon successful sign-up
-      router.push('/questionnaire');
+      // Redirect is now handled by the useEffect hook
+      // router.push('/questionnaire');
 
     } catch (error: any) {
       console.error('Error during sign-up:', error);
