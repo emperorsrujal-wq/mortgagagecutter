@@ -218,6 +218,7 @@ function InnerComparison() {
       mortgageBalance: parseFloat(params.mortgageBalance),
       mortgageRateAPR: parseFloat(params.mortgageRateAPR),
       amortYearsRemaining: parseInt(params.amortYearsRemaining),
+      paymentMonthly: params.paymentMonthly ? parseFloat(params.paymentMonthly) : undefined,
       netMonthlyIncome: parseFloat(params.netMonthlyIncome),
       monthlyExpenses: parseFloat(params.monthlyExpenses),
       debts: params.debts ? JSON.parse(params.debts) : [],
