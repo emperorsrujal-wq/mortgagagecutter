@@ -98,14 +98,10 @@ function safeChunkAmount({
 
   // Safety check: ensure next month's total interest is covered by surplus with a cushion.
   const rH = (helocAPR / 100) / 12;
-  const rM = (mortgageAPR / 100) / 12;
-  
-  const nextHelocBal = helocBal + finalChunk;
-  const nextHelocInterest = nextHelocBal * rH;
-  const nextMortgageInterest = (mortgageBal - finalChunk) * rM;
+  const nextHelocInterest = (helocBal + finalChunk) * rH;
   
   // For arbitrage, we allow dipping into surplus more heavily. For standard, we are more conservative.
-  const requiredSurplus = isArbitrage ? nextHelocInterest : (nextHelocInterest + nextMortgageInterest);
+  const requiredSurplus = nextHelocInterest;
 
   if (monthlySurplus > requiredSurplus * 1.25) { // 25% safety cushion
     return finalChunk >= 1000 ? finalChunk : 0;
@@ -114,8 +110,7 @@ function safeChunkAmount({
   // If the ideal chunk is too aggressive, scale it back.
   if (isArbitrage || (maxChunkUser === undefined)) {
      const scaledDownChunk = (monthlySurplus / (rH * 1.25)) - helocBal;
-     // CRITICAL FIX: Ensure the scaled down chunk ALSO does not exceed available HELOC.
-     const safeScaledChunk = Math.min(scaledDownChunk, helocAvail);
+     const safeScaledChunk = Math.min(scaledDownChunk, helocAvail, mortgageBal);
      return safeScaledChunk >= 1000 ? safeScaledChunk : 0;
   }
 

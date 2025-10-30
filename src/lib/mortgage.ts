@@ -3,7 +3,7 @@ import type { Inputs, Outputs, Debt } from './mortgage-types';
 
 export function estimate(inputs: Inputs): Outputs {
   const ltv = inputs.ltvLimit ?? 0.8;
-  const offsetFactor = inputs.cardOffset ? 1.0 : 0.8; // Correctly apply the logic: offset means more cash available, so factor is 1. No offset means less effective cash, factor is 0.8
+  const offsetFactor = inputs.cardOffset ? 1.0 : 0.8;
 
   // 1) Baseline mortgage payment
   const mortPaymentMonthly = (() => {
@@ -21,8 +21,8 @@ export function estimate(inputs: Inputs): Outputs {
     balance: number,
     rateAPR: number,
     payMonthly: number,
-    series: { month: number; balance: number }[] = []
   ) {
+    const series: { month: number; balance: number }[] = [];
     const i = rateAPR / 12 / 100;
     let months = 0;
     let interest = 0;
@@ -31,43 +31,25 @@ export function estimate(inputs: Inputs): Outputs {
     while (currentBalance > 0 && months < 2000) {
       const interestM = currentBalance * i;
       if (payMonthly <= interestM && i > 0) {
-        // Payment doesn't cover interest, loan will never be paid off
-        months = Infinity;
-        interest = Infinity;
-        break;
+        return { months: Infinity, interest: Infinity, series: [] };
       }
       const principal = Math.max(0, payMonthly - interestM);
       interest += interestM;
       currentBalance = Math.max(0, currentBalance - principal);
       months++;
-      const seriesEntry = series.find((s) => s.month === months);
-      if (seriesEntry) {
-        seriesEntry.balance += currentBalance;
-      } else {
-        series.push({ month: months, balance: currentBalance });
-      }
+      series.push({ month: months, balance: currentBalance });
     }
     return { months, interest, series };
   }
-
-  let baseInterest = 0;
-  let baseMonths = 0;
-  let baselineSeries: { month: number; balance: number }[] = [];
-
+  
+  const debtSchedules: {interest: number, months: number, series: {month: number, balance: number}[]}[] = [];
+  
   // Amortize mortgage
   if (inputs.mortgageBalance > 0 && mortPaymentMonthly > 0) {
-    const mort = amortize(
-      inputs.mortgageBalance,
-      inputs.mortgageRateAPR,
-      mortPaymentMonthly,
-      baselineSeries
-    );
-    baseInterest += mort.interest;
-    baseMonths = Math.max(baseMonths, mort.months);
+    const mortSchedule = amortize(inputs.mortgageBalance, inputs.mortgageRateAPR, mortPaymentMonthly);
+    debtSchedules.push(mortSchedule);
   } else if (inputs.mortgageBalance > 0) {
-    // If no payment, treat as interest-only for baseline purposes
-    baseMonths = Infinity;
-    baseInterest = Infinity;
+     debtSchedules.push({ months: Infinity, interest: Infinity, series: [] });
   }
 
   // Amortize other debts
@@ -80,23 +62,32 @@ export function estimate(inputs: Inputs): Outputs {
           ? d.paymentMonthly
           : d.kind === 'cc'
           ? Math.max(25, iOnly + minPrincipal)
-          : iOnly + 1; // Ensure payment is always > interest
+          : iOnly + 1;
 
       if (pay > 0 && pay > iOnly) {
-        const res = amortize(d.balance, d.rateAPR, pay, baselineSeries);
-        baseInterest += res.interest;
-        baseMonths = Math.max(baseMonths, res.months);
+        const debtSchedule = amortize(d.balance, d.rateAPR, pay);
+        debtSchedules.push(debtSchedule);
       } else {
-        baseMonths = Infinity;
-        baseInterest = Infinity;
+        debtSchedules.push({ months: Infinity, interest: Infinity, series: [] });
       }
     }
   }
   
-  if (baseMonths === Infinity) {
-    baseInterest = Infinity;
-  }
+  const baseMonths = Math.max(0, ...debtSchedules.map(s => s.months));
+  const baseInterest = debtSchedules.reduce((sum, s) => sum + s.interest, 0);
 
+  const baselineSeries: { month: number; balance: number }[] = [];
+  for(let m = 1; m <= baseMonths; m++) {
+      let totalBalance = 0;
+      for(const schedule of debtSchedules) {
+          if (m <= schedule.series.length) {
+              totalBalance += schedule.series[m-1].balance;
+          }
+      }
+      if (totalBalance > 0) {
+        baselineSeries.push({month: m, balance: totalBalance});
+      }
+  }
 
   // 3) HELOC simulation
   const movedSavings =
@@ -108,76 +99,55 @@ export function estimate(inputs: Inputs): Outputs {
 
   let helocBalance = Math.max(0, totalDebtConsolidated - movedSavings);
   const helocI = inputs.helocRateAPR / 12 / 100;
-  const surplus = Math.max(0, inputs.netMonthlyIncome - inputs.monthlyExpenses) * offsetFactor;
+  const surplus = Math.max(0, inputs.netMonthlyIncome - inputs.monthlyExpenses);
 
   let hMonths = 0;
   let hInterest = 0;
   const helocSeries: Outputs['series'] = [];
 
   while (helocBalance > 0 && hMonths < 2000) {
+    const effectiveSurplus = surplus * offsetFactor;
     const interestM = helocBalance * helocI;
-     if (surplus <= interestM && helocI > 0) {
+     if (effectiveSurplus <= interestM && helocI > 0) {
         hMonths = Infinity;
         hInterest = Infinity;
         break;
     }
-    const principal = Math.max(0, surplus - interestM);
+    const principal = Math.max(0, effectiveSurplus - interestM);
     hInterest += interestM;
     helocBalance = Math.max(0, helocBalance - principal);
     hMonths++;
     
-    // find corresponding baseline balance
-    let baselineBalanceForMonth = 0;
-    const basePoint = baselineSeries.find(p => p.month === hMonths);
-    if(basePoint) {
-      baselineBalanceForMonth = basePoint.balance;
-    } else if (hMonths > baseMonths && baseMonths !== Infinity) {
-      baselineBalanceForMonth = 0;
-    } else if (baseMonths === Infinity) {
-      // Estimate baseline balance if it's never paid off
-      let estimatedBase = totalDebtConsolidated;
-      for (let m = 1; m <= hMonths; m++) {
-        let payment = mortPaymentMonthly;
-        inputs.debts.forEach(d => {
-            const iOnly = (d.rateAPR / 12 / 100) * d.balance;
-            const minPrincipal = d.balance * 0.01;
-            const debtPayment = d.paymentMonthly > 0 ? d.paymentMonthly : (d.kind === 'cc' ? Math.max(25, iOnly + minPrincipal) : Math.max(0, iOnly));
-            payment += debtPayment;
-        });
-        const interest = estimatedBase * (inputs.mortgageRateAPR / 12 / 100); // simplified
-        estimatedBase -= (payment - interest);
-      }
-      baselineBalanceForMonth = estimatedBase;
-    }
-
-
+    const baselinePoint = baselineSeries.find(p => p.month === hMonths);
+    const baselineBalanceForMonth = baselinePoint ? baselinePoint.balance : 0;
+    
     helocSeries.push({ month: hMonths, balanceHeloc: helocBalance, balanceBaseline: baselineBalanceForMonth });
   }
 
-  // Ensure baseline series extends to HELOC payoff month
-  if (baseMonths < hMonths && baseMonths !== Infinity) {
-      for (let m = baseMonths + 1; m <= hMonths; m++) {
-          const point = helocSeries.find(p => p.month === m);
-          if (point && point.balanceBaseline === undefined) {
-              point.balanceBaseline = 0;
-          }
-      }
+  if (baseMonths > hMonths) {
+     for (let m = hMonths + 1; m <= baseMonths; m++) {
+         const baselinePoint = baselineSeries.find(p => p.month === m);
+         const baselineBalanceForMonth = baselinePoint ? baselinePoint.balance : 0;
+         if (baselineBalanceForMonth > 0 || helocSeries[helocSeries.length - 1]?.balanceBaseline > 0)
+          helocSeries.push({ month: m, balanceHeloc: 0, balanceBaseline: baselineBalanceForMonth });
+     }
   }
-
 
   // 4) Borrowing room
   const creditLimit = ltv * inputs.homeValue;
   const borrowingRoomAfterSetup = Math.max(0, creditLimit - totalDebtConsolidated);
 
+  const finalBaseInterest = isFinite(baseInterest) ? Math.round(baseInterest) : Infinity;
+
   return {
     debtFreeMonthsBaseline: baseMonths,
-    interestBaseline: Math.round(baseInterest),
+    interestBaseline: finalBaseInterest,
     debtFreeMonthsHeloc: hMonths,
     interestHeloc: Math.round(hInterest),
     interestSaved:
-      baseInterest === Infinity || hInterest === Infinity
+      finalBaseInterest === Infinity || hInterest === Infinity
         ? Infinity
-        : Math.max(0, Math.round(baseInterest - hInterest)),
+        : Math.max(0, Math.round(finalBaseInterest - hInterest)),
     borrowingRoomAfterSetup: Math.round(borrowingRoomAfterSetup),
     series: helocSeries,
   };
