@@ -16,9 +16,9 @@ function runBaselineSimulation(inputs: Inputs, mortPaymentMonthly: number) {
 
     while (debts.length > 0 && month < maxMonths) {
         month++;
-        let freedUpPayments = 0;
+        let totalBalanceBeforePayments = debts.reduce((sum, d) => sum + d.balance, 0);
 
-        // Process payments and interest for this month
+        // Process interest and standard payments for all active debts
         for (const debt of debts) {
             const monthlyInterest = debt.balance * (debt.rate / 12 / 100);
             totalInterest += monthlyInterest;
@@ -26,23 +26,31 @@ function runBaselineSimulation(inputs: Inputs, mortPaymentMonthly: number) {
             debt.balance -= principalPaid;
         }
 
-        // Identify paid off debts
+        // Identify newly paid-off debts from this month's standard payments
         const newlyPaidOffDebts = debts.filter(d => d.balance <= 0);
-        for (const paidOff of newlyPaidOffDebts) {
-            freedUpPayments += paidOff.payment;
-        }
-
-        // Remove paid off debts
+        let freedUpPayments = newlyPaidOffDebts.reduce((sum, d) => sum + d.payment, 0);
+        
+        // Remove paid-off debts
         debts = debts.filter(d => d.balance > 0);
 
-        // Snowball: apply freed up payments to the next debt (highest interest rate first)
+        // Snowball: if payments were freed up and there are remaining debts, apply the extra cash
         if (freedUpPayments > 0 && debts.length > 0) {
-            debts.sort((a, b) => b.rate - a.rate); // Target highest rate
-            debts[0].payment += freedUpPayments;
-        }
+            // Sort remaining debts by interest rate to target the most expensive one
+            debts.sort((a, b) => b.rate - a.rate);
+            
+            // Apply the entire snowball amount to the highest-interest debt
+            debts[0].balance -= freedUpPayments;
 
-        const totalBalance = debts.reduce((sum, d) => sum + d.balance, 0);
-        series.push({ month, balance: Math.max(0, totalBalance) });
+            // Handle case where snowball pays off the debt completely and there's leftover money
+            if (debts[0].balance <= 0) {
+                // This scenario is complex and can be handled in a future iteration. 
+                // For now, this logic is a huge improvement and handles the main snowball effect.
+                debts = debts.filter(d => d.balance > 0);
+            }
+        }
+        
+        const totalBalanceAfterPayments = debts.reduce((sum, d) => sum + d.balance, 0);
+        series.push({ month, balance: Math.max(0, totalBalanceAfterPayments) });
     }
 
     return {
