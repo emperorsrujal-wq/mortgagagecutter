@@ -1,90 +1,96 @@
 
-import type { Inputs, Outputs, Debt } from './mortgage-types';
-import { pmt } from './amort';
+import type { Inputs, Outputs } from './mortgage-types';
+import { pmt, splitMortgagePayment } from './amort';
 
 function runBaselineSimulation(inputs: Inputs, mortPaymentMonthly: number) {
-    let month = 0;
-    let totalInterest = 0;
-    const maxMonths = 480; // 40 years
+  let month = 0;
+  let totalInterest = 0;
+  const maxMonths = 480;
 
-    let debts = [
-        { id: 'mortgage', balance: inputs.mortgageBalance, rate: inputs.mortgageRateAPR, payment: mortPaymentMonthly, originalPayment: mortPaymentMonthly },
-        ...inputs.debts.map(d => ({ id: d.id, balance: d.balance, rate: d.rateAPR, payment: d.paymentMonthly, originalPayment: d.paymentMonthly }))
-    ].filter(d => d.balance > 0 && d.payment > 0);
+  // Clone debts to avoid modifying the original input
+  let debts = [
+    { id: 'mortgage', balance: inputs.mortgageBalance, rate: inputs.mortgageRateAPR, payment: mortPaymentMonthly },
+    ...inputs.debts.map(d => ({ id: d.id, balance: d.balance, rate: d.rateAPR, payment: d.paymentMonthly }))
+  ].filter(d => d.balance > 0);
 
-    const series: { month: number; balance: number }[] = [];
-    let freedUpPayments = 0;
+  const series: number[] = [];
+  let totalBalance = debts.reduce((sum, d) => sum + d.balance, 0);
+  series.push(totalBalance);
 
-    while (debts.length > 0 && month < maxMonths) {
-        month++;
-        let interestForMonth = 0;
+  while (totalBalance > 0 && month < maxMonths) {
+    month++;
+    let interestForMonth = 0;
+    let totalPaymentsForMonth = 0;
 
-        // Sort by highest rate for snowball effect
-        debts.sort((a, b) => b.rate - a.rate);
+    // Sort debts by highest rate for the snowball strategy
+    debts.sort((a, b) => b.rate - a.rate);
 
-        // Apply snowball payments from previously paid-off debts
-        if (freedUpPayments > 0 && debts.length > 0) {
-            const highestRateDebt = debts[0];
-            const snowballAmount = freedUpPayments;
-            
-            // Apply as much of the snowball as possible to the highest-rate debt's principal
-            const principalPaidFromSnowball = Math.min(highestRateDebt.balance, snowballAmount);
-            highestRateDebt.balance -= principalPaidFromSnowball;
-            freedUpPayments -= principalPaidFromSnowball;
-        }
+    let snowballAmount = 0;
+    const nextDebts = [];
 
-        const paidOffThisMonth: number[] = [];
-        const paidThisMonth = new Set<string>();
+    for (const debt of debts) {
+      const monthlyInterest = debt.balance * (debt.rate / 12 / 100);
+      interestForMonth += monthlyInterest;
+      totalPaymentsForMonth += debt.payment;
 
-        // Process regular payments and interest
-        for (let i = 0; i < debts.length; i++) {
-            const debt = debts[i];
-            
-            if (paidThisMonth.has(debt.id)) continue;
-            
-            const monthlyInterest = debt.balance * (debt.rate / 12 / 100);
-            interestForMonth += monthlyInterest;
-            
-            const principalPaid = debt.payment - monthlyInterest;
+      const principalPaid = debt.payment - monthlyInterest;
+      debt.balance -= principalPaid;
 
-            // Only process payment if the debt hasn't been mostly handled by a snowball
-            if (debt.balance > debt.payment) {
-                 debt.balance -= principalPaid;
-            } else {
-                 debt.balance = 0;
-            }
-
-            if (debt.balance <= 0) {
-                paidOffThisMonth.push(i);
-            }
-        }
-        
-        totalInterest += interestForMonth;
-        
-        // Remove paid off debts and add their payments to the snowball fund
-        paidOffThisMonth.reverse().forEach(index => {
-            const paidOffDebt = debts.splice(index, 1)[0];
-            freedUpPayments += paidOffDebt.originalPayment;
-        });
-
-        const totalBalance = debts.reduce((sum, d) => sum + d.balance, 0);
-        series.push({ month, balance: Math.max(0, totalBalance) });
+      if (debt.balance <= 0) {
+        snowballAmount += debt.payment + debt.balance; // Add full payment + overpayment to snowball
+      } else {
+        nextDebts.push(debt);
+      }
     }
 
-    return {
-        months: month >= maxMonths ? Infinity : month,
-        interest: month >= maxMonths ? Infinity : totalInterest,
-        series,
-    };
+    // Apply snowball to the highest-rate remaining debt
+    if (snowballAmount > 0 && nextDebts.length > 0) {
+      nextDebts.sort((a, b) => b.rate - a.rate);
+      nextDebts[0].balance -= snowballAmount;
+
+      // Handle case where snowball pays off the debt
+      if (nextDebts[0].balance <= 0) {
+          const remainingSnowball = Math.abs(nextDebts[0].balance);
+          const paidOffDebt = nextDebts.shift();
+          if (paidOffDebt) {
+            snowballAmount = remainingSnowball + paidOffDebt.payment;
+            // Recursively apply remaining snowball if there are still debts
+            let i = 0;
+            while(snowballAmount > 0 && i < nextDebts.length) {
+                const nextDebt = nextDebts[i];
+                const amountToApply = Math.min(snowballAmount, nextDebt.balance);
+                nextDebt.balance -= amountToApply;
+                snowballAmount -= amountToApply;
+                if (nextDebt.balance <= 0) {
+                    const paidOff = nextDebts.splice(i, 1)[0];
+                    snowballAmount += paidOff.payment;
+                } else {
+                    i++;
+                }
+            }
+          }
+      }
+    }
+    
+    debts = nextDebts;
+    totalInterest += interestForMonth;
+    totalBalance = debts.reduce((sum, d) => sum + d.balance, 0);
+    series.push(Math.max(0, totalBalance));
+  }
+
+  return {
+    months: month >= maxMonths ? Infinity : month,
+    interest: totalInterest,
+    series,
+  };
 }
 
 
 export function estimate(inputs: Inputs): Outputs {
   const ltv = inputs.ltvLimit ?? 0.8;
-  const offsetFactor = inputs.cardOffset ? 0.95 : 0.65; 
-  const helocRateAPR = inputs.helocRateAPR ?? 8.5; // Use default if not provided
+  const offsetFactor = inputs.cardOffset ? 0.95 : 0.65;
 
-  // --- 1. Baseline Simulation (Snowball Method) ---
+  // --- 1. Baseline Simulation (Corrected Debt Snowball) ---
   const mortPaymentMonthly = pmt(inputs.mortgageRateAPR, inputs.amortYearsRemaining * 12, inputs.mortgageBalance);
   const baseline = runBaselineSimulation(inputs, mortPaymentMonthly);
   const baseMonths = baseline.months;
@@ -95,62 +101,61 @@ export function estimate(inputs: Inputs): Outputs {
   const totalDebtConsolidated = inputs.mortgageBalance + inputs.debts.reduce((s, d) => s + d.balance, 0);
 
   let helocBalance = Math.max(0, totalDebtConsolidated - movedSavings);
-  const helocI = helocRateAPR / 12 / 100;
+  const helocI = inputs.helocRateAPR / 12 / 100;
   const surplus = Math.max(0, inputs.netMonthlyIncome - inputs.monthlyExpenses);
 
   let hMonths = 0;
   let hInterest = 0;
-  const helocSeriesData: number[] = [];
+  const helocSeriesData: number[] = [helocBalance];
 
   if (helocBalance > 0) {
     while (helocBalance > 0 && hMonths < 480) {
-        hMonths++;
-        const interestM = helocBalance * helocI;
-        
-        if (surplus <= interestM && helocI > 0) {
-            hMonths = Infinity;
-            hInterest = Infinity;
-            break;
-        }
+      hMonths++;
+      const interestM = helocBalance * helocI;
+      
+      if (surplus <= interestM && helocI > 0) {
+        hMonths = Infinity;
+        hInterest = Infinity;
+        break;
+      }
+      
+      hInterest += interestM;
+      // The effective paydown is the surplus *after* servicing the HELOC interest
+      const principalPaydown = surplus - interestM; 
+      helocBalance -= principalPaydown;
 
-        const effectivePrincipalPaydown = surplus * offsetFactor - interestM;
-
-        hInterest += interestM;
-        helocBalance -= effectivePrincipalPaydown;
-
-        helocSeriesData.push(Math.max(0, helocBalance));
+      helocSeriesData.push(Math.max(0, helocBalance));
     }
   }
 
-
-  // --- 3. Final series for charting ---
-  const finalMonths = Math.min(480, Math.max(baseline.series.length, helocSeriesData.length));
+  // --- 3. Combine series for charting ---
+  const finalMonths = Math.max(baseline.series.length, helocSeriesData.length);
   const series: Outputs['series'] = [];
   for (let i = 0; i < finalMonths; i++) {
     series.push({
-        month: i + 1,
-        balanceBaseline: baseline.series[i]?.balance ?? (baseline.months === Infinity ? inputs.mortgageBalance : 0),
-        balanceHeloc: helocSeriesData[i] ?? (hMonths === Infinity ? inputs.mortgageBalance : 0),
-    })
+      month: i,
+      balanceBaseline: baseline.series[i] ?? (baseMonths === Infinity ? totalDebtConsolidated : 0),
+      balanceHeloc: helocSeriesData[i] ?? (hMonths === Infinity ? totalDebtConsolidated : 0),
+    });
   }
 
-  // --- 4. Borrowing room ---
+  // --- 4. Final calculations ---
   const creditLimit = ltv * inputs.homeValue;
   const borrowingRoomAfterSetup = Math.max(0, creditLimit - totalDebtConsolidated);
   
   const finalBaseInterest = isFinite(baseInterest) ? Math.round(baseInterest) : Infinity;
   const finalHelocInterest = isFinite(hInterest) ? Math.round(hInterest) : Infinity;
+  const interestSaved = finalBaseInterest === Infinity || finalHelocInterest === Infinity
+    ? Infinity
+    : Math.round(finalBaseInterest - finalHelocInterest);
 
   return {
     debtFreeMonthsBaseline: baseMonths,
     interestBaseline: finalBaseInterest,
     debtFreeMonthsHeloc: hMonths,
     interestHeloc: finalHelocInterest,
-    interestSaved:
-      finalBaseInterest === Infinity || finalHelocInterest === Infinity
-        ? Infinity
-        : Math.max(0, Math.round(finalBaseInterest - finalHelocInterest)),
+    interestSaved: Math.max(0, interestSaved),
     borrowingRoomAfterSetup: Math.round(borrowingRoomAfterSetup),
-    series: series,
+    series,
   };
 }
