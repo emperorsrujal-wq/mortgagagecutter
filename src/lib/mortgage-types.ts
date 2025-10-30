@@ -13,13 +13,13 @@ export type Inputs = {
   mortgageBalance: number;
   mortgageRateAPR: number;
   amortYearsRemaining: number;
+  helocRateAPR: number; // This was missing and is critical
 
   debts: Debt[];
   netMonthlyIncome: number;
   monthlyExpenses: number;
 
   savings: { savings: number; chequing: number; shortTerm: number };
-  helocRateAPR: number;
   cardOffset?: boolean;
 };
 
