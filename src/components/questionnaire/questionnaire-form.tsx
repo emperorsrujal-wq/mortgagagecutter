@@ -53,8 +53,6 @@ const formSchema = z.object({
     shortTerm: z.coerce.number().nonnegative().default(0),
   }),
   
-  helocRateAPR: z.coerce.number().min(0.1, '> 0').max(25, '< 25'),
-
   cardOffset: z.boolean().default(false),
 });
 
@@ -75,7 +73,6 @@ export function QuestionnaireForm() {
       monthlyExpenses: 0,
       debts: [],
       savings: { savings: 0, chequing: 0, shortTerm: 0 },
-      helocRateAPR: 0,
       cardOffset: false,
     },
   });
@@ -216,19 +213,6 @@ export function QuestionnaireForm() {
         {/* Savings & HELOC Config */}
         <div className="space-y-4">
           <h3 className="text-lg font-medium border-b pb-2">Strategy & Assumptions</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField control={form.control} name="helocRateAPR" render={({ field }) => (
-                <FormItem>
-                  <FormLabel>HELOC Interest Rate (APR %)</FormLabel>
-                  <FormControl><Input type="number" step="0.01" placeholder="8.5" {...field} /></FormControl>
-                  <FormMessage />
-                </FormItem>
-            )} />
-          </div>
-          <AlertDescription className="text-xs text-muted-foreground">Enter the interest rate for the Home Equity Line of Credit you plan to use.</AlertDescription>
-          
-          <Separator className="my-4"/>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <FormField control={form.control} name="savings.savings" render={({ field }) => (
                 <FormItem><FormLabel>Savings Acct ($)</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>

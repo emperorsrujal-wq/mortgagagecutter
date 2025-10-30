@@ -13,7 +13,7 @@ export type Inputs = {
   mortgageBalance: number;
   mortgageRateAPR: number;
   amortYearsRemaining: number;
-  helocRateAPR: number; // This was missing and is critical
+  helocRateAPR?: number; // Optional now for the main calculator
 
   debts: Debt[];
   netMonthlyIncome: number;
