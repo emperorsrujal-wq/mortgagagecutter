@@ -12,10 +12,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useAuth, useUser } from '@/firebase';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile, User } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useSendWelcomeEmail } from '@/hooks/use-send-welcome-email';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -29,6 +30,7 @@ export function HeroForm() {
   const { toast } = useToast();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const { sendWelcomeEmail } = useSendWelcomeEmail();
 
   useEffect(() => {
     if (user) {
@@ -59,22 +61,20 @@ export function HeroForm() {
     try {
       // 1. Create the user
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
-      const user = userCredential.user;
+      const newUser = userCredential.user;
 
       // 2. Update the user's profile with their name
-      await updateProfile(user, { displayName: values.name });
+      await updateProfile(newUser, { displayName: values.name });
 
-      // NOTE: Email sending is now handled globally in layout.tsx via onAuthStateChanged.
-      // This makes the logic robust for all sign-up methods (email, google, apple).
+      // 3. Send welcome email via Firestore trigger
+      await sendWelcomeEmail(newUser);
 
       toast({
         title: 'Account Created!',
         description: "Welcome! We're redirecting you to the questionnaire.",
       });
 
-      // Redirect is now handled by the useEffect hook
-      // router.push('/questionnaire');
-
+      // Redirect is now handled by the useEffect hook which listens for `user` state changes
     } catch (error: any) {
       console.error('Error during sign-up:', error);
       toast({
