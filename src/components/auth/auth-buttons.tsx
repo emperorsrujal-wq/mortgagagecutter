@@ -6,12 +6,14 @@ import {
   GoogleAuthProvider,
   OAuthProvider,
   signInWithPopup,
+  getAdditionalUserInfo,
 } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
-import { useAuth, useUser } from '@/firebase';
+import { useAuth, useUser, useFirestore } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect } from 'react';
+import { addDoc, collection } from 'firebase/firestore';
 
 const GoogleIcon = () => (
   <svg className="h-5 w-5" viewBox="0 0 24 24">
@@ -45,6 +47,7 @@ const AppleIcon = () => (
 
 export function AuthButtons() {
   const auth = useAuth();
+  const firestore = useFirestore();
   const { user } = useUser();
   const router = useRouter();
   const { toast } = useToast();
@@ -56,14 +59,30 @@ export function AuthButtons() {
   }, [user, router]);
 
   const handleSignIn = async (provider: 'google' | 'apple') => {
-    if (!auth) return;
+    if (!auth || !firestore) return;
     const authProvider =
       provider === 'google'
         ? new GoogleAuthProvider()
         : new OAuthProvider('apple.com');
     try {
-      await signInWithPopup(auth, authProvider);
-      // No need to redirect here, the useEffect hook will handle it
+      const result = await signInWithPopup(auth, authProvider);
+      const additionalInfo = getAdditionalUserInfo(result);
+
+      if (additionalInfo?.isNewUser && result.user.email) {
+        try {
+          await addDoc(collection(firestore, "mail"), {
+            to: [result.user.email],
+            message: {
+              subject: "Welcome to Mortgage Cutter",
+              text: "Thanks for signing up!",
+              html: "<p>Thanks for signing up!</p>",
+            },
+          });
+        } catch (emailError) {
+            console.error("Error writing welcome email document:", emailError);
+            // Non-fatal error, user is still logged in. We can just log it.
+        }
+      }
     } catch (error) {
       const authError = error as AuthError;
       console.error(`Error signing in with ${provider}:`, authError.code, authError.message);

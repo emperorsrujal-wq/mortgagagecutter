@@ -11,11 +11,12 @@ import { Separator } from '../ui/separator';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useAuth, useUser } from '@/firebase';
+import { useAuth, useUser, useFirestore } from '@/firebase';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { addDoc, collection } from 'firebase/firestore';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -25,6 +26,7 @@ const formSchema = z.object({
 
 export function HeroForm() {
   const auth = useAuth();
+  const firestore = useFirestore();
   const { user } = useUser();
   const { toast } = useToast();
   const router = useRouter();
@@ -46,7 +48,7 @@ export function HeroForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!auth) {
+    if (!auth || !firestore) {
         toast({
             variant: 'destructive',
             title: 'Auth service not available.',
@@ -57,19 +59,26 @@ export function HeroForm() {
     
     setIsLoading(true);
     try {
-      // 1. Create the user
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
       const newUser = userCredential.user;
 
-      // 2. Update the user's profile with their name
       await updateProfile(newUser, { displayName: values.name });
+
+      // After successful signup and profile update, write to 'mail' collection
+      await addDoc(collection(firestore, "mail"), {
+        to: [newUser.email],
+        message: {
+          subject: "Welcome to Mortgage Cutter",
+          text: "Thanks for signing up!",
+          html: "<p>Thanks for signing up!</p>",
+        },
+      });
 
       toast({
         title: 'Account Created!',
         description: "Welcome! We're redirecting you to the questionnaire.",
       });
 
-      // Redirect is now handled by the useEffect hook which listens for `user` state changes
     } catch (error: any) {
       console.error('Error during sign-up:', error);
       toast({
