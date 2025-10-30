@@ -33,8 +33,10 @@ export function useSendWelcomeEmail() {
       const mailCollection = collection(firestore, 'mail');
       await addDoc(mailCollection, {
         to: [user.email],
-        subject: 'Welcome to Mortgage Cutter!',
-        html: `<p>Welcome to your financial freedom journey. Get started by filling out our questionnaire.</p><p>You can access the questionnaire here: <a href="https://mortgagecutter.com/questionnaire">https://mortgagecutter.com/questionnaire</a></p>`,
+        message: {
+          subject: 'Welcome to Mortgage Cutter!',
+          html: `<p>Welcome to your financial freedom journey. Get started by filling out our questionnaire.</p><p>You can access the questionnaire here: <a href="https://mortgagecutter.com/questionnaire">https://mortgagecutter.com/questionnaire</a></p>`,
+        }
       });
       console.log('Welcome email document created for:', user.email);
     } catch (error) {
