@@ -1,5 +1,6 @@
+
 import Link from 'next/link';
-import { Home, Gem, Banknote } from 'lucide-react';
+import { Home, Gem, Banknote, Beaker } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { UserProfileButton } from '@/components/auth/user-profile-button';
 
@@ -32,6 +33,9 @@ export default function Header() {
             </Button>
             <Button variant="ghost" asChild>
               <Link href="/snippets">Snippets</Link>
+            </Button>
+            <Button variant="ghost" asChild>
+              <Link href="/test-form"><Beaker className="mr-2 h-4 w-4" /> Test Form</Link>
             </Button>
             <Button variant="ghost" asChild>
               <Link href="#">Contact</Link>
