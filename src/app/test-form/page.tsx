@@ -14,9 +14,6 @@ export default function TestFormPage() {
   const founderImage = PlaceHolderImages.find((p) => p.id === 'testimonial-person');
   const router = useRouter();
 
-  // The redirect is now handled by a hidden input in the form pointing to `/form-submitted`.
-  // No complex useEffect is needed, which prevents interference with the form submission.
-
   return (
     <>
       <div className="flex-1 flex flex-col">
@@ -52,75 +49,13 @@ export default function TestFormPage() {
 
             <div className="w-full max-w-md">
                 <Card className="w-full max-w-md mx-auto shadow-lg rounded-lg overflow-hidden bg-card/90 backdrop-blur-sm">
-                    <CardContent className="p-6" dangerouslySetInnerHTML={{ __html: `
-                      <div class="sg-form" data-sg-form-id="3afc55b0-b157-11f0-9eb7-5e057f64fa4d" data-sg-form-action="https://local.sendgrid.com/mkt/form-submit" data-sg-form-api-key="SG.xxx">
-                          <div class="sg-form-body">
-                              <div class="sg-form-header">
-                                  <h2 class="sg-form-title">Get Your Free Blueprint</h2>
-                                  <p class="sg-form-description">Instantly see your potential savings. No credit card required.</p>
-                              </div>
-                              <form>
-                                  <!-- This hidden input tells SendGrid where to redirect after a successful submission. -->
-                                  <input type="hidden" name="_redirect" value="/form-submitted" />
-                                  <div class="sg-form-fields">
-                                      <div class="sg-form-field">
-                                          <label class="sg-form-label">First Name</label>
-                                          <input type="text" name="first_name" class="sg-form-input" placeholder="Jane" />
-                                      </div>
-                                      <div class="sg-form-field">
-                                          <label class="sg-form-label">Last Name</label>
-                                          <input type="text" name="last_name" class="sg-form-input" placeholder="Doe" />
-                                      </div>
-                                      <div class="sg-form-field">
-                                          <label class="sg-form-label">Email</label>
-                                          <input type="email" name="email" class="sg-form-input" placeholder="you@example.com" required />
-                                      </div>
-                                  </div>
-                                  <div class="sg-form-footer">
-                                      <button type="submit" class="sg-form-button">Create Account & Get Blueprint</button>
-                                  </div>
-                              </form>
-                          </div>
-                      </div>
-                      <style>
-                        .sg-form { width: 100%; }
-                        .sg-form-body { padding: 1.5rem; }
-                        .sg-form-header { text-align: center; margin-bottom: 1.5rem; }
-                        .sg-form-title { font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem; color: hsl(var(--card-foreground)); }
-                        .sg-form-description { color: hsl(var(--muted-foreground)); }
-                        .sg-form-fields { display: flex; flex-direction: column; gap: 1rem; }
-                        .sg-form-field { display: flex; flex-direction: column; }
-                        .sg-form-label { font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; color: hsl(var(--card-foreground)); }
-                        .sg-form-input { 
-                            display: flex;
-                            height: 2.5rem;
-                            width: 100%;
-                            border-radius: 0.375rem;
-                            border: 1px solid hsl(var(--input));
-                            background-color: hsl(var(--background));
-                            padding: 0.5rem 0.75rem;
-                            font-size: 0.875rem;
-                            color: hsl(var(--foreground));
-                        }
-                        .sg-form-input::placeholder { color: hsl(var(--muted-foreground)); }
-                        .sg-form-footer { margin-top: 1.5rem; }
-                        .sg-form-button {
-                            display: inline-flex;
-                            align-items: center;
-                            justify-content: center;
-                            width: 100%;
-                            height: 2.5rem;
-                            padding: 0 1rem;
-                            font-weight: 500;
-                            border-radius: 0.375rem;
-                            background-color: hsl(var(--primary));
-                            color: hsl(var(--primary-foreground));
-                            cursor: pointer;
-                            border: none;
-                        }
-                        .sg-form-button:hover { opacity: 0.9; }
-                      </style>
-                    ` }} />
+                    <CardContent className="p-0">
+                      <iframe 
+                        src="https://cdn.forms-content-1.sg-form.com/3afc55b0-b157-11f0-9eb7-5e057f64fa4d"
+                        style={{ border: 'none', width: '100%', height: '480px' }}
+                        title="Signup Form"
+                      />
+                    </CardContent>
                 </Card>
             </div>
 
@@ -280,3 +215,5 @@ export default function TestFormPage() {
     </>
   );
 }
+
+    
