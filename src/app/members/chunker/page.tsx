@@ -811,7 +811,6 @@ export default function ChunkerCalculatorPage() {
   const t = i18n[lang] || i18n.en;
 
   useEffect(() => {
-    // Super admin check
     if (user?.email === ADMIN_EMAIL) {
       return;
     }
@@ -951,10 +950,9 @@ export default function ChunkerCalculatorPage() {
         </AccordionItem>
       </Accordion>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
-        {/* --- INPUTS --- */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-8">
         <div className="lg:col-span-2 space-y-6">
-          <Card>
+          <Card className="shadow-lg">
             <CardHeader><CardTitle>{t.form.mortgageTitle}</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               <InputField name="mortgageBalance" label={t.labels.mortgageBalance} explainer={t.explainers.mortgageBalance}>
@@ -968,9 +966,7 @@ export default function ChunkerCalculatorPage() {
                     <Label>{t.labels.termRemaining}</Label>
                     <TooltipProvider>
                       <Tooltip>
-                        <TooltipTrigger asChild>
-                          <button type="button"><Info className="h-4 w-4 text-muted-foreground" /></button>
-                        </TooltipTrigger>
+                        <TooltipTrigger asChild><button type="button"><Info className="h-4 w-4 text-muted-foreground" /></button></TooltipTrigger>
                         <TooltipContent className="max-w-xs whitespace-pre-wrap"><p>{t.explainers.termRemaining}</p></TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
@@ -997,7 +993,7 @@ export default function ChunkerCalculatorPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="shadow-lg">
             <CardHeader><CardTitle>{t.form.cashflowTitle}</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               <InputField name="netIncome" label={t.labels.netIncome} explainer={t.explainers.netIncome}>
@@ -1019,7 +1015,7 @@ export default function ChunkerCalculatorPage() {
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="shadow-lg">
             <CardHeader><CardTitle>{t.form.strategyTitle}</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               <InputField name="chunkMode" label={t.labels.chunkMode} explainer={t.explainers.chunkMode}>
@@ -1056,7 +1052,7 @@ export default function ChunkerCalculatorPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={run} className="w-full">{t.form.calculate}</Button>
+              <Button onClick={run} className="w-full" size="lg">{t.form.calculate}</Button>
             </CardFooter>
           </Card>
           <div className="text-center">
@@ -1074,14 +1070,13 @@ export default function ChunkerCalculatorPage() {
           </div>
         </div>
 
-        {/* --- RESULTS --- */}
         <div className="lg:col-span-3">
           {res ? (
              <div className="space-y-6">
                 {res.strategyType === 'HELOC Arbitrage' && (
                     <Alert className="bg-primary/10 border-primary/50 text-primary-foreground">
                         <Zap className="h-4 w-4 text-primary" />
-                        <AlertTitle className="text-primary">{t.results.arbitrageAlertTitle}</AlertTitle>
+                        <AlertTitle className="text-primary font-bold">{t.results.arbitrageAlertTitle}</AlertTitle>
                         <AlertDescription className="text-primary/90">
                            {t.results.arbitrageAlertDescription}
                         </AlertDescription>
@@ -1089,22 +1084,22 @@ export default function ChunkerCalculatorPage() {
                 )}
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <Card className="bg-primary/10 border-primary">
-                        <CardHeader className="pb-2"><CardTitle className="text-sm font-medium">{t.results.interestSaved}</CardTitle></CardHeader>
-                        <CardContent><p className="text-3xl font-bold">{currencyFormatter(res.totals.interestSaved)}</p></CardContent>
+                    <Card className="bg-primary/10 border-primary shadow-lg">
+                        <CardHeader className="pb-2"><CardTitle className="text-sm font-medium text-primary">{t.results.interestSaved}</CardTitle></CardHeader>
+                        <CardContent><p className="text-3xl font-bold text-primary">{currencyFormatter(res.totals.interestSaved)}</p></CardContent>
                     </Card>
-                     <Card>
+                     <Card className="shadow-md">
                         <CardHeader className="pb-2"><CardTitle className="text-sm font-medium">{t.results.monthsSaved}</CardTitle></CardHeader>
                         <CardContent><p className="text-3xl font-bold">{res.totals.monthsSaved}</p></CardContent>
                     </Card>
-                     <Card>
+                     <Card className="shadow-md">
                         <CardHeader className="pb-2"><CardTitle className="text-sm font-medium">{t.results.miSaved}</CardTitle></CardHeader>
                         <CardContent><p className="text-3xl font-bold">{currencyFormatter(res.totals.miSaved)}</p></CardContent>
                     </Card>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <Card>
+                    <Card className="shadow-md">
                         <CardHeader><CardTitle>{t.results.baselineTitle}</CardTitle></CardHeader>
                         <CardContent className="text-sm space-y-2">
                             <p>{t.results.months}: <span className="font-semibold">{res.baseline.months}</span></p>
@@ -1112,7 +1107,7 @@ export default function ChunkerCalculatorPage() {
                             <p>{t.results.totalMI}: <span className="font-semibold">{currencyFormatter(res.baseline.totalMI)}</span></p>
                         </CardContent>
                     </Card>
-                     <Card>
+                     <Card className="shadow-md">
                         <CardHeader><CardTitle>{t.results.strategyTitle}</CardTitle></CardHeader>
                         <CardContent className="text-sm space-y-2">
                              <p>{t.results.months}: <span className="font-semibold">{res.strategy.months}</span></p>
@@ -1121,7 +1116,7 @@ export default function ChunkerCalculatorPage() {
                         </CardContent>
                     </Card>
                 </div>
-                 <Card>
+                 <Card className="shadow-md">
                   <CardHeader>
                       <CardTitle>{t.results.strategyCardTitle}</CardTitle>
                   </CardHeader>
@@ -1132,7 +1127,7 @@ export default function ChunkerCalculatorPage() {
                       )}
                   </CardContent>
                 </Card>
-                 <Card>
+                 <Card className="shadow-xl">
                   <CardHeader>
                       <CardTitle>{t.results.balanceOverTime}</CardTitle>
                       <CardDescription>{t.results.balanceDescription}</CardDescription>
@@ -1192,7 +1187,7 @@ export default function ChunkerCalculatorPage() {
                 </Alert>
              </div>
           ) : (
-             <div className="flex flex-col items-center justify-center text-center p-12 border rounded-lg h-full">
+             <div className="flex flex-col items-center justify-center text-center p-12 border-2 border-dashed rounded-xl h-full">
                  <p className="text-lg font-semibold">{t.results.placeholderTitle}</p>
                  <p className="text-muted-foreground mt-2">{t.results.placeholderDescription}</p>
              </div>
