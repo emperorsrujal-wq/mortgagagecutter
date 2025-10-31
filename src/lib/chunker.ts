@@ -1,3 +1,4 @@
+
 /**
  * HELOC + chunk strategy simulator (readvanceable lines supported).
  * Bank-agnostic. No fees. Education-only.
@@ -155,11 +156,21 @@ export function simulate(inputs: Inputs): Outputs {
   // --- NEW LOGIC: Utilize existing cash ---
   const existingCash = (inputs.savings?.savings ?? 0) + (inputs.savings?.chequing ?? 0) + (inputs.savings?.shortTerm ?? 0);
   
-  // Initial HELOC balance is any opening balance plus the mortgage, MINUS the cash infusion.
-  let helocBal = Math.max(0, (inputs.helocOpeningBalance ?? 0) + mortgageBal - existingCash);
-  // After the cash infusion, the mortgage balance itself is now zero'd out and part of the HELOC.
-  mortgageBal = 0;
-  // --- END NEW LOGIC ---
+  let helocBal = inputs.helocOpeningBalance ?? 0;
+  
+  // Immediately use cash to pay down the mortgage if it's the higher interest debt,
+  // or pay down the HELOC if it's higher (or the only debt).
+  let initialCashChunk = 0;
+  if (existingCash > 0) {
+      if (inputs.mortgageAPR > inputs.helocAPR && mortgageBal > 0) {
+          const cashToMortgage = Math.min(existingCash, mortgageBal);
+          mortgageBal -= cashToMortgage;
+          initialCashChunk = cashToMortgage;
+      } else if (helocBal > 0) {
+          const cashToHeloc = Math.min(existingCash, helocBal);
+          helocBal -= cashToHeloc;
+      }
+  }
 
   const helocLimit = Math.max(0, inputs.helocLimit);
 
@@ -172,27 +183,26 @@ export function simulate(inputs: Inputs): Outputs {
   const timeline: Outputs["timeline"] = [];
 
   let months = 0;
-  let firstChunkSize = 0; // This will now represent the initial cash infusion
-
-  // Record initial state (Month 0) if cash is used
-  if (existingCash > 0) {
-    timeline.push({
-        month: 0,
-        mortgageBal: 0, // It's immediately moved to HELOC
-        helocBal: helocBal,
-        mortInterest: 0,
-        helocInterest: 0,
-        mi: 0,
-        chunkApplied: existingCash, // Show the initial cash paydown
-        surplusUsed: 0,
-    });
+  let firstChunkSize = 0;
+  
+  if (initialCashChunk > 0) {
+      timeline.push({
+          month: 0,
+          mortgageBal: mortgageBal,
+          helocBal: helocBal,
+          mortInterest: 0,
+          helocInterest: 0,
+          mi: 0,
+          chunkApplied: initialCashChunk,
+          surplusUsed: 0,
+      });
   }
 
 
   while ((mortgageBal > 0.01 || helocBal > 0.01) && months < maxMonths) {
     months++;
 
-    // 1) Mortgage step (This will be $0 for this new strategy, but kept for logical consistency)
+    // 1) Mortgage step
     const { interest: mortInterest, newBalance } = splitMortgagePayment(
       mortgageBal,
       inputs.mortgageAPR,
@@ -204,14 +214,12 @@ export function simulate(inputs: Inputs): Outputs {
     // 2) MI only while LTV > 80%
     let thisMI = 0;
     if (inputs.homeValue && inputs.monthlyMI) {
-      // LTV in this strategy should be based on total debt against home (HELOC)
-      const ltv = helocBal / inputs.homeValue;
+      const ltv = (mortgageBal + helocBal) / inputs.homeValue;
       if (ltv > 0.80) thisMI = inputs.monthlyMI;
     }
     totalMI += thisMI;
 
     // 3) Surplus: netIncome - livingExpenses - (mortgage payment + MI)
-    // Mortgage payment is now $0 as it's rolled into HELOC.
     const mortgageOutflow = mortgageBal > 0 ? fixedPmt : 0; 
     const rawSurplus = inputs.netIncome - inputs.livingExpenses - mortgageOutflow - thisMI;
 
@@ -227,17 +235,43 @@ export function simulate(inputs: Inputs): Outputs {
     }
     helocBal -= principalToHeloc;
 
-    // The chunking logic is no longer needed as the mortgage is already in the HELOC
+    // 5) Chunking logic
     let chunkApplied = 0;
+    if (helocBal < 1000 && mortgageBal > 0 && rawSurplus > 0) {
+      const surplusForChunking = Math.max(0, rawSurplus - helocInterest);
+      chunkApplied = safeChunkAmount({
+        mortgageBal,
+        helocBal,
+        helocLimit,
+        monthlySurplus: surplusForChunking,
+        isArbitrage: isArbitrageMode,
+        fixedChunkAmount: inputs.chunkMode === 'FIXED' ? inputs.fixedChunkAmount : undefined,
+      });
+
+      if (chunkApplied > 0) {
+        if (months === 1) firstChunkSize = chunkApplied;
+        mortgageBal -= chunkApplied;
+        helocBal += chunkApplied;
+      }
+    }
+    
+    // For readvanceable mortgages, check if equity increased
+    if (inputs.readvanceable && mortgageBal > 0) {
+        const principalPaidThisMonth = (mortgageBal > 0 ? fixedPmt : 0) - mortInterest;
+        if (principalPaidThisMonth > 0) {
+            // This is a simplification; real banks might have different rules.
+            // helocLimit += principalPaidThisMonth;
+        }
+    }
 
     timeline.push({
       month: months,
-      mortgageBal: Math.max(0, mortgageBal), // Will be 0
+      mortgageBal: Math.max(0, mortgageBal),
       helocBal: Math.max(0, helocBal),
-      mortInterest, // Will be 0
+      mortInterest,
       helocInterest,
       mi: thisMI,
-      chunkApplied, // Will be 0 after initial
+      chunkApplied,
       surplusUsed: rawSurplus > 0 ? rawSurplus : 0,
     });
   }
@@ -248,7 +282,7 @@ export function simulate(inputs: Inputs): Outputs {
   const result: Outputs = {
     months: stratMonths,
     strategyType,
-    optimalChunkSize: existingCash > 0 ? existingCash : undefined, // Reflect the initial cash infusion
+    optimalChunkSize: firstChunkSize,
     baseline: { months: base.months, totalInterest: base.totalInterest, totalMI: base.totalMI },
     strategy: { months: stratMonths, totalInterest: stratInterest, totalMI },
     totals: {
@@ -261,3 +295,5 @@ export function simulate(inputs: Inputs): Outputs {
 
   return result;
 }
+
+    

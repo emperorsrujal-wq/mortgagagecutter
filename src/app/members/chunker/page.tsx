@@ -36,6 +36,7 @@ interface LocalePack {
       strategyTitle: string;
       calculate: string;
       howChunksWork: string;
+      assetsTitle: string;
   };
   results: {
       title: string;
@@ -93,6 +94,7 @@ const i18n: Record<string, LocalePack> = {
       mortgageTitle: "1. Mortgage Details",
       cashflowTitle: "2. Cash Flow & HELOC",
       strategyTitle: "3. Strategy",
+      assetsTitle: "4. Cash & Assets (Optional)",
       calculate: "Calculate",
       howChunksWork: "How do chunks work?",
     },
@@ -143,7 +145,10 @@ const i18n: Record<string, LocalePack> = {
       fixedChunkAmount: "How much to draw from the HELOC each time we ‘chunk’ down your mortgage principal.\nExample: 10000.",
       billTiming: "Optimized = you batch most bills at once, keeping cash parked against the HELOC longer. Typical = bills are scattered.",
       chunkModalTitle: "How the 'Chunk' Strategy Works",
-      chunkModalBody: "We draw a small HELOC chunk to knock down mortgage principal, then your monthly surplus repays the HELOC. Once the HELOC balance is near zero, we repeat. Lower principal sooner = less interest over time."
+      chunkModalBody: "We draw a small HELOC chunk to knock down mortgage principal, then your monthly surplus repays the HELOC. Once the HELOC balance is near zero, we repeat. Lower principal sooner = less interest over time.",
+      savings: "Cash in a standard savings account. This will be used to pay down the HELOC balance on day one.",
+      chequing: "Cash in your primary chequing/current account. This will also be used to immediately reduce your HELOC principal.",
+      shortTerm: "Cash in liquid, short-term investments you're willing to use (e.g., GICs, money market funds)."
     },
      labels: {
       language: "Language",
@@ -168,6 +173,9 @@ const i18n: Record<string, LocalePack> = {
       fixed: "Fixed",
       optimized: "Optimized",
       typical: "Typical",
+      savings: "Savings Account",
+      chequing: "Chequing Account",
+      shortTerm: "Short-Term Investments",
     }
   },
   "fr-CA": {
@@ -190,6 +198,7 @@ const i18n: Record<string, LocalePack> = {
       mortgageTitle: "1. Détails de l'hypothèque",
       cashflowTitle: "2. Flux de trésorerie et MCH",
       strategyTitle: "3. Stratégie",
+      assetsTitle: "4. Actifs et liquidités (Optionnel)",
       calculate: "Calculer",
       howChunksWork: "Comment fonctionnent les versements ?",
     },
@@ -240,7 +249,10 @@ const i18n: Record<string, LocalePack> = {
         fixedChunkAmount: "Montant à retirer de la MCH chaque fois que nous réduisons le capital de votre hypothèque.\nExemple: 10000.",
         billTiming: "Optimisé = vous regroupez la plupart des factures en une fois, gardant l'argent plus longtemps sur la MCH. Typique = factures étalées.",
         chunkModalTitle: "Comment fonctionne la stratégie de 'versement'",
-        chunkModalBody: "Nous retirons un petit versement de la MCH pour réduire le capital de l'hypothèque, puis votre surplus mensuel rembourse la MCH. Une fois le solde de la MCH proche de zéro, nous répétons. Un capital plus bas plus tôt = moins d'intérêts sur la durée."
+        chunkModalBody: "Nous retirons un petit versement de la MCH pour réduire le capital de l'hypothèque, puis votre surplus mensuel rembourse la MCH. Une fois le solde de la MCH proche de zéro, nous répétons. Un capital plus bas plus tôt = moins d'intérêts sur la durée.",
+        savings: "Argent dans un compte d'épargne standard. Il sera utilisé pour rembourser le solde de la MCH le premier jour.",
+        chequing: "Argent dans votre compte chèques principal. Il sera également utilisé pour réduire immédiatement le capital de votre MCH.",
+        shortTerm: "Argent dans des investissements liquides à court terme que vous êtes prêt à utiliser (par ex., CPG, fonds du marché monétaire)."
     },
     labels: {
       language: "Langue",
@@ -265,6 +277,9 @@ const i18n: Record<string, LocalePack> = {
       fixed: "Fixe",
       optimized: "Optimisé",
       typical: "Typique",
+      savings: "Compte d'épargne",
+      chequing: "Compte chèques",
+      shortTerm: "Placements à court terme",
     }
   },
   es: {
@@ -287,6 +302,7 @@ const i18n: Record<string, LocalePack> = {
       mortgageTitle: "1. Detalles de la Hipoteca",
       cashflowTitle: "2. Flujo de Caja y HELOC",
       strategyTitle: "3. Estrategia",
+      assetsTitle: "4. Efectivo y Activos (Opcional)",
       calculate: "Calcular",
       howChunksWork: "¿Cómo funcionan los abonos?",
     },
@@ -337,7 +353,10 @@ const i18n: Record<string, LocalePack> = {
       fixedChunkAmount: "Cuánto retirar de la HELOC cada vez que 'abonamos' al capital de tu hipoteca.\nEjemplo: 10000.",
       billTiming: "Optimizado = agrupas la mayoría de las facturas a la vez, manteniendo el efectivo estacionado contra la HELOC por más tiempo. Típico = las facturas están dispersas.",
       chunkModalTitle: "Cómo Funciona la Estrategia de 'Abonos'",
-      chunkModalBody: "Retiramos un pequeño abono de la HELOC para reducir el capital de la hipoteca, luego tu superávit mensual paga la HELOC. Una vez que el saldo de la HELOC está cerca de cero, repetimos. Un capital más bajo antes = menos interés con el tiempo."
+      chunkModalBody: "Retiramos un pequeño abono de la HELOC para reducir el capital de la hipoteca, luego tu superávit mensual paga la HELOC. Una vez que el saldo de la HELOC está cerca de cero, repetimos. Un capital más bajo antes = menos interés con el tiempo.",
+      savings: "Dinero en una cuenta de ahorros estándar. Se utilizará para pagar el saldo de la HELOC el primer día.",
+      chequing: "Dinero en su cuenta corriente principal. También se utilizará para reducir inmediatamente el capital de su HELOC.",
+      shortTerm: "Dinero en inversiones líquidas a corto plazo que está dispuesto a utilizar (por ejemplo, GIC, fondos del mercado monetario)."
     },
     labels: {
       language: "Idioma",
@@ -362,6 +381,9 @@ const i18n: Record<string, LocalePack> = {
       fixed: "Fijo",
       optimized: "Optimizado",
       typical: "Típico",
+      savings: "Cuenta de Ahorros",
+      chequing: "Cuenta Corriente",
+      shortTerm: "Inversiones a Corto Plazo",
     }
   },
   "pt-BR": {
@@ -384,6 +406,7 @@ const i18n: Record<string, LocalePack> = {
         mortgageTitle: "1. Detalhes da Hipoteca",
         cashflowTitle: "2. Fluxo de Caixa & HELOC",
         strategyTitle: "3. Estratégia",
+        assetsTitle: "4. Dinheiro e Ativos (Opcional)",
         calculate: "Calcular",
         howChunksWork: "Como funcionam os abatimentos?",
     },
@@ -434,7 +457,10 @@ const i18n: Record<string, LocalePack> = {
         fixedChunkAmount: "Quanto sacar do HELOC cada vez que 'abatemos' o principal da sua hipoteca.\nExemplo: 10000.",
         billTiming: "Otimizado = você agrupa a maioria das contas de uma vez, mantendo o dinheiro parado contra o HELOC por mais tempo. Típico = as contas são espalhadas.",
         chunkModalTitle: "Como a Estratégia de 'Abatimento' Funciona",
-        chunkModalBody: "Sacamos um pequeno abatimento do HELOC para diminuir o principal da hipoteca, então seu superávit mensal paga o HELOC. Assim que o saldo do HELOC está perto de zero, repetimos. Um principal mais baixo mais cedo = menos juros ao longo do tempo."
+        chunkModalBody: "Sacamos um pequeno abatimento do HELOC para diminuir o principal da hipoteca, então seu superávit mensal paga o HELOC. Assim que o saldo do HELOC está perto de zero, repetimos. Um principal mais baixo mais cedo = menos juros ao longo do tempo.",
+        savings: "Dinheiro em uma conta poupança padrão. Será usado para pagar o saldo do HELOC no primeiro dia.",
+        chequing: "Dinheiro em sua conta corrente principal. Também será usado para reduzir imediatamente o principal do seu HELOC.",
+        shortTerm: "Dinheiro em investimentos líquidos de curto prazo que você está disposto a usar (por exemplo, CDBs, fundos do mercado monetário)."
     },
     labels: {
         language: "Idioma",
@@ -459,6 +485,9 @@ const i18n: Record<string, LocalePack> = {
         fixed: "Fixo",
         optimized: "Otimizado",
         typical: "Típico",
+        savings: "Conta Poupança",
+        chequing: "Conta Corrente",
+        shortTerm: "Investimentos de Curto Prazo",
     }
   },
   hi: {
@@ -481,6 +510,7 @@ const i18n: Record<string, LocalePack> = {
         mortgageTitle: "1. मॉर्गेज विवरण",
         cashflowTitle: "2. नकदी प्रवाह और HELOC",
         strategyTitle: "3. रणनीति",
+        assetsTitle: "4. नकदी और संपत्ति (वैकल्पिक)",
         calculate: "गणना करें",
         howChunksWork: "एकमुश्त भुगतान कैसे काम करते हैं?",
     },
@@ -531,7 +561,10 @@ const i18n: Record<string, LocalePack> = {
         fixedChunkAmount: "हर बार जब हम आपके मॉर्गेज मूलधन को 'एकमुश्त' करते हैं तो HELOC से कितनी राशि निकालनी है।\nउदाहरण: 10000।",
         billTiming: "अनुकूलित = आप एक बार में अधिकांश बिलों को बैच करते हैं, जिससे नकद HELOC के खिलाफ अधिक समय तक पार्क रहता है। विशिष्ट = बिल बिखरे हुए हैं।",
         chunkModalTitle: "'एकमुश्त' रणनीति कैसे काम करती है",
-        chunkModalBody: "हम मॉर्गेज मूलधन को कम करने के लिए एक छोटा HELOC एकमुश्त निकालते हैं, फिर आपका मासिक अधिशेष HELOC का भुगतान करता है। एक बार HELOC शेष शून्य के करीब हो जाने पर, हम दोहराते हैं। پہلے کم मूलधन = समय के साथ कम ब्याज।"
+        chunkModalBody: "हम मॉर्गेज मूलधन को कम करने के लिए एक छोटा HELOC एकमुश्त निकालते हैं, फिर आपका मासिक अधिशेष HELOC का भुगतान करता है। एक बार HELOC शेष शून्य के करीब हो जाने पर, हम दोहराते हैं। पहले कम मूलधन = समय के साथ कम ब्याज।",
+        savings: "एक मानक बचत खाते में नकद। इसका उपयोग पहले दिन HELOC शेष का भुगतान करने के लिए किया जाएगा।",
+        chequing: "आपके प्राथमिक चालू खाते में नकद। इसका उपयोग आपके HELOC मूलधन को तुरंत कम करने के लिए भी किया जाएगा।",
+        shortTerm: "तरल, अल्पकालिक निवेश में नकद जिसे आप उपयोग करने के इच्छुक हैं (उदाहरण के लिए, जीआईसी, मनी मार्केट फंड)।"
     },
     labels: {
         language: "भाषा",
@@ -556,6 +589,9 @@ const i18n: Record<string, LocalePack> = {
         fixed: "निश्चित",
         optimized: "अनुकूलित",
         typical: "विशिष्ट",
+        savings: "बचत खाता",
+        chequing: "चालू खाता",
+        shortTerm: "अल्पकालिक निवेश",
     }
   },
   pa: {
@@ -578,6 +614,7 @@ const i18n: Record<string, LocalePack> = {
         mortgageTitle: "1. ਮੌਰਗੇਜ ਵੇਰਵੇ",
         cashflowTitle: "2. ਨਕਦੀ ਪ੍ਰਵਾਹ ਅਤੇ HELOC",
         strategyTitle: "3. ਰਣਨੀਤੀ",
+        assetsTitle: "4. ਨਕਦੀ ਅਤੇ ਸੰਪਤੀਆਂ (ਵਿਕਲਪਿਕ)",
         calculate: "ਗਣਨਾ ਕਰੋ",
         howChunksWork: "ਇੱਕਮੁਸ਼ਤ ਭੁਗਤਾਨ ਕਿਵੇਂ ਕੰਮ ਕਰਦੇ ਹਨ?",
     },
@@ -623,12 +660,15 @@ const i18n: Record<string, LocalePack> = {
         helocAPR: "ਤੁਹਾਡੇ HELOC ਦੀ ਪਰਿਵਰਤਨਸ਼ੀਲ ਜਾਂ ਸਥਿਰ ਸਾਲਾਨਾ ਦਰ।\nਉਦਾਹਰਨ: 7.25।",
         helocLimit: "ਅੱਜ ਤੁਸੀਂ ਜੋ ਵੱਧ ਤੋਂ ਵੱਧ ਰਕਮ ਕਢਵਾ ਸਕਦੇ ਹੋ (ਕ੍ਰੈਡਿਟ ਸੀਮਾ ਘਟਾਓ ਕੋਈ ਮੌਜੂਦਾ HELOC ਬਕਾਇਆ)।\nਉਦਾਹਰਨ: ਕ੍ਰੈਡਿਟ ਸੀਮਾ 50,000 ਅਤੇ ਮੌਜੂਦਾ ਬਕਾਇਆ 8,500 → 41500 ਦਰਜ ਕਰੋ।",
         helocOpeningBalance: "ਰਣਨੀਤੀ ਸ਼ੁਰੂ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਤੁਹਾਡਾ ਮੌਜੂਦਾ HELOC ਬਕਾਇਆ। ਜੇਕਰ ਤੁਸੀਂ ਅਜੇ ਤੱਕ ਨਹੀਂ ਕਢਵਾਇਆ ਹੈ ਤਾਂ 0 ਦੀ ਵਰਤੋਂ ਕਰੋ।\nਉਦਾਹਰਨ: 0 ਜਾਂ 8500।",
-        readvanceable: "ਹਾਂ ਜੇਕਰ ਤੁਹਾਡੀ ਲਾਈਨ ਤੁਹਾਡੀ ਮੌਰਗੇਜ ਦਾ ਭੁਗਤਾਨ ਕਰਦੇ ਹੀ ਮੁੜ-ਅੱਗੇ ਵਧਦੀ ਹੈ (ਜਿਵੇਂ, STEP/HPP)। ਇੱਕ ਮੂਲ ਗੈਰ-ਮੁੜ-ਅਗਾਊਂਯੋਗ HELOC ਲਈ ਨਹੀਂ।",
+        readvanceable: "ਹਾਂ ਜੇਕਰ ਤੁਹਾਡੀ ਲਾਈਨ ਤੁਹਾਡੀ ਮੌਰਗੇਜ ਦਾ ਭੁਗਤਾਨ ਕਰਦੇ ही ਮੁੜ-ਅੱਗੇ ਵਧਦੀ ਹੈ (ਜਿਵੇਂ, STEP/HPP)। ਇੱਕ ਮੂਲ ਗੈਰ-ਮੁੜ-ਅਗਾਊਂਯੋਗ HELOC ਲਈ ਨਹੀਂ।",
         chunkMode: "ਆਟੋ = ਅਸੀਂ ਤੁਹਾਡੇ ਵਾਧੂ ਦੇ ਆਧਾਰ 'ਤੇ ਸੁਰੱਖਿਅਤ ਇੱਕਮੁਸ਼ਤ ਆਕਾਰ ਦਿੰਦੇ ਹਾਂ। ਫਿਕਸਡ = ਤੁਸੀਂ ਇੱਕਮੁਸ਼ਤ ਆਕਾਰ ਚੁਣਦੇ ਹੋ। ਆਟੋ ਦੀ ਸਿਫਾਰਸ਼ ਕੀਤੀ ਜਾਂਦੀ ਹੈ।",
         fixedChunkAmount: "ਹਰ ਵਾਰ ਜਦੋਂ ਅਸੀਂ ਤੁਹਾਡੇ ਮੌਰਗੇਜ ਮੂਲਧਨ ਨੂੰ 'ਇੱਕਮੁਸ਼ਤ' ਕਰਦੇ ਹਾਂ ਤਾਂ HELOC ਤੋਂ ਕਿੰਨੀ ਰਕਮ ਕਢਵਾਉਣੀ ਹੈ।\nਉਦਾਹਰਨ: 10000।",
         billTiming: "ਅਨੁਕੂਲਿਤ = ਤੁਸੀਂ ਇੱਕ ਵਾਰ ਵਿੱਚ ਜ਼ਿਆਦਾਤਰ ਬਿੱਲਾਂ ਨੂੰ ਬੈਚ ਕਰਦੇ ਹੋ, ਜਿਸ ਨਾਲ ਨਕਦ HELOC ਦੇ ਵਿਰੁੱਧ ਜ਼ਿਆਦਾ ਦੇਰ ਤੱਕ ਪਾਰਕ ਰਹਿੰਦਾ ਹੈ। ਆਮ = ਬਿੱਲ ਖਿੰਡੇ ਹੋਏ ਹਨ।",
         chunkModalTitle: "'ਇੱਕਮੁਸ਼ਤ' ਰਣਨੀਤੀ ਕਿਵੇਂ ਕੰਮ ਕਰਦੀ ਹੈ",
-        chunkModalBody: "ਅਸੀਂ ਮौरਗੇਜ ਮੂਲਧਨ ਨੂੰ ਘਟਾਉਣ ਲਈ ਇੱਕ ਛੋਟਾ HELOC ਇੱਕਮੁਸ਼ਤ ਕਢਵਾਉਂਦੇ ਹਾਂ, ਫਿਰ ਤੁਹਾਡਾ ਮਹੀਨਾਵਾਰ ਵਾਧੂ HELOC ਦਾ ਭੁਗਤਾਨ ਕਰਦਾ ਹੈ। ਇੱਕ ਵਾਰ HELOC ਬਕਾਇਆ ਜ਼ੀਰੋ ਦੇ ਨੇੜੇ ਹੋ ਜਾਣ 'ਤੇ, ਅਸੀਂ ਦੁਹਰਾਉਂਦੇ ਹਾਂ। ਪਹਿਲਾਂ ਘੱଟ ਮੂਲਧਨ = ਸਮੇਂ ਦੇ ਨਾਲ ਘੱਟ ਵਿਆਜ।"
+        chunkModalBody: "ਅਸੀਂ ਮੌਰਗੇਜ ਮੂਲਧਨ ਨੂੰ ਘਟਾਉਣ ਲਈ ਇੱਕ ਛੋਟਾ HELOC ਇੱਕਮੁਸ਼ਤ ਕਢਵਾਉਂਦੇ ਹਾਂ, ਫਿਰ ਤੁਹਾਡਾ ਮਹੀਨਾਵਾਰ ਵਾਧੂ HELOC ਦਾ ਭੁਗਤਾਨ ਕਰਦਾ ਹੈ। ਇੱਕ ਵਾਰ HELOC ਬਕਾਇਆ ਜ਼ੀਰੋ ਦੇ ਨੇੜੇ ਹੋ ਜਾਣ 'ਤੇ, ਅਸੀਂ ਦੁਹਰਾਉਂਦੇ ਹਾਂ। ਪਹਿਲਾਂ ਘੱਟ ਮੂਲਧਨ = ਸਮੇਂ ਦੇ ਨਾਲ ਘੱਟ ਵਿਆਜ।",
+        savings: "ਇੱਕ ਸਟੈਂਡਰਡ ਬਚਤ ਖਾਤੇ ਵਿੱਚ ਨਕਦ। ਇਸਦੀ ਵਰਤੋਂ ਪਹਿਲੇ ਦਿਨ HELOC ਬਕਾਏ ਦਾ ਭੁਗਤਾਨ ਕਰਨ ਲਈ ਕੀਤੀ ਜਾਵੇਗੀ।",
+        chequing: "ਤੁਹਾਡੇ ਮੁੱਖ ਚੈਕਿੰਗ ਖਾਤੇ ਵਿੱਚ ਨਕਦ। ਇਸਦੀ ਵਰਤੋਂ ਤੁਹਾਡੇ HELOC ਮੂਲਧਨ ਨੂੰ ਤੁਰੰਤ ਘਟਾਉਣ ਲਈ ਵੀ ਕੀਤੀ ਜਾਵੇਗੀ।",
+        shortTerm: "ਤਰਲ, ਥੋੜ੍ਹੇ ਸਮੇਂ ਦੇ ਨਿਵੇਸ਼ਾਂ ਵਿੱਚ ਨਕਦ ਜਿਸਦੀ ਵਰਤੋਂ ਕਰਨ ਲਈ ਤੁਸੀਂ ਤਿਆਰ ਹੋ (ਉਦਾਹਰਨ ਲਈ, GICs, ਮਨੀ ਮਾਰਕੀਟ ਫੰਡ)।"
     },
     labels: {
         language: "ਭਾਸ਼ਾ",
@@ -641,7 +681,7 @@ const i18n: Record<string, LocalePack> = {
         homeValue: "ਘਰ ਦਾ ਮੁੱਲ (ਵਿਕਲਪਿਕ)",
         monthlyMI: "ਮਹੀਨਾਵਾਰ MI/CMHC (ਵਿਕਲਪਿਕ)",
         netIncome: "ਸ਼ੁੱਧ ਮਹੀਨਾਵਾਰ ਆਮਦਨ",
-        livingExpenses: "ਮਹੀਨਾਵਾਰ ਰਹਿਣ-ਸਹਿਣ ਦੇ ਖਰਚੇ (ਮौरਗੇਜ ਨੂੰ ਛੱਡ ਕੇ)",
+        livingExpenses: "ਮਹੀਨਾਵਾਰ ਰਹਿਣ-ਸਹਿਣ ਦੇ ਖਰਚੇ (ਮੌਰਗੇਜ ਨੂੰ ਛੱਡ ਕੇ)",
         helocAPR: "HELOC APR (%)",
         helocLimit: "HELOC ਸੀਮਾ (ਹੁਣੇ ਉਪਲਬਧ)",
         helocOpeningBalance: "HELOC ਸ਼ੁਰੂਆਤੀ ਬਕਾਇਆ",
@@ -653,6 +693,9 @@ const i18n: Record<string, LocalePack> = {
         fixed: "ਸਥਿਰ",
         optimized: "ਅਨੁਕੂਲਿਤ",
         typical: "ਆਮ",
+        savings: "ਬਚਤ ਖਾਤਾ",
+        chequing: "ਚੈਕਿੰਗ ਖਾਤਾ",
+        shortTerm: "ਥੋੜ੍ਹੇ ਸਮੇਂ ਦੇ ਨਿਵੇਸ਼",
     }
   },
   ar: {
@@ -675,6 +718,7 @@ const i18n: Record<string, LocalePack> = {
         mortgageTitle: "1. تفاصيل الرهن العقاري",
         cashflowTitle: "2. التدفق النقدي و HELOC",
         strategyTitle: "3. الاستراتيجية",
+        assetsTitle: "4. النقد والأصول (اختياري)",
         calculate: "احسب",
         howChunksWork: "كيف تعمل الدفعات؟",
     },
@@ -725,7 +769,10 @@ const i18n: Record<string, LocalePack> = {
         fixedChunkAmount: "كمية السحب من HELOC في كل مرة نقوم فيها 'بدفع' رأس مال رهنك العقاري.\nمثال: 10000.",
         billTiming: "محسن = تقوم بتجميع معظم الفواتير مرة واحدة، مع إبقاء النقد مركونًا مقابل HELOC لفترة أطول. نموذجي = الفواتير متفرقة.",
         chunkModalTitle: "كيف تعمل استراتيجية 'الدفعة'",
-        chunkModalBody: "نقوم بسحب دفعة صغيرة من HELOC لخفض رأس مال الرهن العقاري، ثم يقوم فائضك الشهري بسداد HELOC. بمجرد أن يقترب رصيد HELOC من الصفر، نكرر العملية. رأس مال أقل في وقت مبكر = فائدة أقل بمرور الوقت."
+        chunkModalBody: "نقوم بسحب دفعة صغيرة من HELOC لخفض رأس مال الرهن العقاري، ثم يقوم فائضك الشهري بسداد HELOC. بمجرد أن يقترب رصيد HELOC من الصفر، نكرر العملية. رأس مال أقل في وقت مبكر = فائدة أقل بمرور الوقت.",
+        savings: "نقد في حساب توفير قياسي. سيتم استخدامه لسداد رصيد HELOC في اليوم الأول.",
+        chequing: "نقد في حسابك الجاري الأساسي. سيتم استخدامه أيضًا لتقليل رأس مال HELOC الخاص بك على الفور.",
+        shortTerm: "نقد في استثمارات سائلة قصيرة الأجل ترغب في استخدامها (مثل شهادات الإيداع، صناديق سوق المال)."
     },
     labels: {
         language: "لغة",
@@ -750,6 +797,9 @@ const i18n: Record<string, LocalePack> = {
         fixed: "ثابت",
         optimized: "محسن",
         typical: "نموذجي",
+        savings: "حساب التوفير",
+        chequing: "الحساب الجاري",
+        shortTerm: "استثمارات قصيرة الأجل",
     }
   }
 };
@@ -770,6 +820,7 @@ const initial: Inputs = {
   chunkMode: 'AUTO',
   fixedChunkAmount: 10000,
   billTiming: 'OPTIMIZED',
+  savings: { savings: 0, chequing: 0, shortTerm: 0 }
 };
 
 const InputField = ({ name, label, children, explainer }: { name: string, label: string, children: React.ReactNode, explainer?: string }) => (
@@ -1011,6 +1062,21 @@ export default function ChunkerCalculatorPage() {
               </InputField>
               <InputField name="helocOpeningBalance" label={t.labels.helocOpeningBalance} explainer={t.explainers.helocOpeningBalance}>
                 <Input id="helocOpeningBalance" type="number" value={form.helocOpeningBalance ?? 0} onChange={e => onChange("helocOpeningBalance", Number(e.target.value))}/>
+              </InputField>
+            </CardContent>
+          </Card>
+
+           <Card className="shadow-lg">
+            <CardHeader><CardTitle>{t.form.assetsTitle}</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              <InputField name="savings" label={t.labels.savings} explainer={t.explainers.savings}>
+                <Input id="savings" type="number" value={form.savings.savings} onChange={e => onChange("savings", { ...form.savings, savings: Number(e.target.value) })}/>
+              </InputField>
+              <InputField name="chequing" label={t.labels.chequing} explainer={t.explainers.chequing}>
+                <Input id="chequing" type="number" value={form.savings.chequing} onChange={e => onChange("savings", { ...form.savings, chequing: Number(e.target.value) })}/>
+              </InputField>
+              <InputField name="shortTerm" label={t.labels.shortTerm} explainer={t.explainers.shortTerm}>
+                <Input id="shortTerm" type="number" value={form.savings.shortTerm} onChange={e => onChange("savings", { ...form.savings, shortTerm: Number(e.target.value) })}/>
               </InputField>
             </CardContent>
           </Card>
