@@ -56,6 +56,8 @@ interface LocalePack {
         month: string;
         mortgageBal: string;
         helocBal: string;
+        mortInt: string;
+        mortPmt: string;
         chunk: string;
         helocInt: string;
         mi: string;
@@ -116,6 +118,8 @@ const i18n: Record<string, LocalePack> = {
         month: "Month",
         mortgageBal: "Mortgage Bal",
         helocBal: "HELOC Bal",
+        mortInt: "Mortgage Int.",
+        mortPmt: "Mortgage Prin.",
         chunk: "Chunk",
         helocInt: "HELOC Int",
         mi: "MI",
@@ -220,6 +224,8 @@ const i18n: Record<string, LocalePack> = {
         month: "Mois",
         mortgageBal: "Solde Hypo.",
         helocBal: "Solde MCH",
+        mortInt: "Int. Hypo.",
+        mortPmt: "Prin. Hypo.",
         chunk: "Versement",
         helocInt: "Int. MCH",
         mi: "Assurance",
@@ -324,6 +330,8 @@ const i18n: Record<string, LocalePack> = {
         month: "Mes",
         mortgageBal: "Saldo Hipoteca",
         helocBal: "Saldo HELOC",
+        mortInt: "Int. Hipoteca",
+        mortPmt: "Prin. Hipoteca",
         chunk: "Abono",
         helocInt: "Int. HELOC",
         mi: "MI",
@@ -428,6 +436,8 @@ const i18n: Record<string, LocalePack> = {
             month: "Mês",
             mortgageBal: "Saldo Hipoteca",
             helocBal: "Saldo HELOC",
+            mortInt: "Juros Hipoteca",
+            mortPmt: "Principal Hipoteca",
             chunk: "Abatimento",
             helocInt: "Juros HELOC",
             mi: "MI",
@@ -532,6 +542,8 @@ const i18n: Record<string, LocalePack> = {
             month: "महीना",
             mortgageBal: "मॉर्गेज शेष",
             helocBal: "HELOC शेष",
+            mortInt: "मॉर्गेज ब्याज",
+            mortPmt: "मॉर्गेज मूलधन",
             chunk: "एकमुश्त",
             helocInt: "HELOC ब्याज",
             mi: "MI",
@@ -636,6 +648,8 @@ const i18n: Record<string, LocalePack> = {
             month: "ਮਹੀਨਾ",
             mortgageBal: "ਮੌਰਗੇਜ ਬਕਾਇਆ",
             helocBal: "HELOC ਬਕਾਇਆ",
+            mortInt: "ਮੌਰਗੇਜ ਵਿਆਜ",
+            mortPmt: "ਮੌਰਗੇਜ ਮੂਲਧਨ",
             chunk: "ਇੱਕਮੁਸ਼ਤ",
             helocInt: "HELOC ਵਿਆਜ",
             mi: "MI",
@@ -740,6 +754,8 @@ const i18n: Record<string, LocalePack> = {
             month: "شهر",
             mortgageBal: "رصيد الرهن العقاري",
             helocBal: "رصيد HELOC",
+            mortInt: "فائدة الرهن العقاري",
+            mortPmt: "رأس مال الرهن العقاري",
             chunk: "دفعة",
             helocInt: "فائدة HELOC",
             mi: "MI",
@@ -813,6 +829,7 @@ const initial: Inputs = {
   monthlyMI: 0,
   netIncome: 9000,
   livingExpenses: 4500,
+  savings: { savings: 0, chequing: 0, shortTerm: 0 },
   helocAPR: 7.5,
   helocLimit: 40000,
   helocOpeningBalance: 0,
@@ -820,7 +837,6 @@ const initial: Inputs = {
   chunkMode: 'AUTO',
   fixedChunkAmount: 10000,
   billTiming: 'OPTIMIZED',
-  savings: { savings: 0, chequing: 0, shortTerm: 0 }
 };
 
 const InputField = ({ name, label, children, explainer }: { name: string, label: string, children: React.ReactNode, explainer?: string }) => (
@@ -942,13 +958,13 @@ export default function ChunkerCalculatorPage() {
 
 
   return (
-    <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8">
+    <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8 bg-slate-50">
        <header className="text-center mb-8">
         <div className="flex justify-center items-center gap-4 mb-2">
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{t.title}</h1>
-            <div className="flex items-center border rounded-md p-1">
+            <div className="flex items-center border rounded-md p-1 bg-white">
                 <Select value={lang} onValueChange={handleLangChange}>
-                  <SelectTrigger className="w-[140px]">
+                  <SelectTrigger className="w-[140px] shadow-inner">
                     <SelectValue placeholder={t.labels.language} />
                   </SelectTrigger>
                   <SelectContent>
@@ -1003,7 +1019,7 @@ export default function ChunkerCalculatorPage() {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-8">
         <div className="lg:col-span-2 space-y-6">
-          <Card className="shadow-lg">
+          <Card className="shadow-lg transition-shadow hover:shadow-xl">
             <CardHeader><CardTitle>{t.form.mortgageTitle}</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               <InputField name="mortgageBalance" label={t.labels.mortgageBalance} explainer={t.explainers.mortgageBalance}>
@@ -1021,7 +1037,7 @@ export default function ChunkerCalculatorPage() {
                         <TooltipContent className="max-w-xs whitespace-pre-wrap"><p>{t.explainers.termRemaining}</p></TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
-                    <div className="flex items-center gap-1 ml-auto border rounded-md p-0.5">
+                    <div className="flex items-center gap-1 ml-auto border rounded-md p-0.5 bg-muted/50">
                         <Button type="button" size="sm" variant={termMode === 'YEARS' ? 'secondary' : 'ghost'} className="h-7 px-2" onClick={() => handleTermModeChange('YEARS')}>{t.labels.years}</Button>
                         <Button type="button" size="sm" variant={termMode === 'MONTHS' ? 'secondary' : 'ghost'} className="h-7 px-2" onClick={() => handleTermModeChange('MONTHS')}>{t.labels.months}</Button>
                     </div>
@@ -1044,7 +1060,7 @@ export default function ChunkerCalculatorPage() {
             </CardContent>
           </Card>
 
-          <Card className="shadow-lg">
+          <Card className="shadow-lg transition-shadow hover:shadow-xl">
             <CardHeader><CardTitle>{t.form.cashflowTitle}</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               <InputField name="netIncome" label={t.labels.netIncome} explainer={t.explainers.netIncome}>
@@ -1066,7 +1082,7 @@ export default function ChunkerCalculatorPage() {
             </CardContent>
           </Card>
 
-           <Card className="shadow-lg">
+           <Card className="shadow-lg transition-shadow hover:shadow-xl">
             <CardHeader><CardTitle>{t.form.assetsTitle}</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               <InputField name="savings" label={t.labels.savings} explainer={t.explainers.savings}>
@@ -1081,7 +1097,7 @@ export default function ChunkerCalculatorPage() {
             </CardContent>
           </Card>
           
-          <Card className="shadow-lg">
+          <Card className="shadow-lg transition-shadow hover:shadow-xl">
             <CardHeader><CardTitle>{t.form.strategyTitle}</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               <InputField name="chunkMode" label={t.labels.chunkMode} explainer={t.explainers.chunkMode}>
@@ -1150,22 +1166,22 @@ export default function ChunkerCalculatorPage() {
                 )}
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <Card className="bg-primary/10 border-primary shadow-lg">
-                        <CardHeader className="pb-2"><CardTitle className="text-sm font-medium text-primary">{t.results.interestSaved}</CardTitle></CardHeader>
-                        <CardContent><p className="text-3xl font-bold text-primary">{currencyFormatter(res.totals.interestSaved)}</p></CardContent>
+                    <Card className="bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-lg">
+                        <CardHeader className="pb-2"><CardTitle className="text-sm font-medium">{t.results.interestSaved}</CardTitle></CardHeader>
+                        <CardContent><p className="text-3xl font-bold">{currencyFormatter(res.totals.interestSaved)}</p></CardContent>
                     </Card>
-                     <Card className="shadow-md">
+                     <Card className="shadow-md bg-white">
                         <CardHeader className="pb-2"><CardTitle className="text-sm font-medium">{t.results.monthsSaved}</CardTitle></CardHeader>
                         <CardContent><p className="text-3xl font-bold">{res.totals.monthsSaved}</p></CardContent>
                     </Card>
-                     <Card className="shadow-md">
+                     <Card className="shadow-md bg-white">
                         <CardHeader className="pb-2"><CardTitle className="text-sm font-medium">{t.results.miSaved}</CardTitle></CardHeader>
                         <CardContent><p className="text-3xl font-bold">{currencyFormatter(res.totals.miSaved)}</p></CardContent>
                     </Card>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <Card className="shadow-md">
+                    <Card className="shadow-md bg-white">
                         <CardHeader><CardTitle>{t.results.baselineTitle}</CardTitle></CardHeader>
                         <CardContent className="text-sm space-y-2">
                             <p>{t.results.months}: <span className="font-semibold">{res.baseline.months}</span></p>
@@ -1173,7 +1189,7 @@ export default function ChunkerCalculatorPage() {
                             <p>{t.results.totalMI}: <span className="font-semibold">{currencyFormatter(res.baseline.totalMI)}</span></p>
                         </CardContent>
                     </Card>
-                     <Card className="shadow-md">
+                     <Card className="shadow-md bg-white">
                         <CardHeader><CardTitle>{t.results.strategyTitle}</CardTitle></CardHeader>
                         <CardContent className="text-sm space-y-2">
                              <p>{t.results.months}: <span className="font-semibold">{res.strategy.months}</span></p>
@@ -1182,7 +1198,7 @@ export default function ChunkerCalculatorPage() {
                         </CardContent>
                     </Card>
                 </div>
-                 <Card className="shadow-md">
+                 <Card className="shadow-md bg-white">
                   <CardHeader>
                       <CardTitle>{t.results.strategyCardTitle}</CardTitle>
                   </CardHeader>
@@ -1193,7 +1209,7 @@ export default function ChunkerCalculatorPage() {
                       )}
                   </CardContent>
                 </Card>
-                 <Card className="shadow-xl">
+                 <Card className="shadow-xl bg-white">
                   <CardHeader>
                       <CardTitle>{t.results.balanceOverTime}</CardTitle>
                       <CardDescription>{t.results.balanceDescription}</CardDescription>
@@ -1216,12 +1232,14 @@ export default function ChunkerCalculatorPage() {
                 </Card>
                 <details className="mt-4">
                     <summary className="cursor-pointer text-sm font-medium">{t.results.timelineTitle}</summary>
-                    <div className="overflow-auto mt-2 border rounded-lg max-h-96">
+                    <div className="overflow-auto mt-2 border rounded-lg max-h-96 bg-white shadow-inner">
                       <table className="min-w-full text-sm">
                         <thead className="sticky top-0 bg-secondary">
                           <tr className="text-left">
                             <th className="p-2">{t.results.table.month}</th>
                             <th className="p-2">{t.results.table.mortgageBal}</th>
+                            <th className="p-2">{t.results.table.mortInt}</th>
+                            <th className="p-2">{t.results.table.mortPmt}</th>
                             <th className="p-2">{t.results.table.helocBal}</th>
                             <th className="p-2">{t.results.table.chunk}</th>
                             <th className="p-2">{t.results.table.helocInt}</th>
@@ -1234,6 +1252,8 @@ export default function ChunkerCalculatorPage() {
                             <tr key={row.month} className="border-b">
                               <td className="p-2">{row.month}</td>
                               <td className="p-2">{currencyFormatter(row.mortgageBal)}</td>
+                              <td className="p-2">{currencyFormatter(row.mortgageInterestPaid)}</td>
+                              <td className="p-2">{currencyFormatter(row.mortgagePrincipalPaid)}</td>
                               <td className="p-2">{currencyFormatter(row.helocBal)}</td>
                               <td className="p-2">{currencyFormatter(row.chunkApplied)}</td>
                               <td className="p-2">{currencyFormatter(row.helocInterest)}</td>
@@ -1248,12 +1268,12 @@ export default function ChunkerCalculatorPage() {
                        {t.results.timelineDescription}
                     </div>
                 </details>
-                <Alert variant="default" className="text-xs">
+                <Alert variant="default" className="text-xs bg-white shadow-sm">
                     <AlertDescription>{t.disclaimer}</AlertDescription>
                 </Alert>
              </div>
           ) : (
-             <div className="flex flex-col items-center justify-center text-center p-12 border-2 border-dashed rounded-xl h-full">
+             <div className="flex flex-col items-center justify-center text-center p-12 border-2 border-dashed rounded-xl h-full bg-white/50">
                  <p className="text-lg font-semibold">{t.results.placeholderTitle}</p>
                  <p className="text-muted-foreground mt-2">{t.results.placeholderDescription}</p>
              </div>

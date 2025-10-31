@@ -55,7 +55,8 @@ export interface Outputs {
     month: number;
     mortgageBal: number;
     helocBal: number;
-    mortInterest: number;
+    mortgageInterestPaid: number;
+    mortgagePrincipalPaid: number;
     helocInterest: number;
     mi: number;
     chunkApplied: number;
@@ -190,7 +191,8 @@ export function simulate(inputs: Inputs): Outputs {
           month: 0,
           mortgageBal: mortgageBal,
           helocBal: helocBal,
-          mortInterest: 0,
+          mortgageInterestPaid: 0,
+          mortgagePrincipalPaid: 0,
           helocInterest: 0,
           mi: 0,
           chunkApplied: initialCashChunk,
@@ -203,7 +205,7 @@ export function simulate(inputs: Inputs): Outputs {
     months++;
 
     // 1) Mortgage step
-    const { interest: mortInterest, newBalance } = splitMortgagePayment(
+    const { interest: mortInterest, principal: mortPrincipal, newBalance } = splitMortgagePayment(
       mortgageBal,
       inputs.mortgageAPR,
       mortgageBal > 0 ? fixedPmt : 0 // once paid off, 0
@@ -268,7 +270,8 @@ export function simulate(inputs: Inputs): Outputs {
       month: months,
       mortgageBal: Math.max(0, mortgageBal),
       helocBal: Math.max(0, helocBal),
-      mortInterest,
+      mortgageInterestPaid: mortInterest,
+      mortgagePrincipalPaid: mortPrincipal,
       helocInterest,
       mi: thisMI,
       chunkApplied,
