@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -21,7 +22,7 @@ import { useToast } from '@/hooks/use-toast';
 
 
 const phoneSchema = z.object({
-  phone: z.string().min(10, { message: 'Please enter a valid phone number with area code.' }),
+  phone: z.string().min(10, { message: 'Please enter a valid phone number with area code.' }).refine(val => val.startsWith('+'), { message: 'Phone number must start with a country code (e.g., +1).' }),
 });
 
 const codeSchema = z.object({
@@ -82,7 +83,9 @@ function PhoneAuthForm() {
             console.error("SMS sending error:", error);
             toast({ variant: 'destructive', title: 'Error sending code', description: error.message });
             window.recaptchaVerifier?.render().then(widgetId => {
-                window.grecaptcha.reset(widgetId);
+                if (typeof window.grecaptcha !== 'undefined' && widgetId !== undefined) {
+                    window.grecaptcha.reset(widgetId);
+                }
             });
         } finally {
             setIsLoading(false);
@@ -378,3 +381,5 @@ export default function TestFormPage() {
     </>
   );
 }
+
+    
