@@ -22,7 +22,7 @@ import { useToast } from '@/hooks/use-toast';
 
 
 const phoneSchema = z.object({
-  phone: z.string().min(10, { message: 'Please enter a valid phone number with area code.' }).refine(val => val.startsWith('+'), { message: 'Phone number must start with a country code (e.g., +1).' }),
+  phone: z.string().min(10, { message: 'Please enter a valid phone number with area code.' }),
 });
 
 const codeSchema = z.object({
@@ -58,14 +58,18 @@ function PhoneAuthForm() {
     
     const setupRecaptcha = () => {
         if (!auth) return;
-        if (!window.recaptchaVerifier) {
-            window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-                'size': 'invisible',
-                'callback': (response: any) => {
-                    // reCAPTCHA solved, allow signInWithPhoneNumber.
-                }
-            });
+        // Check if the verifier has already been rendered.
+        const recaptchaContainer = document.getElementById('recaptcha-container');
+        if (recaptchaContainer && recaptchaContainer.innerHTML !== '') {
+            return;
         }
+
+        window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+            'size': 'invisible',
+            'callback': (response: any) => {
+                // reCAPTCHA solved, allow signInWithPhoneNumber.
+            }
+        });
     }
 
     async function onPhoneSubmit(values: z.infer<typeof phoneSchema>) {
@@ -73,20 +77,30 @@ function PhoneAuthForm() {
         setIsLoading(true);
         setupRecaptcha();
 
+        // Sanitize and format the phone number
+        let phoneNumber = values.phone.replace(/[^0-9]/g, '');
+        if (!values.phone.startsWith('+')) {
+            // Assume US/Canada country code if not provided
+            phoneNumber = `+1${phoneNumber}`;
+        }
+
         try {
             const appVerifier = window.recaptchaVerifier!;
-            const confirmationResult = await signInWithPhoneNumber(auth, values.phone, appVerifier);
+            const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
             window.confirmationResult = confirmationResult;
             setIsCodeSent(true);
             toast({ title: "Verification code sent!", description: "Please check your phone." });
         } catch (error: any) {
             console.error("SMS sending error:", error);
             toast({ variant: 'destructive', title: 'Error sending code', description: error.message });
-            window.recaptchaVerifier?.render().then(widgetId => {
-                if (typeof window.grecaptcha !== 'undefined' && widgetId !== undefined) {
-                    window.grecaptcha.reset(widgetId);
-                }
-            });
+            // Only reset reCAPTCHA if it exists and there's an error
+            if (window.recaptchaVerifier) {
+                window.recaptchaVerifier.render().then(widgetId => {
+                    if (typeof window.grecaptcha !== 'undefined' && widgetId !== undefined) {
+                        window.grecaptcha.reset(widgetId);
+                    }
+                });
+            }
         } finally {
             setIsLoading(false);
         }
@@ -128,7 +142,12 @@ function PhoneAuthForm() {
         <Card className="w-full max-w-md mx-auto shadow-2xl bg-card/90 backdrop-blur-sm">
             <CardHeader className="text-center">
                 <CardTitle>Sign In with Phone</CardTitle>
-                <CardDescription>Enter your phone number to get a verification code.</CardDescription>
+                <CardDescription>
+                    {isCodeSent 
+                        ? 'Enter the 6-digit code we sent to your phone.'
+                        : 'Enter your phone number to get a verification code.'
+                    }
+                </CardDescription>
             </CardHeader>
             <CardContent>
                 {!isCodeSent ? (
@@ -141,7 +160,7 @@ function PhoneAuthForm() {
                                     <FormItem>
                                         <FormLabel>Phone Number</FormLabel>
                                         <FormControl>
-                                            <Input type="tel" placeholder="+1 555-555-5555" {...field} />
+                                            <Input type="tel" placeholder="(555) 555-5555" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -381,5 +400,3 @@ export default function TestFormPage() {
     </>
   );
 }
-
-    
