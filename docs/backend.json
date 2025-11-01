@@ -8,7 +8,7 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the lead."
+          "description": "Unique identifier for the lead, typically the Firebase Auth UID."
         },
         "name": {
           "type": "string",
@@ -19,6 +19,10 @@
           "description": "Email address of the lead.",
           "format": "email"
         },
+        "phone": {
+          "type": "string",
+          "description": "Phone number of the lead."
+        },
         "submissionDate": {
           "type": "string",
           "description": "Date and time the lead information was submitted.",
@@ -27,8 +31,6 @@
       },
       "required": [
         "id",
-        "name",
-        "email",
         "submissionDate"
       ]
     },
@@ -202,7 +204,8 @@
   "auth": {
     "providers": [
       "google.com",
-      "apple.com"
+      "apple.com",
+      "phone"
     ]
   },
   "firestore": {

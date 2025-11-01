@@ -1,19 +1,190 @@
-
 'use client';
+
+import { useState } from 'react';
+import { useAuth, useFirestore } from '@/firebase';
+import { RecaptchaVerifier, signInWithPhoneNumber, ConfirmationResult } from 'firebase/auth';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { useRouter } from 'next/navigation';
 
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Star, CheckCircle, TrendingUp, ShieldCheck, Calculator } from 'lucide-react';
+import { Star, CheckCircle, TrendingUp, ShieldCheck, Calculator, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Card, CardContent } from '@/components/ui/card';
-import { useRouter } from 'next/navigation';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useToast } from '@/hooks/use-toast';
+
+
+const phoneSchema = z.object({
+  phone: z.string().min(10, { message: 'Please enter a valid phone number with area code.' }),
+});
+
+const codeSchema = z.object({
+  code: z.string().length(6, { message: 'Verification code must be 6 digits.' }),
+});
+
+declare global {
+    interface Window {
+        recaptchaVerifier?: RecaptchaVerifier;
+        confirmationResult?: ConfirmationResult;
+    }
+}
+
+
+function PhoneAuthForm() {
+    const auth = useAuth();
+    const firestore = useFirestore();
+    const router = useRouter();
+    const { toast } = useToast();
+    
+    const [isLoading, setIsLoading] = useState(false);
+    const [isCodeSent, setIsCodeSent] = useState(false);
+
+    const phoneForm = useForm<z.infer<typeof phoneSchema>>({
+        resolver: zodResolver(phoneSchema),
+        defaultValues: { phone: '' },
+    });
+
+    const codeForm = useForm<z.infer<typeof codeSchema>>({
+        resolver: zodResolver(codeSchema),
+        defaultValues: { code: '' },
+    });
+    
+    const setupRecaptcha = () => {
+        if (!auth) return;
+        if (!window.recaptchaVerifier) {
+            window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+                'size': 'invisible',
+                'callback': (response: any) => {
+                    // reCAPTCHA solved, allow signInWithPhoneNumber.
+                }
+            });
+        }
+    }
+
+    async function onPhoneSubmit(values: z.infer<typeof phoneSchema>) {
+        if (!auth || !firestore) return;
+        setIsLoading(true);
+        setupRecaptcha();
+
+        try {
+            const appVerifier = window.recaptchaVerifier!;
+            const confirmationResult = await signInWithPhoneNumber(auth, values.phone, appVerifier);
+            window.confirmationResult = confirmationResult;
+            setIsCodeSent(true);
+            toast({ title: "Verification code sent!", description: "Please check your phone." });
+        } catch (error: any) {
+            console.error("SMS sending error:", error);
+            toast({ variant: 'destructive', title: 'Error sending code', description: error.message });
+            window.recaptchaVerifier?.render().then(widgetId => {
+                window.grecaptcha.reset(widgetId);
+            });
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    async function onCodeSubmit(values: z.infer<typeof codeSchema>) {
+        if (!firestore) return;
+        setIsLoading(true);
+        const confirmationResult = window.confirmationResult;
+        if (!confirmationResult) {
+            toast({ variant: 'destructive', title: 'Verification failed', description: 'Please try sending the code again.'});
+            setIsLoading(false);
+            return;
+        }
+
+        try {
+            const result = await confirmationResult.confirm(values.code);
+            const user = result.user;
+            
+            // Create lead document in Firestore
+            await setDoc(doc(firestore, "leads", user.uid), {
+                id: user.uid,
+                phone: user.phoneNumber,
+                submissionDate: serverTimestamp(),
+            }, { merge: true });
+
+            toast({ title: 'Success!', description: 'You are now signed in.'});
+            router.push('/questionnaire');
+
+        } catch (error: any) {
+            console.error("Code verification error:", error);
+            toast({ variant: 'destructive', title: 'Invalid Code', description: 'The code you entered is incorrect. Please try again.' });
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    return (
+        <Card className="w-full max-w-md mx-auto shadow-2xl bg-card/90 backdrop-blur-sm">
+            <CardHeader className="text-center">
+                <CardTitle>Sign In with Phone</CardTitle>
+                <CardDescription>Enter your phone number to get a verification code.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                {!isCodeSent ? (
+                     <Form {...phoneForm}>
+                        <form onSubmit={phoneForm.handleSubmit(onPhoneSubmit)} className="space-y-4">
+                            <FormField
+                                control={phoneForm.control}
+                                name="phone"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Phone Number</FormLabel>
+                                        <FormControl>
+                                            <Input type="tel" placeholder="+1 555-555-5555" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <Button type="submit" className="w-full" disabled={isLoading}>
+                                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Send Verification Code'}
+                            </Button>
+                        </form>
+                    </Form>
+                ) : (
+                    <Form {...codeForm}>
+                        <form onSubmit={codeForm.handleSubmit(onCodeSubmit)} className="space-y-4">
+                             <FormField
+                                control={codeForm.control}
+                                name="code"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Verification Code</FormLabel>
+                                        <FormControl>
+                                            <Input type="text" placeholder="123456" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <Button type="submit" className="w-full" disabled={isLoading}>
+                                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Verify & Sign In'}
+                            </Button>
+                             <Button variant="link" size="sm" onClick={() => setIsCodeSent(false)} className="w-full">
+                                Use a different phone number
+                            </Button>
+                        </form>
+                    </Form>
+                )}
+                 <div id="recaptcha-container" className="mt-4"></div>
+            </CardContent>
+        </Card>
+    )
+}
+
 
 export default function TestFormPage() {
   const heroImage = PlaceHolderImages.find((p) => p.id === 'hero');
   const founderImage = PlaceHolderImages.find((p) => p.id === 'testimonial-person');
-  const router = useRouter();
-
+  
   return (
     <>
       <div className="flex-1 flex flex-col">
@@ -48,15 +219,7 @@ export default function TestFormPage() {
             </div>
 
             <div className="w-full max-w-md">
-                <Card className="w-full max-w-md mx-auto shadow-lg rounded-lg overflow-hidden bg-card/90 backdrop-blur-sm">
-                    <CardContent className="p-0">
-                      <iframe 
-                        src="https://cdn.forms-content-1.sg-form.com/3afc55b0-b157-11f0-9eb7-5e057f64fa4d"
-                        style={{ border: 'none', width: '100%', height: '480px' }}
-                        title="Signup Form"
-                      />
-                    </CardContent>
-                </Card>
+                <PhoneAuthForm />
             </div>
 
           </div>
@@ -215,5 +378,3 @@ export default function TestFormPage() {
     </>
   );
 }
-
-    
