@@ -36,29 +36,18 @@ declare global {
     }
 }
 
-
-function PhoneAuthForm() {
+function PhoneStep({ onCodeSent }: { onCodeSent: () => void }) {
     const auth = useAuth();
-    const firestore = useFirestore();
-    const router = useRouter();
     const { toast } = useToast();
-    
     const [isLoading, setIsLoading] = useState(false);
-    const [isCodeSent, setIsCodeSent] = useState(false);
-
-    const phoneForm = useForm<z.infer<typeof phoneSchema>>({
+    
+    const form = useForm<z.infer<typeof phoneSchema>>({
         resolver: zodResolver(phoneSchema),
         defaultValues: { phone: '' },
     });
 
-    const codeForm = useForm<z.infer<typeof codeSchema>>({
-        resolver: zodResolver(codeSchema),
-        defaultValues: { code: '' },
-    });
-    
     const setupRecaptcha = () => {
         if (!auth) return;
-        // Check if the verifier has already been rendered.
         const recaptchaContainer = document.getElementById('recaptcha-container');
         if (recaptchaContainer && recaptchaContainer.innerHTML !== '') {
             return;
@@ -66,21 +55,17 @@ function PhoneAuthForm() {
 
         window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
             'size': 'invisible',
-            'callback': (response: any) => {
-                // reCAPTCHA solved, allow signInWithPhoneNumber.
-            }
+            'callback': (response: any) => {},
         });
-    }
+    };
 
     async function onPhoneSubmit(values: z.infer<typeof phoneSchema>) {
-        if (!auth || !firestore) return;
+        if (!auth) return;
         setIsLoading(true);
         setupRecaptcha();
 
-        // Sanitize and format the phone number
         let phoneNumber = values.phone.replace(/[^0-9]/g, '');
         if (!values.phone.startsWith('+')) {
-            // Assume US/Canada country code if not provided
             phoneNumber = `+1${phoneNumber}`;
         }
 
@@ -88,14 +73,13 @@ function PhoneAuthForm() {
             const appVerifier = window.recaptchaVerifier!;
             const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
             window.confirmationResult = confirmationResult;
-            setIsCodeSent(true);
             toast({ title: "Verification code sent!", description: "Please check your phone." });
+            onCodeSent();
         } catch (error: any) {
             console.error("SMS sending error:", error);
             toast({ variant: 'destructive', title: 'Error sending code', description: error.message });
-            // Only reset reCAPTCHA if it exists and there's an error
             if (window.recaptchaVerifier) {
-                window.recaptchaVerifier.render().then(widgetId => {
+                 window.recaptchaVerifier.render().then(widgetId => {
                     if (typeof window.grecaptcha !== 'undefined' && widgetId !== undefined) {
                         window.grecaptcha.reset(widgetId);
                     }
@@ -105,6 +89,41 @@ function PhoneAuthForm() {
             setIsLoading(false);
         }
     }
+
+    return (
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onPhoneSubmit)} className="space-y-4">
+                <FormField
+                    control={form.control}
+                    name="phone"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Phone Number</FormLabel>
+                            <FormControl>
+                                <Input type="tel" placeholder="(555) 555-5555" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Send Verification Code'}
+                </Button>
+            </form>
+        </Form>
+    );
+}
+
+function CodeStep({ onBack }: { onBack: () => void }) {
+    const firestore = useFirestore();
+    const router = useRouter();
+    const { toast } = useToast();
+    const [isLoading, setIsLoading] = useState(false);
+
+    const form = useForm<z.infer<typeof codeSchema>>({
+        resolver: zodResolver(codeSchema),
+        defaultValues: { code: '' },
+    });
 
     async function onCodeSubmit(values: z.infer<typeof codeSchema>) {
         if (!firestore) return;
@@ -120,7 +139,6 @@ function PhoneAuthForm() {
             const result = await confirmationResult.confirm(values.code);
             const user = result.user;
             
-            // Create lead document in Firestore
             await setDoc(doc(firestore, "leads", user.uid), {
                 id: user.uid,
                 phone: user.phoneNumber,
@@ -139,6 +157,37 @@ function PhoneAuthForm() {
     }
 
     return (
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onCodeSubmit)} className="space-y-4">
+                 <FormField
+                    control={form.control}
+                    name="code"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Verification Code</FormLabel>
+                            <FormControl>
+                                <Input type="text" placeholder="123456" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Verify & Sign In'}
+                </Button>
+                 <Button variant="link" size="sm" onClick={onBack} className="w-full">
+                    Use a different phone number
+                </Button>
+            </form>
+        </Form>
+    );
+}
+
+
+function PhoneAuthForm() {
+    const [isCodeSent, setIsCodeSent] = useState(false);
+
+    return (
         <Card className="w-full max-w-md mx-auto shadow-2xl bg-card/90 backdrop-blur-sm">
             <CardHeader className="text-center">
                 <CardTitle>Sign In with Phone</CardTitle>
@@ -151,50 +200,9 @@ function PhoneAuthForm() {
             </CardHeader>
             <CardContent>
                 {!isCodeSent ? (
-                     <Form {...phoneForm}>
-                        <form onSubmit={phoneForm.handleSubmit(onPhoneSubmit)} className="space-y-4">
-                            <FormField
-                                control={phoneForm.control}
-                                name="phone"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Phone Number</FormLabel>
-                                        <FormControl>
-                                            <Input type="tel" placeholder="(555) 555-5555" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <Button type="submit" className="w-full" disabled={isLoading}>
-                                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Send Verification Code'}
-                            </Button>
-                        </form>
-                    </Form>
+                    <PhoneStep onCodeSent={() => setIsCodeSent(true)} />
                 ) : (
-                    <Form {...codeForm}>
-                        <form onSubmit={codeForm.handleSubmit(onCodeSubmit)} className="space-y-4">
-                             <FormField
-                                control={codeForm.control}
-                                name="code"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Verification Code</FormLabel>
-                                        <FormControl>
-                                            <Input type="text" placeholder="123456" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <Button type="submit" className="w-full" disabled={isLoading}>
-                                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Verify & Sign In'}
-                            </Button>
-                             <Button variant="link" size="sm" onClick={() => setIsCodeSent(false)} className="w-full">
-                                Use a different phone number
-                            </Button>
-                        </form>
-                    </Form>
+                    <CodeStep onBack={() => setIsCodeSent(false)} />
                 )}
                  <div id="recaptcha-container" className="mt-4"></div>
             </CardContent>
@@ -400,5 +408,3 @@ export default function TestFormPage() {
     </>
   );
 }
-
-    
