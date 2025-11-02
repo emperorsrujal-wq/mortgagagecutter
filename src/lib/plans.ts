@@ -13,7 +13,7 @@ export const productPlans: Record<string, ProductPlan> = {
         name: 'Mortgage Cutter Pro',
         description: 'Lifetime access to the complete Mortgage Cutter toolkit and guides.',
         priceFormatted: '$297',
-        paymentLink: 'https://buy.stripe.com/28EdRaf4U1V3gb4fec00004', 
+        paymentLink: 'https://buy.stripe.com/5kQeVe4qg2Z79MG3vu00006', 
     },
     'pro_197': {
         name: 'Mortgage Cutter Pro (Discounted)',
