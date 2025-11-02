@@ -52,11 +52,11 @@ I know this is more steps than it should be, and I apologize for this complexity
 
 ---
 
-## How to Deploy Your Cloud Function
+## How to Deploy Your Cloud Function for SMS
 
-Your project includes a Cloud Function (`sendWelcomeEmail`) that automatically sends a welcome email to new users. This function lives in the `functions` folder but must be deployed to Firebase to work.
+Your project includes a Cloud Function (`sendWelcomeSms`) that automatically sends a welcome text message to new users who sign up with a phone number. This function lives in the `functions` folder but must be configured and deployed to Firebase to work.
 
-Here is the step-by-step guide to deploying it.
+Here is the step-by-step guide.
 
 ### Step 1: Open Your Terminal
 
@@ -89,12 +89,30 @@ cd Desktop/mortgage-cutter-app
 ```
 *(Replace with the actual path to your project folder.)*
 
-### Step 5: Deploy the Function
+### Step 5: Install Function Dependencies
 
-Now that you are in the correct directory, run the following command. This tells Firebase to deploy only the code inside your `functions` folder.
+Cloud Functions have their own dependencies. Navigate into the `functions` folder and install them.
+
+```bash
+cd functions
+npm install
+cd ..
+```
+
+### Step 6: Configure Your Secret API Key
+
+To keep your SMS provider's API key safe, we'll store it securely in the Firebase environment, not in the code. Run the following command, replacing `YOUR_API_KEY_HERE` with your actual secret key.
+
+```bash
+firebase functions:config:set sms.api_key="YOUR_API_KEY_HERE"
+```
+
+### Step 7: Deploy the Function
+
+Now that you are in the correct root directory and the key is set, run the following command. This tells Firebase to deploy only the code inside your `functions` folder.
 
 ```bash
 firebase deploy --only functions
 ```
 
-Wait for the process to complete. Once it's finished, you will see your `sendWelcomeEmail` function in the "Functions" section of your Firebase Console, and it will be active.
+Wait for the process to complete. Once it's finished, you will see your `sendWelcomeSms` function in the "Functions" section of your Firebase Console. It will now be active and will automatically send a welcome text to every new user who signs up with a phone number.
