@@ -54,7 +54,7 @@ const productPlans: Record<string, ProductPlan> = {
         name: 'Mortgage Cutter Pro (Discounted)',
         description: 'Lifetime access to the complete Mortgage Cutter toolkit and guides.',
         priceFormatted: '$197',
-        paymentLink: 'https://buy.stripe.com/YOUR_PRO_197_LINK', // Replace with your actual link
+        paymentLink: 'https://buy.stripe.com/aFadRabSI43b7Ey3vu00003', // Replace with your actual link
     },
     'elite_997': {
         name: 'Mortgage Cutter Elite',
