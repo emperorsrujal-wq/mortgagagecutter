@@ -19,17 +19,17 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
-  itemListElement: [
+  'itemListElement': [
     {
       '@type': 'ListItem',
-      position: 1,
-      name: 'Home',
-      item: 'https://mortgagecutter.com',
+      'position': 1,
+      'name': 'Home',
+      'item': 'https://mortgagecutter.com'
     },
     {
       '@type': 'ListItem',
-      position: 2,
-      name: 'Purchase',
+      'position': 2,
+      'name': 'Purchase',
     },
   ],
 };
@@ -60,7 +60,7 @@ const productPlans: Record<string, ProductPlan> = {
         name: 'Mortgage Cutter Elite',
         description: 'Complete toolkit plus 1-on-1 onboarding and advanced strategies.',
         priceFormatted: '$997',
-        paymentLink: 'https://buy.stripe.com/YOUR_ELITE_997_LINK', // Replace with your actual link
+        paymentLink: 'https://buy.stripe.com/8x27sM6yodDLbUOc2000002',
     },
      'basic_39_monthly': {
         name: 'Mortgage Cutter Basic',
