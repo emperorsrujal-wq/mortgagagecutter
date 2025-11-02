@@ -66,7 +66,7 @@ const productPlans: Record<string, ProductPlan> = {
         name: 'Mortgage Cutter Basic',
         description: 'The essential toolkit to get started on a monthly plan.',
         priceFormatted: '$39/month',
-        paymentLink: 'https://buy.stripe.com/YOUR_BASIC_39_LINK', // Replace with your actual link
+        paymentLink: 'https://buy.stripe.com/9B600k9KAfLTbUO1nm',
     },
 };
 
