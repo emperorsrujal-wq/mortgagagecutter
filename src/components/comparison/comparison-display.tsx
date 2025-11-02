@@ -54,6 +54,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import Image from 'next/image';
+import { productPlans } from '@/lib/plans';
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -394,11 +395,11 @@ function InnerComparison() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start pt-4">
                 <Card className="flex flex-col rounded-xl shadow-lg hover:shadow-2xl transition-shadow">
                     <CardHeader>
-                        <CardTitle className="text-xl">Basic</CardTitle>
-                        <CardDescription>The essential toolkit to get started.</CardDescription>
+                        <CardTitle className="text-xl">{productPlans['basic_39_monthly'].name}</CardTitle>
+                        <CardDescription>{productPlans['basic_39_monthly'].description}</CardDescription>
                     </CardHeader>
                     <CardContent className="flex-grow space-y-4">
-                        <div className="text-4xl font-bold">$39<span className="text-lg font-normal text-muted-foreground">/mo</span></div>
+                        <div className="text-4xl font-bold">{productPlans['basic_39_monthly'].priceFormatted}<span className="text-lg font-normal text-muted-foreground"></span></div>
                         <ul className="space-y-2 text-sm">
                             <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Calculator + Monthly Plan</li>
                             <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Community Q&A</li>
@@ -415,11 +416,11 @@ function InnerComparison() {
                 <Card className="border-2 border-primary shadow-2xl relative flex flex-col rounded-xl scale-105">
                     <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 text-sm font-semibold rounded-full shadow-lg">MOST POPULAR</div>
                     <CardHeader>
-                        <CardTitle className="text-2xl pt-4">Pro</CardTitle>
-                        <CardDescription>Everything you need to succeed.</CardDescription>
+                        <CardTitle className="text-2xl pt-4">{productPlans[proPlanUnlocked ? 'pro_197' : 'pro_297'].name}</CardTitle>
+                        <CardDescription>{productPlans[proPlanUnlocked ? 'pro_197' : 'pro_297'].description}</CardDescription>
                     </CardHeader>
                     <CardContent className="flex-grow space-y-4">
-                        <div className="text-5xl font-bold">{proPlanUnlocked ? '$197' : '$297'}</div>
+                        <div className="text-5xl font-bold">{productPlans[proPlanUnlocked ? 'pro_197' : 'pro_297'].priceFormatted}</div>
                         <ul className="space-y-2 text-sm">
                             <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Full Toolkit Access</li>
                             <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Bank-Agnostic Guides</li>
@@ -438,7 +439,7 @@ function InnerComparison() {
                     </CardContent>
                     <CardFooter className="flex-col gap-2">
                         <Button asChild size="lg" className="w-full shadow-lg">
-                           <Link href={`/purchase?plan=${proPlanUnlocked ? 'pro_197' : 'pro_297'}`}>Buy Pro for {proPlanUnlocked ? '$197' : '$297'}</Link>
+                           <Link href={`/purchase?plan=${proPlanUnlocked ? 'pro_197' : 'pro_297'}`}>Buy Pro for {productPlans[proPlanUnlocked ? 'pro_197' : 'pro_297'].priceFormatted}</Link>
                         </Button>
                         <Button variant="ghost" className="w-full text-xs" onClick={() => setShowSharePro(!showSharePro)}>
                           {showSharePro ? 'Hide Share Options' : 'Want a $100 discount? Click to share.'}
@@ -448,12 +449,12 @@ function InnerComparison() {
 
                 <Card className="flex flex-col rounded-xl shadow-lg hover:shadow-2xl transition-shadow">
                     <CardHeader>
-                        <CardTitle className="text-xl">Elite</CardTitle>
-                        <CardDescription>For complex situations & investors.</CardDescription>
+                        <CardTitle className="text-xl">{productPlans['elite_997'].name}</CardTitle>
+                        <CardDescription>{productPlans['elite_997'].description}</CardDescription>
                     </CardHeader>
                     <CardContent className="flex-grow space-y-4">
                          <div className="absolute top-2 right-2 bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded-md">Only 10 spots left!</div>
-                        <div className="text-4xl font-bold">$997</div>
+                        <div className="text-4xl font-bold">{productPlans['elite_997'].priceFormatted}</div>
                         <ul className="space-y-2 text-sm">
                             <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Everything in Pro, plus...</li>
                             <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Advanced Investor Strategies</li>

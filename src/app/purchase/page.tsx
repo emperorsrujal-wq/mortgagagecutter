@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Lock, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { productPlans, ProductPlan } from '@/lib/plans';
 
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
@@ -34,49 +35,12 @@ const breadcrumbSchema = {
   ],
 };
 
-type ProductPlan = {
-  name: string;
-  description: string;
-  priceFormatted: string;
-  paymentLink: string;
-};
-
-// This object maps plan IDs from the URL to your Stripe Payment Links.
-// Replace the placeholder URLs with your actual Stripe Payment Links.
-const productPlans: Record<string, ProductPlan> = {
-    'pro_297': {
-        name: 'Mortgage Cutter Pro',
-        description: 'Lifetime access to the complete Mortgage Cutter toolkit and guides.',
-        priceFormatted: '$297',
-        paymentLink: 'https://buy.stripe.com/28EdRaf4U1V3gb4fec00004', // Replace with your actual link
-    },
-    'pro_197': {
-        name: 'Mortgage Cutter Pro (Discounted)',
-        description: 'Lifetime access to the complete Mortgage Cutter toolkit and guides.',
-        priceFormatted: '$197',
-        paymentLink: 'https://buy.stripe.com/aFadRabSI43b7Ey3vu00003', // Replace with your actual link
-    },
-    'elite_997': {
-        name: 'Mortgage Cutter Elite',
-        description: 'Complete toolkit plus 1-on-1 onboarding and advanced strategies.',
-        priceFormatted: '$997',
-        paymentLink: 'https://buy.stripe.com/8x27sM6yodDLbUOc2000002',
-    },
-     'basic_39_monthly': {
-        name: 'Mortgage Cutter Basic',
-        description: 'The essential toolkit to get started on a monthly plan.',
-        priceFormatted: '$39/month',
-        paymentLink: 'https://buy.stripe.com/9B600k9KAfLTbUO1nm',
-    },
-};
-
-
 function PurchaseForm() {
   const searchParams = useSearchParams();
   const plan = searchParams.get('plan') || 'pro_297';
   
   // Default to the 'pro_297' plan if the one from the URL is invalid
-  const product = productPlans[plan] || productPlans['pro_297'];
+  const product = productPlans[plan as keyof typeof productPlans] || productPlans['pro_297'];
 
    if (!product.paymentLink.includes('stripe.com/')) {
      return (
