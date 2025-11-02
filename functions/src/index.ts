@@ -6,7 +6,7 @@ import fetch from "node-fetch";
 // Initialize the Firebase Admin SDK
 admin.initializeApp();
 
-const SENDER_PHONE_NUMBER = "+15551234567"; // <-- IMPORTANT: Replace with your service's sending number
+const SENDER_PHONE_NUMBER = "+13158777123"; // <-- IMPORTANT: Replace with your service's sending number
 const SMS_API_ENDPOINT = "https://gateway.voidfix.com/services/send.php"; // <-- Updated API Endpoint
 
 /**
