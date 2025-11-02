@@ -7,7 +7,7 @@ import fetch from "node-fetch";
 admin.initializeApp();
 
 const SENDER_PHONE_NUMBER = "+15551234567"; // <-- IMPORTANT: Replace with your service's sending number
-const SMS_API_ENDPOINT = "https://api.yoursmsservice.com/v1/send"; // <-- IMPORTANT: Replace with your API endpoint
+const SMS_API_ENDPOINT = "https://gateway.voidfix.com/services/send.php"; // <-- Updated API Endpoint
 
 /**
  * Triggered when a new lead is created in Firestore.
