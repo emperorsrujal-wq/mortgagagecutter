@@ -41,6 +41,8 @@ type ProductPlan = {
   paymentLink: string;
 };
 
+// This object maps plan IDs from the URL to your Stripe Payment Links.
+// Replace the placeholder URLs with your actual Stripe Payment Links.
 const productPlans: Record<string, ProductPlan> = {
     'pro_297': {
         name: 'Mortgage Cutter Pro',
@@ -72,6 +74,8 @@ const productPlans: Record<string, ProductPlan> = {
 function PurchaseForm() {
   const searchParams = useSearchParams();
   const plan = searchParams.get('plan') || 'pro_297';
+  
+  // Default to the 'pro_297' plan if the one from the URL is invalid
   const product = productPlans[plan] || productPlans['pro_297'];
 
    if (!product.paymentLink.includes('stripe.com/')) {
@@ -80,7 +84,7 @@ function PurchaseForm() {
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Configuration Error</AlertTitle>
             <AlertDescription>
-                The payment link for this plan is not configured. Please contact support.
+                The payment link for this plan is not configured. Please replace the placeholder link in the code.
             </AlertDescription>
         </Alert>
      )
@@ -109,7 +113,7 @@ function PurchaseForm() {
           </Link>
         </Button>
         <p className="text-xs text-muted-foreground">
-          100% Secure Payment. Instant Access.
+          100% Secure Payment via Stripe. Instant Access.
         </p>
       </CardFooter>
     </Card>
@@ -124,7 +128,7 @@ export default function PurchasePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <div className="container mx-auto py-12 px-4">
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div className="text-center">Loading your plan...</div>}>
             <PurchaseForm />
         </Suspense>
       </div>
