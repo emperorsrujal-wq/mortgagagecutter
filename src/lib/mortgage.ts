@@ -19,8 +19,9 @@ function runBaselineSimulation(inputs: Inputs) {
       rateAPR: inputs.mortgageRateAPR,
       payment: inputs.paymentMonthly ?? pmt(inputs.mortgageRateAPR, inputs.amortYearsRemaining * 12, inputs.mortgageBalance),
       kind: 'other',
+      paymentMonthly: inputs.paymentMonthly ?? pmt(inputs.mortgageRateAPR, inputs.amortYearsRemaining * 12, inputs.mortgageBalance)
     },
-    ...inputs.debts.map(d => ({
+    ...(inputs.debts || []).map(d => ({ // Ensure inputs.debts is an array
       ...d,
       name: d.kind,
       payment: d.paymentMonthly,
@@ -92,11 +93,11 @@ export function estimate(inputs: Inputs): Outputs {
   
   // --- 2. HELOC Simulation ---
   const movedSavings = inputs.savings.savings + inputs.savings.chequing + inputs.savings.shortTerm;
-  const totalDebtConsolidated = inputs.mortgageBalance + inputs.debts.reduce((s, d) => s + d.balance, 0);
+  const totalDebtConsolidated = inputs.mortgageBalance + (inputs.debts || []).reduce((s, d) => s + d.balance, 0);
 
   let helocBalance = Math.max(0, totalDebtConsolidated - movedSavings);
   const helocI = inputs.helocRateAPR / 12 / 100;
-  const totalPayments = (inputs.paymentMonthly ?? pmt(inputs.mortgageRateAPR, inputs.amortYearsRemaining * 12, inputs.mortgageBalance)) + inputs.debts.reduce((sum, d) => sum + d.paymentMonthly, 0);
+  const totalPayments = (inputs.paymentMonthly ?? pmt(inputs.mortgageRateAPR, inputs.amortYearsRemaining * 12, inputs.mortgageBalance)) + (inputs.debts || []).reduce((sum, d) => sum + d.paymentMonthly, 0);
   const surplus = Math.max(0, inputs.netMonthlyIncome - inputs.monthlyExpenses - totalPayments);
 
   let hMonths = 0;

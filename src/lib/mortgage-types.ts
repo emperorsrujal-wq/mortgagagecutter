@@ -16,7 +16,7 @@ export type Inputs = {
   paymentMonthly?: number;
   paymentFrequency?: 'monthly'|'biweekly'|'weekly';
 
-  debts: Debt[];
+  debts?: Debt[];
   netMonthlyIncome: number;
   monthlyExpenses: number;
 
