@@ -65,12 +65,12 @@ export function QuestionnaireForm() {
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      homeValue: 500000,
-      mortgageBalance: 400000,
-      mortgageRateAPR: 6.5,
-      amortYearsRemaining: 25,
-      netMonthlyIncome: 8000,
-      monthlyExpenses: 3500,
+      homeValue: undefined,
+      mortgageBalance: undefined,
+      mortgageRateAPR: undefined,
+      amortYearsRemaining: undefined,
+      netMonthlyIncome: undefined,
+      monthlyExpenses: undefined,
       debts: [],
       savings: { savings: 0, chequing: 0, shortTerm: 0 },
       cardOffset: false,
@@ -259,3 +259,5 @@ export function QuestionnaireForm() {
     </Form>
   );
 }
+
+    
