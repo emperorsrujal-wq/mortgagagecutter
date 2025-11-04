@@ -13,7 +13,7 @@ import { useAuth, useUser, useFirestore } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect } from 'react';
-import { addDoc, collection } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 
 const GoogleIcon = () => (
   <svg className="h-5 w-5" viewBox="0 0 24 24">
@@ -68,20 +68,23 @@ export function AuthButtons() {
       const result = await signInWithPopup(auth, authProvider);
       const additionalInfo = getAdditionalUserInfo(result);
 
-      if (additionalInfo?.isNewUser && result.user.phoneNumber) {
-        try {
-          await addDoc(collection(firestore, "messages"), {
-             to: [result.user.phoneNumber],
-             template: 'welcome_sms',
-             flowId: 'MSG91_FLOW_ID', // IMPORTANT: Replace with your actual Flow ID from MSG91
-          });
-        } catch (smsError) {
-            console.error("Error writing welcome sms document:", smsError);
-            // Non-fatal error, user is still logged in. We can just log it.
-        }
+      if (additionalInfo?.isNewUser) {
+        const newUser = result.user;
+        await setDoc(doc(firestore, "leads", newUser.uid), {
+            id: newUser.uid,
+            name: newUser.displayName,
+            email: newUser.email,
+            submissionDate: serverTimestamp(),
+        });
       }
     } catch (error) {
       const authError = error as AuthError;
+      
+      // Don't show an error toast if the user simply closed the popup
+      if (authError.code === 'auth/popup-closed-by-user') {
+          return;
+      }
+      
       console.error(`Error signing in with ${provider}:`, authError.code, authError.message);
       
       if (authError.code === 'auth/operation-not-allowed') {

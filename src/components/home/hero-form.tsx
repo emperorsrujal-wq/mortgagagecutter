@@ -16,7 +16,7 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { addDoc, collection } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -64,11 +64,12 @@ export function HeroForm() {
 
       await updateProfile(newUser, { displayName: values.name });
 
-      // After successful signup and profile update, write to 'messages' collection
-      await addDoc(collection(firestore, 'messages'), {
-        to: [newUser.phoneNumber],
-        template: 'welcome_sms',
-        flowId: 'MSG91_FLOW_ID', // IMPORTANT: Replace with your actual Flow ID from MSG91
+      // Create the lead document in Firestore
+      await setDoc(doc(firestore, "leads", newUser.uid), {
+          id: newUser.uid,
+          name: values.name,
+          email: values.email,
+          submissionDate: serverTimestamp(),
       });
 
       toast({
