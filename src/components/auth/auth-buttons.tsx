@@ -68,18 +68,15 @@ export function AuthButtons() {
       const result = await signInWithPopup(auth, authProvider);
       const additionalInfo = getAdditionalUserInfo(result);
 
-      if (additionalInfo?.isNewUser && result.user.email) {
+      if (additionalInfo?.isNewUser && result.user.phoneNumber) {
         try {
-          await addDoc(collection(firestore, "mail"), {
-            to: [result.user.email],
-            message: {
-              subject: "Welcome to Mortgage Cutter",
-              text: "Thanks for signing up!",
-              html: "<p>Thanks for signing up!</p>",
-            },
+          await addDoc(collection(firestore, "messages"), {
+             to: [result.user.phoneNumber],
+             template: 'welcome_sms',
+             flowId: 'MSG91_FLOW_ID', // IMPORTANT: Replace with your actual Flow ID from MSG91
           });
-        } catch (emailError) {
-            console.error("Error writing welcome email document:", emailError);
+        } catch (smsError) {
+            console.error("Error writing welcome sms document:", smsError);
             // Non-fatal error, user is still logged in. We can just log it.
         }
       }

@@ -64,14 +64,11 @@ export function HeroForm() {
 
       await updateProfile(newUser, { displayName: values.name });
 
-      // After successful signup and profile update, write to 'mail' collection
-      await addDoc(collection(firestore, "mail"), {
-        to: [newUser.email],
-        message: {
-          subject: "Welcome to Mortgage Cutter",
-          text: "Thanks for signing up!",
-          html: "<p>Thanks for signing up!</p>",
-        },
+      // After successful signup and profile update, write to 'messages' collection
+      await addDoc(collection(firestore, 'messages'), {
+        to: [newUser.phoneNumber],
+        template: 'welcome_sms',
+        flowId: 'MSG91_FLOW_ID', // IMPORTANT: Replace with your actual Flow ID from MSG91
       });
 
       toast({
@@ -99,7 +96,7 @@ export function HeroForm() {
         <CardTitle>Get Your Free Blueprint</CardTitle>
         <CardDescription>Instantly see your potential savings. No credit card required.</CardDescription>
       </CardHeader>
-      <CardContent className="pt-0">
+      <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
