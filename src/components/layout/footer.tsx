@@ -49,7 +49,7 @@ export default function Footer() {
               Mortgage Cutter provides educational tools to help homeowners understand potential interest savings. Results vary by mortgage size, term, and rate. Verify decisions with your lender or advisor.
             </p>
             <p className="text-sm text-muted-foreground mt-2">
-            &copy; {year || new Date().getFullYear()} Mortgage Cutter. All rights reserved.
+            &copy; {year || new Date().getFullYear()} Mortgage Cutter by MINDRICH TECHNOLOGIES USA INC. All rights reserved.
             </p>
         </div>
       </div>
