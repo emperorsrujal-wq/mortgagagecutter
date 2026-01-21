@@ -8,9 +8,6 @@ export type ProductPlan = {
 
 // This object maps plan IDs from the URL to your Stripe Payment Links.
 // IMPORTANT: Replace the placeholder URLs with your actual Stripe Payment Links.
-// You will need to create two new products/links in Stripe:
-// 1. A one-time payment product for the $37 book.
-// 2. A bundled product that includes the $37 book AND the $1 trial for the $29/month subscription.
 export const productPlans: Record<string, ProductPlan> = {
     'book_37': {
         name: 'The Mortgage-Free Manifesto (eBook)',
