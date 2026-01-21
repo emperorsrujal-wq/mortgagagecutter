@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,9 +8,9 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'The Mortgage-Free Manifesto - Your Escape Route',
-  description: 'Discover the secret to paying off your mortgage in as little as 7-10 years using the bank\'s own money. Get the book for just $7.',
-  robots: { // Good for sales pages that might be part of a funnel
+  title: 'The Mortgage-Free Manifesto - Your Escape Route from the 30-Year Trap',
+  description: 'Discover the underground playbook to paying off your mortgage in as little as 7-10 years using the bank\'s own money. Get the Manifesto for just $37.',
+  robots: { 
     index: true,
     follow: true,
   }
@@ -23,18 +24,18 @@ export default function BookSalesPage() {
 
   return (
     <div className="bg-gray-50 text-gray-800">
-      <div className="text-center py-3 bg-yellow-400 text-black font-bold text-sm px-4">
-        <AlertTriangle className="inline-block h-4 w-4 mr-1" /> WARNING: This page contains a strategy your bank hopes you never discover.
+      <div className="text-center py-3 bg-yellow-400 text-black font-bold text-sm px-4 shadow-md">
+        <AlertTriangle className="inline-block h-4 w-4 mr-1" /> WARNING: This page contains a strategy your bank prays you never discover.
       </div>
       
       {/* Main Headline Section */}
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
-            Are You <span className="text-red-600">Trapped</span> in a 30-Year Mortgage? Here’s the Escape Route They Hoped You’d Never Find.
+            The Underground Playbook That Frees You From Your 30-Year Mortgage Prison
           </h1>
           <p className="mt-6 text-lg sm:text-xl md:text-2xl text-gray-600 font-semibold">
-            Discover the 'Cashflow Cannon' Secret That <span className="underline decoration-yellow-400 decoration-4">Obliterates Your Mortgage in 7-10 Years</span>... Using the Bank's Own Money... Without Changing Your Job or Winning the Lottery.
+            How to Use the Bank's <span className="underline decoration-yellow-400 decoration-4">Own Money</span> to Obliterate Your Debt in as Little as 7-10 Years—Without Changing Your Income or Switching Lenders.
           </p>
         </div>
 
@@ -42,28 +43,30 @@ export default function BookSalesPage() {
         <Card className="mt-12 max-w-3xl mx-auto bg-white shadow-xl">
           <CardContent className="p-8">
             <p className="text-lg text-gray-700 leading-relaxed">
-              For years, I was a "good" homeowner. I paid my mortgage on time, every single month. I even tried to throw an extra $50 at it when I could.
+              For years, I did everything "right." I paid my mortgage on time, every single month. I dutifully sent in my payment, convinced I was building equity and securing my family's future.
               <br/><br/>
-              But when I looked at my statement after five years of faithful payments, <strong className="font-bold">I felt sick to my stomach.</strong> My balance had barely budged. I had paid the bank tens of thousands of dollars, and almost all of it had vanished into thin air as pure interest.
+              Then one day, I looked at my mortgage statement after five years of faithful payments and <strong className="font-bold">I felt sick to my stomach.</strong> 
               <br/><br/>
-              <span className="bg-red-100 p-2 rounded-md">I was trapped in a financial prison, and the bank was getting rich off my "slow and steady" sentence.</span>
+              My balance had barely budged. I had paid the bank over $80,000, and almost all of it had vanished into thin air as PURE INTEREST.
               <br/><br/>
-              Do you realize that on a typical $400,000 mortgage, you're on track to hand over <strong className="text-red-700 text-xl font-bold">$500,000+</strong> in PURE INTEREST to the bank? That's more than the house itself!
+              <span className="bg-red-100 p-2 rounded-md">I wasn't building wealth. I was trapped in a financial prison, and the bank was getting rich off my 30-year sentence.</span>
+              <br/><br/>
+              Do you realize that on a typical $400,000 mortgage, you're on track to hand over <strong className="text-red-700 text-xl font-bold">$500,000+</strong> in PURE INTEREST to the bank? That's more than the house itself! It's a system designed to keep you paying, and paying... and paying.
             </p>
           </CardContent>
         </Card>
 
         {/* The Solution / Book Reveal */}
         <div className="mt-16 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold">But what if there was a way to turn the tables?</h2>
-          <p className="mt-4 max-w-3xl mx-auto text-lg text-gray-600">A method so powerful, it uses your normal, everyday income to act like a wrecking ball against your principal balance. A method that lets you pay off your home in a third of the time.</p>
+          <h2 className="text-2xl sm:text-3xl font-bold">But what if you could turn their system against them?</h2>
+          <p className="mt-4 max-w-3xl mx-auto text-lg text-gray-600">A method so powerful, it uses your normal, everyday income to act like a wrecking ball against your principal balance. A strategy that forces the bank to give you credit for every single dollar, every single day.</p>
           <h3 className="mt-8 text-2xl sm:text-3xl font-bold">INTRODUCING...</h3>
         </div>
 
         <div className="mt-8 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-gray-900 text-white p-8 rounded-2xl shadow-2xl">
           <div className="text-center md:text-left">
             <h4 className="text-4xl font-bold tracking-tighter">The Mortgage-Free Manifesto</h4>
-            <p className="mt-4 text-gray-300 text-lg">The 220-Page Underground Playbook to Paying Off Your Mortgage in Record Time.</p>
+            <p className="mt-4 text-gray-300 text-lg">The 220-Page Underground Playbook to Reclaiming Your Financial Freedom.</p>
             {bookCoverImage && (
               <div className="mt-6 md:hidden">
                 <Image src={bookCoverImage.imageUrl} alt="The Mortgage-Free Manifesto Book Cover" width={400} height={600} className="rounded-lg shadow-lg mx-auto" data-ai-hint={bookCoverImage.imageHint} />
@@ -74,7 +77,7 @@ export default function BookSalesPage() {
               <li className="flex items-start"><Check className="h-6 w-6 text-green-400 mr-3 mt-1 flex-shrink-0" /><span>How to turn your chequing account into a debt-crushing weapon that works for you 24/7.</span></li>
               <li className="flex items-start"><Check className="h-6 w-6 text-green-400 mr-3 mt-1 flex-shrink-0" /><span>The "Chunk Down" trick for making targeted principal strikes that save you thousands in future interest.</span></li>
                <li className="flex items-start"><Check className="h-6 w-6 text-green-400 mr-3 mt-1 flex-shrink-0" /><span>Why making "extra payments" is the slow, inefficient way to get debt-free (and what to do instead).</span></li>
-               <li className="flex items-start"><Check className="h-6 w-6 text-green-400 mr-3 mt-1 flex-shrink-0" /><span>How to use the bank's own money (a HELOC) to pay them off faster.</span></li>
+               <li className="flex items-start"><Check className="h-6 w-6 text-green-400 mr-3 mt-1 flex-shrink-0" /><span>The secret to using a simple line of credit (that you likely already have) to pay the bank off faster.</span></li>
             </ul>
           </div>
           <div className="hidden md:block">
@@ -88,17 +91,17 @@ export default function BookSalesPage() {
         <div className="mt-16 text-center">
             <Card className="max-w-2xl mx-auto bg-white shadow-2xl border-4 border-yellow-400">
                 <CardHeader>
-                    <CardTitle className="text-3xl font-bold">Get Instant Access to the Digital Book Now</CardTitle>
+                    <CardTitle className="text-3xl font-bold">Get Instant Access to the Digital Manifesto Now</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <p className="text-5xl font-extrabold text-gray-900">
-                        <span className="line-through text-3xl text-gray-400 mr-2">$27</span>
-                        Just $7
+                        <span className="line-through text-3xl text-gray-400 mr-2">$97</span>
+                        Just $37
                     </p>
-                    <p className="text-yellow-600 font-semibold mt-2">Special Introductory Price - Ends Soon!</p>
+                    <p className="text-yellow-600 font-semibold mt-2">Special Introductory Price - For a Limited Time Only!</p>
                     <Button asChild size="lg" className="mt-6 w-full text-xl py-8 animate-pulse">
-                        <Link href="/purchase?plan=book_7">
-                            <ChevronsRight className="mr-2 h-6 w-6"/> Yes! I Want the $7 Book!
+                        <Link href="/purchase?plan=book_37">
+                            <ChevronsRight className="mr-2 h-6 w-6"/> Yes! I Want My Manifesto for $37!
                         </Link>
                     </Button>
                     <p className="text-xs text-gray-500 mt-2 flex items-center justify-center"><Lock className="h-3 w-3 mr-1" /> Secure 128-bit SSL Encrypted Payment</p>
@@ -108,7 +111,7 @@ export default function BookSalesPage() {
 
         {/* Social Proof */}
         <div id="social-proof" className="my-16">
-            <h2 className="text-3xl font-bold mb-8 text-center">What Homeowners Are Saying...</h2>
+            <h2 className="text-3xl font-bold mb-8 text-center">What Homeowners Are Saying After Reading the Manifesto...</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
                 <Card className="bg-white p-6 rounded-lg shadow-md flex flex-col">
                     <div className="flex justify-center mb-2">{[...Array(5)].map((_, i) => <Star key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" />)}</div>
@@ -120,7 +123,7 @@ export default function BookSalesPage() {
                 </Card>
                 <Card className="bg-white p-6 rounded-lg shadow-md flex flex-col">
                     <div className="flex justify-center mb-2">{[...Array(5)].map((_, i) => <Star key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" />)}</div>
-                    <p className="italic text-gray-600 flex-grow">"The 'Cashflow Cannon' is no joke. I finally see how to beat the interest game. This changed our entire financial timeline."</p>
+                    <p className="italic text-gray-600 flex-grow">"The 'Chunk Down' strategy is no joke. I finally see a clear path to beating the interest game. This changed our entire financial timeline."</p>
                      <div className="flex items-center justify-center mt-4">
                         {testimonial2 && <Image src={testimonial2.imageUrl} alt={testimonial2.description} width={40} height={40} className="rounded-full mr-3" data-ai-hint={testimonial2.imageHint}/>}
                         <p className="font-semibold text-sm">- Michael R., Calgary</p>
@@ -141,18 +144,18 @@ export default function BookSalesPage() {
         <div className="mt-16 text-center">
             <Card className="max-w-2xl mx-auto border-dashed border-2 p-6 bg-green-50 border-green-300">
                  {bookCoverImage && <Image src={bookCoverImage.imageUrl} alt="Book Cover" width={100} height={150} className="mx-auto mb-4 rounded-md shadow-lg" data-ai-hint={bookCoverImage.imageHint} />}
-                <h3 className="text-xl font-bold">The 60-Day "Keep The Book" Guarantee</h3>
-                <p className="mt-2 text-gray-600">My promise to you is simple: Get the book. Read it. If you don't see a clear, actionable path to saving at least $20,000 on your mortgage, just send us an email within 60 days, and we'll refund your $7. No questions asked. <strong className="font-bold">You can even keep the book as our gift.</strong> That's how confident I am this will change your life.</p>
+                <h3 className="text-xl font-bold">The 60-Day "Keep The Book" Money-Back Guarantee</h3>
+                <p className="mt-2 text-gray-600">My promise to you is simple: Get the manifesto. Read it. If you don't see a clear, actionable path to saving at least $20,000 on your mortgage, just send us an email within 60 days, and we'll refund your $37. No questions asked. <strong className="font-bold">You can even keep the book as our gift for your time.</strong> That's how confident I am this will change your life.</p>
             </Card>
         </div>
 
          {/* Final CTA */}
          <div className="mt-16 text-center">
              <h2 className="text-3xl font-bold">Stop Letting the Bank Dictate Your Next 30 Years.</h2>
-             <p className="mt-4 text-lg text-gray-600">For just $7, you get the blueprint to freedom. Click the button below to get started.</p>
-             <Button asChild size="lg" className="mt-6 w-full max-w-md text-xl py-8">
-                <Link href="/purchase?plan=book_7">
-                    Get My $7 Manifesto Now
+             <p className="mt-4 text-lg text-gray-600">For just $37, you get the blueprint to freedom. Your future self will thank you.</p>
+             <Button asChild size="lg" className="mt-6 w-full max-w-lg text-xl py-8">
+                <Link href="/purchase?plan=book_37">
+                    Give Me the Manifesto for Just $37
                 </Link>
             </Button>
             <p className="text-xs text-gray-500 mt-2 flex items-center justify-center"><Lock className="h-3 w-3 mr-1" /> 100% Secure Payment via Stripe</p>

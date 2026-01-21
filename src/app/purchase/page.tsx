@@ -40,14 +40,15 @@ const breadcrumbSchema = {
 
 function PurchaseForm() {
   const searchParams = useSearchParams();
-  const planId = searchParams.get('plan') || 'pro_297';
+  const planId = searchParams.get('plan') || 'book_37';
   
   const [addUpsell, setAddUpsell] = useState(false);
 
   // Determine the correct plan and payment link based on the order bump
-  const isBookPurchase = planId === 'book_7';
-  const finalPlanId = isBookPurchase && addUpsell ? 'book_7_plus_trial' : planId;
+  const isBookPurchase = planId === 'book_37';
+  const finalPlanId = isBookPurchase && addUpsell ? 'book_37_plus_trial' : planId;
   const product = productPlans[finalPlanId as keyof typeof productPlans] || productPlans['pro_297'];
+  const baseProduct = productPlans[planId as keyof typeof productPlans] || productPlans['pro_297'];
 
    if (!product.paymentLink || !product.paymentLink.includes('stripe.com/')) {
      return (
@@ -73,16 +74,16 @@ function PurchaseForm() {
         <div className="p-4 bg-secondary/50 rounded-lg border">
             <div className="flex justify-between items-center">
                 <div>
-                    <p className="font-bold">{productPlans[planId as keyof typeof productPlans]?.name || 'Selected Plan'}</p>
-                    <p className="text-sm text-muted-foreground">{productPlans[planId as keyof typeof productPlans]?.description || ''}</p>
+                    <p className="font-bold">{baseProduct.name}</p>
+                    <p className="text-sm text-muted-foreground">{baseProduct.description}</p>
                 </div>
-                <p className="font-bold text-lg">{productPlans[planId as keyof typeof productPlans]?.priceFormatted || ''}</p>
+                <p className="font-bold text-lg">{baseProduct.priceFormatted}</p>
             </div>
 
             {addUpsell && (
                  <div className="flex justify-between items-center mt-3 pt-3 border-t border-dashed">
                     <div>
-                        <p className="font-bold text-primary">ADDED: Calculator Trial</p>
+                        <p className="font-bold text-primary">ADDED: Calculator Toolkit Trial</p>
                         <p className="text-sm text-muted-foreground">3-Day Trial, then $29/mo.</p>
                     </div>
                     <p className="font-bold text-lg text-primary">$1.00</p>
@@ -115,7 +116,7 @@ function PurchaseForm() {
       </CardContent>
       <CardFooter className="flex flex-col gap-4 p-6 bg-secondary/30">
          <div className="w-full text-right font-bold text-xl">
-            Total Today: {addUpsell ? '$8.00' : productPlans[planId as keyof typeof productPlans]?.priceFormatted || ''}
+            Total Today: {addUpsell ? '$38.00' : baseProduct.priceFormatted}
         </div>
         <Button asChild size="lg" className="w-full text-lg py-7 shadow-lg">
           <Link href={product.paymentLink}>

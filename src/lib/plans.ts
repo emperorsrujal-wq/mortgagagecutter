@@ -9,20 +9,20 @@ export type ProductPlan = {
 // This object maps plan IDs from the URL to your Stripe Payment Links.
 // IMPORTANT: Replace the placeholder URLs with your actual Stripe Payment Links.
 // You will need to create two new products/links in Stripe:
-// 1. A one-time payment product for the $7 book.
-// 2. A bundled product that includes the $7 book AND the $1 trial for the $29/month subscription.
+// 1. A one-time payment product for the $37 book.
+// 2. A bundled product that includes the $37 book AND the $1 trial for the $29/month subscription.
 export const productPlans: Record<string, ProductPlan> = {
-    'book_7': {
+    'book_37': {
         name: 'The Mortgage-Free Manifesto (eBook)',
         description: 'Instant digital access to the 220-page guide.',
-        priceFormatted: '$7',
-        paymentLink: 'https://buy.stripe.com/test_5kA2aZ1gT5qmb4Y6ou', // <-- REPLACE
+        priceFormatted: '$37',
+        paymentLink: 'https://buy.stripe.com/test_dR63f3fZd2Gg3AYbIK', // <-- REPLACE
     },
-    'book_7_plus_trial': {
+    'book_37_plus_trial': {
         name: 'eBook + Calculator Toolkit Trial',
         description: 'The eBook plus a 3-day trial of our premium calculator.',
-        priceFormatted: '$8', // $7 for book + $1 for trial
-        paymentLink: 'https://buy.stripe.com/test_eVa3f36BXaGSb4YfZ2', // <-- REPLACE
+        priceFormatted: '$38', // $37 for book + $1 for trial
+        paymentLink: 'https://buy.stripe.com/test_28o5nb1gT8yO3AYdQU', // <-- REPLACE
     },
     'pro_297': {
         name: 'Mortgage Cutter Pro',
