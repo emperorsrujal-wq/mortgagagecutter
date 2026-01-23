@@ -75,7 +75,7 @@ export default function BookSalesPage() {
             <p className="mt-4 text-gray-300 text-lg">The 220-Page Underground Playbook to Reclaiming Your Financial Freedom.</p>
             {bookCoverImage && (
               <div className="mt-6 md:hidden">
-                <img src={bookCoverImage.imageUrl} alt="The Mortgage-Free Manifesto Book Cover" width="400" height="600" className="rounded-lg shadow-lg mx-auto" />
+                <Image src={bookCoverImage.imageUrl} alt="The Mortgage-Free Manifesto Book Cover" width="400" height="600" className="rounded-lg shadow-lg mx-auto" />
               </div>
             )}
             <ul className="mt-6 space-y-3 text-left">
@@ -88,7 +88,7 @@ export default function BookSalesPage() {
           </div>
           <div className="hidden md:block">
             {bookCoverImage && (
-              <img src={bookCoverImage.imageUrl} alt="The Mortgage-Free Manifesto Book Cover" width="400" height="600" className="rounded-lg shadow-2xl" />
+              <Image src={bookCoverImage.imageUrl} alt="The Mortgage-Free Manifesto Book Cover" width="400" height="600" className="rounded-lg shadow-2xl" />
             )}
           </div>
         </div>
@@ -184,4 +184,5 @@ export default function BookSalesPage() {
   );
 }
 
+    
     
