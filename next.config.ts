@@ -45,7 +45,7 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'storage.googleapis.com',
         port: '',
-        pathname: '/**',
+        pathname: '/altara-6d3e3.appspot.com/**',
       }
     ],
   },
