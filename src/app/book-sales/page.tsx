@@ -28,6 +28,12 @@ export default function BookSalesPage() {
         <AlertTriangle className="inline-block h-4 w-4 mr-1" /> WARNING: This page contains a strategy your bank prays you never discover.
       </div>
       
+      <div className="text-center py-2 bg-blue-100 border-b border-blue-200">
+        <Link href="/book-sales/hindi" className="text-blue-700 font-semibold hover:underline">
+          हिंदी में पढ़ने के लिए यहां क्लिक करें (Click here to read in Hindi)
+        </Link>
+      </div>
+      
       {/* Main Headline Section */}
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="max-w-4xl mx-auto text-center">
@@ -177,3 +183,5 @@ export default function BookSalesPage() {
     </div>
   );
 }
+
+    
