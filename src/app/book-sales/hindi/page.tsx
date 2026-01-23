@@ -49,6 +49,12 @@ export default function BookSalesHindiPage() {
         <AlertTriangle className="inline-block h-4 w-4 mr-1" /> चेतावनी: यह पेज एक ऐसा राज़ खोलता है जिसे आपका बैंक कभी नहीं चाहेगा कि आप जानें।
       </div>
       
+       <div className="text-center py-2 bg-blue-100 border-b border-blue-200">
+        <Link href="/book-sales" className="text-blue-700 font-semibold hover:underline">
+          Click here to read in English (अंग्रेजी में पढ़ने के लिए यहां क्लिक करें)
+        </Link>
+      </div>
+      
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
@@ -64,8 +70,8 @@ export default function BookSalesHindiPage() {
             <p className="text-lg text-gray-700 leading-relaxed">
               महीने की पहली तारीख़। Salary क्रेडिट होने का मैसेज आता है, और उसके ठीक 5 मिनट बाद एक और SMS...
               <br/><br/>
-              <strong className="font-bold text-red-700 text-xl">"Dear Customer, your account has been debited for EMI of Rs. 45,780..."</strong>
-              <br/><br/>
+              <strong className="font-bold text-red-700 text-xl block text-center bg-red-50 p-4 rounded-lg">"Dear Customer, your account has been debited for EMI of Rs. 45,780..."</strong>
+              <br/>
               आप स्टेटमेंट देखते हैं, और आपका दिल बैठ जाता है। ₹45,780 में से ₹35,000 तो सिर्फ ब्याज (interest) में चला गया! आपके 50 लाख के लोन में से Principal तो बस ₹10,780 ही कम हुआ।
               <br/><br/>
               <span className="bg-red-100 p-2 rounded-md">हर महीने यही कहानी... आपकी मेहनत की कमाई का बड़ा हिस्सा बैंक ले जाता है, और आपका लोन कछुए की चाल से कम होता है।</span>
@@ -96,7 +102,7 @@ export default function BookSalesHindiPage() {
               <li className="flex items-start"><Check className="h-6 w-6 text-green-400 mr-3 mt-1 flex-shrink-0" /><span><strong className="text-white">50 लाख का लोन 1 करोड़ कैसे बन जाता है:</strong> सिर्फ इसलिए क्योंकि आपने standard EMI path blindly follow किया।</span></li>
               <li className="flex items-start"><Check className="h-6 w-6 text-green-400 mr-3 mt-1 flex-shrink-0" /><span><strong className="text-white">Balance Transfer, Top-up, Refinance:</strong> ये दोस्त हैं या दुश्मन? जानिए बैंक के इन "helping hands" का असली सच।</span></li>
               <li className="flex items-start"><Check className="h-6 w-6 text-green-400 mr-3 mt-1 flex-shrink-0" /><span><strong className="text-white">“Open Money System”:</strong> वो सोच जो आपके home loan को life sentence नहीं, बल्कि एक smart financial tool में बदल देती है।</span></li>
-              <li className="flex items-start"><Check className="h-6 w-6 text-green-400 mr-3 mt-1 flex-shrink-0" /><span><strong className="text-white">Cash Flow का जादू:</strong> बिना salary बढ़ाए, सिर्फ planning बदलकर interest में लाखों की बचत कैसे करें।</span></li>
+              <li className="flex items-start"><Check className="h-6 w-6 text-green-400 mr-3 mt-1 flex-shrink-0" /><span><strong className="text-white">Cash Flow का जादू:</strong> बिना salary बढ़ाए, सिर्फ़ planning बदलकर interest में लाखों की बचत कैसे करें।</span></li>
                <li className="flex items-start"><Check className="h-6 w-6 text-green-400 mr-3 mt-1 flex-shrink-0" /><span><strong className="text-white">The "Loan Killer" Plan:</strong> Step-by-step अपना खुद का amortization analysis करें और अपने परिवार के लिए personal “Loan Killer” प्लान बनाएँ।</span></li>
             </ul>
           </div>
@@ -133,13 +139,13 @@ export default function BookSalesHindiPage() {
 
         <div className="mt-16">
             <h2 className="text-3xl font-bold mb-8 text-center">यह किताब किन लोगों के लिए है (और किनके लिए नहीं)</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-                <Card className="bg-green-50 border-green-200">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <Card className="bg-green-50 border-green-200 shadow-md">
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><Check className="text-green-600"/> यह आपके लिए है अगर...</CardTitle>
+                        <CardTitle className="flex items-center gap-2 text-green-800"><Check className="text-green-600"/> यह आपके लिए है अगर...</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <ul className="list-disc pl-5 space-y-2">
+                        <ul className="list-disc pl-5 space-y-2 text-gray-700">
                             <li>आप एक सैलरीड प्रोफेशनल हैं और होम लोन EMI से परेशान हैं।</li>
                             <li>आप पहली बार घर खरीदने की planning कर रहे हैं और EMI के जाल से बचना चाहते हैं।</li>
                             <li>आप अपने पैसों पर control चाहते हैं, और बैंक को अपनी मेहनत की कमाई interest में नहीं देना चाहते।</li>
@@ -147,12 +153,12 @@ export default function BookSalesHindiPage() {
                         </ul>
                     </CardContent>
                 </Card>
-                 <Card className="bg-red-50 border-red-200">
+                 <Card className="bg-red-50 border-red-200 shadow-md">
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><X className="text-red-600"/> यह आपके लिए नहीं है अगर...</CardTitle>
+                        <CardTitle className="flex items-center gap-2 text-red-800"><X className="text-red-600"/> यह आपके लिए नहीं है अगर...</CardTitle>
                     </CardHeader>
                     <CardContent>
-                       <ul className="list-disc pl-5 space-y-2">
+                       <ul className="list-disc pl-5 space-y-2 text-gray-700">
                             <li>आप रातों-रात अमीर बनने वाली कोई scheme ढूँढ रहे हैं।</li>
                             <li>आप stock market tips या crypto gamble की तलाश में हैं।</li>
                             <li>आप "zero down payment में 4 फ्लैट" जैसे shortcuts चाहते हैं।</li>
@@ -164,33 +170,35 @@ export default function BookSalesHindiPage() {
         </div>
 
         <div className="mt-16 text-center">
-            <Card className="max-w-2xl mx-auto border-dashed border-2 p-6 bg-blue-50 border-blue-300">
+            <Card className="max-w-2xl mx-auto border-dashed border-2 p-6 bg-blue-50 border-blue-300 shadow-lg">
                  <div className="mx-auto bg-blue-200 h-16 w-16 rounded-full flex items-center justify-center mb-4 border-4 border-white shadow-inner">
                     <Award className="h-8 w-8 text-blue-700"/>
                  </div>
-                <h3 className="text-xl font-bold text-blue-800">हमारी 30-दिन की "Knowledge Guarantee"</h3>
-                <p className="mt-2 text-gray-600">हमारा वादा सीधा है: इस किताब को पढ़ें। अगर आपको ऐसा नहीं लगता कि इससे आपको EMI सिस्टम की ऐसी deep understanding मिली है जो आपके लाखों रुपये बचा सकती है, तो बस 30 दिनों के अंदर हमें एक ईमेल भेजिए। हम आपके पूरे पैसे वापस कर देंगे। कोई सवाल नहीं पूछा जाएगा। यह हमारा भरोसा है अपनी knowledge पर।</p>
+                <h3 className="text-2xl font-bold text-blue-800">हमारी 30-दिन की "Knowledge Guarantee"</h3>
+                <p className="mt-2 text-gray-700">हमारा वादा सीधा है: इस किताब को पढ़ें। अगर आपको ऐसा नहीं लगता कि इससे आपको EMI सिस्टम की ऐसी deep understanding मिली है जो आपके लाखों रुपये बचा सकती है, तो बस 30 दिनों के अंदर हमें एक ईमेल भेजिए। हम आपके पूरे पैसे वापस कर देंगे। कोई सवाल नहीं पूछा जाएगा। यह हमारा भरोसा है अपनी knowledge पर।</p>
             </Card>
         </div>
 
          <div className="mt-16 text-center">
              <h2 className="text-3xl font-bold">आज ही फैसला करें: अगले 20 साल तक EMI भरें, या 8-12 साल में आज़ाद हों?</h2>
-             <p className="mt-4 text-lg text-gray-600">सिर्फ़ ₹299 में, आप उस गुलामी से आज़ादी की चाबी पा सकते हैं। आपका future self आपको धन्यवाद देगा।</p>
-             <Button asChild size="lg" className="mt-6 w-full max-w-lg text-xl py-8 bg-green-600 hover:bg-green-700">
-                <Link href="/purchase?plan=book_37">
-                    हाँ! मुझे अपनी Financial Freedom चाहिए!
-                </Link>
-            </Button>
-            <p className="text-xs text-gray-500 mt-2 flex items-center justify-center"><Lock className="h-3 w-3 mr-1" /> 100% सुरक्षित पेमेंट</p>
+             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">सिर्फ़ ₹299 में, आप उस गुलामी से आज़ादी की चाबी पा सकते हैं। आपका future self आपको धन्यवाद देगा।</p>
+             <div className="mt-6">
+                <Button asChild size="lg" className="w-full max-w-lg text-xl py-8 bg-green-600 hover:bg-green-700 animate-pulse">
+                    <Link href="/purchase?plan=book_37">
+                        <ChevronsRight className="mr-2 h-6 w-6"/> हाँ! मुझे अपनी Financial Freedom चाहिए!
+                    </Link>
+                </Button>
+                <p className="text-xs text-gray-500 mt-2 flex items-center justify-center"><Lock className="h-3 w-3 mr-1" /> 100% सुरक्षित पेमेंट</p>
+             </div>
          </div>
          
-         <div className="mt-16 max-w-3xl mx-auto">
+         <div className="mt-20 max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-xl">
             <h2 className="text-3xl font-bold text-center mb-8">अक्सर पूछे जाने वाले सवाल (FAQ)</h2>
             <Accordion type="single" collapsible className="w-full">
               {FAQ_ITEMS.map((item, index) => (
                 <AccordionItem value={`item-${index + 1}`} key={index}>
-                  <AccordionTrigger className="text-lg text-left">{item.question}</AccordionTrigger>
-                  <AccordionContent className="text-base text-muted-foreground">
+                  <AccordionTrigger className="text-lg text-left font-semibold">{item.question}</AccordionTrigger>
+                  <AccordionContent className="text-base text-muted-foreground pt-2">
                     {item.answer}
                   </AccordionContent>
                 </AccordionItem>
