@@ -3,10 +3,11 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { CheckCircle, XCircle, Star, Lock, Target, Gift, FileText, Bot, ListChecks, CalendarClock } from 'lucide-react';
+import { CheckCircle, XCircle, Star, Lock, Target, Gift, FileText, Bot, ListChecks, CalendarClock, Award, ChevronsRight } from 'lucide-react';
 import Link from 'next/link';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import type { Metadata } from 'next';
+import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
   title: 'How to Pay Off Your House in About 5 Years',
@@ -36,190 +37,217 @@ const FAQ_ITEMS = [
     }
 ];
 
-export default function BookSalesPageV2() {
+export default function BookSalesPageV3() {
   const authorImage = PlaceHolderImages.find(p => p.id === 'author-portrait');
   const productBundleImage = PlaceHolderImages.find(p => p.id === 'product-bundle');
 
   return (
-    <div className="bg-gray-50 text-slate-900">
-      <div className="text-center py-2 bg-blue-100 border-b border-blue-200">
+    <div className="bg-gray-900 text-slate-100">
+       <div className="text-center py-2 bg-blue-100 border-b border-blue-200">
         <Link href="/book-sales/hindi" className="text-blue-700 font-semibold hover:underline">
           हिंदी में पढ़ने के लिए यहां क्लिक करें (Click here to read in Hindi)
         </Link>
       </div>
 
       {/* 1. The Headline Section */}
-      <header className="bg-gray-900 text-white text-center py-16 md:py-24 px-4">
+      <header className="text-center py-16 md:py-24 px-4 bg-gray-900">
         <div className="container mx-auto max-w-4xl">
             <p className="font-semibold text-yellow-400">For U.S. & Canadian Homeowners Stuck in a 25–30 Year Mortgage…</p>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mt-2">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mt-2 text-white">
                 How to Pay Off Your House in About 5 Years Without Earning a Single Extra Dollar
             </h1>
             <p className="mt-6 text-lg sm:text-xl md:text-2xl text-gray-300">
                 Discover the simple HELOC-based system that turns your current income into a debt-destroying machine… so you can own your home free and clear years sooner, without cutting your lifestyle to the bone.
             </p>
              <div className="mt-8">
-                <Button asChild size="lg" className="bg-yellow-400 text-gray-900 hover:bg-yellow-500 text-lg font-bold py-7 px-10 animate-pulse">
-                    <Link href="#offer">Get Instant Access for $27</Link>
+                <Button asChild size="lg" className="bg-green-600 text-white hover:bg-green-700 text-xl font-bold py-8 px-12 animate-pulse shadow-lg shadow-green-500/30">
+                    <Link href="#offer">YES, Show Me The System! <ChevronsRight className="ml-2 h-6 w-6" /></Link>
                 </Button>
+                 <p className="text-sm text-gray-400 mt-3">Instant Access for Just $27</p>
             </div>
         </div>
       </header>
       
       {/* 2. The Lead */}
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold text-center">Let me ask you a blunt question:</h2>
-          <p className="text-2xl font-semibold text-center mt-2 text-primary">How many more years are you willing to work… just to keep your bank rich?</p>
-          <p className="text-lg text-slate-700 mt-6">Every month, you send in that mortgage payment. You do what you’re “supposed” to do. You pay on time. You follow the rules. And yet… if you look at your statement, almost nothing goes to the actual loan. Most of it is interest.</p>
-          <p className="text-lg text-slate-700 mt-4">If you’re like most U.S. and Canadian homeowners, you’re on track to pay back one house for you… and one house for the bank over 25–30 years. All with the income you’re already sweating for.</p>
-          
-          <Card className="mt-8 bg-blue-50 border-blue-200">
-            <CardContent className="p-6">
-                <h3 className="text-xl font-bold text-center">But what if:</h3>
-                <ul className="mt-4 space-y-3 text-lg">
-                    <li className="flex items-start gap-3"><XCircle className="h-6 w-6 text-red-500 mt-1 flex-shrink-0" /><span>You could change <span className="font-bold">nothing</span> about your job.</span></li>
-                    <li className="flex items-start gap-3"><XCircle className="h-6 w-6 text-red-500 mt-1 flex-shrink-0" /><span>Change <span className="font-bold">almost nothing</span> about your lifestyle.</span></li>
-                    <li className="flex items-start gap-3"><CheckCircle className="h-6 w-6 text-green-500 mt-1 flex-shrink-0" /><span>And still pay off your home in about <span className="font-bold">5–7 years</span> instead of 25–30?</span></li>
-                </ul>
-                <p className="text-center font-semibold mt-4">No side hustle. No risky investments. Just a smarter way to route the income you ALREADY earn.</p>
-            </CardContent>
-          </Card>
-          
-          <p className="text-lg text-slate-700 mt-8">That’s exactly what my system shows you inside:</p>
-          <h3 className="text-2xl font-bold text-center mt-2 p-4 bg-yellow-200 rounded-lg">"How to Pay Off Your House in 5 Years Without Earning More Money"</h3>
-          <p className="text-lg text-slate-700 mt-4">This is a step-by-step ebook + tools designed for U.S. and Canadian homeowners who are tired of being stuck in a “death pledge” and ready to own their home outright in a fraction of the time.</p>
+      <main className="bg-slate-50 text-slate-900 py-12 md:py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="text-3xl md:text-4xl font-bold">Let me ask you a blunt question:</h2>
+              <p className="text-2xl md:text-3xl font-semibold mt-2 text-primary">How many more years are you willing to work… <span className="underline decoration-yellow-400">just to keep your bank rich?</span></p>
+              
+              <div className="mt-8 text-left text-lg text-slate-700 space-y-4 prose prose-lg max-w-none">
+                  <p>Every month, you send in that mortgage payment. You do what you’re “supposed” to do. You pay on time. You follow the rules.</p>
+                  <p>And yet… if you look at your statement, <strong className="text-red-600">almost nothing goes to the actual loan.</strong> Most of it is interest.</p>
+                  <p>If you’re like most U.S. and Canadian homeowners, you’re on track to pay back <strong>one house for you… and one house for the bank</strong> over 25–30 years. All with the income you’re already sweating for.</p>
+              </div>
+
+              <Card className="mt-10 bg-blue-50 border-2 border-blue-200 shadow-xl text-left">
+                <CardContent className="p-6">
+                    <h3 className="text-2xl font-bold text-center mb-4">But what if you could...</h3>
+                    <ul className="mt-4 space-y-3 text-lg">
+                        <li className="flex items-start gap-3"><XCircle className="h-6 w-6 text-red-500 mt-1 flex-shrink-0" /><span>Change <span className="font-bold">nothing</span> about your job.</span></li>
+                        <li className="flex items-start gap-3"><XCircle className="h-6 w-6 text-red-500 mt-1 flex-shrink-0" /><span>Change <span className="font-bold">almost nothing</span> about your lifestyle.</span></li>
+                        <li className="flex items-start gap-3"><CheckCircle className="h-6 w-6 text-green-600 mt-1 flex-shrink-0" /><span>And still pay off your home in about <span className="font-bold text-primary">5–7 years</span> instead of 25–30?</span></li>
+                    </ul>
+                    <p className="text-center font-semibold mt-6 text-lg">No side hustle. No risky investments. Just a smarter way to route the income you ALREADY earn.</p>
+                </CardContent>
+              </Card>
+              
+              <div className="mt-12">
+                <p className="text-lg text-slate-700">That’s exactly what my system shows you inside:</p>
+                <h3 className="text-2xl sm:text-3xl font-bold text-center mt-2 p-4 bg-yellow-200 rounded-lg shadow-md">"How to Pay Off Your House in 5 Years Without Earning More Money"</h3>
+                <p className="text-lg text-slate-600 mt-4">This is a step-by-step ebook + tools designed for U.S. and Canadian homeowners who are tired of being stuck in a “death pledge” and ready to own their home outright in a fraction of the time.</p>
+              </div>
+            </div>
         </div>
+      </main>
 
         {/* 3. The Story */}
-        <section id="story" className="mt-20">
-            <Card className="max-w-4xl mx-auto bg-white shadow-xl overflow-hidden md:flex">
-                {authorImage && (
-                    <div className="md:w-1/3">
-                        <Image src={authorImage.imageUrl} alt={authorImage.description} width={400} height={600} className="object-cover h-full w-full" data-ai-hint={authorImage.imageHint}/>
+        <section id="story" className="py-12 md:py-20 bg-gray-800 text-slate-200">
+            <div className="container mx-auto px-4">
+                <Card className="max-w-4xl mx-auto bg-gray-900 shadow-xl overflow-hidden md:flex">
+                    {authorImage && (
+                        <div className="md:w-1/3">
+                            <Image src={authorImage.imageUrl} alt={authorImage.description} width={400} height={600} className="object-cover h-full w-full" data-ai-hint={authorImage.imageHint}/>
+                        </div>
+                    )}
+                    <div className="p-8 md:w-2/3">
+                        <h2 className="text-2xl font-bold text-yellow-400">Why I Was Angry Enough to Create This</h2>
+                        <p className="mt-4 text-slate-300">When I got my first mortgage, I did what everyone else does. I smiled and signed the 25-year papers. Then I looked at my statement.</p>
+                        <blockquote className="mt-4 p-4 border-l-4 border-yellow-400 bg-gray-800 rounded-r-lg italic text-xl font-semibold">
+                            “I’m working this hard… and most of my house payment doesn’t even go toward my house.”
+                        </blockquote>
+                        <p className="mt-4 text-slate-300">I felt trapped. So I started digging. I discovered that mortgages are front-loaded with interest on purpose. Then I discovered a different tool: the Home Equity Line of Credit (HELOC).</p>
+                        <p className="mt-2 text-slate-300">Not a “second mortgage to blow on a kitchen remodel,” but a first-lien HELOC strategy that lets you use simple daily interest math to crush the balance. I didn't earn more money. I just changed where my money flowed. My payoff date dropped from 25 years to under 7.</p>
+                        <p className="mt-4 font-bold text-white">That's why I wrote this ebook—so regular homeowners can finally see the game the banks are playing and learn the simple system that flips the script.</p>
                     </div>
-                )}
-                <div className="p-8 md:w-2/3">
-                    <h2 className="text-2xl font-bold text-primary">Why I Was Angry Enough to Create This</h2>
-                    <p className="mt-4 text-slate-600">When I got my first mortgage, I did what everyone else does. I smiled and signed the 25-year papers. Then I looked at my statement. After a full year of payments, I saw I had paid tens of thousands, and only a tiny slice had gone to the principal.</p>
-                    <p className="mt-2 text-slate-600 font-semibold italic">“I’m working this hard… and most of my house payment doesn’t even go toward my house.”</p>
-                    <p className="mt-2 text-slate-600">I felt trapped. So I started digging. I discovered that mortgages are front-loaded with interest on purpose. The first 10–15 years are designed so the bank gets paid first. Then I discovered a different tool: the Home Equity Line of Credit (HELOC).</p>
-                     <p className="mt-2 text-slate-600">Not a “second mortgage to blow on a kitchen remodel,” but a first-lien HELOC strategy that lets you use simple daily interest math to crush the balance. I didn't earn more money or change my life. I just changed where my money flowed. My payoff date dropped from 25 years to under 7.</p>
-                    <p className="mt-4 font-bold">That's why I wrote this ebook—so regular homeowners can finally see the game the banks are playing and learn the simple system that flips the script.</p>
-                </div>
-            </Card>
-        </section>
-
-        {/* 4. The Pitch */}
-        <section id="pitch" className="mt-20 max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold text-center">What You’ll Get Inside</h2>
-            <p className="text-lg text-muted-foreground text-center mt-2">This isn’t theory. It’s a <span className="font-bold">do this, then do this</span> system.</p>
-            <div className="mt-8 space-y-4">
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-3"><Target className="h-6 w-6 text-primary"/>Why Your Mortgage Is Your #1 Wealth Blocker</CardTitle>
-                        <CardDescription>Learn how 25–30 year mortgages quietly steal hundreds of thousands from average families.</CardDescription>
-                    </CardHeader>
-                </Card>
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-3"><Bot className="h-6 w-6 text-primary"/>The HELOC Explained in Plain English</CardTitle>
-                        <CardDescription>No jargon. You’ll see exactly how a HELOC works and why it can be your secret weapon.</CardDescription>
-                    </CardHeader>
-                </Card>
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-3"><ListChecks className="h-6 w-6 text-primary"/>The 5-Step Fast Track Plan</CardTitle>
-                        <CardDescription>A simple, repeatable process for using the income you already earn to hammer down your balance.</CardDescription>
-                    </CardHeader>
-                </Card>
-                 <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-3"><CalendarClock className="h-6 w-6 text-primary"/>Day-by-Day Money Flow Blueprint</CardTitle>
-                        <CardDescription>Precisely what to do when your paycheck hits and when to pay bills to shrink your payoff date.</CardDescription>
-                    </CardHeader>
                 </Card>
             </div>
-            <p className="text-center mt-8 text-lg">...and you're not guessing. The system plugs into a simple online calculator (like the one on this site) where you can see the plan working with your real numbers.</p>
+        </section>
+
+        {/* 4. The Pitch & Offer */}
+        <section id="offer" className="py-12 md:py-20 bg-blue-50 text-slate-900">
+            <div className="container mx-auto px-4 max-w-3xl text-center">
+                <h2 className="text-3xl md:text-4xl font-extrabold">Here’s Everything You Get When You Order Today</h2>
+                <p className="text-lg text-slate-600 mt-2">You’re not just getting a PDF. You’re getting a complete home payoff mini-system.</p>
+                
+                <div className="mt-10 text-left bg-white p-6 sm:p-8 rounded-2xl shadow-2xl border-4 border-gray-200">
+                    <div className="space-y-4">
+                        <div className="p-4 bg-slate-50 rounded-lg flex items-start gap-4">
+                            <CheckCircle className="h-8 w-8 text-green-600 mt-1 flex-shrink-0" />
+                            <div>
+                                <h4 className="font-bold text-lg">The Core Ebook: "How to Pay Off Your House in 5 Years"</h4>
+                                <p className="text-sm text-slate-600">The clear, 8-chapter guide to go from "stuck" to "I know exactly what to do."</p>
+                                <p className="font-bold text-sm text-slate-500 mt-1">(Value: $97)</p>
+                            </div>
+                        </div>
+                        <div className="p-4 bg-slate-50 rounded-lg flex items-start gap-4">
+                            <CheckCircle className="h-8 w-8 text-green-600 mt-1 flex-shrink-0" />
+                            <div>
+                                <h4 className="font-bold text-lg">The 5-Year Payoff Calculator Access</h4>
+                                <p className="text-sm text-slate-600">See your new payoff date and savings with your real numbers.</p>
+                                <p className="font-bold text-sm text-slate-500 mt-1">(Value: $47)</p>
+                            </div>
+                        </div>
+                         <div className="p-4 bg-slate-50 rounded-lg flex items-start gap-4">
+                            <CheckCircle className="h-8 w-8 text-green-600 mt-1 flex-shrink-0" />
+                            <div>
+                                <h4 className="font-bold text-lg">HELOC Bank Call Script & Checklist</h4>
+                                <p className="text-sm text-slate-600">Know exactly what to say to lenders so you sound prepared, not lost.</p>
+                                <p className="font-bold text-sm text-slate-500 mt-1">(Value: $27)</p>
+                            </div>
+                        </div>
+                         <div className="p-4 bg-slate-50 rounded-lg flex items-start gap-4">
+                            <CheckCircle className="h-8 w-8 text-green-600 mt-1 flex-shrink-0" />
+                            <div>
+                                <h4 className="font-bold text-lg">HELOC vs Mortgage Cheat Sheet</h4>
+                                <p className="text-sm text-slate-600">A one-page visual to see how different the game really is.</p>
+                                <p className="font-bold text-sm text-slate-500 mt-1">(Value: $27)</p>
+                            </div>
+                        </div>
+                         <div className="p-4 bg-slate-50 rounded-lg flex items-start gap-4">
+                            <CheckCircle className="h-8 w-8 text-green-600 mt-1 flex-shrink-0" />
+                            <div>
+                                <h4 className="font-bold text-lg">Credit Tune-Up Checklist</h4>
+                                <p className="text-sm text-slate-600">Actionable steps to position yourself for better HELOC terms.</p>
+                                <p className="font-bold text-sm text-slate-500 mt-1">(Value: $37)</p>
+                            </div>
+                        </div>
+                         <div className="p-4 bg-slate-50 rounded-lg flex items-start gap-4">
+                            <CheckCircle className="h-8 w-8 text-green-600 mt-1 flex-shrink-0" />
+                            <div>
+                                <h4 className="font-bold text-lg">"First 90 Days" Action Plan</h4>
+                                <p className="text-sm text-slate-600">A printable roadmap so you always know your next step.</p>
+                                <p className="font-bold text-sm text-slate-500 mt-1">(Value: $27)</p>
+                            </div>
+                        </div>
+                    </div>
+                     <div className="text-center pt-8 mt-6 border-t-2 border-dashed">
+                        <p className="text-gray-500 font-semibold">Total Real-World Value: <span className="line-through">$262</span></p>
+                        <p className="text-xl mt-2">Your Price Today: Just...</p>
+                        <p className="text-7xl font-extrabold text-primary mt-1">$27</p>
+                        <p className="text-gray-500">One time. No subscriptions. Instant access.</p>
+                    </div>
+                     <div className="mt-8">
+                         <Button asChild size="lg" className="w-full text-xl py-8 animate-pulse bg-green-600 hover:bg-green-700 shadow-lg shadow-green-500/50">
+                            <Link href="/purchase?plan=book_27">
+                                <Lock className="mr-3 h-6 w-6"/> Get Instant Access Now For Just $27
+                            </Link>
+                        </Button>
+                        <p className="text-xs text-slate-500 mt-2 flex items-center justify-center gap-2"><Lock className="h-3 w-3" /> Secure 128-bit SSL Encrypted Payment</p>
+                    </div>
+                </div>
+            </div>
         </section>
 
         {/* 5. The Evidence (Objections) */}
-        <section id="evidence" className="mt-20 max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold text-center">Let’s Address the Voices In Your Head...</h2>
-             <Accordion type="single" collapsible className="w-full mt-8">
-              {FAQ_ITEMS.map((item, index) => (
-                <AccordionItem value={`item-${index + 1}`} key={index}>
-                  <AccordionTrigger className="text-lg text-left font-semibold">{item.question}</AccordionTrigger>
-                  <AccordionContent className="text-base text-muted-foreground pt-2">
-                    {item.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-        </section>
-        
-        {/* 6. The Offer */}
-        <section id="offer" className="mt-20">
-            <Card className="max-w-3xl mx-auto bg-gray-900 text-white shadow-2xl border-4 border-yellow-400">
-                <CardHeader className="text-center">
-                    <CardTitle className="text-3xl font-bold text-yellow-400">Here’s Everything You Get When You Order Today</CardTitle>
-                    <CardDescription className="text-gray-300">You’re not just getting a PDF. You’re getting a complete home payoff mini-system.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    {productBundleImage && <Image src={productBundleImage.imageUrl} alt="Bundle of ebook and checklists" width={800} height={400} className="rounded-lg mb-6" data-ai-hint={productBundleImage.imageHint} />}
-                    <ul className="space-y-3 text-lg">
-                        <li className="flex items-start gap-3"><CheckCircle className="h-6 w-6 text-green-400 mt-1 flex-shrink-0" /><div><strong className="text-white">The Core Ebook: "How to Pay Off Your House in 5 Years"</strong> (Value: $97)</div></li>
-                        <li className="flex items-start gap-3"><CheckCircle className="h-6 w-6 text-green-400 mt-1 flex-shrink-0" /><div><strong className="text-white">The 5-Year Payoff Calculator Access</strong> (Value: $47)</div></li>
-                        <li className="flex items-start gap-3"><CheckCircle className="h-6 w-6 text-green-400 mt-1 flex-shrink-0" /><div><strong className="text-white">HELOC Bank Call Script & Checklist</strong> (Value: $27)</div></li>
-                        <li className="flex items-start gap-3"><CheckCircle className="h-6 w-6 text-green-400 mt-1 flex-shrink-0" /><div><strong className="text-white">HELOC vs. Mortgage Cheat Sheet</strong> (Value: $27)</div></li>
-                        <li className="flex items-start gap-3"><CheckCircle className="h-6 w-6 text-green-400 mt-1 flex-shrink-0" /><div><strong className="text-white">Credit Tune-Up Checklist</strong> (Value: $37)</div></li>
-                         <li className="flex items-start gap-3"><CheckCircle className="h-6 w-6 text-green-400 mt-1 flex-shrink-0" /><div><strong className="text-white">"First 90 Days" Action Plan</strong> (Value: $27)</div></li>
-                    </ul>
-                    <div className="text-center pt-4">
-                        <p className="text-gray-400">Total Real-World Value: <span className="line-through">$262</span></p>
-                        <p className="text-xl mt-2">Your Price Today: Just...</p>
-                        <p className="text-6xl font-extrabold text-yellow-400 mt-1">$27</p>
-                        <p className="text-gray-400">One time. No subscriptions. Instant access.</p>
-                    </div>
-                </CardContent>
-                <CardContent>
-                     <Button asChild size="lg" className="w-full text-xl py-8 animate-pulse bg-green-600 hover:bg-green-700">
-                        <Link href="/purchase?plan=book_27">
-                            👉 Click Here to Get Instant Access for $27
-                        </Link>
-                    </Button>
-                    <p className="text-xs text-gray-400 mt-2 flex items-center justify-center"><Lock className="h-3 w-3 mr-1" /> Secure 128-bit SSL Encrypted Payment</p>
-                </CardContent>
-            </Card>
-        </section>
-
-        {/* 7. The Close */}
-        <section id="close" className="mt-20 max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl font-bold">This Is Worth 10–100X What You’ll Pay</h2>
-            <p className="text-lg mt-4 text-slate-700">Let’s be blunt. If your current path has you paying $150,000… $200,000… even $300,000+ in interest, and this system helps you save even $30,000–$50,000, then a $27 decision is nothing.</p>
-            <p className="text-lg font-semibold mt-4 text-primary">Every month you wait is a month you could have been saving interest and pulling your payoff date closer.</p>
-            
-            <Card className="mt-12 text-left bg-green-50 border-green-300">
-                 <CardHeader>
-                    <CardTitle className="text-2xl text-green-800">30-Day Money-Back Guarantee</CardTitle>
-                 </CardHeader>
-                <CardContent>
-                    <p className="text-green-900">Try the ebook. Run your numbers. If within 30 days you don’t feel clear on the strategy and confident in your next steps, just send a quick email for a full refund. No hoops. No hard feelings. You risk $0.</p>
-                </CardContent>
-            </Card>
-
-            <div className="mt-12">
-                 <h3 className="text-2xl font-bold">Your Move.</h3>
-                 <p className="text-lg text-slate-600 mt-2">You can close this page and keep sending thousands to the bank for the next 20–25 years. Or you can spend $27 one time and learn how to flip the math.</p>
-                  <Button asChild size="lg" className="mt-6 w-full max-w-lg text-xl py-8 bg-green-600 hover:bg-green-700">
-                    <Link href="/purchase?plan=book_27">
-                        Get Instant Access for $27
-                    </Link>
-                </Button>
-                <p className="text-xs text-slate-500 mt-2">Own your home faster. Keep more of your money.</p>
+        <section id="evidence" className="py-12 md:py-20 bg-gray-800 text-slate-200">
+            <div className="container mx-auto px-4 max-w-3xl">
+                <h2 className="text-3xl font-bold text-center">Let’s Address the Voices In Your Head...</h2>
+                 <Accordion type="single" collapsible className="w-full mt-8" defaultValue="item-1">
+                  {FAQ_ITEMS.map((item, index) => (
+                    <AccordionItem value={`item-${index + 1}`} key={index} className="bg-gray-900/50 rounded-lg mb-3 border-b-0 px-4">
+                      <AccordionTrigger className="text-lg text-left font-semibold text-white hover:no-underline">{item.question}</AccordionTrigger>
+                      <AccordionContent className="text-base text-slate-300 pt-2 pb-4 prose prose-invert">
+                        {item.answer}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
             </div>
         </section>
-      </main>
+        
+        {/* 7. The Close & Guarantee */}
+        <section id="close" className="py-12 md:py-20 bg-gray-900 text-white">
+            <div className="container mx-auto px-4 max-w-3xl text-center">
+                
+                <Card className="mt-12 text-left bg-yellow-400 text-gray-900 border-4 border-yellow-500 shadow-2xl shadow-yellow-500/20">
+                     <CardHeader className="flex-row items-center gap-4">
+                        <Award className="h-16 w-16 text-yellow-800 flex-shrink-0" />
+                        <CardTitle className="text-3xl text-yellow-900">Our 30-Day, 100% Money-Back Guarantee</CardTitle>
+                     </CardHeader>
+                    <CardContent className="text-lg text-yellow-900/80">
+                        <p>Try the ebook. Run your numbers. If within 30 days you don’t feel clear on the strategy and confident in your next steps, just send a quick email for a full refund. No hoops. No hard feelings. <strong className="text-yellow-900">You risk $0.</strong></p>
+                    </CardContent>
+                </Card>
+
+                <div className="mt-16">
+                     <h3 className="text-4xl font-bold">Your Move.</h3>
+                     <p className="text-lg text-slate-300 mt-4">You can close this page and keep sending thousands to the bank for the next 20–25 years. Or you can spend $27 one time and learn how to flip the math.</p>
+                      <Button asChild size="lg" className="mt-8 w-full max-w-lg text-2xl py-10 bg-green-600 hover:bg-green-700 shadow-lg shadow-green-500/40">
+                        <Link href="/purchase?plan=book_27">
+                           Yes! Give Me Instant Access for $27
+                        </Link>
+                    </Button>
+                    <p className="text-sm text-slate-400 mt-3">Own your home faster. Keep more of your money.</p>
+                </div>
+                
+                 <div className="mt-16 pt-8 border-t border-gray-700 text-base text-slate-400">
+                    <p><strong>P.S.</strong> Every month you wait is another full-interest payment to the bank. For just $27, you can learn how to break the cycle starting today. The risk is all on me. <Link href="/purchase?plan=book_27" className="underline hover:text-yellow-400">Click here to get started.</Link></p>
+                 </div>
+            </div>
+        </section>
     </div>
   );
 }
+
