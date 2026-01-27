@@ -50,9 +50,33 @@
     },
     {
       "id": "book-cover",
-      "description": "The official book cover for 'LOAN KILLER' by Srujal Patel.",
-      "imageUrl": "https://images.unsplash.com/photo-1592496431122-2349e0fbc666?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "description": "A high-quality, professional-looking generic book cover.",
+      "imageUrl": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=1287&auto=format&fit=crop",
       "imageHint": "book cover"
+    },
+    {
+      "id": "testimonial-amit-pooja",
+      "description": "Avatar for a happy couple.",
+      "imageUrl": "https://i.pravatar.cc/150?img=12",
+      "imageHint": "happy couple"
+    },
+    {
+      "id": "testimonial-seema",
+      "description": "Avatar for a female professional.",
+      "imageUrl": "https://i.pravatar.cc/150?img=25",
+      "imageHint": "professional woman"
+    },
+    {
+      "id": "testimonial-rohit",
+      "description": "Avatar for a male professional.",
+      "imageUrl": "https://i.pravatar.cc/150?img=32",
+      "imageHint": "professional man"
+    },
+    {
+      "id": "testimonial-nisha",
+      "description": "Avatar for a female creative professional.",
+      "imageUrl": "https://i.pravatar.cc/150?img=45",
+      "imageHint": "creative woman"
     }
   ]
 }

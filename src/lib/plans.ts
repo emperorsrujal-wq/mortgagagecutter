@@ -27,6 +27,12 @@ export const productPlans: Record<string, ProductPlan> = {
         priceFormatted: '₹299',
         paymentLink: 'https://buy.stripe.com/test_dR63f3fZd2Gg3AYbIK', // <-- REPLACE
     },
+    'book_399': {
+        name: 'Loan Killers - India’s Hidden EMI Secret',
+        description: 'Instant digital access to the premium eBook.',
+        priceFormatted: '₹399',
+        paymentLink: 'https://buy.stripe.com/test_cN2gZreV5f5g1sQ9AE', // <-- REPLACE
+    },
     'book_37_plus_trial': {
         name: 'eBook + Calculator Toolkit Trial',
         description: 'The eBook plus a 3-day trial of our premium calculator.',
@@ -49,7 +55,7 @@ export const productPlans: Record<string, ProductPlan> = {
         name: 'Mortgage Cutter Elite',
         description: 'Complete toolkit plus 1-on-1 onboarding and advanced strategies.',
         priceFormatted: '$997',
-        paymentLink: 'https://buy.stripe.com/8x27sM6yodDLbUOc2000002',
+        paymentLink: 'https://buy.stripe.com/8x27sM6yodLcbUOc2000002',
     },
      'basic_39_monthly': {
         name: 'Mortgage Cutter Basic',
