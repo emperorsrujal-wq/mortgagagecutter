@@ -24,13 +24,13 @@ export const productPlans: Record<string, ProductPlan> = {
     'book_37': {
         name: 'The Mortgage-Free Manifesto (eBook)',
         description: 'Instant digital access to the 220-page guide.',
-        priceFormatted: '$37',
+        priceFormatted: '₹299',
         paymentLink: 'https://buy.stripe.com/test_dR63f3fZd2Gg3AYbIK', // <-- REPLACE
     },
     'book_37_plus_trial': {
         name: 'eBook + Calculator Toolkit Trial',
         description: 'The eBook plus a 3-day trial of our premium calculator.',
-        priceFormatted: '$38', // $37 for book + $1 for trial
+        priceFormatted: '₹378', // ₹299 for book + ₹79 for trial
         paymentLink: 'https://buy.stripe.com/test_28o5nb1gT8yO3AYdQU', // <-- REPLACE
     },
     'pro_297': {
