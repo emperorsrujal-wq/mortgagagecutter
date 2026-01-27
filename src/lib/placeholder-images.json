@@ -50,8 +50,8 @@
     },
     {
       "id": "book-cover",
-      "description": "A high-quality, professional-looking generic book cover.",
-      "imageUrl": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=1287&auto=format&fit=crop",
+      "description": "The cover of the Loan Killer book.",
+      "imageUrl": "https://storage.googleapis.com/altara-6d3e3.appspot.com/9788197327702.png",
       "imageHint": "book cover"
     },
     {
