@@ -31,7 +31,7 @@ export const productPlans: Record<string, ProductPlan> = {
         name: 'Loan Killers - India’s Hidden EMI Secret',
         description: 'Instant digital access to the premium eBook.',
         priceFormatted: '₹399',
-        paymentLink: 'https://buy.stripe.com/test_cN2gZreV5f5g1sQ9AE', // <-- REPLACE
+        paymentLink: 'https://buy.stripe.com/eVq6oIcWMdDL9MG7LK00008',
     },
     'book_37_plus_trial': {
         name: 'eBook + Calculator Toolkit Trial',
