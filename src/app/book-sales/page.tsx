@@ -37,12 +37,14 @@ const FAQ_ITEMS = [
     }
 ];
 
-export default function BookSalesPageV3() {
+export default function BookSalesPageV4() {
   const authorImage = PlaceHolderImages.find(p => p.id === 'author-portrait');
   const productBundleImage = PlaceHolderImages.find(p => p.id === 'product-bundle');
+  const bookCoverImage = PlaceHolderImages.find(p => p.id === 'book-cover');
+
 
   return (
-    <div className="bg-gray-900 text-slate-100">
+    <div className="bg-gray-900 text-slate-100 font-sans">
        <div className="text-center py-2 bg-blue-100 border-b border-blue-200">
         <Link href="/book-sales/hindi" className="text-blue-700 font-semibold hover:underline">
           हिंदी में पढ़ने के लिए यहां क्लिक करें (Click here to read in Hindi)
@@ -50,7 +52,7 @@ export default function BookSalesPageV3() {
       </div>
 
       {/* 1. The Headline Section */}
-      <header className="text-center py-16 md:py-24 px-4 bg-gray-900">
+      <header className="text-center pt-16 pb-20 px-4 bg-gray-900">
         <div className="container mx-auto max-w-4xl">
             <p className="font-semibold text-yellow-400">For U.S. & Canadian Homeowners Stuck in a 25–30 Year Mortgage…</p>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mt-2 text-white">
@@ -69,7 +71,7 @@ export default function BookSalesPageV3() {
       </header>
       
       {/* 2. The Lead */}
-      <main className="bg-slate-50 text-slate-900 py-12 md:py-20">
+      <main className="bg-slate-50 text-slate-900 py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-3xl md:text-4xl font-bold">Let me ask you a blunt question:</h2>
@@ -103,7 +105,7 @@ export default function BookSalesPageV3() {
       </main>
 
         {/* 3. The Story */}
-        <section id="story" className="py-12 md:py-20 bg-gray-800 text-slate-200">
+        <section id="story" className="py-16 md:py-24 bg-gray-800 text-slate-200">
             <div className="container mx-auto px-4">
                 <Card className="max-w-4xl mx-auto bg-gray-900 shadow-xl overflow-hidden md:flex">
                     {authorImage && (
@@ -126,63 +128,29 @@ export default function BookSalesPageV3() {
         </section>
 
         {/* 4. The Pitch & Offer */}
-        <section id="offer" className="py-12 md:py-20 bg-blue-50 text-slate-900">
-            <div className="container mx-auto px-4 max-w-3xl text-center">
+        <section id="offer" className="py-16 md:py-24 bg-blue-50 text-slate-900">
+            <div className="container mx-auto px-4 max-w-4xl text-center">
                 <h2 className="text-3xl md:text-4xl font-extrabold">Here’s Everything You Get When You Order Today</h2>
                 <p className="text-lg text-slate-600 mt-2">You’re not just getting a PDF. You’re getting a complete home payoff mini-system.</p>
                 
                 <div className="mt-10 text-left bg-white p-6 sm:p-8 rounded-2xl shadow-2xl border-4 border-gray-200">
-                    <div className="space-y-4">
-                        <div className="p-4 bg-slate-50 rounded-lg flex items-start gap-4">
-                            <CheckCircle className="h-8 w-8 text-green-600 mt-1 flex-shrink-0" />
-                            <div>
-                                <h4 className="font-bold text-lg">The Core Ebook: "How to Pay Off Your House in 5 Years"</h4>
-                                <p className="text-sm text-slate-600">The clear, 8-chapter guide to go from "stuck" to "I know exactly what to do."</p>
-                                <p className="font-bold text-sm text-slate-500 mt-1">(Value: $97)</p>
-                            </div>
-                        </div>
-                        <div className="p-4 bg-slate-50 rounded-lg flex items-start gap-4">
-                            <CheckCircle className="h-8 w-8 text-green-600 mt-1 flex-shrink-0" />
-                            <div>
-                                <h4 className="font-bold text-lg">The 5-Year Payoff Calculator Access</h4>
-                                <p className="text-sm text-slate-600">See your new payoff date and savings with your real numbers.</p>
-                                <p className="font-bold text-sm text-slate-500 mt-1">(Value: $47)</p>
-                            </div>
-                        </div>
-                         <div className="p-4 bg-slate-50 rounded-lg flex items-start gap-4">
-                            <CheckCircle className="h-8 w-8 text-green-600 mt-1 flex-shrink-0" />
-                            <div>
-                                <h4 className="font-bold text-lg">HELOC Bank Call Script & Checklist</h4>
-                                <p className="text-sm text-slate-600">Know exactly what to say to lenders so you sound prepared, not lost.</p>
-                                <p className="font-bold text-sm text-slate-500 mt-1">(Value: $27)</p>
-                            </div>
-                        </div>
-                         <div className="p-4 bg-slate-50 rounded-lg flex items-start gap-4">
-                            <CheckCircle className="h-8 w-8 text-green-600 mt-1 flex-shrink-0" />
-                            <div>
-                                <h4 className="font-bold text-lg">HELOC vs Mortgage Cheat Sheet</h4>
-                                <p className="text-sm text-slate-600">A one-page visual to see how different the game really is.</p>
-                                <p className="font-bold text-sm text-slate-500 mt-1">(Value: $27)</p>
-                            </div>
-                        </div>
-                         <div className="p-4 bg-slate-50 rounded-lg flex items-start gap-4">
-                            <CheckCircle className="h-8 w-8 text-green-600 mt-1 flex-shrink-0" />
-                            <div>
-                                <h4 className="font-bold text-lg">Credit Tune-Up Checklist</h4>
-                                <p className="text-sm text-slate-600">Actionable steps to position yourself for better HELOC terms.</p>
-                                <p className="font-bold text-sm text-slate-500 mt-1">(Value: $37)</p>
-                            </div>
-                        </div>
-                         <div className="p-4 bg-slate-50 rounded-lg flex items-start gap-4">
-                            <CheckCircle className="h-8 w-8 text-green-600 mt-1 flex-shrink-0" />
-                            <div>
-                                <h4 className="font-bold text-lg">"First 90 Days" Action Plan</h4>
-                                <p className="text-sm text-slate-600">A printable roadmap so you always know your next step.</p>
-                                <p className="font-bold text-sm text-slate-500 mt-1">(Value: $27)</p>
-                            </div>
-                        </div>
+                    <div className="grid md:grid-cols-2 gap-8 items-center">
+                      <div>
+                        <h3 className="text-2xl font-bold mb-4">WHAT YOU GET:</h3>
+                        <ul className="space-y-4">
+                            <li className="flex items-start gap-3"><CheckCircle className="h-6 w-6 text-green-600 mt-1 shrink-0" /><div><h4 className="font-bold">The Core Ebook: "How to Pay Off Your House in 5 Years"</h4><p className="text-sm text-slate-500">(Value: $97)</p></div></li>
+                            <li className="flex items-start gap-3"><CheckCircle className="h-6 w-6 text-green-600 mt-1 shrink-0" /><div><h4 className="font-bold">The 5-Year Payoff Calculator Access</h4><p className="text-sm text-slate-500">(Value: $47)</p></div></li>
+                            <li className="flex items-start gap-3"><CheckCircle className="h-6 w-6 text-green-600 mt-1 shrink-0" /><div><h4 className="font-bold">HELOC Bank Call Script & Checklist</h4><p className="text-sm text-slate-500">(Value: $27)</p></div></li>
+                            <li className="flex items-start gap-3"><CheckCircle className="h-6 w-6 text-green-600 mt-1 shrink-0" /><div><h4 className="font-bold">HELOC vs Mortgage Cheat Sheet</h4><p className="text-sm text-slate-500">(Value: $27)</p></div></li>
+                            <li className="flex items-start gap-3"><CheckCircle className="h-6 w-6 text-green-600 mt-1 shrink-0" /><div><h4 className="font-bold">Credit Tune-Up Checklist</h4><p className="text-sm text-slate-500">(Value: $37)</p></div></li>
+                            <li className="flex items-start gap-3"><CheckCircle className="h-6 w-6 text-green-600 mt-1 shrink-0" /><div><h4 className="font-bold">"First 90 Days" Action Plan</h4><p className="text-sm text-slate-500">(Value: $27)</p></div></li>
+                        </ul>
+                      </div>
+                       <div className="text-center">
+                        {bookCoverImage && <Image src={bookCoverImage.imageUrl} alt={bookCoverImage.description} width={400} height={600} className="rounded-lg shadow-xl mx-auto" data-ai-hint={bookCoverImage.imageHint} />}
+                      </div>
                     </div>
-                     <div className="text-center pt-8 mt-6 border-t-2 border-dashed">
+                     <div className="text-center pt-8 mt-8 border-t-2 border-dashed">
                         <p className="text-gray-500 font-semibold">Total Real-World Value: <span className="line-through">$262</span></p>
                         <p className="text-xl mt-2">Your Price Today: Just...</p>
                         <p className="text-7xl font-extrabold text-primary mt-1">$27</p>
@@ -201,14 +169,14 @@ export default function BookSalesPageV3() {
         </section>
 
         {/* 5. The Evidence (Objections) */}
-        <section id="evidence" className="py-12 md:py-20 bg-gray-800 text-slate-200">
+        <section id="evidence" className="py-16 md:py-24 bg-gray-800 text-slate-200">
             <div className="container mx-auto px-4 max-w-3xl">
                 <h2 className="text-3xl font-bold text-center">Let’s Address the Voices In Your Head...</h2>
                  <Accordion type="single" collapsible className="w-full mt-8" defaultValue="item-1">
                   {FAQ_ITEMS.map((item, index) => (
                     <AccordionItem value={`item-${index + 1}`} key={index} className="bg-gray-900/50 rounded-lg mb-3 border-b-0 px-4">
                       <AccordionTrigger className="text-lg text-left font-semibold text-white hover:no-underline">{item.question}</AccordionTrigger>
-                      <AccordionContent className="text-base text-slate-300 pt-2 pb-4 prose prose-invert">
+                      <AccordionContent className="text-base text-slate-300 pt-2 pb-4 prose prose-invert max-w-none">
                         {item.answer}
                       </AccordionContent>
                     </AccordionItem>
@@ -218,10 +186,10 @@ export default function BookSalesPageV3() {
         </section>
         
         {/* 7. The Close & Guarantee */}
-        <section id="close" className="py-12 md:py-20 bg-gray-900 text-white">
+        <section id="close" className="py-16 md:py-24 bg-gray-900 text-white">
             <div className="container mx-auto px-4 max-w-3xl text-center">
                 
-                <Card className="mt-12 text-left bg-yellow-400 text-gray-900 border-4 border-yellow-500 shadow-2xl shadow-yellow-500/20">
+                <Card className="text-left bg-yellow-400 text-gray-900 border-4 border-yellow-500 shadow-2xl shadow-yellow-500/20">
                      <CardHeader className="flex-row items-center gap-4">
                         <Award className="h-16 w-16 text-yellow-800 flex-shrink-0" />
                         <CardTitle className="text-3xl text-yellow-900">Our 30-Day, 100% Money-Back Guarantee</CardTitle>
@@ -250,4 +218,3 @@ export default function BookSalesPageV3() {
     </div>
   );
 }
-

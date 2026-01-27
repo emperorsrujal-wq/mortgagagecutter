@@ -93,7 +93,7 @@ export default function BookSalesHindiPage() {
             <p className="mt-4 text-gray-300 text-lg">वो 220 पन्नों की प्रैक्टिकल गाइड जो आपको EMI के जाल से आज़ाद करेगी।</p>
             {bookCoverImage && (
               <div className="mt-6 md:hidden">
-                <Image src={bookCoverImage.imageUrl} alt="LOAN KILLERS Book Cover" width="400" height="600" className="rounded-lg shadow-lg mx-auto" />
+                <Image src={bookCoverImage.imageUrl} alt="LOAN KILLERS Book Cover" width="400" height="600" className="rounded-lg shadow-lg mx-auto" data-ai-hint={bookCoverImage.imageHint} />
               </div>
             )}
             <h5 className="font-bold text-xl mt-6 mb-3 text-yellow-400">इस किताब में आप क्या-क्या सीखेंगे:</h5>
@@ -108,7 +108,7 @@ export default function BookSalesHindiPage() {
           </div>
           <div className="hidden md:block">
             {bookCoverImage && (
-              <Image src={bookCoverImage.imageUrl} alt="LOAN KILLERS Book Cover" width="400" height="600" className="rounded-lg shadow-2xl" />
+              <Image src={bookCoverImage.imageUrl} alt="LOAN KILLERS Book Cover" width="400" height="600" className="rounded-lg shadow-2xl" data-ai-hint={bookCoverImage.imageHint}/>
             )}
           </div>
         </div>
@@ -210,6 +210,3 @@ export default function BookSalesHindiPage() {
     </div>
   );
 }
-
-    
-    
