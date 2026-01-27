@@ -7,7 +7,6 @@ import { CheckCircle, XCircle, Award, ChevronsRight, Lock } from 'lucide-react';
 import Link from 'next/link';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import type { Metadata } from 'next';
-import { PersonalizedIntroGenerator } from '@/components/book-sales/PersonalizedIntroGenerator';
 
 const FAQ_ITEMS = [
     {
@@ -115,12 +114,6 @@ export default function BookSalesPageV5() {
             </div>
         </section>
         
-        <div className="py-16 md:py-24 bg-gray-900">
-             <div className="container mx-auto px-4 max-w-4xl text-center">
-                <PersonalizedIntroGenerator />
-            </div>
-        </div>
-
         <section id="offer" className="py-16 md:py-24 bg-blue-50 text-slate-900">
             <div className="container mx-auto px-4 max-w-4xl text-center">
                 <h2 className="text-3xl md:text-4xl font-extrabold">Here’s Everything You Get When You Order Today</h2>
