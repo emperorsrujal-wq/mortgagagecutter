@@ -30,7 +30,7 @@ const FAQ_ITEMS = [
 
 export default function BookSalesPageV5() {
   const authorImage = PlaceHolderImages.find(p => p.id === 'author-portrait');
-  const bookCoverImage = PlaceHolderImages.find(p => p.id === 'book-cover');
+  const bookCoverImage = PlaceHolderImages.find(p => p.id === 'book-cover-en');
 
 
   return (
