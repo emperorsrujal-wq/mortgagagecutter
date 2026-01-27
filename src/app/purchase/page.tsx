@@ -40,13 +40,13 @@ const breadcrumbSchema = {
 
 function PurchaseForm() {
   const searchParams = useSearchParams();
-  const planId = searchParams.get('plan') || 'book_37';
+  const planId = searchParams.get('plan') || 'book_37_en';
   
   const [addUpsell, setAddUpsell] = useState(false);
 
   // Determine the correct plan and payment link based on the order bump
-  const isBookPurchase = planId === 'book_37';
-  const finalPlanId = isBookPurchase && addUpsell ? 'book_37_plus_trial' : planId;
+  const isBookPurchase = planId === 'book_37_en';
+  const finalPlanId = isBookPurchase && addUpsell ? 'book_37_en_plus_trial' : planId;
   const product = productPlans[finalPlanId as keyof typeof productPlans] || productPlans['pro_297'];
   const baseProduct = productPlans[planId as keyof typeof productPlans] || productPlans['pro_297'];
 
@@ -147,3 +147,5 @@ export default function PurchasePage() {
     </>
   );
 }
+
+    

@@ -9,16 +9,16 @@ export type ProductPlan = {
 // This object maps plan IDs from the URL to your Stripe Payment Links.
 // IMPORTANT: Replace the placeholder URLs with your actual Stripe Payment Links.
 export const productPlans: Record<string, ProductPlan> = {
-    'book_27': {
+    'book_37_en': {
         name: 'How to Pay Off Your House in 5 Years',
         description: 'Instant digital access to the complete ebook and toolset.',
-        priceFormatted: '$27',
+        priceFormatted: '$37',
         paymentLink: 'https://buy.stripe.com/test_14kfZnaWM9WSgb6cMM', // <-- REPLACE
     },
-    'book_27_plus_trial': {
+    'book_37_en_plus_trial': {
         name: 'Ebook + Calculator Toolkit Trial',
         description: 'The eBook plus a 3-day trial of our premium calculator.',
-        priceFormatted: '$28', // $27 for book + $1 for trial
+        priceFormatted: '$38', // $37 for book + $1 for trial
         paymentLink: 'https://buy.stripe.com/test_cN216R4CAdSWgb6002', // <-- REPLACE
     },
     'book_37': {
@@ -64,3 +64,5 @@ export const productPlans: Record<string, ProductPlan> = {
         paymentLink: 'https://buy.stripe.com/7sYaEY5ukarzgb45DC00005',
     },
 };
+
+    

@@ -1,4 +1,5 @@
 
+'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -8,7 +9,6 @@ import Link from 'next/link';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import type { Metadata } from 'next';
 import { PersonalizedIntroGenerator } from '@/components/book-sales/PersonalizedIntroGenerator';
-
 
 const FAQ_ITEMS = [
     {
@@ -56,7 +56,7 @@ export default function BookSalesPageV5() {
                 <Button asChild size="lg" className="bg-green-600 text-white hover:bg-green-700 text-xl font-bold py-8 px-12 animate-pulse shadow-lg shadow-green-500/30">
                     <Link href="#offer">YES, Show Me The System! <ChevronsRight className="ml-2 h-6 w-6" /></Link>
                 </Button>
-                 <p className="text-sm text-gray-400 mt-3">Instant Access for Just $27</p>
+                 <p className="text-sm text-gray-400 mt-3">Instant Access for Just $37</p>
             </div>
         </div>
       </header>
@@ -147,13 +147,13 @@ export default function BookSalesPageV5() {
                      <div className="text-center pt-8 mt-8 border-t-2 border-dashed">
                         <p className="text-gray-500 font-semibold">Total Real-World Value: <span className="line-through">$262</span></p>
                         <p className="text-xl mt-2">Your Price Today: Just...</p>
-                        <p className="text-7xl font-extrabold text-primary mt-1">$27</p>
+                        <p className="text-7xl font-extrabold text-primary mt-1">$37</p>
                         <p className="text-gray-500">One time. No subscriptions. Instant access.</p>
                     </div>
                      <div className="mt-8">
                          <Button asChild size="lg" className="w-full text-xl py-8 animate-pulse bg-green-600 hover:bg-green-700 shadow-lg shadow-green-500/50">
-                            <Link href="/purchase?plan=book_27">
-                                <Lock className="mr-3 h-6 w-6"/> Get Instant Access Now For Just $27
+                            <Link href="/purchase?plan=book_37_en">
+                                <Lock className="mr-3 h-6 w-6"/> Get Instant Access Now For Just $37
                             </Link>
                         </Button>
                         <p className="text-xs text-slate-500 mt-2 flex items-center justify-center gap-2"><Lock className="h-3 w-3" /> Secure 128-bit SSL Encrypted Payment</p>
@@ -193,17 +193,17 @@ export default function BookSalesPageV5() {
 
                 <div className="mt-16">
                      <h3 className="text-4xl font-bold">Your Move.</h3>
-                     <p className="text-lg text-slate-300 mt-4">You can close this page and keep sending thousands to the bank for the next 20–25 years. Or you can spend $27 one time and learn how to flip the math.</p>
+                     <p className="text-lg text-slate-300 mt-4">You can close this page and keep sending thousands to the bank for the next 20–25 years. Or you can spend $37 one time and learn how to flip the math.</p>
                       <Button asChild size="lg" className="mt-8 w-full max-w-lg text-2xl py-10 bg-green-600 hover:bg-green-700 shadow-lg shadow-green-500/40">
-                        <Link href="/purchase?plan=book_27">
-                           Yes! Give Me Instant Access for $27
+                        <Link href="/purchase?plan=book_37_en">
+                           Yes! Give Me Instant Access for $37
                         </Link>
                     </Button>
                     <p className="text-sm text-slate-400 mt-3">Own your home faster. Keep more of your money.</p>
                 </div>
                 
                  <div className="mt-16 pt-8 border-t border-gray-700 text-base text-slate-400">
-                    <p><strong>P.S.</strong> Every month you wait is another full-interest payment to the bank. For just $27, you can learn how to break the cycle starting today. The risk is all on me. <Link href="/purchase?plan=book_27" className="underline hover:text-yellow-400">Click here to get started.</Link></p>
+                    <p><strong>P.S.</strong> Every month you wait is another full-interest payment to the bank. For just $37, you can learn how to break the cycle starting today. The risk is all on me. <Link href="/purchase?plan=book_37_en" className="underline hover:text-yellow-400">Click here to get started.</Link></p>
                  </div>
             </div>
         </section>
@@ -219,3 +219,5 @@ export const metadata: Metadata = {
     follow: true,
   }
 };
+
+    
