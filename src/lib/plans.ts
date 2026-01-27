@@ -13,7 +13,7 @@ export const productPlans: Record<string, ProductPlan> = {
         name: 'How to Pay Off Your House in 5 Years',
         description: 'Instant digital access to the complete ebook and toolset.',
         priceFormatted: '$37',
-        paymentLink: 'https://buy.stripe.com/test_14kfZnaWM9WSgb6cMM', // <-- REPLACE
+        paymentLink: 'https://buy.stripe.com/5kQ6oIbSI2Z74sm5DC00009',
     },
     'book_37_en_plus_trial': {
         name: 'Ebook + Calculator Toolkit Trial',
