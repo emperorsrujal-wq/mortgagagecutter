@@ -28,18 +28,6 @@ export default function Header() {
             <Button variant="ghost" asChild>
               <Link href="/book-sales"><BookOpen className="mr-2 h-4 w-4" /> Book</Link>
             </Button>
-             <Button variant="ghost" asChild>
-              <Link href="/members/chunker"><Gem className="mr-2 h-4 w-4" /> Chunker</Link>
-            </Button>
-            <Button variant="ghost" asChild>
-              <Link href="/members/bank-screener"><Banknote className="mr-2 h-4 w-4" /> Bank Screener</Link>
-            </Button>
-            <Button variant="ghost" asChild>
-              <Link href="/snippets">Snippets</Link>
-            </Button>
-            <Button variant="ghost" asChild>
-              <Link href="/test-form"><Beaker className="mr-2 h-4 w-4" /> Test Form</Link>
-            </Button>
             <Button variant="ghost" asChild>
               <Link href="#">Contact</Link>
             </Button>
