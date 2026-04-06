@@ -1,136 +1,21 @@
-/**
- * @file Firestore Security Rules
- * @description This ruleset enforces a strict user-ownership model for leads and their associated data.
- *
- * Data Structure:
- * All data is nested under /leads/{leadId}, with subcollections for mortgage questionnaires, purchases,
- * savings reports, and user authentications.
- *
- * Key Security Decisions:
- * - Users can only access their own lead document and associated subcollections.
- * - Listing all leads is only allowed for admins (not implemented in this prototype).
- * - The data model assumes a 1:1 relationship between leads and their related data.
- * - Data validation is minimal in this prototyping phase.
- *
- * Denormalization for Authorization:
- * This ruleset relies on the `leadId` in subcollection documents to match the path parameter `{leadId}`.
- * This denormalization avoids costly `get()` operations to verify ownership.
- */
+
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    /**
-     * @description Controls access to the leads collection.
-     * @path /leads/{leadId}
-     * @allow (create) User with auth.uid "test_user" can create a lead document where leadId matches auth.uid.
-     * @deny (create) User with auth.uid "test_user" cannot create a lead document where leadId does not match auth.uid.
-     * @allow (get) User with auth.uid "test_user" can get a lead document where leadId matches auth.uid.
-     * @deny (get) User with auth.uid "test_user" cannot get a lead document where leadId does not match auth.uid.
-     * @allow (list) User with auth.uid "test_user" can list leads.
-     * @deny (update) User with auth.uid "test_user" cannot update a lead document where leadId does not match auth.uid.
-     * @deny (delete) User with auth.uid "test_user" cannot delete a lead document where leadId does not match auth.uid.
-     * @principle Enforces document ownership for all operations.
-     */
     match /leads/{leadId} {
-      allow create: if isSignedIn() && isOwner(leadId) && request.resource.data.id == leadId;
-      allow get: if isSignedIn() && isOwner(leadId);
-      allow list: if isSignedIn(); // Only authenticated users can list leads
-      allow update: if isSignedIn() && isExistingOwner(leadId) && request.resource.data.id == resource.data.id;
-      allow delete: if isSignedIn() && isExistingOwner(leadId);
+      allow create: if request.auth != null && request.auth.uid == leadId;
+      allow get: if request.auth != null && request.auth.uid == leadId;
+      allow list: if false; // Only admins could list, but not implemented
+      allow update: if request.auth != null && request.auth.uid == leadId;
     }
 
-    /**
-     * @description Controls access to the mortgage_questionnaire_response subcollection.
-     * @path /leads/{leadId}/mortgage_questionnaire_response/{responseId}
-     * @allow (create) User with auth.uid "test_user" can create a response document under their lead.
-     * @deny (create) User with auth.uid "test_user" cannot create a response document under another user's lead.
-     * @allow (get) User with auth.uid "test_user" can get a response document under their lead.
-     * @deny (get) User with auth.uid "test_user" cannot get a response document under another user's lead.
-     * @allow (list) User with auth.uid "test_user" can list response documents under their lead.
-     * @deny (update) User with auth.uid "test_user" cannot update a response document under another user's lead.
-     * @deny (delete) User with auth.uid "test_user" cannot delete a response document under another user's lead.
-     * @principle Enforces document ownership for all operations within the user's data tree.
-     */
-    match /leads/{leadId}/mortgage_questionnaire_response/{responseId} {
-      allow create: if isSignedIn() && isOwner(leadId) && request.resource.data.leadId == leadId;
-      allow get: if isSignedIn() && isOwner(leadId);
-      allow list: if isSignedIn() && isOwner(leadId);
-      allow update: if isSignedIn() && isExistingOwner(leadId) && request.resource.data.leadId == resource.data.leadId;
-      allow delete: if isSignedIn() && isExistingOwner(leadId);
+    match /mail/{mailId} {
+      allow create: if request.auth != null; // Users can trigger emails for themselves
+      allow read, update, delete: if false;
     }
 
-    /**
-     * @description Controls access to the purchases subcollection.
-     * @path /leads/{leadId}/purchases/{purchaseId}
-     * @allow (create) User with auth.uid "test_user" can create a purchase document under their lead.
-     * @deny (create) User with auth.uid "test_user" cannot create a purchase document under another user's lead.
-     * @allow (get) User with auth.uid "test_user" can get a purchase document under their lead.
-     * @deny (get) User with auth.uid "test_user" cannot get a purchase document under another user's lead.
-     * @allow (list) User with auth.uid "test_user" can list purchase documents under their lead.
-     * @deny (update) User with auth.uid "test_user" cannot update a purchase document under another user's lead.
-     * @deny (delete) User with auth.uid "test_user" cannot delete a purchase document under another user's lead.
-     * @principle Enforces document ownership for all operations within the user's data tree.
-     */
-    match /leads/{leadId}/purchases/{purchaseId} {
-      allow create: if isSignedIn() && isOwner(leadId) && request.resource.data.leadId == leadId;
-      allow get: if isSignedIn() && isOwner(leadId);
-      allow list: if isSignedIn() && isOwner(leadId);
-      allow update: if isSignedIn() && isExistingOwner(leadId) && request.resource.data.leadId == resource.data.leadId;
-      allow delete: if isSignedIn() && isExistingOwner(leadId);
-    }
-
-    /**
-     * @description Controls access to the savings_reports subcollection.
-     * @path /leads/{leadId}/savings_reports/{reportId}
-     * @allow (create) User with auth.uid "test_user" can create a report document under their lead.
-     * @deny (create) User with auth.uid "test_user" cannot create a report document under another user's lead.
-     * @allow (get) User with auth.uid "test_user" can get a report document under their lead.
-     * @deny (get) User with auth.uid "test_user" cannot get a report document under another user's lead.
-     * @allow (list) User with auth.uid "test_user" can list report documents under their lead.
-     * @deny (update) User with auth.uid "test_user" cannot update a report document under another user's lead.
-     * @deny (delete) User with auth.uid "test_user" cannot delete a report document under another user's lead.
-     * @principle Enforces document ownership for all operations within the user's data tree.
-     */
-    match /leads/{leadId}/savings_reports/{reportId} {
-      allow create: if isSignedIn() && isOwner(leadId) && request.resource.data.leadId == leadId;
-      allow get: if isSignedIn() && isOwner(leadId);
-      allow list: if isSignedIn() && isOwner(leadId);
-      allow update: if isSignedIn() && isExistingOwner(leadId) && request.resource.data.leadId == resource.data.leadId;
-      allow delete: if isSignedIn() && isExistingOwner(leadId);
-    }
-
-    /**
-     * @description Controls access to the user_authentications subcollection.
-     * @path /leads/{leadId}/user_authentications/{authId}
-     * @allow (create) User with auth.uid "test_user" can create an authentication document under their lead.
-     * @deny (create) User with auth.uid "test_user" cannot create an authentication document under another user's lead.
-     * @allow (get) User with auth.uid "test_user" can get an authentication document under their lead.
-     * @deny (get) User with auth.uid "test_user" cannot get an authentication document under another user's lead.
-     * @allow (list) User with auth.uid "test_user" can list authentication documents under their lead.
-     * @deny (update) User with auth.uid "test_user" cannot update an authentication document under another user's lead.
-     * @deny (delete) User with auth.uid "test_user" cannot delete an authentication document under another user's lead.
-     * @principle Enforces document ownership for all operations within the user's data tree.
-     */
-    match /leads/{leadId}/user_authentications/{authId} {
-      allow create: if isSignedIn() && isOwner(leadId) && request.resource.data.leadId == leadId;
-      allow get: if isSignedIn() && isOwner(leadId);
-      allow list: if isSignedIn() && isOwner(leadId);
-      allow update: if isSignedIn() && isExistingOwner(leadId) && request.resource.data.leadId == resource.data.leadId;
-      allow delete: if isSignedIn() && isExistingOwner(leadId);
-    }
-
-    // --- Helper Functions ---
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    function isOwner(leadId) {
-      return request.auth.uid == leadId;
-    }
-
-    function isExistingOwner(leadId) {
-      return isOwner(leadId) && resource != null;
+    match /leads/{leadId}/{allSubcollections=**} {
+      allow read, write: if request.auth != null && request.auth.uid == leadId;
     }
   }
 }

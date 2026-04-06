@@ -1,12 +1,17 @@
 
+'use client';
+
 import Link from 'next/link';
-import { Home, Gem, Banknote, Beaker, BookOpen } from 'lucide-react';
+import { Home, BookOpen, GraduationCap, Calculator } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { UserProfileButton } from '@/components/auth/user-profile-button';
+import { useUser } from '@/firebase';
 
 export default function Header() {
+  const { user } = useUser();
+
   return (
-    <header className="py-4 px-4 sm:px-6 lg:px-8 border-b bg-card">
+    <header className="py-4 px-4 sm:px-6 lg:px-8 border-b bg-card sticky top-0 z-50">
       <div className="container mx-auto flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Home className="h-6 w-6 text-primary" />
@@ -20,16 +25,18 @@ export default function Header() {
               <Link href="/">Home</Link>
             </Button>
             <Button variant="ghost" asChild>
-              <Link href="/learn">Learn</Link>
+              <Link href="/learn"><GraduationCap className="mr-2 h-4 w-4" /> Learn</Link>
+            </Button>
+            {user && (
+              <Button variant="ghost" asChild>
+                <Link href="/questionnaire"><Calculator className="mr-2 h-4 w-4" /> Estimator</Link>
+              </Button>
+            )}
+            <Button variant="ghost" asChild>
+              <Link href="/book-sales"><BookOpen className="mr-2 h-4 w-4" /> The Book</Link>
             </Button>
             <Button variant="ghost" asChild>
               <Link href="/blog">Blog</Link>
-            </Button>
-            <Button variant="ghost" asChild>
-              <Link href="/book-sales"><BookOpen className="mr-2 h-4 w-4" /> Book</Link>
-            </Button>
-            <Button variant="ghost" asChild>
-              <Link href="#">Contact</Link>
             </Button>
           </nav>
           <UserProfileButton />

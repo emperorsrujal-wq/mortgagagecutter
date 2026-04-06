@@ -16,7 +16,7 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp, collection, addDoc } from 'firebase/firestore';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -70,6 +70,15 @@ export function HeroForm() {
           name: values.name,
           email: values.email,
           submissionDate: serverTimestamp(),
+      });
+
+      // Trigger Welcome Email via collection
+      await addDoc(collection(firestore, "mail"), {
+        to: values.email,
+        message: {
+          subject: "Welcome to Mortgage Cutter!",
+          html: `<p>Hi ${values.name}, welcome to your financial freedom journey. Get started by filling out our questionnaire to see your personalized savings blueprint.</p>`
+        }
       });
 
       toast({
