@@ -29,7 +29,14 @@ import {
   Activity,
   TrendingUp,
   PiggyBank,
-  Flame
+  Flame,
+  MessageSquare,
+  FileText,
+  Search,
+  AlertTriangle,
+  Target,
+  BarChart,
+  Coins
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -103,10 +110,10 @@ function LessonContent({ id }: { id: number }) {
           </h1>
           <p className="text-[#5A6175] text-xl leading-relaxed">
             <TranslatedText>
-              {id === 1 ? `Why the world's most popular financial product is actually a brilliantly disguised trap for your wealth.` : 
-               id === 2 ? `How to break the trap using the "Open System" logic that the wealthy have used for decades.` :
-               id === 3 ? `The credit card offset trick, debt rolling, and cashflow boosters.` :
-               id === 4 ? `The exact words to say, banks to call, and red flags to avoid.` :
+              {id === 1 ? "Why the world's most popular financial product is actually a brilliantly disguised trap for your wealth." : 
+               id === 2 ? "How to break the trap using the 'Open System' logic that the wealthy have used for decades." :
+               id === 3 ? "The credit card offset trick, debt rolling, and cashflow boosters." :
+               id === 4 ? "The exact words to say, banks to call, and red flags to avoid." :
                `Week-by-week roadmap to ${country.productShort} freedom in ${country.name}.`}
             </TranslatedText>
           </p>
@@ -211,6 +218,10 @@ function LessonContent({ id }: { id: number }) {
               </div>
               <h3 className="text-2xl font-fraunces font-bold text-[#1A1D26]"><TranslatedText>Ready to see the "Open System"?</TranslatedText></h3>
               <p className="text-[#5A6175] max-w-md mx-auto"><TranslatedText>Now that you've seen the trap, it's time to see the exit strategy. In the next lesson, we reveal the "Bathtub" method that saves thousands.</TranslatedText></p>
+              <button className="bg-blue-600 text-white hover:bg-blue-700 font-bold px-8 py-4 rounded-2xl text-lg group flex items-center gap-2 mx-auto transition-all" onClick={nextLesson}>
+                <TranslatedText>See the Exit Strategy</TranslatedText>
+                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </button>
             </section>
           </div>
         )}
@@ -397,7 +408,7 @@ function LessonContent({ id }: { id: number }) {
                   </ol>
                 </div>
 
-                <InfoBox title="The "Float" Math" color="blue">
+                <InfoBox title="The Float Math" color="blue">
                   <TranslatedText>{`If you spend ${country.symbol}3,000/month, and keep that ${country.symbol}3,000 in your ${country.productShort} for an extra 30 days using this trick, you avoid paying interest on ${country.symbol}3,000 every single day. Over a year, this simple "float" can shave another 6-12 months off your term with zero extra income.`}</TranslatedText>
                 </InfoBox>
 
@@ -489,71 +500,195 @@ function LessonContent({ id }: { id: number }) {
         )}
 
         {id === 4 && (
-          <div className="space-y-8">
-            <CourseCard title="📞 The Phone Script">
-              <div className="flex flex-col">
-                <ChatBubble role="you">{`Hi, I'm interested in refinancing my current mortgage into a ${country.productName}.`}</ChatBubble>
-                <ChatBubble role="bank">{`We usually offer HELOCs as a second mortgage. Would you like to keep your current fixed rate?`}</ChatBubble>
-                <ChatBubble role="pro">{`Pro Tip: Don't let them upsell a second lien. You want this in FIRST position so it replaces your mortgage entirely.`}</ChatBubble>
-                <ChatBubble role="you">{`Actually, I need this to be a first-lien product where my income deposits directly into the account to reduce daily interest.`}</ChatBubble>
+          <div className="space-y-12">
+            <section className="space-y-6">
+              <div className="flex items-center gap-3 text-2xl font-fraunces font-bold text-[#1A1D26]">
+                <Landmark className="text-purple-500 h-8 w-8" />
+                <h2><TranslatedText>The Art of the Open System Setup</TranslatedText></h2>
               </div>
-            </CourseCard>
+              <p className="text-lg leading-relaxed text-[#5A6175]">
+                <TranslatedText>{`Now that you know HOW the system works, you need to know how to GET it. Banks are massive corporations built on selling traditional mortgages. Getting them to give you an "Open System" product requires knowing exactly what to ask for—and what to ignore.`}</TranslatedText>
+              </p>
+              
+              <CourseCard className="border-purple-100 bg-purple-50/20">
+                <h4 className="font-bold text-purple-900 mb-2 flex items-center gap-2">
+                  <UserCircle2 className="h-5 w-5 text-purple-600" /> <TranslatedText>The Banker's Psychology</TranslatedText>
+                </h4>
+                <p className="text-sm text-purple-800 leading-relaxed">
+                  <TranslatedText>{`Most loan officers are paid on volume. They want to sell you the most "standard" product because it's the easiest to process. You need to approach them not as a borrower, but as a strategist who knows the math.`}</TranslatedText>
+                </p>
+              </CourseCard>
+            </section>
 
-            <CourseCard title={`🏦 Recommended ${country.name} Banks`}>
-              <div className="grid grid-cols-2 gap-3">
+            <section className="space-y-8">
+              <div className="flex items-center gap-3 text-2xl font-fraunces font-bold text-[#1A1D26]">
+                <MessageSquare className="text-blue-500 h-8 w-8" />
+                <h2><TranslatedText>The "Magic Words" Phone Script</TranslatedText></h2>
+              </div>
+              <p className="text-[#5A6175]">
+                <TranslatedText>{`Don't just walk in and ask for a loan. Use this script to signal that you are looking for a specific structural financial tool.`}</TranslatedText>
+              </p>
+
+              <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-inner space-y-4">
+                <ChatBubble role="you">{`Hi, I'm looking to refinance my primary residence into a ${country.productName} in first-lien position.`}</ChatBubble>
+                <ChatBubble role="bank">{`We usually offer HELOCs as a second mortgage on top of your current one. Why do you want it in first position?`}</ChatBubble>
+                <ChatBubble role="pro">{`Pro Tip: They are trying to keep you in the "Closed System" interest trap. Stand your ground.`}</ChatBubble>
+                <ChatBubble role="you">{`I'm implementing a cashflow management strategy. I need my income to deposit directly into the account to offset the daily interest calculation on the full balance.`}</ChatBubble>
+                <ChatBubble role="bank">{`I see. We have a product like that, but the rate is 0.5% higher than our fixed 30-year.`}</ChatBubble>
+                <ChatBubble role="you">{`The rate is less important to me than the structure. I'm focusing on minimizing the Average Daily Balance, which saves me more than the 0.5% rate difference.`}</ChatBubble>
+              </div>
+            </section>
+
+            <section className="space-y-8">
+              <div className="flex items-center gap-3 text-2xl font-fraunces font-bold text-[#1A1D26]">
+                <Search className="text-indigo-500 h-8 w-8" />
+                <h2><TranslatedText>The "Gold Standard" Lender Hunt</TranslatedText></h2>
+              </div>
+              <p className="text-[#5A6175]">
+                <TranslatedText>{`Not all banks are created equal. In ${country.name}, some lenders are much more "strategy-friendly" than others.`}</TranslatedText>
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {country.banks.map(bank => (
-                  <div key={bank} className="flex items-center gap-2 p-3 bg-slate-50 rounded-xl border border-slate-100 font-bold text-sm text-slate-700">
-                    <Landmark className="h-4 w-4 text-blue-500" />
-                    {bank}
+                  <div key={bank} className="flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-100 shadow-sm hover:border-indigo-200 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600">
+                        <Landmark className="h-5 w-5" />
+                      </div>
+                      <span className="font-bold text-[#1A1D26]">{bank}</span>
+                    </div>
+                    <CheckCircle2 className="h-5 w-5 text-green-500 opacity-20" />
                   </div>
                 ))}
               </div>
-            </CourseCard>
+              
+              <InfoBox title="Why these banks?" color="blue">
+                <TranslatedText>{`These lenders in ${country.name} are known for having "Revolving" or "Offset" capabilities that allow for the direct-deposit-to-principal mechanic we need.`}</TranslatedText>
+              </InfoBox>
+            </section>
 
-            <CourseCard title="❓ Key Questions to Ask">
-              <ol className="space-y-4 list-decimal list-inside text-sm font-medium">
-                <li><TranslatedText>{`Is this a 100% ${country.productShort} where my savings/income reduce the balance daily?`}</TranslatedText></li>
-                <li><TranslatedText>{`Can I get this in first-lien position to replace my current mortgage?`}</TranslatedText></li>
-                <li><TranslatedText>{`What is the draw period vs the repayment period?`}</TranslatedText></li>
-                <li><TranslatedText>{`Are there any transaction fees for paying bills directly from the account?`}</TranslatedText></li>
-              </ol>
-            </CourseCard>
+            <section className="space-y-8">
+              <div className="flex items-center gap-3 text-2xl font-fraunces font-bold text-[#1A1D26]">
+                <ShieldAlert className="text-red-500 h-8 w-8" />
+                <h2><TranslatedText>The Red Flag Audit</TranslatedText></h2>
+              </div>
+              <p className="text-[#5A6175]">
+                <TranslatedText>{`Banks will sometimes try to sneak in terms that kill the "Open System" benefit. If you see these, keep shopping.`}</TranslatedText>
+              </p>
 
-            <div className="bg-red-50 p-6 rounded-2xl border border-red-100 space-y-4">
-              <h4 className="font-fraunces font-black text-red-800 flex items-center gap-2">
-                <ShieldAlert className="h-5 w-5" /> <TranslatedText>Red Flags to Avoid</TranslatedText>
-              </h4>
-              <ul className="text-sm space-y-3 text-red-700">
-                <li className="flex gap-2">🚩 <TranslatedText>Lender insists on keeping your current mortgage (Second Lien trap).</TranslatedText></li>
-                <li className="flex gap-2">🚩 <TranslatedText>High annual maintenance fees (> $100).</TranslatedText></li>
-                <li className="flex gap-2">🚩 <TranslatedText>No direct deposit or bill-pay capability.</TranslatedText></li>
-              </ul>
-            </div>
+              <div className="space-y-4">
+                <div className="p-5 bg-red-50 border border-red-100 rounded-2xl flex gap-4">
+                  <div className="bg-red-100 h-10 w-10 rounded-full flex items-center justify-center shrink-0">
+                    <AlertTriangle className="h-5 w-5 text-red-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-red-900"><TranslatedText>The "Second Lien" Trap</TranslatedText></h4>
+                    <p className="text-sm text-red-800 leading-relaxed"><TranslatedText>{`If the bank insists you keep your current mortgage and just add a HELOC on top, the strategy won't work. You'll still be paying front-loaded interest on the big loan. It MUST be in first position.`}</TranslatedText></p>
+                  </div>
+                </div>
+                <div className="p-5 bg-red-50 border border-red-100 rounded-2xl flex gap-4">
+                  <div className="bg-red-100 h-10 w-10 rounded-full flex items-center justify-center shrink-0">
+                    <ShieldAlert className="h-5 w-5 text-red-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-red-900"><TranslatedText>Restricted Withdrawals</TranslatedText></h4>
+                    <p className="text-sm text-red-800 leading-relaxed"><TranslatedText>{`Some accounts only let you withdraw in "chunks" (e.g., minimum $5,000). For our method, you need to be able to withdraw small amounts daily for bills and groceries.`}</TranslatedText></p>
+                  </div>
+                </div>
+                <div className="p-5 bg-red-50 border border-red-100 rounded-2xl flex gap-4">
+                  <div className="bg-red-100 h-10 w-10 rounded-full flex items-center justify-center shrink-0">
+                    <Timer className="h-5 w-5 text-red-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-red-900"><TranslatedText>Inactivity Fees</TranslatedText></h4>
+                    <p className="text-sm text-red-800 leading-relaxed"><TranslatedText>{`Avoid accounts that charge you for NOT borrowing. Since our goal is to keep the balance as close to zero as possible, these fees can eat into your savings.`}</TranslatedText></p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section className="space-y-8">
+              <div className="flex items-center gap-3 text-2xl font-fraunces font-bold text-[#1A1D26]">
+                <FileText className="text-amber-500 h-8 w-8" />
+                <h2><TranslatedText>The Document War Chest</TranslatedText></h2>
+              </div>
+              <p className="text-[#5A6175]">
+                <TranslatedText>{`To get approved for these premium products, you need to look like a "low-risk" borrower. Gather these 4 things before you make the call.`}</TranslatedText>
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <CourseCard className="border-slate-100 shadow-none">
+                  <h4 className="font-bold text-[#1A1D26] flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-green-500" /> <TranslatedText>Proof of Income</TranslatedText></h4>
+                  <p className="text-xs text-[#5A6175] mt-2"><TranslatedText>Last 2 years of tax returns (W2/T4) and your last 3 pay stubs. Banks love consistent, predictable cashflow.</TranslatedText></p>
+                </CourseCard>
+                <CourseCard className="border-slate-100 shadow-none">
+                  <h4 className="font-bold text-[#1A1D26] flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-green-500" /> <TranslatedText>Property Valuation</TranslatedText></h4>
+                  <p className="text-xs text-[#5A6175] mt-2"><TranslatedText>A recent appraisal or tax assessment. Most "Open System" products require an LTV (Loan-to-Value) under 80%.</TranslatedText></p>
+                </CourseCard>
+                <CourseCard className="border-slate-100 shadow-none">
+                  <h4 className="font-bold text-[#1A1D26] flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-green-500" /> <TranslatedText>Debt List</TranslatedText></h4>
+                  <p className="text-xs text-[#5A6175] mt-2"><TranslatedText>Statements for any car loans or credit cards you plan to "roll" into the account to prove the consolidation benefit.</TranslatedText></p>
+                </CourseCard>
+                <CourseCard className="border-slate-100 shadow-none">
+                  <h4 className="font-bold text-[#1A1D26] flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-green-500" /> <TranslatedText>Existing Statement</TranslatedText></h4>
+                  <p className="text-xs text-[#5A6175] mt-2"><TranslatedText>Your current mortgage statement showing your balance and, most importantly, your current interest rate for comparison.</TranslatedText></p>
+                </CourseCard>
+              </div>
+            </section>
+
+            <section className="bg-gradient-to-br from-purple-600 to-violet-700 p-10 rounded-[32px] text-white text-center space-y-6 shadow-2xl">
+              <div className="inline-flex items-center gap-2 px-4 py-1 bg-white/20 text-white rounded-full text-xs font-bold uppercase tracking-widest backdrop-blur-md">
+                <CheckCircle2 className="h-3 w-3" />
+                <TranslatedText>End of Lesson 4</TranslatedText>
+              </div>
+              <h3 className="text-3xl font-fraunces font-black"><TranslatedText>Ready for the Roadmap?</TranslatedText></h3>
+              <p className="opacity-90 max-w-md mx-auto text-lg"><TranslatedText>You have the scripts, the banks, and the documents. Now it's time to put it all into a week-by-week action plan to reach freedom.</TranslatedText></p>
+              <button className="bg-white text-purple-600 hover:bg-slate-50 font-bold px-8 py-4 rounded-2xl text-lg group flex items-center gap-2 mx-auto transition-all" onClick={nextLesson}>
+                <TranslatedText>Get My Action Plan</TranslatedText>
+                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </section>
           </div>
         )}
 
         {id === 5 && (
-          <div className="space-y-8">
-            <CourseCard title="🗓️ 8-Week Roadmap">
+          <div className="space-y-12">
+            <section className="space-y-6">
+              <div className="flex items-center gap-3 text-2xl font-fraunces font-bold text-[#1A1D26]">
+                <Target className="text-green-500 h-8 w-8" />
+                <h2><TranslatedText>Your 8-Week Freedom Roadmap</TranslatedText></h2>
+              </div>
+              <p className="text-lg leading-relaxed text-[#5A6175]">
+                <TranslatedText>{`Knowledge without action is just trivia. This lesson is your tactical manual. We have broken down the transition into the "Open System" into 4 distinct phases.`}</TranslatedText>
+              </p>
+            </section>
+
+            <CourseCard title="🗓️ The Implementation Timeline">
               <ExpandSection title="Weeks 1-2: Gather Intel">
                 <div className="space-y-1">
-                  <TaskItem id="w1-1" label="Find current mortgage statement and rate" />
-                  <TaskItem id="w1-2" label="Calculate average monthly net income" />
-                  <TaskItem id="w1-3" label="Track non-debt expenses for 14 days" />
+                  <TaskItem id="w1-1" label="Find current mortgage statement and exact principal balance" />
+                  <TaskItem id="w1-2" label="Calculate average monthly NET (take-home) income" />
+                  <TaskItem id="w1-3" label="Track non-debt expenses for 14 days to find your true cashflow" />
+                  <TaskItem id="w1-4" label="Check your current credit score (aim for 720+ for best rates)" />
+                  <TaskItem id="w1-5" label="List all other debts (car, CC, loans) and their APRs" />
                 </div>
               </ExpandSection>
               <ExpandSection title={`Weeks 2-4: Call ${country.name} Banks`}>
                 <div className="space-y-1">
-                  <TaskItem id="w2-1" label="Call at least 3 banks from the recommended list" />
+                  <TaskItem id="w2-1" label="Call at least 3 banks from our recommended list" />
                   <TaskItem id="w2-2" label="Use the phone script to ask for first-lien products" />
-                  <TaskItem id="w2-3" label="Compare LTV limits and interest calculation methods" />
+                  <TaskItem id="w2-3" label="Ask specifically about 'Daily Interest Calculation' rules" />
+                  <TaskItem id="w2-4" label="Compare LTV limits (aim for 80%) and setup fees" />
+                  <TaskItem id="w2-5" label="Request a formal 'Letter of Interest' or pre-approval" />
                 </div>
               </ExpandSection>
               <ExpandSection title="Weeks 4-6: Apply & Close">
                 <div className="space-y-1">
                   <TaskItem id="w4-1" label="Submit required documentation (T4s/W2s, Appraisals)" />
-                  <TaskItem id="w4-2" label="Review closing disclosure for hidden fees" />
-                  <TaskItem id="w4-3" label="Set up your direct deposit into the new account" />
+                  <TaskItem id="w4-2" label="Review closing disclosure for hidden 'inactivity' fees" />
+                  <TaskItem id="w4-3" label="Sign the paperwork and receive your new account details" />
+                  <TaskItem id="w4-4" label="Notify your employer to switch your direct deposit" />
+                  <TaskItem id="w4-5" label="Move existing liquid savings into the new account" />
                 </div>
               </ExpandSection>
               <ExpandSection title="Weeks 7-8: Optimize">
@@ -561,34 +696,69 @@ function LessonContent({ id }: { id: number }) {
                   <TaskItem id="w7-1" label="Connect your 0% credit card for the offset trick" />
                   <TaskItem id="w7-2" label="Automate all bill payments from the credit card" />
                   <TaskItem id="w7-3" label="Perform your first monthly balance review" />
+                  <TaskItem id="w7-4" label="Roll any high-interest debt into the account" />
+                  <TaskItem id="w7-5" label="Celebrate your first month of interest savings!" />
                 </div>
               </ExpandSection>
             </CourseCard>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm text-center space-y-2">
-                <p className="text-[10px] font-black uppercase text-slate-400">Year 3 Milestone</p>
-                <p className="font-bold text-slate-800"><TranslatedText>Balance down ~40%</TranslatedText></p>
+            <section className="space-y-8">
+              <div className="flex items-center gap-3 text-2xl font-fraunces font-bold text-[#1A1D26]">
+                <BarChart className="text-blue-500 h-8 w-8" />
+                <h2><TranslatedText>The Milestone Path</TranslatedText></h2>
               </div>
-              <div className="bg-emerald-50 p-6 rounded-2xl border border-emerald-100 shadow-sm text-center space-y-2">
-                <p className="text-[10px] font-black uppercase text-emerald-400">Year 5-7 Milestone</p>
-                <p className="font-bold text-slate-800 uppercase tracking-tighter"><TranslatedText>Home Paid Off</TranslatedText></p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-3">
+                  <div className="h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+                    <Activity className="h-5 w-5" />
+                  </div>
+                  <h4 className="font-bold text-[#1A1D26] uppercase text-xs tracking-widest"><TranslatedText>Year 1: The Habit Phase</TranslatedText></h4>
+                  <p className="text-sm text-[#5A6175]"><TranslatedText>You've mastered the 'Bathtub' flow. Interest charges are noticeably lower every month compared to your old loan.</TranslatedText></p>
+                </div>
+                <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-3">
+                  <div className="h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600">
+                    <TrendingUp className="h-5 w-5" />
+                  </div>
+                  <h4 className="font-bold text-[#1A1D26] uppercase text-xs tracking-widest"><TranslatedText>Year 3: The Velocity Phase</TranslatedText></h4>
+                  <p className="text-sm text-[#5A6175]"><TranslatedText>Balance is down roughly 40%. The principal reduction is now moving faster than interest accrual. Debt-free date is visible.</TranslatedText></p>
+                </div>
+                <div className="bg-emerald-50 p-6 rounded-2xl border border-emerald-100 shadow-sm space-y-3">
+                  <div className="h-10 w-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600">
+                    <ShieldCheck className="h-5 w-5" />
+                  </div>
+                  <h4 className="font-bold text-[#1A1D26] uppercase text-xs tracking-widest"><TranslatedText>Year 5-7: The Freedom Phase</TranslatedText></h4>
+                  <p className="text-sm text-emerald-800 font-medium"><TranslatedText>HOME PAID OFF. You now own 100% of your primary residence. Your entire income is now yours to keep or invest.</TranslatedText></p>
+                </div>
+                <div className="bg-amber-50 p-6 rounded-2xl border border-amber-100 shadow-sm space-y-3">
+                  <div className="h-10 w-10 bg-amber-100 rounded-full flex items-center justify-center text-amber-600">
+                    <Coins className="h-5 w-5" />
+                  </div>
+                  <h4 className="font-bold text-[#1A1D26] uppercase text-xs tracking-widest"><TranslatedText>Year 8+: The Multiplier Phase</TranslatedText></h4>
+                  <p className="text-sm text-amber-800 font-medium"><TranslatedText>Using your paid-off equity to buy cash-flowing rentals. Generational wealth starts building here.</TranslatedText></p>
+                </div>
               </div>
-            </div>
+            </section>
 
-            <div className="bg-gradient-to-br from-[#2563EB] to-[#7C3AED] p-10 rounded-[32px] text-white text-center space-y-6 shadow-2xl shadow-blue-200">
-              <div className="bg-white/20 w-20 h-20 rounded-full flex items-center justify-center mx-auto backdrop-blur-md">
-                <GraduationCap className="h-10 w-10" />
+            <section className="bg-gradient-to-br from-[#2563EB] to-[#7C3AED] p-10 rounded-[32px] text-white text-center space-y-6 shadow-2xl shadow-blue-200">
+              <div className="bg-white/20 w-24 h-24 rounded-full flex items-center justify-center mx-auto backdrop-blur-md">
+                <GraduationCap className="h-12 w-12" />
               </div>
               <div className="space-y-2">
                 <h2 className="text-3xl font-fraunces font-black"><TranslatedText>Congratulations, Graduate!</TranslatedText></h2>
-                <p className="opacity-90 max-w-md mx-auto"><TranslatedText>You now have the knowledge to beat the bank at their own game. Your journey to true ownership starts today.</TranslatedText></p>
+                <p className="opacity-90 max-w-md mx-auto text-lg"><TranslatedText>You now have the exact knowledge required to beat the banks at their own game. True home ownership isn't 30 years away—it's within your grasp right now.</TranslatedText></p>
               </div>
-              <button className="bg-white text-[#2563EB] hover:bg-slate-50 font-bold px-8 py-4 rounded-2xl text-lg group flex items-center gap-2 mx-auto transition-all" onClick={() => router.push('/')}>
-                <TranslatedText>Get My Free Savings Blueprint</TranslatedText>
-                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
+              
+              <div className="pt-4">
+                <button 
+                  className="bg-white text-[#2563EB] hover:bg-slate-50 font-bold px-10 py-5 rounded-2xl text-xl group flex items-center gap-2 mx-auto transition-all shadow-xl hover:scale-105" 
+                  onClick={() => router.push('/')}
+                >
+                  <TranslatedText>Get My Free Savings Blueprint</TranslatedText>
+                  <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
+                </button>
+                <p className="mt-4 text-white/60 text-sm italic font-medium"><TranslatedText>Enter your actual numbers into the Blueprint to see your specific payoff date.</TranslatedText></p>
+              </div>
+            </section>
           </div>
         )}
 
