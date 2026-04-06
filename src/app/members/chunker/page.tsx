@@ -9,15 +9,16 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, Tooltip as RechartsTooltip } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { Loader2, Save, Info, HelpCircle, Zap, TrendingDown } from 'lucide-react';
+import { Loader2, Save, Info, HelpCircle, Zap, TrendingDown, CheckCircle2, ChevronDown, ChevronUp, Table as TableIcon } from 'lucide-react';
 import { useUser, useFirestore } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { doc, setDoc, serverTimestamp, collection, query, limit, getDocs } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 const initial: Inputs = {
   mortgageBalance: 600000,
@@ -38,12 +39,20 @@ const initial: Inputs = {
   billTiming: 'OPTIMIZED',
 };
 
+const currencyFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+});
+
 export default function ChunkerCalculatorPage() {
   const [form, setForm] = useState<Inputs>(initial);
   const [termUnit, setTermUnit] = useState<'years' | 'months'>('years');
   const [termValue, setTermValue] = useState<number>(25);
   const [res, setRes] = useState<Outputs | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [showTimeline, setShowTimeline] = useState(false);
   const { user, isUserLoading } = useUser();
   const firestore = useFirestore();
   const { toast } = useToast();
@@ -119,13 +128,59 @@ export default function ChunkerCalculatorPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto p-4 md:p-8 bg-slate-50 min-h-screen">
-      <header className="text-center mb-10">
-        <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">HELOC-Assist Chunker Estimator</h1>
-        <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">
-          Turn credit access into principal destruction. Use the chunk method to nuke interest without switching lenders.
-        </p>
-      </header>
+    <div className="max-w-7xl mx-auto p-4 md:p-8 bg-slate-50 min-h-screen space-y-10">
+      
+      {/* EXPLAINER TOP SECTION */}
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card className="bg-white border-blue-100">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-blue-600 text-sm font-black uppercase flex items-center gap-2">
+              <TrendingDown className="h-4 w-4" /> s from HELOC
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-slate-600">Batch bills so cash sits longer against balance.</p>
+          </CardContent>
+        </Card>
+        <Card className="bg-white border-green-100">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-green-600 text-sm font-black uppercase flex items-center gap-2">
+              <Zap className="h-4 w-4" /> Chunk to mortgage
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-slate-600">Send a lump-sum prepayment to principal (payment stays same; term shrinks).</p>
+          </CardContent>
+        </Card>
+        <Card className="bg-white border-purple-100">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-purple-600 text-sm font-black uppercase flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4" /> Use surplus to reset
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-slate-600">Your monthly surplus pays HELOC back; repeat.</p>
+          </CardContent>
+        </Card>
+      </section>
+
+      <section className="bg-slate-100 rounded-xl p-6 border">
+        <h3 className="text-lg font-bold mb-4 flex items-center gap-2">Common Questions</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+          <div className="space-y-1">
+            <p className="font-bold text-slate-900">Will my mortgage payment change?</p>
+            <p className="text-slate-600">No. Your required payment stays exactly the same, but more goes to principal.</p>
+          </div>
+          <div className="space-y-1">
+            <p className="font-bold text-slate-900">Do I need a special account?</p>
+            <p className="text-slate-600">Yes, you typically need a first-lien HELOC or an offset account to maximize benefit.</p>
+          </div>
+          <div className="space-y-1">
+            <p className="font-bold text-slate-900">What if my surplus is small?</p>
+            <p className="text-slate-600">Even small surpluses save thousands. The key is the frequency of daily recalculation.</p>
+          </div>
+        </div>
+      </section>
 
       <div className="grid lg:grid-cols-12 gap-8">
         {/* INPUTS COLUMN */}
@@ -299,20 +354,6 @@ export default function ChunkerCalculatorPage() {
                   {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
                   Save Inputs
                 </Button>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button variant="ghost" size="icon" className="text-muted-foreground"><HelpCircle className="h-5 w-5"/></Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader><DialogTitle>How do chunks work?</DialogTitle></DialogHeader>
-                    <div className="space-y-4 text-sm leading-relaxed">
-                      <p>The "Chunk Method" involves using your HELOC to make large principal payments against your mortgage.</p>
-                      <p>By using your monthly cashflow surplus to pay down the HELOC balance daily, you dramatically reduce the interest charged compared to standard monthly mortgage payments.</p>
-                      <p><strong>Auto Mode:</strong> Automatically calculates the mathematically optimal chunk size based on your surplus.</p>
-                      <p><strong>Fixed Mode:</strong> Uses a specific dollar amount you specify for each chunk.</p>
-                    </div>
-                  </DialogContent>
-                </Dialog>
               </div>
             </CardFooter>
           </Card>
@@ -321,79 +362,115 @@ export default function ChunkerCalculatorPage() {
         {/* RESULTS COLUMN */}
         <div className="lg:col-span-7">
           {res ? (
-            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              
+              {/* PRIMARY STATS */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <Card className="bg-emerald-600 text-white shadow-xl border-none">
                   <CardHeader className="pb-2">
                     <p className="text-xs uppercase tracking-widest font-black opacity-80">Interest Saved</p>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-3xl font-black">${res.totals.interestSaved.toLocaleString()}</p>
-                    <p className="text-[10px] mt-1 opacity-70">Over the life of the loan</p>
+                    <p className="text-3xl font-black">{currencyFormatter.format(res.totals.interestSaved)}</p>
                   </CardContent>
                 </Card>
                 <Card className="shadow-md border-l-4 border-l-primary">
                   <CardHeader className="pb-2">
-                    <p className="text-xs uppercase tracking-widest font-black text-slate-400">Time Saved</p>
+                    <p className="text-xs uppercase tracking-widest font-black text-slate-400">Months Saved</p>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-3xl font-black text-slate-900">{Math.floor(res.totals.monthsSaved / 12)}y {res.totals.monthsSaved % 12}m</p>
-                    <p className="text-[10px] mt-1 text-muted-foreground">Off your original term</p>
+                    <p className="text-3xl font-black text-slate-900">{res.totals.monthsSaved}</p>
                   </CardContent>
                 </Card>
                 <Card className="shadow-md">
                   <CardHeader className="pb-2">
-                    <p className="text-xs uppercase tracking-widest font-black text-slate-400">Payoff Date</p>
+                    <p className="text-xs uppercase tracking-widest font-black text-slate-400">MI/CMHC Saved</p>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-xl font-black text-slate-900">
-                      {new Date(Date.now() + res.strategy.months * 30.44 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-                    </p>
-                    <p className="text-[10px] mt-1 text-emerald-600 font-bold">vs. {new Date(Date.now() + res.baseline.months * 30.44 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</p>
+                    <p className="text-3xl font-black text-slate-900">{currencyFormatter.format(res.totals.miSaved)}</p>
                   </CardContent>
                 </Card>
               </div>
 
+              {/* COMPARISON CARDS */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card className="bg-white border-red-50">
+                  <CardHeader className="bg-red-50/50 pb-4">
+                    <CardTitle className="text-sm font-black text-red-700 uppercase">Baseline (Do Nothing)</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-4 space-y-2">
+                    <div className="flex justify-between"><span>Months:</span> <span className="font-bold">{res.baseline.months}</span></div>
+                    <div className="flex justify-between"><span>Total Interest:</span> <span className="font-bold">{currencyFormatter.format(res.baseline.totalInterest)}</span></div>
+                    <div className="flex justify-between"><span>Total MI/CMHC:</span> <span className="font-bold">{currencyFormatter.format(res.baseline.totalMI)}</span></div>
+                  </CardContent>
+                </Card>
+                <Card className="bg-white border-emerald-50 shadow-lg scale-[1.02]">
+                  <CardHeader className="bg-emerald-50 pb-4">
+                    <CardTitle className="text-sm font-black text-emerald-700 uppercase">With Chunker Strategy</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-4 space-y-2">
+                    <div className="flex justify-between"><span>Months:</span> <span className="font-bold">{res.strategy.months}</span></div>
+                    <div className="flex justify-between"><span>Total Interest:</span> <span className="font-bold">{currencyFormatter.format(res.strategy.totalInterest)}</span></div>
+                    <div className="flex justify-between"><span>Total MI/CMHC:</span> <span className="font-bold">{currencyFormatter.format(res.strategy.totalMI)}</span></div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* STRATEGY INFO */}
+              <Card className="bg-slate-900 text-white p-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-[10px] text-slate-400 uppercase font-black">Strategy Used</p>
+                    <p className="font-bold">{res.strategyType}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] text-slate-400 uppercase font-black">Optimal First Chunk</p>
+                    <p className="font-bold">{currencyFormatter.format(res.optimalChunkSize || 0)}</p>
+                  </div>
+                </div>
+              </Card>
+
+              {/* CHART */}
               <Card className="p-6 shadow-lg border-none overflow-hidden">
                 <div className="flex justify-between items-center mb-6">
                   <div>
-                    <CardTitle className="text-lg">Debt Depletion Schedule</CardTitle>
-                    <CardDescription>Total balance comparison over time.</CardDescription>
+                    <CardTitle className="text-lg">Balance Over Time</CardTitle>
+                    <CardDescription>Mortgage vs. Total Debt with Chunker Strategy</CardDescription>
                   </div>
                   <div className="flex gap-4 text-[10px] font-bold">
-                    <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-slate-300"></span> Old Path</div>
-                    <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500"></span> Accelerated</div>
+                    <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-slate-300"></span> Baseline Mortgage</div>
+                    <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500"></span> Strategy Total Debt</div>
                   </div>
                 </div>
-                <div className="h-[400px] w-full">
+                <div className="h-[350px] w-full">
                   <ChartContainer config={{
-                    baselineBal: { label: "Standard Path", color: "#cbd5e1" },
-                    strategyBal: { label: "Accelerated", color: "#10b981" }
+                    baselineBal: { label: "Baseline Mortgage", color: "#cbd5e1" },
+                    strategyBal: { label: "Strategy Total Debt", color: "#10b981" }
                   }}>
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={res.timeline.filter((_, i) => i % Math.max(1, Math.floor(res.timeline.length / 60)) === 0)}>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                         <XAxis 
                           dataKey="month" 
-                          tickFormatter={(v) => `Y${Math.floor(v/12)}`} 
+                          tickFormatter={(v) => `Yr ${Math.floor(v/12)}`} 
                           axisLine={false}
                           tickLine={false}
                           className="text-[10px] font-medium"
                         />
                         <YAxis 
-                          tickFormatter={(v) => `$${v/1000}k`} 
+                          tickFormatter={(v) => `${Math.floor(v/1000)}k`} 
                           axisLine={false}
                           tickLine={false}
                           className="text-[10px] font-medium"
                         />
-                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <RechartsTooltip content={<ChartTooltipContent />} />
                         <Line 
                           type="monotone" 
                           dataKey="baselineBal" 
                           stroke="#cbd5e1" 
                           strokeWidth={2}
                           dot={false} 
-                          name="Old Path" 
+                          name="Baseline Mortgage" 
                         />
                         <Line 
                           type="monotone" 
@@ -401,7 +478,7 @@ export default function ChunkerCalculatorPage() {
                           stroke="#10b981" 
                           strokeWidth={3}
                           dot={false} 
-                          name="Accelerated" 
+                          name="Strategy Total Debt" 
                         />
                       </LineChart>
                     </ResponsiveContainer>
@@ -409,38 +486,58 @@ export default function ChunkerCalculatorPage() {
                 </div>
               </Card>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card className="shadow-sm">
-                  <CardHeader><CardTitle className="text-sm">Strategy Insights</CardTitle></CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="text-muted-foreground">Optimal Chunk Size:</span>
-                      <span className="font-bold">${res.optimalChunkSize?.toLocaleString()}</span>
-                    </div>
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="text-muted-foreground">Strategy Type:</span>
-                      <span className="font-bold px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full">{res.strategyType}</span>
-                    </div>
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="text-muted-foreground">Total Interest Paid:</span>
-                      <span className="font-bold">${Math.round(res.strategy.totalInterest).toLocaleString()}</span>
-                    </div>
-                  </CardContent>
-                </Card>
+              {/* TIMELINE TABLE */}
+              <Collapsible open={showTimeline} onOpenChange={setShowTimeline} className="w-full">
+                <CollapsibleTrigger asChild>
+                  <Button variant="outline" className="w-full font-bold">
+                    <TableIcon className="mr-2 h-4 w-4" /> 
+                    {showTimeline ? "Hide Timeline" : "View Month-by-Month Timeline"}
+                    {showTimeline ? <ChevronUp className="ml-auto h-4 w-4" /> : <ChevronDown className="ml-auto h-4 w-4" />}
+                  </Button>
+                </CollapsibleTrigger>
+                <CollapsibleContent className="mt-4 pt-4 border-t">
+                  <div className="max-h-[600px] overflow-auto border rounded-lg">
+                    <Table>
+                      <TableHeader className="bg-slate-50 sticky top-0 z-10 shadow-sm">
+                        <TableRow>
+                          <TableHead className="w-16">Month</TableHead>
+                          <TableHead>Mortgage Bal</TableHead>
+                          <TableHead>Mortgage Int.</TableHead>
+                          <TableHead>Mortgage Prin.</TableHead>
+                          <TableHead>HELOC Bal</TableHead>
+                          <TableHead>Chunk</TableHead>
+                          <TableHead>HELOC Int</TableHead>
+                          <TableHead>MI</TableHead>
+                          <TableHead>Surplus Used</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {res.timeline.slice(0, 240).map((row) => (
+                          <TableRow key={row.month} className={cn(row.month === 0 ? "bg-slate-50 font-bold" : "")}>
+                            <TableCell>{row.month}</TableCell>
+                            <TableCell>{currencyFormatter.format(row.mortgageBal)}</TableCell>
+                            <TableCell className="text-red-600">{currencyFormatter.format(row.mortgageInterestPaid)}</TableCell>
+                            <TableCell className="text-green-600">{currencyFormatter.format(row.mortgagePrincipalPaid)}</TableCell>
+                            <TableCell className="font-bold">{currencyFormatter.format(row.helocBal)}</TableCell>
+                            <TableCell className="text-blue-600">{currencyFormatter.format(row.chunkApplied)}</TableCell>
+                            <TableCell className="text-red-400">{currencyFormatter.format(row.helocInterest)}</TableCell>
+                            <TableCell>{currencyFormatter.format(row.mi)}</TableCell>
+                            <TableCell>{currencyFormatter.format(row.surplusUsed)}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                  <p className="text-[10px] text-muted-foreground mt-2 italic">(Showing first 240 months to keep the table light.)</p>
+                </CollapsibleContent>
+              </Collapsible>
 
-                <Card className="bg-slate-900 text-white shadow-xl">
-                  <CardHeader><CardTitle className="text-sm flex items-center gap-2"><TrendingDown className="h-4 w-4 text-emerald-400" /> Velocity Boost</CardTitle></CardHeader>
-                  <CardContent className="space-y-2">
-                    <p className="text-xs leading-relaxed opacity-80">
-                      Your current cashflow velocity allows you to pay off your home in 
-                      <span className="text-emerald-400 font-bold ml-1">{Math.floor(res.strategy.months / 12)} years</span>.
-                    </p>
-                    <p className="text-[10px] italic opacity-60">
-                      * This assumes your income and expenses remain constant and you reinvest all savings into the HELOC principal.
-                    </p>
-                  </CardContent>
-                </Card>
+              <div className="text-center p-6 border rounded-2xl bg-white shadow-inner">
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Educational estimate only. No bank fees, promos, or taxes included. Results improve with positive monthly surplus, readvanceable lines, and batched bill pay.
+                </p>
               </div>
+
             </div>
           ) : (
             <div className="h-full flex flex-col items-center justify-center border-4 border-dashed rounded-[32px] p-12 text-center bg-white/50 space-y-4">
@@ -448,7 +545,7 @@ export default function ChunkerCalculatorPage() {
                 <TrendingDown className="h-12 w-12 text-slate-300" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-slate-400">Results Pending</h3>
+                <h3 className="text-xl font-bold text-slate-400">Your results will appear here.</h3>
                 <p className="text-muted-foreground max-w-xs mx-auto">Fill out the mortgage and cashflow details on the left to see your acceleration blueprint.</p>
               </div>
             </div>
