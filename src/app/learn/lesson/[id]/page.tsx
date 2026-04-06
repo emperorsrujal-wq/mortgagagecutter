@@ -58,7 +58,7 @@ function ProgressBar({ current }: { current: number }) {
         <div className="text-xs font-black uppercase text-slate-400 tracking-widest">
           <TranslatedText>Lesson</TranslatedText> {current} <TranslatedText>of</TranslatedText> 5
         </div>
-        <div className="w-20" /> {/* Spacer */}
+        <div className="w-20" />
       </div>
     </div>
   );
@@ -74,7 +74,7 @@ function LessonContent({ id }: { id: number }) {
   const nextLesson = () => {
     completeLesson(id);
     if (id < 5) router.push(`/learn/lesson/${id + 1}`);
-    else router.push('/learn');
+    else router.push('/');
   };
 
   const prevLesson = () => {
@@ -659,7 +659,7 @@ function LessonContent({ id }: { id: number }) {
                 <h2><TranslatedText>Your 8-Week Freedom Roadmap</TranslatedText></h2>
               </div>
               <p className="text-lg leading-relaxed text-[#5A6175]">
-                <TranslatedText>{`Knowledge without action is just trivia. This lesson is your tactical manual. We have broken down the transition into the "Open System" into 4 distinct phases.`}</TranslatedText>
+                <TranslatedText>{`Knowledge without action is just trivia. This lesson is your tactical manual. We have broken down the transition into the "Open System" into 4 distinct phases. Success isn't about working harder—it's about following the blueprint.`}</TranslatedText>
               </p>
             </section>
 
@@ -707,13 +707,15 @@ function LessonContent({ id }: { id: number }) {
                 <BarChart className="text-blue-500 h-8 w-8" />
                 <h2><TranslatedText>The Milestone Path</TranslatedText></h2>
               </div>
+              <p className="text-[#5A6175]"><TranslatedText>{`What does your life look like after you start? Here is the standard progression for a ${country.name} homeowner using this method.`}</TranslatedText></p>
+              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-3">
                   <div className="h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
                     <Activity className="h-5 w-5" />
                   </div>
                   <h4 className="font-bold text-[#1A1D26] uppercase text-xs tracking-widest"><TranslatedText>Year 1: The Habit Phase</TranslatedText></h4>
-                  <p className="text-sm text-[#5A6175]"><TranslatedText>You've mastered the 'Bathtub' flow. Interest charges are noticeably lower every month compared to your old loan.</TranslatedText></p>
+                  <p className="text-sm text-[#5A6175]"><TranslatedText>You've mastered the 'Bathtub' flow. Interest charges are noticeably lower every month compared to your old loan. You feel in control.</TranslatedText></p>
                 </div>
                 <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-3">
                   <div className="h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600">
@@ -727,16 +729,27 @@ function LessonContent({ id }: { id: number }) {
                     <ShieldCheck className="h-5 w-5" />
                   </div>
                   <h4 className="font-bold text-[#1A1D26] uppercase text-xs tracking-widest"><TranslatedText>Year 5-7: The Freedom Phase</TranslatedText></h4>
-                  <p className="text-sm text-emerald-800 font-medium"><TranslatedText>HOME PAID OFF. You now own 100% of your primary residence. Your entire income is now yours to keep or invest.</TranslatedText></p>
+                  <p className="text-sm text-emerald-800 font-medium"><TranslatedText>HOME PAID OFF. You now own 100% of your primary residence. Your entire income is now yours to keep or invest. No more House #2.</TranslatedText></p>
                 </div>
                 <div className="bg-amber-50 p-6 rounded-2xl border border-amber-100 shadow-sm space-y-3">
                   <div className="h-10 w-10 bg-amber-100 rounded-full flex items-center justify-center text-amber-600">
                     <Coins className="h-5 w-5" />
                   </div>
                   <h4 className="font-bold text-[#1A1D26] uppercase text-xs tracking-widest"><TranslatedText>Year 8+: The Multiplier Phase</TranslatedText></h4>
-                  <p className="text-sm text-amber-800 font-medium"><TranslatedText>Using your paid-off equity to buy cash-flowing rentals. Generational wealth starts building here.</TranslatedText></p>
+                  <p className="text-sm text-amber-800 font-medium"><TranslatedText>Using your paid-off equity to buy cash-flowing rentals. Generational wealth starts building here. You are the bank now.</TranslatedText></p>
                 </div>
               </div>
+            </section>
+
+            <section className="space-y-6">
+              <div className="flex items-center gap-3 text-2xl font-fraunces font-bold text-[#1A1D26]">
+                <HomeIcon className="text-blue-500 h-8 w-8" />
+                <h2><TranslatedText>Dave and Sarah: 7 Years Later</TranslatedText></h2>
+              </div>
+              <CourseCard className="border-blue-100 bg-blue-50/20 italic">
+                <p><TranslatedText>{`Dave and Sarah stuck to the plan. They didn't earn an extra penny, but they used the "Bathtub" flow religiously. Today, they received a letter from their bank in ${country.name}. The balance on their ${country.productShort} is $0.00.`}</TranslatedText></p>
+                <p className="mt-4"><TranslatedText>{`While their neighbors are still in Year 7 of their 30-year "trap," Dave and Sarah are debt-free. That monthly mortgage payment? It's now a monthly "Freedom Fund" they're using to travel and invest. The "Invisible House" they were building for the bank is gone—every brick now belongs to them.`}</TranslatedText></p>
+              </CourseCard>
             </section>
 
             <section className="bg-gradient-to-br from-[#2563EB] to-[#7C3AED] p-10 rounded-[32px] text-white text-center space-y-6 shadow-2xl shadow-blue-200">
