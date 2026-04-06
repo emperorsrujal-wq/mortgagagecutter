@@ -17,6 +17,7 @@ import { useRouter } from 'next/navigation';
 import { doc, setDoc, serverTimestamp, collection, query, limit, getDocs } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 const initial: Inputs = {
   mortgageBalance: 600000,
@@ -61,7 +62,6 @@ export default function ChunkerCalculatorPage() {
       if (!snap.empty) {
         const savedInputs = snap.docs[0].data().inputs as Inputs;
         setForm(savedInputs);
-        // Sync term display
         if (savedInputs.termMonthsRemaining % 12 === 0) {
           setTermUnit('years');
           setTermValue(savedInputs.termMonthsRemaining / 12);
@@ -130,8 +130,6 @@ export default function ChunkerCalculatorPage() {
       <div className="grid lg:grid-cols-12 gap-8">
         {/* INPUTS COLUMN */}
         <div className="lg:col-span-5 space-y-6">
-          
-          {/* 1. Mortgage Details */}
           <Card className="shadow-sm">
             <CardHeader className="pb-4">
               <CardTitle className="text-lg font-bold flex items-center gap-2">
@@ -182,7 +180,6 @@ export default function ChunkerCalculatorPage() {
             </CardContent>
           </Card>
 
-          {/* 2. Cash Flow & HELOC */}
           <Card className="shadow-sm border-l-4 border-l-blue-500">
             <CardHeader className="pb-4">
               <CardTitle className="text-lg font-bold flex items-center gap-2">
@@ -218,7 +215,6 @@ export default function ChunkerCalculatorPage() {
             </CardContent>
           </Card>
 
-          {/* 4. Cash & Assets (Optional) */}
           <Card className="shadow-sm">
             <CardHeader className="pb-4">
               <CardTitle className="text-lg font-bold flex items-center gap-2">
@@ -229,22 +225,21 @@ export default function ChunkerCalculatorPage() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-[10px]">Savings</Label>
+                  <Label className="text-[10px]">Savings Account</Label>
                   <Input type="number" value={form.savings.savings} onChange={e => onSavingsChange("savings", e.target.value)}/>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-[10px]">Chequing</Label>
+                  <Label className="text-[10px]">Chequing Account</Label>
                   <Input type="number" value={form.savings.chequing} onChange={e => onSavingsChange("chequing", e.target.value)}/>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-[10px]">Short-Term</Label>
+                  <Label className="text-[10px]">Short-Term Inv.</Label>
                   <Input type="number" value={form.savings.shortTerm} onChange={e => onSavingsChange("shortTerm", e.target.value)}/>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* 3. Strategy */}
           <Card className="shadow-sm bg-slate-100/50 border-dashed">
             <CardHeader className="pb-4">
               <CardTitle className="text-lg font-bold flex items-center gap-2">
@@ -327,8 +322,6 @@ export default function ChunkerCalculatorPage() {
         <div className="lg:col-span-7">
           {res ? (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              
-              {/* TOP STATS */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <Card className="bg-emerald-600 text-white shadow-xl border-none">
                   <CardHeader className="pb-2">
@@ -354,19 +347,18 @@ export default function ChunkerCalculatorPage() {
                   </CardHeader>
                   <CardContent>
                     <p className="text-xl font-black text-slate-900">
-                      {new Date(Date.now() + res.strategy.months * 30 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                      {new Date(Date.now() + res.strategy.months * 30.44 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
                     </p>
-                    <p className="text-[10px] mt-1 text-emerald-600 font-bold">vs. {new Date(Date.now() + res.baseline.months * 30 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</p>
+                    <p className="text-[10px] mt-1 text-emerald-600 font-bold">vs. {new Date(Date.now() + res.baseline.months * 30.44 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</p>
                   </CardContent>
                 </Card>
               </div>
 
-              {/* CHART */}
               <Card className="p-6 shadow-lg border-none overflow-hidden">
                 <div className="flex justify-between items-center mb-6">
                   <div>
                     <CardTitle className="text-lg">Debt Depletion Schedule</CardTitle>
-                    <CardDescription>Comparison of balance reduction over time.</CardDescription>
+                    <CardDescription>Total balance comparison over time.</CardDescription>
                   </div>
                   <div className="flex gap-4 text-[10px] font-bold">
                     <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-slate-300"></span> Old Path</div>
@@ -375,11 +367,11 @@ export default function ChunkerCalculatorPage() {
                 </div>
                 <div className="h-[400px] w-full">
                   <ChartContainer config={{
-                    mortgageBal: { label: "Standard Path", color: "#cbd5e1" },
-                    helocBal: { label: "Accelerated", color: "#10b981" }
+                    baselineBal: { label: "Standard Path", color: "#cbd5e1" },
+                    strategyBal: { label: "Accelerated", color: "#10b981" }
                   }}>
                     <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={res.timeline.filter((_, i) => i % 3 === 0)}>
+                      <LineChart data={res.timeline.filter((_, i) => i % Math.max(1, Math.floor(res.timeline.length / 60)) === 0)}>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                         <XAxis 
                           dataKey="month" 
@@ -397,7 +389,7 @@ export default function ChunkerCalculatorPage() {
                         <ChartTooltip content={<ChartTooltipContent />} />
                         <Line 
                           type="monotone" 
-                          dataKey="mortgageBal" 
+                          dataKey="baselineBal" 
                           stroke="#cbd5e1" 
                           strokeWidth={2}
                           dot={false} 
@@ -405,7 +397,7 @@ export default function ChunkerCalculatorPage() {
                         />
                         <Line 
                           type="monotone" 
-                          dataKey="helocBal" 
+                          dataKey="strategyBal" 
                           stroke="#10b981" 
                           strokeWidth={3}
                           dot={false} 
@@ -417,7 +409,6 @@ export default function ChunkerCalculatorPage() {
                 </div>
               </Card>
 
-              {/* STRATEGY BREAKDOWN */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Card className="shadow-sm">
                   <CardHeader><CardTitle className="text-sm">Strategy Insights</CardTitle></CardHeader>
@@ -450,7 +441,6 @@ export default function ChunkerCalculatorPage() {
                   </CardContent>
                 </Card>
               </div>
-
             </div>
           ) : (
             <div className="h-full flex flex-col items-center justify-center border-4 border-dashed rounded-[32px] p-12 text-center bg-white/50 space-y-4">
@@ -468,5 +458,3 @@ export default function ChunkerCalculatorPage() {
     </div>
   );
 }
-
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
