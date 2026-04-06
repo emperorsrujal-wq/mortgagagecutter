@@ -1,10 +1,10 @@
-
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useCourse } from './CourseProvider';
 import { CourseCard, StatBox } from './UIComponents';
 import { Play, Pause, RotateCcw } from 'lucide-react';
 import { TranslatedText } from './TranslatedText';
+import { cn } from '@/lib/utils';
 
 export function InterestCalc() {
   const { country } = useCourse();
@@ -60,7 +60,7 @@ export function AmortViz() {
   const rate = country.avgRate;
   const totalMonths = country.amortYears * 12;
   const monthlyRate = rate / 100 / 12;
-  const pmt = loan * (monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / (Math.pow(1 + monthlyRate, totalMonths) - 1);
+  const pmtValue = loan * (monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / (Math.pow(1 + monthlyRate, totalMonths) - 1);
 
   useEffect(() => {
     let interval: any;
@@ -74,16 +74,16 @@ export function AmortViz() {
     return () => clearInterval(interval);
   }, [isPlaying, month, totalMonths]);
 
-  const currentInterest = (loan * Math.pow(1 + monthlyRate, month - 1) - pmt * (Math.pow(1 + monthlyRate, month - 1) - 1) / monthlyRate) * monthlyRate;
-  const currentPrincipal = pmt - currentInterest;
-  const interestPct = (currentInterest / pmt) * 100;
+  const currentInterest = (loan * Math.pow(1 + monthlyRate, month - 1) - pmtValue * (Math.pow(1 + monthlyRate, month - 1) - 1) / monthlyRate) * monthlyRate;
+  const currentPrincipal = pmtValue - currentInterest;
+  const interestPct = (currentInterest / pmtValue) * 100;
   
   let totalInterest = 0;
   let remainingBal = loan;
   for(let i = 1; i <= month; i++) {
     const int = remainingBal * monthlyRate;
     totalInterest += int;
-    remainingBal -= (pmt - int);
+    remainingBal -= (pmtValue - int);
   }
 
   const fmt = (val: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: country.currency, maximumFractionDigits: 0 }).format(val);
@@ -117,14 +117,14 @@ export function AmortViz() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-          <StatBox label="Paid So Far" value={fmt(pmt * month)} />
+          <StatBox label="Paid So Far" value={fmt(pmtValue * month)} />
           <StatBox label="→ Lender" value={fmt(totalInterest)} colorClass="text-red-600" />
-          <StatBox label="→ Your Equity" value={fmt((pmt * month) - totalInterest)} colorClass="text-green-600" />
+          <StatBox label="→ Your Equity" value={fmt((pmtValue * month) - totalInterest)} colorClass="text-green-600" />
           <StatBox label="Still Owe" value={fmt(remainingBal)} />
         </div>
 
-        {month >= 60 && month < 61 && <div className="p-3 bg-blue-50 border border-blue-100 rounded-lg text-blue-800 text-xs font-bold animate-bounce text-center"><TranslatedText>{`📢 After 5 years of payments, only ${Math.round(((pmt*60-totalInterest)/loan)*100)}% went to your equity!`}</TranslatedText></div>}
-        {month >= totalMonths && <div className="p-3 bg-emerald-50 border border-emerald-100 rounded-lg text-emerald-800 text-xs font-bold text-center"><TranslatedText>{`🏁 Done! You paid ${fmt(pmt * totalMonths)} for a ${fmt(loan)} home.`}</TranslatedText></div>}
+        {month >= 60 && month < 61 && <div className="p-3 bg-blue-50 border border-blue-100 rounded-lg text-blue-800 text-xs font-bold animate-bounce text-center"><TranslatedText>{`📢 After 5 years of payments, only ${Math.round(((pmtValue*60-totalInterest)/loan)*100)}% went to your equity!`}</TranslatedText></div>}
+        {month >= totalMonths && <div className="p-3 bg-emerald-50 border border-emerald-100 rounded-lg text-emerald-800 text-xs font-bold text-center"><TranslatedText>{`🏁 Done! You paid ${fmt(pmtValue * totalMonths)} for a ${fmt(loan)} home.`}</TranslatedText></div>}
       </div>
     </CourseCard>
   );
