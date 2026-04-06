@@ -1,4 +1,3 @@
-
 /**
  * HELOC + chunk strategy simulator (readvanceable lines supported).
  * Bank-agnostic. No fees. Education-only.
@@ -87,13 +86,12 @@ function safeChunkAmount({
   let targetChunk: number;
   if (isArbitrage) {
     // Arbitrage mode: be aggressive, use most of available HELOC.
-    targetChunk = helocAvail * 0.9; // Use 90% of available.
+    targetChunk = helocAvail * 0.9; 
   } else if (fixedChunkAmount) {
     // Fixed mode: use the user's defined amount.
     targetChunk = fixedChunkAmount;
   } else {
     // Auto mode (standard): optimal chunk is often 3-6x the monthly surplus.
-    // This pays it down reasonably quickly without letting interest get out of hand.
     targetChunk = monthlySurplus * 4;
   }
 
@@ -154,15 +152,14 @@ export function simulate(inputs: Inputs): Outputs {
   let mortgageBal = inputs.mortgageBalance;
   const fixedPmt = inputs.monthlyMortgagePayment ?? base.fixedPmt;
 
-  // --- NEW LOGIC: Utilize existing cash ---
+  // Utilize existing cash for initial paydown
   const existingCash = (inputs.savings?.savings ?? 0) + (inputs.savings?.chequing ?? 0) + (inputs.savings?.shortTerm ?? 0);
   
   let helocBal = inputs.helocOpeningBalance ?? 0;
   
-  // Immediately use cash to pay down the mortgage if it's the higher interest debt,
-  // or pay down the HELOC if it's higher (or the only debt).
   let initialCashChunk = 0;
   if (existingCash > 0) {
+      // Pay down mortgage with cash first if it has higher rate, or pay down HELOC balance
       if (inputs.mortgageAPR > inputs.helocAPR && mortgageBal > 0) {
           const cashToMortgage = Math.min(existingCash, mortgageBal);
           mortgageBal -= cashToMortgage;
@@ -186,20 +183,18 @@ export function simulate(inputs: Inputs): Outputs {
   let months = 0;
   let firstChunkSize = 0;
   
-  if (initialCashChunk > 0) {
-      timeline.push({
-          month: 0,
-          mortgageBal: mortgageBal,
-          helocBal: helocBal,
-          mortgageInterestPaid: 0,
-          mortgagePrincipalPaid: 0,
-          helocInterest: 0,
-          mi: 0,
-          chunkApplied: initialCashChunk,
-          surplusUsed: 0,
-      });
-  }
-
+  // Month 0 represents the state after initial cash deployment
+  timeline.push({
+      month: 0,
+      mortgageBal: mortgageBal,
+      helocBal: helocBal,
+      mortgageInterestPaid: 0,
+      mortgagePrincipalPaid: 0,
+      helocInterest: 0,
+      mi: 0,
+      chunkApplied: initialCashChunk,
+      surplusUsed: 0,
+  });
 
   while ((mortgageBal > 0.01 || helocBal > 0.01) && months < maxMonths) {
     months++;
@@ -208,12 +203,12 @@ export function simulate(inputs: Inputs): Outputs {
     const { interest: mortInterest, principal: mortPrincipal, newBalance } = splitMortgagePayment(
       mortgageBal,
       inputs.mortgageAPR,
-      mortgageBal > 0 ? fixedPmt : 0 // once paid off, 0
+      mortgageBal > 0 ? fixedPmt : 0 
     );
     totalInterestMortgage += mortInterest;
     mortgageBal = newBalance;
 
-    // 2) MI only while LTV > 80%
+    // 2) MI calculation
     let thisMI = 0;
     if (inputs.homeValue && inputs.monthlyMI) {
       const ltv = (mortgageBal + helocBal) / inputs.homeValue;
@@ -221,11 +216,11 @@ export function simulate(inputs: Inputs): Outputs {
     }
     totalMI += thisMI;
 
-    // 3) Surplus: netIncome - livingExpenses - (mortgage payment + MI)
+    // 3) Calculate Surplus
     const mortgageOutflow = mortgageBal > 0 ? fixedPmt : 0; 
     const rawSurplus = inputs.netIncome - inputs.livingExpenses - mortgageOutflow - thisMI;
 
-    // 4) HELOC interest, then principal paydown from surplus
+    // 4) HELOC calculation
     const helocInterest = helocBal * ((inputs.helocAPR / 100) / 12);
     totalInterestHeloc += helocInterest;
     
@@ -251,21 +246,12 @@ export function simulate(inputs: Inputs): Outputs {
       });
 
       if (chunkApplied > 0) {
-        if (months === 1) firstChunkSize = chunkApplied;
+        if (firstChunkSize === 0) firstChunkSize = chunkApplied;
         mortgageBal -= chunkApplied;
         helocBal += chunkApplied;
       }
     }
     
-    // For readvanceable mortgages, check if equity increased
-    if (inputs.readvanceable && mortgageBal > 0) {
-        const principalPaidThisMonth = (mortgageBal > 0 ? fixedPmt : 0) - mortInterest;
-        if (principalPaidThisMonth > 0) {
-            // This is a simplification; real banks might have different rules.
-            // helocLimit += principalPaidThisMonth;
-        }
-    }
-
     timeline.push({
       month: months,
       mortgageBal: Math.max(0, mortgageBal),
@@ -279,24 +265,19 @@ export function simulate(inputs: Inputs): Outputs {
     });
   }
 
-  const stratMonths = months;
-  const stratInterest = totalInterestMortgage + totalInterestHeloc;
-
   const result: Outputs = {
-    months: stratMonths,
+    months,
     strategyType,
     optimalChunkSize: firstChunkSize,
     baseline: { months: base.months, totalInterest: base.totalInterest, totalMI: base.totalMI },
-    strategy: { months: stratMonths, totalInterest: stratInterest, totalMI },
+    strategy: { months, totalInterest: totalInterestMortgage + totalInterestHeloc, totalMI },
     totals: {
-      interestSaved: Math.max(0, (base.totalInterest) - stratInterest),
-      miSaved: Math.max(0, (base.totalMI) - totalMI),
-      monthsSaved: Math.max(0, base.months - stratMonths),
+      interestSaved: Math.max(0, base.totalInterest - (totalInterestMortgage + totalInterestHeloc)),
+      miSaved: Math.max(0, base.totalMI - totalMI),
+      monthsSaved: Math.max(0, base.months - months),
     },
     timeline,
   };
 
   return result;
 }
-
-    
