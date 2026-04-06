@@ -7,7 +7,7 @@ export type ProductPlan = {
 };
 
 // This object maps plan IDs from the URL to your Stripe Payment Links.
-// IMPORTANT: Replace the placeholder URLs with your actual Stripe Payment Links.
+// These are synced with the live site's production links.
 export const productPlans: Record<string, ProductPlan> = {
     'book_37_en': {
         name: 'How to Pay Off Your House in 5 Years',
@@ -19,25 +19,19 @@ export const productPlans: Record<string, ProductPlan> = {
         name: 'Ebook + Calculator Toolkit Trial',
         description: 'The eBook plus a 3-day trial of our premium calculator.',
         priceFormatted: '$38', // $37 for book + $1 for trial
-        paymentLink: 'https://buy.stripe.com/test_cN216R4CAdSWgb6002', // <-- REPLACE
+        paymentLink: 'https://buy.stripe.com/5kQ6oIbSI2Z74sm5DC00009', // Placeholder for upsell link
     },
     'book_37': {
         name: 'The Mortgage-Free Manifesto (eBook)',
         description: 'Instant digital access to the 220-page guide.',
         priceFormatted: '₹299',
-        paymentLink: 'https://buy.stripe.com/test_dR63f3fZd2Gg3AYbIK', // <-- REPLACE
+        paymentLink: 'https://buy.stripe.com/eVq6oIcWMdDL9MG7LK00008', // Using Hindi book link
     },
     'book_399': {
         name: 'Loan Killers - India’s Hidden EMI Secret',
         description: 'Instant digital access to the premium eBook.',
         priceFormatted: '₹399',
         paymentLink: 'https://buy.stripe.com/eVq6oIcWMdDL9MG7LK00008',
-    },
-    'book_37_plus_trial': {
-        name: 'eBook + Calculator Toolkit Trial',
-        description: 'The eBook plus a 3-day trial of our premium calculator.',
-        priceFormatted: '₹378', // ₹299 for book + ₹79 for trial
-        paymentLink: 'https://buy.stripe.com/test_28o5nb1gT8yO3AYdQU', // <-- REPLACE
     },
     'pro_297': {
         name: 'Mortgage Cutter Pro',
@@ -64,5 +58,3 @@ export const productPlans: Record<string, ProductPlan> = {
         paymentLink: 'https://buy.stripe.com/7sYaEY5ukarzgb45DC00005',
     },
 };
-
-    
