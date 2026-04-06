@@ -7,7 +7,7 @@ import { InterestCalc, AmortViz, PayoffRace } from '@/components/course/Calculat
 import { CourseCard, InfoBox, ExpandSection, StatBox, ChatBubble, TaskItem } from '@/components/course/UIComponents';
 import { TranslatedText } from '@/components/course/TranslatedText';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight, Home, CheckCircle2, Rocket, Landmark, ShieldAlert, GraduationCap, ArrowRight, UserCircle2, HomeIcon, Ghost, Timer } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Home, CheckCircle2, Rocket, Landmark, ShieldAlert, GraduationCap, ArrowRight, UserCircle2, HomeIcon, Ghost, Timer, Droplets, Waves, Zap, ShieldCheck } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 
@@ -81,7 +81,7 @@ function LessonContent({ id }: { id: number }) {
           <p className="text-[#5A6175] text-xl leading-relaxed">
             <TranslatedText>
               {id === 1 ? `Why the world's most popular financial product is actually a brilliantly disguised trap for your wealth.` : 
-               id === 2 ? `The day-by-day mechanics of ${country.productShort} in ${country.name}.` :
+               id === 2 ? `How to break the trap using the "Open System" logic that the wealthy have used for decades.` :
                id === 3 ? `The credit card offset trick, debt rolling, and cashflow boosters.` :
                id === 4 ? `The exact words to say, banks to call, and red flags to avoid.` :
                `Week-by-week roadmap to ${country.productShort} freedom in ${country.name}.`}
@@ -193,33 +193,131 @@ function LessonContent({ id }: { id: number }) {
         )}
 
         {id === 2 && (
-          <div className="space-y-8">
-            <CourseCard title="💡 The simple version (no jargon)">
-              <p><TranslatedText>{`Imagine you have a bathtub full of water. The water represents your home loan balance. With a traditional loan, you can only drain the tub by a tiny amount once a month. The rest of the time, the water level stays high and the daily interest fee stays high.`}</TranslatedText></p>
-              <p><TranslatedText>{`With a ${country.productShort}, you pour ALL your income into the tub on payday, instantly dropping the level. You scoop it back out to pay bills, but for most of the month, the level is LOWER. Over years, this saves a fortune.`}</TranslatedText></p>
-              <div className="mt-4 p-4 bg-emerald-50 border border-emerald-100 rounded-xl text-emerald-800 text-sm font-bold">
-                🎯 <TranslatedText>The magic isn't in the interest rate. It's in the DAILY RECALCULATION. Every dollar sitting in the account reduces the interest charged immediately.</TranslatedText>
+          <div className="space-y-12">
+            <section className="space-y-6">
+              <div className="flex items-center gap-3 text-2xl font-fraunces font-bold text-[#1A1D26]">
+                <Droplets className="text-blue-500 h-8 w-8" />
+                <h2><TranslatedText>The "Closed" vs. "Open" Concept</TranslatedText></h2>
               </div>
-            </CourseCard>
+              <p className="text-lg leading-relaxed text-[#5A6175]">
+                <TranslatedText>{`To understand how to pay off your home faster, you first have to understand that your current mortgage is a "Closed System". Your money goes in once a month, and it is locked away forever.`}</TranslatedText>
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <CourseCard className="border-red-100 bg-red-50/30">
+                  <div className="flex items-center gap-2 text-red-700 font-bold mb-2">
+                    <ShieldAlert className="h-5 w-5" />
+                    <TranslatedText>The Closed System (Traditional)</TranslatedText>
+                  </div>
+                  <p className="text-sm mb-4"><TranslatedText>{`Think of this like a Sealed Water Tank. You can only pour a tiny cup of water into the tank once a month. The rest of your money sits in a separate bucket (your checking account) doing nothing while the tank's water level (your debt) stays high.`}</TranslatedText></p>
+                  <ul className="text-xs space-y-2 text-red-800/70 font-medium">
+                    <li className="flex gap-2">❌ <TranslatedText>Savings sit idle while debt costs you money</TranslatedText></li>
+                    <li className="flex gap-2">❌ <TranslatedText>Interest is calculated on the full balance every month</TranslatedText></li>
+                    <li className="flex gap-2">❌ <TranslatedText>Lender controls the speed of payoff</TranslatedText></li>
+                  </ul>
+                </CourseCard>
+
+                <CourseCard className="border-emerald-100 bg-emerald-50/30">
+                  <div className="flex items-center gap-2 text-emerald-700 font-bold mb-2">
+                    <Zap className="h-5 w-5" />
+                    <TranslatedText>The Open System (Offset/HELOC)</TranslatedText>
+                  </div>
+                  <p className="text-sm mb-4"><TranslatedText>{`This is the "Bathtub" model. Your mortgage and your checking account are combined. Every dollar you earn flows into the tub immediately, dropping the water level (debt) instantly. You only pay for what's left in the tub each day.`}</TranslatedText></p>
+                  <ul className="text-xs space-y-2 text-emerald-800/70 font-medium">
+                    <li className="flex gap-2">✅ <TranslatedText>Every dollar works 24/7 to lower interest</TranslatedText></li>
+                    <li className="flex gap-2">✅ <TranslatedText>Interest is recalculated DAILY</TranslatedText></li>
+                    <li className="flex gap-2">✅ <TranslatedText>YOU control the speed of payoff</TranslatedText></li>
+                  </ul>
+                </CourseCard>
+              </div>
+            </section>
+
+            <section className="bg-slate-900 text-white p-8 rounded-[32px] space-y-6">
+              <h3 className="text-2xl font-fraunces font-bold flex items-center gap-3">
+                <UserCircle2 className="text-blue-400 h-7 w-7" />
+                <TranslatedText>A Day in the Life of the Open System</TranslatedText>
+              </h3>
+              <p className="text-slate-400 leading-relaxed">
+                <TranslatedText>{`Let's look at how Dave and Sarah's month changes when they switch to a ${country.productShort} in ${country.name}. They haven't earned an extra cent, but watch what happens to their interest.`}</TranslatedText>
+              </p>
+
+              <div className="space-y-4">
+                <div className="flex gap-4 items-start border-l-2 border-blue-500/30 pl-6 pb-6">
+                  <div className="bg-blue-500 h-8 w-8 rounded-full flex items-center justify-center shrink-0 font-bold text-sm">1</div>
+                  <div className="space-y-1">
+                    <p className="font-bold text-blue-400 uppercase text-xs tracking-widest"><TranslatedText>Payday</TranslatedText></p>
+                    <p className="text-sm text-slate-200"><TranslatedText>{`Dave deposits his ${formatCurrency(country.avgIncome / 2)} paycheck. In a traditional loan, this would sit in checking. Here, it goes straight against the ${country.productShort} balance. For the next two weeks, the bank charges Dave interest on ${formatCurrency(country.avgIncome / 2)} LESS than before.`}</TranslatedText></p>
+                  </div>
+                </div>
+                <div className="flex gap-4 items-start border-l-2 border-blue-500/30 pl-6 pb-6">
+                  <div className="bg-blue-500 h-8 w-8 rounded-full flex items-center justify-center shrink-0 font-bold text-sm">2</div>
+                  <div className="space-y-1">
+                    <p className="font-bold text-blue-400 uppercase text-xs tracking-widest"><TranslatedText>Expense Day</TranslatedText></p>
+                    <p className="text-sm text-slate-200"><TranslatedText>{`Sarah needs ${country.symbol}200 for groceries. She withdraws it from the ${country.productShort} (or linked account). The balance goes up slightly, but only for the remaining days of the month. She only paid interest on that ${country.symbol}200 for the days it was actually spent, not the whole month.`}</TranslatedText></p>
+                  </div>
+                </div>
+                <div className="flex gap-4 items-start border-l-2 border-blue-500/30 pl-6">
+                  <div className="bg-blue-500 h-8 w-8 rounded-full flex items-center justify-center shrink-0 font-bold text-sm">3</div>
+                  <div className="space-y-1">
+                    <p className="font-bold text-blue-400 uppercase text-xs tracking-widest"><TranslatedText>Month End</TranslatedText></p>
+                    <p className="text-sm text-slate-200"><TranslatedText>{`Because Dave and Sarah kept their "Idle Cash" inside the home loan account for an average of 15-20 days longer each month, the total interest charged is hundreds of dollars lower. This "saved interest" effectively becomes a principal payment, snowballing the payoff.`}</TranslatedText></p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <InfoBox title="🎯 The 'Magic' Mechanic" color="green">
+              <p className="font-bold"><TranslatedText>Daily Recalculation vs. Monthly Amortization</TranslatedText></p>
+              <p className="mt-2"><TranslatedText>{`In ${country.name}, banks typically calculate interest daily on the outstanding balance of a ${country.productShort}. This means every single dollar you have—your emergency fund, your vacation savings, your next grocery bill—is actively fighting your mortgage interest every minute it sits in your account.`}</TranslatedText></p>
+            </InfoBox>
+
             <PayoffRace />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-red-50 p-6 rounded-2xl border border-red-100 space-y-4">
-                <h4 className="font-fraunces font-black text-red-800"><TranslatedText>{`🔒 Traditional ${country.amortYears}-Year Loan`}</TranslatedText></h4>
-                <ul className="text-sm space-y-3 text-red-700">
-                  <li className="flex gap-2">❌ <TranslatedText>Money goes in monthly, never out</TranslatedText></li>
-                  <li className="flex gap-2">❌ <TranslatedText>Zero flexibility for emergencies</TranslatedText></li>
-                  <li className="flex gap-2">❌ <TranslatedText>Interest calculated on full balance monthly</TranslatedText></li>
-                </ul>
+
+            <section className="space-y-8">
+              <div className="text-center space-y-2">
+                <h2 className="text-3xl font-fraunces font-bold text-[#1A1D26]"><TranslatedText>{`Why the Rate Doesn't Matter (As Much)`}</TranslatedText></h2>
+                <p className="text-[#5A6175]"><TranslatedText>{`One of the biggest fears people have is switching from a lower fixed rate to a slightly higher variable rate ${country.productShort}. Let's look at the math.`}</TranslatedText></p>
               </div>
-              <div className="bg-emerald-50 p-6 rounded-2xl border border-emerald-100 space-y-4">
-                <h4 className="font-fraunces font-black text-emerald-800"><TranslatedText>{`🔓 ${country.productName}`}</TranslatedText></h4>
-                <ul className="text-sm space-y-3 text-emerald-700">
-                  <li className="flex gap-2">✅ <TranslatedText>Money flows freely in AND out</TranslatedText></li>
-                  <li className="flex gap-2">✅ <TranslatedText>Full liquidity for opportunities</TranslatedText></li>
-                  <li className="flex gap-2">✅ <TranslatedText>Interest recalculated DAILY</TranslatedText></li>
-                </ul>
+
+              <CourseCard className="border-amber-100 bg-amber-50/20">
+                <div className="flex items-start gap-4">
+                  <div className="bg-amber-100 p-3 rounded-xl shrink-0">
+                    <Zap className="h-6 w-6 text-amber-600" />
+                  </div>
+                  <div className="space-y-3">
+                    <h4 className="font-bold text-lg text-amber-900"><TranslatedText>The 1% Myth</TranslatedText></h4>
+                    <p className="text-sm text-amber-800 leading-relaxed"><TranslatedText>{`If a traditional loan is 5% and a ${country.productShort} is 6%, most people think the 5% is better. But remember: you pay 5% on the FULL balance for 30 days. In the ${country.productShort}, you might pay 6%, but because your paycheck dropped the balance, you are paying 6% on a MUCH SMALLER NUMBER.`}</TranslatedText></p>
+                    <p className="text-sm font-bold text-amber-900"><TranslatedText>{`Example: 5% of ${country.symbol}500,000 is ${formatCurrency(2083)} in monthly interest. But 6% of ${country.symbol}450,000 (after your paycheck/savings are offset) is only ${formatCurrency(2250)}. As your savings grow, the higher rate actually costs you LESS total dollars than the lower fixed rate.`}</TranslatedText></p>
+                  </div>
+                </div>
+              </CourseCard>
+            </section>
+
+            <section className="space-y-6">
+              <div className="flex items-center gap-3 text-2xl font-fraunces font-bold text-[#1A1D26]">
+                <ShieldCheck className="text-green-500 h-8 w-8" />
+                <h2><TranslatedText>Safety & Liquidity</TranslatedText></h2>
               </div>
-            </div>
+              <p className="text-[#5A6175]"><TranslatedText>{`The best part? You aren't "spending" your money to pay off the house. You are "parking" it. If you have an emergency tomorrow, you can simply withdraw that money back out. It's the only system where you can be debt-free and cash-rich at the same time.`}</TranslatedText></p>
+              
+              <div className="bg-emerald-50 p-6 rounded-2xl border border-emerald-100">
+                <h4 className="font-bold text-emerald-900 mb-2"><TranslatedText>The Financial Peace of Mind</TranslatedText></h4>
+                <p className="text-sm text-emerald-800"><TranslatedText>{`Most people are "House Poor"—they have equity in their home but ${country.symbol}0 in the bank. If they lose their job, they can't eat their kitchen cabinets. In the Open System, your home equity IS your bank account. You have access to your money 24/7.`}</TranslatedText></p>
+              </div>
+            </section>
+
+            <section className="bg-gradient-to-br from-blue-600 to-indigo-700 p-10 rounded-[32px] text-white text-center space-y-6 shadow-2xl">
+              <div className="inline-flex items-center gap-2 px-4 py-1 bg-white/20 text-white rounded-full text-xs font-bold uppercase tracking-widest backdrop-blur-md">
+                <CheckCircle2 className="h-3 w-3" />
+                <TranslatedText>End of Lesson 2</TranslatedText>
+              </div>
+              <h3 className="text-3xl font-fraunces font-black"><TranslatedText>Ready to Turbocharge?</TranslatedText></h3>
+              <p className="opacity-90 max-w-md mx-auto text-lg"><TranslatedText>You've seen the engine. Now it's time to add the fuel. In Lesson 3, we reveal the "Credit Card Trick" and other advanced strategies to cut even more years off your term.</TranslatedText></p>
+              <button className="bg-white text-blue-600 hover:bg-slate-50 font-bold px-8 py-4 rounded-2xl text-lg group flex items-center gap-2 mx-auto transition-all" onClick={nextLesson}>
+                <TranslatedText>Unlock Turbo Strategies</TranslatedText>
+                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </section>
           </div>
         )}
 
@@ -361,13 +459,15 @@ function LessonContent({ id }: { id: number }) {
             <ChevronLeft className="h-5 w-5" />
             <TranslatedText>Previous</TranslatedText>
           </button>
-          <button 
-            onClick={nextLesson}
-            className="group flex items-center gap-2 bg-[#2563EB] text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-600 transition-all active:scale-95"
-          >
-            <TranslatedText>{id === 5 ? "Finish Course" : "Next Lesson"}</TranslatedText>
-            <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-          </button>
+          {id !== 2 && (
+            <button 
+              onClick={nextLesson}
+              className="group flex items-center gap-2 bg-[#2563EB] text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-600 transition-all active:scale-95"
+            >
+              <TranslatedText>{id === 5 ? "Finish Course" : "Next Lesson"}</TranslatedText>
+              <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </button>
+          )}
         </div>
 
       </div>
