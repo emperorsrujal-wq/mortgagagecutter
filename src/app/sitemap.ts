@@ -1,3 +1,4 @@
+
 import { MetadataRoute } from 'next';
 import { blogPosts } from '@/lib/blog-posts';
 
@@ -50,6 +51,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${siteUrl}/purchase`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.7,
+    },
+    {
+      url: `${siteUrl}/book-sales`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.8,
+    },
+    {
+      url: `${siteUrl}/book-sales/hindi`,
       lastModified: new Date(),
       changeFrequency: 'yearly',
       priority: 0.7,

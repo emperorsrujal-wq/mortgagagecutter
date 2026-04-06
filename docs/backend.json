@@ -52,59 +52,26 @@
       },
       "required": ["to", "message"]
     },
-    "MortgageQuestionnaireResponse": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "MortgageQuestionnaireResponse",
+    "BankScreenerResponse": {
+      "title": "BankScreenerResponse",
+      "description": "Stored data from the HELOC Bank Screener questionnaire.",
       "type": "object",
-      "description": "Represents a user's response to the mortgage questionnaire.",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the questionnaire response."
-        },
-        "leadId": {
-          "type": "string",
-          "description": "Reference to the Lead who submitted the questionnaire. (Relationship: Lead 1:1 MortgageQuestionnaireResponse)"
-        },
-        "currentMortgageBalance": {
-          "type": "number",
-          "description": "The user's current mortgage balance."
-        },
-        "currentInterestRate": {
-          "type": "number",
-          "description": "The user's current interest rate."
-        },
-        "originalLoanAmount": {
-          "type": "number",
-          "description": "The original loan amount."
-        },
-        "loanTerm": {
-          "type": "number",
-          "description": "The loan term in years."
-        },
-        "monthlyMortgagePayment": {
-          "type": "number",
-          "description": "The user's monthly mortgage payment (principal & interest)."
-        },
-        "yearsInHome": {
-          "type": "number",
-          "description": "Number of years the user has been in their home."
-        },
-        "estimatedHomeValue": {
-          "type": "number",
-          "description": "Estimated home value (optional)."
-        }
-      },
-      "required": [
-        "id",
-        "leadId",
-        "currentMortgageBalance",
-        "currentInterestRate",
-        "originalLoanAmount",
-        "loanTerm",
-        "monthlyMortgagePayment",
-        "yearsInHome"
-      ]
+        "userId": { "type": "string" },
+        "bankName": { "type": "string" },
+        "formData": { "type": "object" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "ChunkerState": {
+      "title": "ChunkerState",
+      "description": "Saved inputs for the HELOC-Assist Chunker Estimator.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "inputs": { "type": "object" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
     }
   },
   "auth": {
@@ -136,8 +103,24 @@
           },
           "description": "Collection for triggering outgoing emails."
         }
+      },
+      {
+        "path": "/leads/{leadId}/bankScreeners/{screenerId}",
+        "definition": {
+          "entityName": "BankScreenerResponse",
+          "schema": { "$ref": "#/backend/entities/BankScreenerResponse" },
+          "description": "User's saved bank screener data."
+        }
+      },
+      {
+        "path": "/leads/{leadId}/chunkerStates/{stateId}",
+        "definition": {
+          "entityName": "ChunkerState",
+          "schema": { "$ref": "#/backend/entities/ChunkerState" },
+          "description": "User's saved chunker estimator inputs."
+        }
       }
     ],
-    "reasoning": "Standard structure for lead capture and email automation."
+    "reasoning": "Standard structure for lead capture and personalized member tools."
   }
 }
