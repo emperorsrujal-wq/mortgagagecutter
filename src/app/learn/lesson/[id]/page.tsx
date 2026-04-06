@@ -7,7 +7,7 @@ import { InterestCalc, AmortViz, PayoffRace } from '@/components/course/Calculat
 import { CourseCard, InfoBox, ExpandSection, StatBox, ChatBubble, TaskItem } from '@/components/course/UIComponents';
 import { TranslatedText } from '@/components/course/TranslatedText';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight, Home, CheckCircle2, Rocket, Landmark, ShieldAlert, GraduationCap, ArrowRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Home, CheckCircle2, Rocket, Landmark, ShieldAlert, GraduationCap, ArrowRight, UserCircle2, HomeIcon, Ghost, Timer } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 
@@ -52,13 +52,15 @@ function LessonContent({ id }: { id: number }) {
     else router.push('/learn');
   };
 
+  const formatCurrency = (val: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: country.currency, maximumFractionDigits: 0 }).format(val);
+
   return (
     <div className="min-h-screen bg-[#FAFBFD] font-dm-sans pb-24">
       <ProgressBar current={id} />
       
       <div className="max-w-[720px] mx-auto px-4 py-12 space-y-10">
         
-        <header className="space-y-2">
+        <header className="space-y-4">
           <div className="flex items-center justify-between mb-4">
             <span className="text-xs font-black uppercase tracking-widest text-slate-400 px-3 py-1 bg-slate-100 rounded-full">
               {country.flag} {country.name}
@@ -73,12 +75,12 @@ function LessonContent({ id }: { id: number }) {
               ))}
             </select>
           </div>
-          <h1 className="text-3xl md:text-4xl font-fraunces font-black text-[#1A1D26] leading-tight">
+          <h1 className="text-4xl md:text-5xl font-fraunces font-black text-[#1A1D26] leading-tight">
             <TranslatedText>{meta.title}</TranslatedText>
           </h1>
-          <p className="text-[#5A6175] text-lg">
+          <p className="text-[#5A6175] text-xl leading-relaxed">
             <TranslatedText>
-              {id === 1 ? `What your ${country.name} lender hopes you'll never calculate.` : 
+              {id === 1 ? `Why the world's most popular financial product is actually a brilliantly disguised trap for your wealth.` : 
                id === 2 ? `The day-by-day mechanics of ${country.productShort} in ${country.name}.` :
                id === 3 ? `The credit card offset trick, debt rolling, and cashflow boosters.` :
                id === 4 ? `The exact words to say, banks to call, and red flags to avoid.` :
@@ -88,36 +90,105 @@ function LessonContent({ id }: { id: number }) {
         </header>
 
         {id === 1 && (
-          <div className="space-y-8">
-            <CourseCard title="🍽️ Imagine walking into a restaurant...">
-              <p><TranslatedText>{`The menu says a steak costs ${country.symbol}50. You order it. The waiter smiles and says: "That'll be ${country.symbol}97, please." You'd walk out, right?`}</TranslatedText></p>
-              <p><TranslatedText>{`But this is EXACTLY what happens with a traditional home loan. You borrow ${new Intl.NumberFormat('en-US', { style: 'currency', currency: country.currency }).format(country.avgHome)} to buy a home. By the time you finish paying, you've paid nearly DOUBLE that amount.`}</TranslatedText></p>
+          <div className="space-y-12">
+            <CourseCard title="🍽️ The Hidden Menu Problem">
+              <p className="text-lg"><TranslatedText>{`Imagine Dave and Sarah walk into a restaurant. The menu says a steak costs ${country.symbol}50. They enjoy the meal, but when the bill arrives, it says: "${country.symbol}97.00".`}</TranslatedText></p>
+              <p><TranslatedText>{`Confused, Dave asks the waiter why it's so high. The waiter smiles and says: "Well, we charged you interest on that steak every minute it sat on your plate. Plus, we charged you a fee for the plate, and a fee for the waiter's shoes."`}</TranslatedText></p>
+              <p className="font-bold text-[#1A1D26]"><TranslatedText>{`You'd walk out, right? But this is EXACTLY what happens with your ${country.name} home loan.`}</TranslatedText></p>
+              <InfoBox title="The Reality" color="red">
+                <TranslatedText>{`You borrow ${formatCurrency(country.avgHome)} to buy a home. By the time you finish paying, you've paid nearly DOUBLE that amount. The bank didn't build the house, paint the walls, or mow the lawn — but they made more profit from it than the person who built it.`}</TranslatedText>
+              </InfoBox>
             </CourseCard>
-            <InterestCalc />
-            <CourseCard title="📊 Where does your monthly payment actually go?">
-              <p><TranslatedText>{`Here's the part that shocks everyone: your monthly payment stays the same for ${country.amortYears} years. But in the early years, about 80 to 90 cents of every dollar goes to INTEREST — not to actually paying off your home. The lender gets fed first.`}</TranslatedText></p>
-            </CourseCard>
-            <AmortViz />
-            <CourseCard title={`${country.flag} How ${country.productShort} is different in ${country.name}`}>
-              <p><TranslatedText>{country.howItWorks}</TranslatedText></p>
-              <div className="space-y-4 pt-4">
-                <InfoBox title="Analogy" color="blue">{country.analogy}</InfoBox>
-                <InfoBox title={`Tax rules in ${country.name}`} color="amber">{country.taxRule}</InfoBox>
-                <InfoBox title="Qualification / Stress test" color="purple">{country.stressTest}</InfoBox>
-                <InfoBox title={`Why ${country.name} is special`} color="green">{country.uniqueInfo}</InfoBox>
+
+            <section className="space-y-6">
+              <div className="flex items-center gap-3 text-2xl font-fraunces font-bold text-[#1A1D26]">
+                <HomeIcon className="text-blue-500 h-8 w-8" />
+                <h2><TranslatedText>The Tale of Two Houses</TranslatedText></h2>
               </div>
-            </CourseCard>
-            <CourseCard title={`🏦 ${country.name} Products Available`}>
-              {country.products.map((p, i) => (
-                <ExpandSection key={i} title={p.name}>{p.desc}</ExpandSection>
-              ))}
-              <div className="pt-4">
-                <p className="text-xs font-bold uppercase text-slate-400 mb-3"><TranslatedText>{`Banks offering ${country.productShort} in ${country.name}:`}</TranslatedText></p>
-                <div className="flex flex-wrap gap-2">
-                  {country.banks.map(b => <span key={b} className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-bold">{b}</span>)}
+              <p className="text-[#5A6175]"><TranslatedText>{`When you sign a traditional ${country.amortYears}-year mortgage, you aren't just buying one house. You're actually buying TWO.`}</TranslatedText></p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-3">
+                  <div className="h-12 w-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 mb-2">
+                    <HomeIcon className="h-6 w-6" />
+                  </div>
+                  <h4 className="font-bold text-[#1A1D26]"><TranslatedText>House #1: Yours</TranslatedText></h4>
+                  <p className="text-sm text-[#5A6175]"><TranslatedText>{`This is the one you live in. You pay the principal to eventually own this brick and mortar.`}</TranslatedText></p>
+                </div>
+                <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-3">
+                  <div className="h-12 w-12 bg-red-100 rounded-full flex items-center justify-center text-red-600 mb-2">
+                    <Ghost className="h-6 w-6" />
+                  </div>
+                  <h4 className="font-bold text-[#1A1D26]"><TranslatedText>House #2: The Bank's</TranslatedText></h4>
+                  <p className="text-sm text-[#5A6175]"><TranslatedText>{`This is the "Invisible House" built entirely of your interest payments. It's the pure profit the bank gets for letting you buy House #1.`}</TranslatedText></p>
                 </div>
               </div>
-            </CourseCard>
+            </section>
+
+            <InterestCalc />
+
+            <section className="space-y-6">
+              <div className="flex items-center gap-3 text-2xl font-fraunces font-bold text-[#1A1D26]">
+                <ShieldAlert className="text-red-500 h-8 w-8" />
+                <h2><TranslatedText>The Secret of "Front-Loading"</TranslatedText></h2>
+              </div>
+              <p className="text-[#5A6175]"><TranslatedText>{`Why does it feel like your balance never drops? Because banks are smart. They don't take their profit evenly over ${country.amortYears} years. They take it all AT THE START.`}</TranslatedText></p>
+              
+              <CourseCard className="bg-slate-900 text-white border-none">
+                <div className="flex items-start gap-4">
+                  <div className="bg-blue-500/20 p-3 rounded-xl">
+                    <Timer className="h-6 w-6 text-blue-400" />
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="font-bold text-lg"><TranslatedText>The "19-Year Trap"</TranslatedText></h4>
+                    <p className="text-slate-400 text-sm leading-relaxed"><TranslatedText>{`On a 30-year loan, it takes nearly 19 years before your monthly payment actually starts paying off more principal than interest. For almost two decades, you are mostly just feeding the bank's profit machine.`}</TranslatedText></p>
+                  </div>
+                </div>
+              </CourseCard>
+            </section>
+
+            <AmortViz />
+
+            <section className="space-y-8">
+              <div className="text-center space-y-2">
+                <h2 className="text-3xl font-fraunces font-bold text-[#1A1D26]"><TranslatedText>{`The ${country.name} Specific Context`}</TranslatedText></h2>
+                <p className="text-[#5A6175]"><TranslatedText>{`Every country has its own version of this trap. Here is how it's rigged where you live.`}</TranslatedText></p>
+              </div>
+
+              <div className="space-y-4">
+                <CourseCard title={`${country.flag} How ${country.productShort} is different in ${country.name}`}>
+                  <p><TranslatedText>{country.howItWorks}</TranslatedText></p>
+                  <div className="space-y-4 pt-4">
+                    <InfoBox title="Analogy" color="blue">{country.analogy}</InfoBox>
+                    <InfoBox title={`Tax rules in ${country.name}`} color="amber">{country.taxRule}</InfoBox>
+                    <InfoBox title="Qualification / Stress test" color="purple">{country.stressTest}</InfoBox>
+                    <InfoBox title={`Why ${country.name} is special`} color="green">{country.uniqueInfo}</InfoBox>
+                  </div>
+                </CourseCard>
+
+                <CourseCard title={`🏦 ${country.name} Products Available`}>
+                  <p className="mb-4 text-sm text-muted-foreground"><TranslatedText>{`These are the actual bank products in ${country.name} that allow you to escape the standard trap.`}</TranslatedText></p>
+                  {country.products.map((p, i) => (
+                    <ExpandSection key={i} title={p.name}>{p.desc}</ExpandSection>
+                  ))}
+                  <div className="pt-4">
+                    <p className="text-xs font-bold uppercase text-slate-400 mb-3"><TranslatedText>{`Banks offering ${country.productShort} in ${country.name}:`}</TranslatedText></p>
+                    <div className="flex flex-wrap gap-2">
+                      {country.banks.map(b => <span key={b} className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-bold">{b}</span>)}
+                    </div>
+                  </div>
+                </CourseCard>
+              </div>
+            </section>
+
+            <section className="bg-gradient-to-br from-slate-50 to-blue-50 p-8 rounded-[32px] border border-blue-100 text-center space-y-6">
+              <div className="inline-flex items-center gap-2 px-4 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold uppercase tracking-widest">
+                <CheckCircle2 className="h-3 w-3" />
+                <TranslatedText>End of Lesson 1</TranslatedText>
+              </div>
+              <h3 className="text-2xl font-fraunces font-bold text-[#1A1D26]"><TranslatedText>Ready to see the "Open System"?</TranslatedText></h3>
+              <p className="text-[#5A6175] max-w-md mx-auto"><TranslatedText>Now that you've seen the trap, it's time to see the exit strategy. In the next lesson, we reveal the "Bathtub" method that saves thousands.</TranslatedText></p>
+            </section>
           </div>
         )}
 
@@ -274,12 +345,10 @@ function LessonContent({ id }: { id: number }) {
                 <h2 className="text-3xl font-fraunces font-black"><TranslatedText>Congratulations, Graduate!</TranslatedText></h2>
                 <p className="opacity-90 max-w-md mx-auto"><TranslatedText>You now have the knowledge to beat the bank at their own game. Your journey to true ownership starts today.</TranslatedText></p>
               </div>
-              <Button asChild size="lg" className="bg-white text-[#2563EB] hover:bg-slate-50 font-bold px-8 py-7 rounded-2xl text-lg group">
-                <Link href="/">
-                  <TranslatedText>Get My Free Savings Blueprint</TranslatedText>
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
+              <button className="bg-white text-[#2563EB] hover:bg-slate-50 font-bold px-8 py-4 rounded-2xl text-lg group flex items-center gap-2 mx-auto transition-all" onClick={() => router.push('/')}>
+                <TranslatedText>Get My Free Savings Blueprint</TranslatedText>
+                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </button>
             </div>
           </div>
         )}
