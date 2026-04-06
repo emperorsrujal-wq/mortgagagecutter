@@ -7,7 +7,30 @@ import { InterestCalc, AmortViz, PayoffRace } from '@/components/course/Calculat
 import { CourseCard, InfoBox, ExpandSection, StatBox, ChatBubble, TaskItem } from '@/components/course/UIComponents';
 import { TranslatedText } from '@/components/course/TranslatedText';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight, Home, CheckCircle2, Rocket, Landmark, ShieldAlert, GraduationCap, ArrowRight, UserCircle2, HomeIcon, Ghost, Timer, Droplets, Waves, Zap, ShieldCheck } from 'lucide-react';
+import { 
+  ChevronLeft, 
+  ChevronRight, 
+  Home, 
+  CheckCircle2, 
+  Rocket, 
+  Landmark, 
+  ShieldAlert, 
+  GraduationCap, 
+  ArrowRight, 
+  UserCircle2, 
+  HomeIcon, 
+  Ghost, 
+  Timer, 
+  Droplets, 
+  Waves, 
+  Zap, 
+  ShieldCheck,
+  CreditCard,
+  Activity,
+  TrendingUp,
+  PiggyBank,
+  Flame
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 
@@ -322,28 +345,146 @@ function LessonContent({ id }: { id: number }) {
         )}
 
         {id === 3 && (
-          <div className="space-y-8">
-            <CourseCard title="🚀 Strategy 1: The Credit Card Offset (~20% Faster)">
-              <p><TranslatedText>{`This is the ultimate "double job" for your money. You route all your spending through a 0% interest credit card. You keep your entire income inside your ${country.productShort} for an extra 25-30 days.`}</TranslatedText></p>
-              <p><TranslatedText>{`Then, on the last possible day, you pay off the credit card from the ${country.productShort}. This keeps your loan balance lower for longer every month, nuking interest 24/7.`}</TranslatedText></p>
-              <InfoBox title="Analogy" color="blue">Your money gets to work TWO jobs simultaneously. Job 1: Lowering your mortgage interest. Job 2: Paying for your groceries.</InfoBox>
-              <div className="p-4 bg-amber-50 border border-amber-100 rounded-xl text-amber-800 text-sm italic">
-                ⚠️ <TranslatedText>Warning: Only use this if you pay your card in FULL every month. Use 0% interest grace periods only. Keep utilization under 30%.</TranslatedText>
+          <div className="space-y-12">
+            <section className="space-y-6">
+              <div className="flex items-center gap-3 text-2xl font-fraunces font-bold text-[#1A1D26]">
+                <Activity className="text-pink-500 h-8 w-8" />
+                <h2><TranslatedText>The Principle of "Financial Velocity"</TranslatedText></h2>
               </div>
-            </CourseCard>
+              <p className="text-lg leading-relaxed text-[#5A6175]">
+                <TranslatedText>{`In physics, velocity is speed in a specific direction. In the Mortgage Cutter method, velocity is the speed at which your income hits your principal. Now that you have the "Open System" (the engine), it's time to add the "Turbo" (strategies that increase velocity).`}</TranslatedText>
+              </p>
+              
+              <CourseCard className="border-pink-100 bg-pink-50/20">
+                <h4 className="font-bold text-pink-900 mb-2 flex items-center gap-2">
+                  <Flame className="h-5 w-5 text-pink-600" /> <TranslatedText>The "Double Job" for Your Money</TranslatedText>
+                </h4>
+                <p className="text-sm text-pink-800 leading-relaxed">
+                  <TranslatedText>{`Usually, your money has one job: buy things. But in Lesson 3, we teach your money to do TWO jobs at once. Job 1: Pay for your groceries. Job 2: Lower your mortgage interest 24/7 while it's waiting to be spent.`}</TranslatedText>
+                </p>
+              </CourseCard>
+            </section>
 
-            <CourseCard title="🔄 Strategy 2: Debt Rolling">
-              <p><TranslatedText>{`Got a car loan at 8%? Or credit cards at 20%? Roll them into your ${country.productShort}. Why? Because your ${country.productShort} rate is almost certainly lower, and the daily interest mechanic means you pay it off exponentially faster than an installment loan.`}</TranslatedText></p>
-              <InfoBox title={`Tax Tip for ${country.name}`} color="purple">{country.taxRule}</InfoBox>
-            </CourseCard>
+            <section className="space-y-8">
+              <div className="flex items-center gap-3 text-2xl font-fraunces font-bold text-[#1A1D26]">
+                <CreditCard className="text-blue-500 h-8 w-8" />
+                <h2><TranslatedText>Strategy 1: The Credit Card Offset (The 30-Day Float)</TranslatedText></h2>
+              </div>
+              <p className="text-[#5A6175]">
+                <TranslatedText>{`This is the ultimate "turbo" for the ${country.productShort} method. It allows you to keep your money inside your home loan for up to 30 days longer than normal, nuking interest every single hour.`}</TranslatedText>
+              </p>
 
-            <CourseCard title="💰 9 Cashflow Boosters">
-              <ExpandSection title="🍳 Cook at Home (~$3,500/yr per person)">The average restaurant markup is 300%. Cutting one meal out a week saves thousands in principal interest over 5 years.</ExpandSection>
-              <ExpandSection title="🚗 Buy 2+ Year Old Cars (~$9,600 every 8 years)">Avoid the 20% "off-the-lot" depreciation. That money stays in your account lowering interest every day.</ExpandSection>
-              <ExpandSection title="💳 0% Cashback Cards (~$1,500/yr)">Use the rewards to hit your principal. It's free money the bank is giving you back.</ExpandSection>
-              <ExpandSection title="🌡️ Smart Thermostat (~$300/yr)">Automate your savings. Small monthly wins add up to months off your mortgage.</ExpandSection>
-              <ExpandSection title="🏛️ Tax Optimization ($5,000-15,000+/yr)">Ensure you are claiming every deduction. In many regions, this alone can pay off your home 2 years sooner.</ExpandSection>
-            </CourseCard>
+              <div className="space-y-4">
+                <div className="bg-white p-6 rounded-2xl border border-slate-100 space-y-4">
+                  <h4 className="font-bold text-[#1A1D26] uppercase text-xs tracking-widest text-blue-600"><TranslatedText>How it works step-by-step</TranslatedText></h4>
+                  <ol className="space-y-4">
+                    <li className="flex gap-4">
+                      <div className="h-6 w-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center shrink-0 font-bold text-xs">1</div>
+                      <p className="text-sm text-[#5A6175]"><TranslatedText>{`Deposit your entire income into your ${country.productShort}. This instantly drops the balance and stops the bank from charging you interest on that amount.`}</TranslatedText></p>
+                    </li>
+                    <li className="flex gap-4">
+                      <div className="h-6 w-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center shrink-0 font-bold text-xs">2</div>
+                      <p className="text-sm text-[#5A6175]"><TranslatedText>{`Pay for EVERYTHING (groceries, gas, bills) with a 0% interest credit card. DO NOT touch the money in your ${country.productShort}.`}</TranslatedText></p>
+                    </li>
+                    <li className="flex gap-4">
+                      <div className="h-6 w-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center shrink-0 font-bold text-xs">3</div>
+                      <p className="text-sm text-[#5A6175]"><TranslatedText>{`Wait 25-30 days. Your income has been sitting in your ${country.productShort} the entire time, saving you interest at the "daily rate".`}</TranslatedText></p>
+                    </li>
+                    <li className="flex gap-4">
+                      <div className="h-6 w-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center shrink-0 font-bold text-xs">4</div>
+                      <p className="text-sm text-[#5A6175]"><TranslatedText>{`On the last day of the card's grace period, pay the FULL card balance from the ${country.productShort}. You used the bank's money for free for 30 days while your own money was fighting your mortgage.`}</TranslatedText></p>
+                    </li>
+                  </ol>
+                </div>
+
+                <InfoBox title="The "Float" Math" color="blue">
+                  <TranslatedText>{`If you spend ${country.symbol}3,000/month, and keep that ${country.symbol}3,000 in your ${country.productShort} for an extra 30 days using this trick, you avoid paying interest on ${country.symbol}3,000 every single day. Over a year, this simple "float" can shave another 6-12 months off your term with zero extra income.`}</TranslatedText>
+                </InfoBox>
+
+                <div className="p-4 bg-amber-50 border border-amber-100 rounded-xl text-amber-800 text-sm flex gap-3">
+                  <ShieldAlert className="h-5 w-5 shrink-0" />
+                  <p><strong><TranslatedText>Strict Rule:</TranslatedText></strong> <TranslatedText>Only use this if you pay your card in FULL every month. Use 0% interest grace periods only. If you carry a balance on the card, the 20% interest will wipe out all your mortgage savings.</TranslatedText></p>
+                </div>
+              </div>
+            </section>
+
+            <section className="space-y-8">
+              <div className="flex items-center gap-3 text-2xl font-fraunces font-bold text-[#1A1D26]">
+                <Activity className="text-indigo-500 h-8 w-8" />
+                <h2><TranslatedText>Strategy 2: The "Debt Consolidation Engine"</TranslatedText></h2>
+              </div>
+              <p className="text-[#5A6175]">
+                <TranslatedText>{`Most financial advice says: "Don't add to your mortgage." We say: "Use the Open System to swallow high-interest debt and nuke it."`}</TranslatedText>
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <CourseCard className="border-slate-100 shadow-none bg-slate-50/50">
+                  <h4 className="font-bold text-[#1A1D26] mb-2"><TranslatedText>The Installment Trap</TranslatedText></h4>
+                  <p className="text-xs text-[#5A6175] leading-relaxed"><TranslatedText>{`A car loan at 8% or a credit card at 20% is a "Closed System". Your monthly payment is high, and you can't reuse the principal you pay back. You are trapped in two separate amortization schedules.`}</TranslatedText></p>
+                </CourseCard>
+                <CourseCard className="border-indigo-100 shadow-none bg-indigo-50/30">
+                  <h4 className="font-bold text-indigo-900 mb-2"><TranslatedText>The Open System Escape</TranslatedText></h4>
+                  <p className="text-xs text-indigo-800 leading-relaxed"><TranslatedText>{`When you roll that 8% car loan into a 6.5% ${country.productShort}, you do two things: 1) Lower the rate. 2) Apply the daily interest mechanic. Because your paycheck hits the total balance every day, you pay off that "car portion" of the loan 3-4x faster than the original loan.`}</TranslatedText></p>
+                </CourseCard>
+              </div>
+
+              <InfoBox title={`Tax Optimization in ${country.name}`} color="purple">
+                {country.taxRule}
+              </InfoBox>
+            </section>
+
+            <section className="space-y-8">
+              <div className="flex items-center gap-3 text-2xl font-fraunces font-bold text-[#1A1D26]">
+                <TrendingUp className="text-green-500 h-8 w-8" />
+                <h2><TranslatedText>Strategy 3: 9 High-Impact Cashflow Boosters</TranslatedText></h2>
+              </div>
+              <p className="text-[#5A6175]">
+                <TranslatedText>{`Every ${country.symbol}1 you save in expenses doesn't just save you ${country.symbol}1. Because of the daily interest multiplier, that ${country.symbol}1 might save you ${country.symbol}3.20 in future interest. Here are 9 ways to find that extra fuel.`}</TranslatedText>
+              </p>
+
+              <div className="space-y-3">
+                <ExpandSection title="🍳 Cook at Home (~$3,500/yr per person)">
+                  <TranslatedText>{`The average restaurant markup is 300%. By cutting out just TWO meals out per week, you find extra cash flow that hits your principal every day. Over 5 years, this one habit change can shave 4 months off your mortgage.`}</TranslatedText>
+                </ExpandSection>
+                <ExpandSection title="🚗 Buy 2+ Year Old Cars (~$9,600 every 8 years)">
+                  <TranslatedText>{`Avoid the 20% "off-the-lot" depreciation. That money stays in your ${country.productShort} lowering interest every day. A new car is an interest-bearing liability; a used car is a wealth-building tool.`}</TranslatedText>
+                </ExpandSection>
+                <ExpandSection title="💳 0% Cashback Cards (~$1,500/yr)">
+                  <TranslatedText>{`Use the rewards to hit your principal. It's free money the bank is giving you back. If you use the Offset trick, your card rewards effectively become a "negative interest rate" booster.`}</TranslatedText>
+                </ExpandSection>
+                <ExpandSection title="🌡️ Smart Thermostat (~$300/yr)">
+                  <TranslatedText>{`Automate your savings. Small monthly wins add up to months off your mortgage. Every dollar not spent on heating is a dollar fighting your principal.`}</TranslatedText>
+                </ExpandSection>
+                <ExpandSection title="🏛️ Tax Optimization ($5,000-15,000+/yr)">
+                  <TranslatedText>{`Ensure you are claiming every deduction. In many regions, redirecting your tax refund directly into the ${country.productShort} on Day 1 creates a massive "principal shock" that nukes future interest.`}</TranslatedText>
+                </ExpandSection>
+                <ExpandSection title="🔄 Subscription Audit (~$600/yr)">
+                  <TranslatedText>{`We find the average member has 3 unused subscriptions. Cancelling them increases your monthly surplus, which is the "fuel" for your acceleration engine.`}</TranslatedText>
+                </ExpandSection>
+                <ExpandSection title="🛒 Bulk Buying Non-Perishables (~$1,200/yr)">
+                  <TranslatedText>{`Buying items you use anyway (toilet paper, rice, etc.) at 20% discounts from bulk stores increases your monthly "surplus cashflow".`}</TranslatedText>
+                </ExpandSection>
+                <ExpandSection title="🛡️ Insurance Shopping (~$800/yr)">
+                  <TranslatedText>{`Re-quoting your home and auto insurance once a year often finds hidden savings. That surplus goes straight to the principal.`}</TranslatedText>
+                </ExpandSection>
+                <ExpandSection title="💰 Negotiate Bank Fees (~$200/yr)">
+                  <TranslatedText>{`Many "Open System" products have monthly fees. Ask your bank to waive them based on your total assets with them. Every saved fee is an interest-fighting dollar.`}</TranslatedText>
+                </ExpandSection>
+              </div>
+            </section>
+
+            <section className="bg-gradient-to-br from-pink-600 to-rose-700 p-10 rounded-[32px] text-white text-center space-y-6 shadow-2xl">
+              <div className="inline-flex items-center gap-2 px-4 py-1 bg-white/20 text-white rounded-full text-xs font-bold uppercase tracking-widest backdrop-blur-md">
+                <CheckCircle2 className="h-3 w-3" />
+                <TranslatedText>End of Lesson 3</TranslatedText>
+              </div>
+              <h3 className="text-3xl font-fraunces font-black"><TranslatedText>Ready to Talk to the Bank?</TranslatedText></h3>
+              <p className="opacity-90 max-w-md mx-auto text-lg"><TranslatedText>You have the engine and the turbo. Now you need the keys. In Lesson 4, we give you the exact phone scripts and the list of banks to call to set this up.</TranslatedText></p>
+              <button className="bg-white text-pink-600 hover:bg-slate-50 font-bold px-8 py-4 rounded-2xl text-lg group flex items-center gap-2 mx-auto transition-all" onClick={nextLesson}>
+                <TranslatedText>Get My Bank Scripts</TranslatedText>
+                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </section>
           </div>
         )}
 
@@ -431,7 +572,7 @@ function LessonContent({ id }: { id: number }) {
               </div>
               <div className="bg-emerald-50 p-6 rounded-2xl border border-emerald-100 shadow-sm text-center space-y-2">
                 <p className="text-[10px] font-black uppercase text-emerald-400">Year 5-7 Milestone</p>
-                <p className="font-bold text-emerald-800 uppercase tracking-tighter"><TranslatedText>Home Paid Off</TranslatedText></p>
+                <p className="font-bold text-slate-800 uppercase tracking-tighter"><TranslatedText>Home Paid Off</TranslatedText></p>
               </div>
             </div>
 
@@ -459,15 +600,13 @@ function LessonContent({ id }: { id: number }) {
             <ChevronLeft className="h-5 w-5" />
             <TranslatedText>Previous</TranslatedText>
           </button>
-          {id !== 2 && (
-            <button 
-              onClick={nextLesson}
-              className="group flex items-center gap-2 bg-[#2563EB] text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-600 transition-all active:scale-95"
-            >
-              <TranslatedText>{id === 5 ? "Finish Course" : "Next Lesson"}</TranslatedText>
-              <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </button>
-          )}
+          <button 
+            onClick={nextLesson}
+            className="group flex items-center gap-2 bg-[#2563EB] text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-600 transition-all active:scale-95"
+          >
+            <TranslatedText>{id === 5 ? "Finish Course" : "Next Lesson"}</TranslatedText>
+            <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+          </button>
         </div>
 
       </div>
