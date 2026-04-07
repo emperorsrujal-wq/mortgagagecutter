@@ -27,6 +27,8 @@ import {
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
+import { useFirestore, useUser } from '@/firebase';
+import { collection, addDoc, doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 
 const debtSchema = z.object({
   id: z.string(),
@@ -60,6 +62,8 @@ type FormData = z.infer<typeof formSchema>;
 
 export function QuestionnaireForm() {
   const router = useRouter();
+  const firestore = useFirestore();
+  const { user } = useUser();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<FormData>({
@@ -82,7 +86,7 @@ export function QuestionnaireForm() {
     name: 'debts',
   });
 
-  function onSubmit(values: FormData) {
+  async function onSubmit(values: FormData) {
     setIsSubmitting(true);
     const params = new URLSearchParams();
     
@@ -97,6 +101,40 @@ export function QuestionnaireForm() {
 
     // Add system-defined values
     params.append('ltvLimit', '0.8');
+
+    const resultUrl = `${window.location.origin}/comparison?${params.toString()}`;
+
+    // Update Lead status and send Blueprint email if user is logged in
+    if (user && firestore) {
+      try {
+        await updateDoc(doc(firestore, "leads", user.uid), {
+          status: 'completed_questionnaire',
+          lastCompletedAt: serverTimestamp(),
+        });
+
+        await addDoc(collection(firestore, "mail"), {
+          to: user.email,
+          message: {
+            subject: "Your Savings Blueprint is Ready!",
+            html: `
+              <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+                <h1 style="color: #059669;">The Numbers are In!</h1>
+                <p>We've analyzed your mortgage details, and the potential for savings is significant.</p>
+                <p>Your custom blueprint is securely stored in your account. You can access it anytime using the link below:</p>
+                <div style="text-align: center; margin: 30px 0;">
+                  <a href="${resultUrl}" style="background-color: #059669; color: white; padding: 15px 25px; text-decoration: none; border-radius: 8px; font-weight: bold;">View My Blueprint →</a>
+                </div>
+                <p>Don't let the interest trap slow you down. Start implementing your strategy today.</p>
+                <p>Best,</p>
+                <p><strong>The Mortgage Cutter Team</strong></p>
+              </div>
+            `
+          }
+        });
+      } catch (e) {
+        console.error("Error updating lead/sending mail:", e);
+      }
+    }
 
     router.push(`/comparison?${params.toString()}`);
   }

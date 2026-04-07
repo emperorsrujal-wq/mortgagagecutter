@@ -59,6 +59,7 @@ export function AuthButtons() {
             id: newUser.uid,
             name: newUser.displayName,
             email: newUser.email,
+            status: 'registered',
             submissionDate: serverTimestamp(),
         });
 
@@ -68,7 +69,19 @@ export function AuthButtons() {
             to: newUser.email,
             message: {
               subject: "Welcome to Mortgage Cutter!",
-              html: `<p>Welcome to your financial freedom journey. Get started by filling out our questionnaire to unlock your savings potential.</p>`
+              html: `
+                <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+                  <h1 style="color: #2563EB;">Welcome aboard, ${newUser.displayName || 'Friend'}!</h1>
+                  <p>You've just unlocked access to the strategies the banks would rather you didn't know.</p>
+                  <p>Ready to see your personalized savings potential?</p>
+                  <div style="text-align: center; margin: 30px 0;">
+                    <a href="https://mortgagecutter.com/questionnaire" style="background-color: #2563EB; color: white; padding: 15px 25px; text-decoration: none; border-radius: 8px; font-weight: bold;">Calculate My Savings →</a>
+                  </div>
+                  <p>Let's get to work.</p>
+                  <p>Best,</p>
+                  <p><strong>The Mortgage Cutter Team</strong></p>
+                </div>
+              `
             }
           });
         }

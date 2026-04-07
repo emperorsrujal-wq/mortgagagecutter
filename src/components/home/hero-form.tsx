@@ -69,15 +69,27 @@ export function HeroForm() {
           id: newUser.uid,
           name: values.name,
           email: values.email,
+          status: 'registered',
           submissionDate: serverTimestamp(),
       });
 
-      // Trigger Welcome Email via collection
+      // Trigger Welcome Email via collection (Firebase Trigger Email extension)
       await addDoc(collection(firestore, "mail"), {
         to: values.email,
         message: {
           subject: "Welcome to Mortgage Cutter!",
-          html: `<p>Hi ${values.name}, welcome to your financial freedom journey. Get started by filling out our questionnaire to see your personalized savings blueprint.</p>`
+          html: `
+            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+              <h1 style="color: #2563EB;">Welcome to the Movement, ${values.name}!</h1>
+              <p>You've just taken the first step toward reclaiming years of your life and thousands of dollars from the bank.</p>
+              <p>The "Interest Trap" is real, but now you have the tools to fight back.</p>
+              <div style="text-align: center; margin: 30px 0;">
+                <a href="https://mortgagecutter.com/questionnaire" style="background-color: #2563EB; color: white; padding: 15px 25px; text-decoration: none; border-radius: 8px; font-weight: bold;">Get Your Savings Blueprint Now →</a>
+              </div>
+              <p>See you on the inside,</p>
+              <p><strong>The Mortgage Cutter Team</strong></p>
+            </div>
+          `
         }
       });
 
