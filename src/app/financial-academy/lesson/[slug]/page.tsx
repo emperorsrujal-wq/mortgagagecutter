@@ -29,7 +29,10 @@ import {
   PieChart,
   Target,
   Globe,
-  Zap
+  Zap,
+  HandCoins,
+  ShieldCheck,
+  Building
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -65,21 +68,28 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
     if (cachedCountry) setSelectedCountry(cachedCountry);
 
     async function loadUser() {
-      if (!user || !firestore) return;
-      const docRef = doc(firestore, 'userFinancialProgress', user.uid);
-      const snap = await getDoc(docRef);
-      if (snap.exists()) {
-        const data = snap.data();
-        if (data.selectedCountry) {
-          setSelectedCountry(data.selectedCountry);
-          localStorage.setItem('mc_academy_country', data.selectedCountry);
+      if (isUserLoading) return;
+
+      if (user && firestore) {
+        try {
+          const docRef = doc(firestore, 'userFinancialProgress', user.uid);
+          const snap = await getDoc(docRef);
+          if (snap.exists()) {
+            const data = snap.data();
+            if (data.selectedCountry) {
+              setSelectedCountry(data.selectedCountry);
+              localStorage.setItem('mc_academy_country', data.selectedCountry);
+            }
+            setCompletedLessons(data.completedLessons || []);
+          }
+        } catch (e) {
+          console.error("Error fetching progress:", e);
         }
-        setCompletedLessons(data.completedLessons || []);
       }
       setIsLoading(false);
     }
-    if (!isUserLoading) loadUser();
-    else if (!user && !isUserLoading) setIsLoading(false);
+    
+    loadUser();
   }, [user, firestore, isUserLoading]);
 
   const handleCountryChange = async (val: string) => {
@@ -206,11 +216,44 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
             </section>
           </div>
         );
+      case 'Debt':
+        return (
+          <div className="space-y-12">
+            <section className="space-y-6">
+              <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
+                <HandCoins className="h-6 w-6 text-red-500" /> Managing Debt in {selectedCountry}
+              </h2>
+              <p>Debt in {selectedCountry} can be a tool or a trap. Using your prime-linked accounts at {country.majorBanks[0]} correctly allows you to leverage liquidity while avoiding high-interest pitfalls.</p>
+            </section>
+          </div>
+        );
+      case 'Mortgage':
+        return (
+          <div className="space-y-12">
+            <section className="space-y-6">
+              <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
+                <Building className="h-6 w-6 text-blue-500" /> The {selectedCountry} Property Market
+              </h2>
+              <p>In {selectedCountry}, home ownership is often the largest financial commitment. Understanding how {country.centralBank} rates affect your amortization at {country.majorBanks[1]} is critical to your long-term success.</p>
+            </section>
+          </div>
+        );
+      case 'Family':
+        return (
+          <div className="space-y-12">
+            <section className="space-y-6">
+              <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
+                <Baby className="h-6 w-6 text-blue-300" /> Legacy in {selectedCountry}
+              </h2>
+              <p>Preparing the next generation in {selectedCountry} starts with literacy. By teaching them about {country.currencyCode} and localized programs like {country.programs[1]}, you build a foundation that lasts.</p>
+            </section>
+          </div>
+        );
       default:
         return (
           <section className="space-y-6">
             <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
-              <Zap className="h-6 w-6 text-blue-500" /> Regional Lesson: {selectedCountry}
+              <Zap className="h-6 w-6 text-blue-500" /> {selectedCountry} Financial Pillar
             </h2>
             <p>Mastering the financial mechanics of {selectedCountry} is the foundation of your family's future wealth.</p>
             <p>In {country.cities[0]} and across the nation, institutions like {country.majorBanks[0]} and {country.taxAgency} set the rules.</p>

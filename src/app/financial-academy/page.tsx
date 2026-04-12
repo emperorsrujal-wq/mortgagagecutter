@@ -37,20 +37,27 @@ export default function FinancialAcademyHub() {
     if (cached) setSelectedCountry(cached);
 
     async function loadProgress() {
-      if (!user || !firestore) return;
-      const docRef = doc(firestore, 'userFinancialProgress', user.uid);
-      const snap = await getDoc(docRef);
-      if (snap.exists()) {
-        const data = snap.data();
-        if (data.selectedCountry) {
-          setSelectedCountry(data.selectedCountry);
-          localStorage.setItem('mc_academy_country', data.selectedCountry);
+      if (isUserLoading) return;
+
+      if (user && firestore) {
+        try {
+          const docRef = doc(firestore, 'userFinancialProgress', user.uid);
+          const snap = await getDoc(docRef);
+          if (snap.exists()) {
+            const data = snap.data();
+            if (data.selectedCountry) {
+              setSelectedCountry(data.selectedCountry);
+              localStorage.setItem('mc_academy_country', data.selectedCountry);
+            }
+            setCompletedLessons(data.completedLessons || []);
+          }
+        } catch (e) {
+          console.error("Error loading progress:", e);
         }
-        setCompletedLessons(data.completedLessons || []);
       }
       setIsLoadingProgress(false);
     }
-    if (!isUserLoading) loadProgress();
+    loadProgress();
   }, [user, firestore, isUserLoading]);
 
   const handleCountryChange = async (val: string) => {
