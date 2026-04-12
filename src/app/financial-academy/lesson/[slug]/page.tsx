@@ -28,7 +28,11 @@ import {
   Scale,
   ShieldCheck,
   Building2,
-  Coins
+  Coins,
+  Umbrella,
+  Activity,
+  HeartPulse,
+  Flame
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -194,6 +198,66 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
     );
   };
 
+  const renderInsuranceDeepDive = (country: CountrySpecificInfo) => {
+    const sections = [
+      {
+        title: "01. The Architecture of Certainty",
+        icon: <Umbrella className="h-6 w-6 text-blue-400" />,
+        content: `In the ${selectedCountry} market, insurance is often sold as a safety net, but it is more accurately described as the 'Architecture of Certainty.' When you pay a premium to an entity like ${country.majorInsurers[0]}, you are not just buying a piece of paper; you are legally transferring the financial consequence of a catastrophic event to a larger balance sheet. This 'Transfer of Risk' is the cornerstone of generational wealth. Without it, one medical emergency or property disaster in ${country.cities[0]} can wipe out decades of disciplined savings.`
+      },
+      {
+        title: "02. The Actuarial Machine",
+        icon: <Activity className="h-6 w-6 text-emerald-400" />,
+        content: `Under the gaze of the ${country.insuranceRegulator}, major players like ${country.majorInsurers[1]} and ${country.majorInsurers[2]} operate the 'Actuarial Machine.' This is a massive mathematical engine that uses the 'Law of Large Numbers' to predict the future. They know, with terrifying accuracy, how many houses will burn and how many people will fall ill this year in ${selectedCountry}. They don't bet on individuals; they bet on the collective. By understanding that your premium is a calculated bet where the house (the insurer) always has the edge, you can begin to choose policies that cover true catastrophes rather than minor inconveniences.`
+      },
+      {
+        title: "03. Premiums vs. Protection: The True Spread",
+        icon: <Scale className="h-6 w-6 text-amber-400" />,
+        content: `Just as banks profit from interest spreads, ${country.majorInsurers[0]} profits from the gap between the premiums collected and the claims paid. In ${selectedCountry}, this 'Underwriting Profit' is supplemented by 'Investment Float.' Between the time you pay ${country.majorInsurers[1]} and the time they pay out a claim, they are investing your ${country.currencyCode} in the ${country.stockExchanges[0]}. They are effectively using your fear to fund their investment growth. To win, you must learn to self-insure for small risks and only use institutional insurance for 'Legacy-Ending' events.`
+      },
+      {
+        title: "04. Strategic Pitfalls & Complexity as a Feature",
+        icon: <ShieldAlert className="h-6 w-6 text-red-400" />,
+        content: `The greatest risk in the ${selectedCountry} insurance landscape is the 'Policy Illusion.' Many homeowners in ${country.cities[1]} believe they are fully covered, only to discover 'exclusions' buried deep in the fine print during a crisis. In ${selectedCountry}, complexity is a feature of the product, not a bug. It allows ${country.majorInsurers[2]} to deny claims based on technicalities. You must move beyond the 'set it and forget it' mindset and perform a 'Stress Test' on your policies to ensure they actually function when the pressure is applied.`
+      },
+      {
+        title: "05. The Strategic Insurance Audit",
+        icon: <ShieldCheck className="h-6 w-6 text-purple-400" />,
+        content: `To optimize your financial fortress in ${selectedCountry}, you must audit your relationship with ${country.majorInsurers[0]}. Start by questioning why you are paying for low-deductible policies that encourage 'premium leakage.' In ${selectedCountry}, your highest ROI comes from increasing your deductibles to the maximum you can safely handle and redirecting that saved premium into your ${country.retirementAccounts[0]} or debt reduction. This shifts the Actuarial Machine's math in your favor, keeping more ${country.currencyCode} on your balance sheet and less on theirs.`
+      },
+      {
+        title: "06. Advanced Regional Sovereignty",
+        icon: <Award className="h-6 w-6 text-yellow-400" />,
+        content: `Mastering the ${selectedCountry} risk landscape requires an understanding of the ${country.insuranceRegulator} framework. These rules are designed to ensure ${country.majorInsurers[1]} remains solvent, not to ensure you get the best deal. By teaching your family that insurance is a strategic tool rather than a monthly bill, you build a culture of financial sovereignty. Once you master the architecture of risk in ${selectedCountry}, you stop being a victim of uncertainty and start being the architect of your own financial legacy.`
+      }
+    ];
+
+    return (
+      <div className="space-y-20">
+        {sections.map((s, i) => (
+          <section key={i} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: `${i * 100}ms` }}>
+            <div className="flex items-center gap-4 border-b border-white/5 pb-6">
+              <div className="p-3 bg-slate-900 rounded-2xl border border-white/10 shadow-inner">
+                {s.icon}
+              </div>
+              <h2 className="text-3xl font-black text-white tracking-tight">
+                {s.title}
+              </h2>
+            </div>
+            <div className="space-y-6">
+              <p className="leading-relaxed text-slate-300 text-xl font-medium first-letter:text-5xl first-letter:font-black first-letter:text-blue-400 first-letter:mr-3 first-letter:float-left">
+                {s.content}
+              </p>
+              <p className="text-slate-400 text-lg leading-relaxed italic border-l-2 border-emerald-500/30 pl-6">
+                As a student of the Academy in ${selectedCountry}, you must recognize that your contracts with ${country.majorInsurers[0]} are among the most important legal documents you own. In Unit ${currentUnit?.number}, we provide the strategy needed to negotiate better coverage and minimize premium drain within the ${country.currencyCode} environment.
+              </p>
+            </div>
+          </section>
+        ))}
+      </div>
+    );
+  };
+
   const renderDefaultDeepDive = (country: CountrySpecificInfo) => {
     const sections = [
       {
@@ -250,9 +314,12 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
   };
 
   const renderDeepDive = () => {
-    const isBanking = currentLesson.category.toLowerCase() === 'banking';
-    if (isBanking) return renderBankingDeepDive(country);
-    return renderDefaultDeepDive(country);
+    const category = currentLesson.category.toLowerCase();
+    switch (category) {
+      case 'banking': return renderBankingDeepDive(country);
+      case 'insurance': return renderInsuranceDeepDive(country);
+      default: return renderDefaultDeepDive(country);
+    }
   };
 
   return (
