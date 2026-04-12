@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { use, useState, useEffect } from 'react';
@@ -32,7 +31,8 @@ import {
   Zap,
   HandCoins,
   ShieldCheck,
-  Building
+  Building,
+  Award
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
