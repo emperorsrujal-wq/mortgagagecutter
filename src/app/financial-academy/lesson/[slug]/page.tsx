@@ -4,7 +4,7 @@ import React, { use, useState, useEffect } from 'react';
 import { useUser, useFirestore } from '@/firebase';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { academyUnits } from '@/lib/academy/curriculum';
-import { countryContentMap } from '@/lib/academy/content-data';
+import { countryContentMap, CountrySpecificInfo } from '@/lib/academy/content-data';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
@@ -17,22 +17,18 @@ import {
   Home,
   Loader2,
   CheckCircle,
-  Info,
   TrendingUp,
   Landmark,
   ShieldAlert,
-  Coins,
-  Scale,
-  Baby,
-  Building2,
-  PieChart,
+  Zap,
   Target,
   Globe,
-  Zap,
-  HandCoins,
+  Award,
+  BookOpen,
+  Scale,
   ShieldCheck,
-  Building,
-  Award
+  Building2,
+  Coins
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -138,7 +134,67 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
   const isCompleted = completedLessons.includes(currentLesson.id);
   const country = countryContentMap[selectedCountry] || countryContentMap['Canada'];
 
-  const renderDeepDive = () => {
+  const renderBankingDeepDive = (country: CountrySpecificInfo) => {
+    const sections = [
+      {
+        title: "01. The Illusion of the Vault",
+        icon: <Landmark className="h-6 w-6 text-blue-500" />,
+        content: `When you walk into a branch of ${country.majorBanks[0]} in ${country.cities[0]}, the atmosphere is designed to scream 'Security.' The polished marble and heavy doors suggest your ${country.currencyCode} is sitting in a physical vault, safely locked away. This is the first great illusion of modern finance. In reality, thanks to the rules set by the ${country.regulator}, your bank is a 'pass-through' entity. Your deposit is not a box of cash with your name on it; it is a legally binding unsecured loan you have granted to the bank at an interest rate that barely covers the cost of the paper it's printed on.`
+      },
+      {
+        title: "02. The Fractional Reserve Machine",
+        icon: <TrendingUp className="h-6 w-6 text-emerald-500" />,
+        content: `Under the oversight of the ${country.centralBank}, the system in ${selectedCountry} operates on 'Fractional Reserve' mechanics. For every ${country.currencySymbol}1,000 you deposit, the bank is only required to keep a tiny fraction in reserve. They lend out the remaining 90% or more to other consumers for mortgages and car loans. But here is the secret: those loans become new deposits at ${country.majorBanks[1]} or ${country.majorBanks[2]}, which are then lent out again. Through this cycle, banks literally 'create' money out of thin air, all while charging compound interest on every cent of it.`
+      },
+      {
+        title: "03. The Spread: Your Effort, Their Profit",
+        icon: <Zap className="h-6 w-6 text-amber-500" />,
+        content: `The primary profit engine for banks in ${selectedCountry} is the 'Spread.' They pay you ${country.rates.savings} on your savings while charging you ${country.rates.mortgage} on your debt. This difference—the spread—is what funds the massive skyscrapers owned by ${country.majorBanks[0]}. They are effectively arbitrageurs of your life's work. They take your 'idle' capital, pay you almost nothing for the privilege of holding it, and then sell it back to your community at a massive premium. To win the financial game, you must learn how to minimize this spread in your own household.`
+      },
+      {
+        title: "04. Strategic Pitfalls & Inflation Erosion",
+        icon: <ShieldAlert className="h-6 w-6 text-red-500" />,
+        content: `The biggest risk in the ${selectedCountry} banking system isn't a bank run—it's the slow, silent erosion of your purchasing power. While your balance at ${country.majorBanks[1]} might look stable, the ${country.centralBank} is constantly balancing the national debt of ${country.nationalDebt} by managing inflation. If the inflation rate is higher than your savings rate, you are effectively paying the bank to lose money every single day. In hubs like ${country.cities[1]} and ${country.cities[2]}, keeping large sums in a 'safe' savings account is a guaranteed way to lose wealth relative to the cost of living.`
+      },
+      {
+        title: "05. The Strategic Action Plan",
+        icon: <Target className="h-6 w-6 text-purple-500" />,
+        content: `To break free from being a 'consumer' of banking and become a 'strategist,' you must audit your relationship with ${country.majorBanks[0]}. Start by questioning why your money is siloed in accounts that benefit the bank's balance sheet more than yours. In ${selectedCountry}, using tax-advantaged tools like ${country.retirementAccounts[0]} and ${country.retirementAccounts[1]} is non-negotiable. You must shift your mindset from 'saving' to 'velocity'—ensuring your money hits your debt immediately to neutralize the interest calculations regulated by the ${country.regulator}.`
+      },
+      {
+        title: "06. Advanced Regional Mastery",
+        icon: <Award className="h-6 w-6 text-yellow-500" />,
+        content: `True mastery of the ${selectedCountry} financial pillar foundation requires understanding the specific protections like ${country.protection}. By teaching your family how ${country.currencyCode} actually functions within the ${country.regulator} framework, you build a generational shield against institutional greed. This Academy unit is your 'Owner's Manual' to a system designed to be opaque. Once you see the machine for what it is, you can never go back to being an average depositor at ${country.majorBanks[0]}.`
+      }
+    ];
+
+    return (
+      <div className="space-y-20">
+        {sections.map((s, i) => (
+          <section key={i} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: `${i * 100}ms` }}>
+            <div className="flex items-center gap-4 border-b border-white/5 pb-6">
+              <div className="p-3 bg-slate-900 rounded-2xl border border-white/10 shadow-inner">
+                {s.icon}
+              </div>
+              <h2 className="text-3xl font-black text-white tracking-tight">
+                {s.title}
+              </h2>
+            </div>
+            <div className="space-y-6">
+              <p className="leading-relaxed text-slate-300 text-xl font-medium first-letter:text-5xl first-letter:font-black first-letter:text-blue-500 first-letter:mr-3 first-letter:float-left">
+                {s.content}
+              </p>
+              <p className="text-slate-400 text-lg leading-relaxed italic border-l-2 border-blue-500/30 pl-6">
+                As a student of the Academy in ${selectedCountry}, you must recognize that your interactions with ${country.majorBanks[0]} and the ${country.taxAgency} are part of a larger economic game. The rules are often buried in fine print, but they are predictable. In Unit ${currentUnit?.number}, we provide the data points needed to negotiate better terms and optimize your cash flow velocity within the ${country.currencyCode} environment.
+              </p>
+            </div>
+          </section>
+        ))}
+      </div>
+    );
+  };
+
+  const renderDefaultDeepDive = (country: CountrySpecificInfo) => {
     const sections = [
       {
         title: "01. The Local Reality",
@@ -193,8 +249,14 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
     );
   };
 
+  const renderDeepDive = () => {
+    const isBanking = currentLesson.category.toLowerCase() === 'banking';
+    if (isBanking) return renderBankingDeepDive(country);
+    return renderDefaultDeepDive(country);
+  };
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 font-sans">
+    <div className="min-h-screen bg-slate-950 text-slate-50 font-sans selection:bg-blue-500/30">
       <nav className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-md border-b border-white/5 py-4">
         <div className="container mx-auto max-w-4xl px-4 flex justify-between items-center">
           <Link href="/financial-academy" className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors font-bold text-sm">
@@ -228,62 +290,68 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
           <div className="inline-flex items-center gap-4 text-xs font-black uppercase text-slate-500 tracking-widest">
             <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {currentLesson.readingTime}m Deep Dive</span>
             <span className="flex items-center gap-1"><FileText className="h-3 w-3" /> {currentLesson.wordCount} Words</span>
-            <Badge variant="secondary" className="bg-blue-500/10 text-blue-400 border-none">{currentLesson.category}</Badge>
+            <Badge variant="secondary" className="bg-blue-500/10 text-blue-400 border-none px-3 py-1">{currentLesson.category}</Badge>
           </div>
-          <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-tight">
+          <h1 className="text-4xl md:text-7xl font-black tracking-tight leading-tight">
             {currentLesson.title} <br /><span className="text-blue-500 italic">in {selectedCountry}</span>
           </h1>
+          <p className="text-xl text-slate-400 max-w-xl mx-auto font-medium italic">
+            "The system is designed to reward those who understand its mechanics and penalize those who don't."
+          </p>
         </header>
 
         <div className="prose prose-invert prose-blue max-w-none leading-relaxed">
           {renderDeepDive()}
           
-          <section className="p-8 mt-16 bg-emerald-500/5 border border-emerald-500/30 rounded-3xl space-y-8">
-            <h3 className="text-2xl font-black text-emerald-400 flex items-center gap-2">
-              <CheckCircle className="h-6 w-6" /> Localized Takeaways: {selectedCountry}
+          <section className="p-10 mt-20 bg-slate-900/50 border border-emerald-500/20 rounded-[40px] space-y-8 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+              <CheckCircle className="h-32 w-32 text-emerald-500" />
+            </div>
+            <h3 className="text-2xl font-black text-emerald-400 flex items-center gap-3">
+              <CheckCircle className="h-6 w-6" /> Localized Strategy: {selectedCountry}
             </h3>
-            <ul className="space-y-6">
-              <li className="flex gap-4 items-start">
-                <div className="h-6 w-6 rounded bg-emerald-500/20 flex items-center justify-center shrink-0 mt-1"><CheckCircle2 className="h-4 w-4 text-emerald-500" /></div>
+            <ul className="space-y-8 relative z-10">
+              <li className="flex gap-6 items-start">
+                <div className="h-8 w-8 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0 mt-1"><CheckCircle2 className="h-5 w-5 text-emerald-500" /></div>
                 <div>
-                  <strong className="text-white block mb-1">Institutional Awareness</strong>
-                  <span className="text-slate-300">In {selectedCountry}, the {country.regulator} dictates the framework, but entities like {country.majorBanks[0]} optimize for their shareholders. Always audit your relationship with {country.majorBanks[1]}.</span>
+                  <strong className="text-white block mb-2 text-xl">Institutional Awareness</strong>
+                  <span className="text-slate-300 text-lg leading-relaxed">In {selectedCountry}, the ${country.regulator} provides the framework, but entities like ${country.majorBanks[0]} and ${country.majorBanks[1]} are primarily accountable to their shareholders. Every transaction you make is part of their profit model. Audit your current relationship and ensure your capital velocity is optimized for your benefit, not theirs.</span>
                 </div>
               </li>
-              <li className="flex gap-4 items-start">
-                <div className="h-6 w-6 rounded bg-emerald-500/20 flex items-center justify-center shrink-0 mt-1"><CheckCircle2 className="h-4 w-4 text-emerald-500" /></div>
+              <li className="flex gap-6 items-start">
+                <div className="h-8 w-8 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0 mt-1"><CheckCircle2 className="h-5 w-5 text-emerald-500" /></div>
                 <div>
-                  <strong className="text-white block mb-1">Tax-Advantaged Growth</strong>
-                  <span className="text-slate-300">Maximize your utilization of {country.retirementAccounts.join(' and ')} to minimize the impact of {country.taxAgency} on your net worth.</span>
+                  <strong className="text-white block mb-2 text-xl">Tax-Advantaged Growth</strong>
+                  <span className="text-slate-300 text-lg leading-relaxed">Your highest ROI often comes from minimizing what you lose to the ${country.taxAgency}. Maximize your utilization of ${country.retirementAccounts.join(' and ')} within the ${country.currencyCode} environment. These are not just savings accounts; they are strategic bunkers for your generational wealth.</span>
                 </div>
               </li>
             </ul>
           </section>
         </div>
 
-        <div className="pt-12 border-t border-white/5 space-y-8">
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <div className="pt-16 border-t border-white/5 space-y-12">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <Button 
               size="lg" 
               onClick={toggleComplete} 
               disabled={isMarking}
               className={cn(
-                "w-full sm:w-auto px-12 py-8 text-xl font-black rounded-2xl transition-all shadow-xl",
+                "w-full sm:w-auto px-12 py-10 text-2xl font-black rounded-[24px] transition-all shadow-2xl active:scale-95",
                 isCompleted ? "bg-emerald-600 hover:bg-emerald-700" : "bg-blue-600 hover:bg-blue-700"
               )}
             >
-              {isMarking ? <Loader2 className="animate-spin" /> : isCompleted ? <><CheckCircle2 className="mr-2" /> Completed</> : "Mark as Complete"}
+              {isMarking ? <Loader2 className="animate-spin h-8 w-8" /> : isCompleted ? <><CheckCircle2 className="mr-3 h-8 w-8" /> Completed</> : "Mark as Complete"}
             </Button>
             {isCompleted && nextLesson && (
-              <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-12 py-8 text-xl font-black border-slate-700 hover:bg-slate-800 rounded-2xl">
-                <Link href={`/financial-academy/lesson/${nextLesson.slug}`}>Next Lesson <ArrowRight className="ml-2 h-6 w-6" /></Link>
+              <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-12 py-10 text-2xl font-black border-white/10 hover:bg-white/5 rounded-[24px] shadow-2xl transition-all">
+                <Link href={`/financial-academy/lesson/${nextLesson.slug}`}>Next Lesson <ArrowRight className="ml-3 h-8 w-8" /></Link>
               </Button>
             )}
           </div>
           
           <div className="text-center">
-             <Button asChild variant="link" className="text-blue-400 font-bold">
-                <Link href="/questionnaire">Ready to Optimize Your Mortgage? →</Link>
+             <Button asChild variant="link" className="text-blue-400 font-black text-lg hover:text-blue-300">
+                <Link href="/questionnaire">Ready to Optimize Your Mortgage? <ArrowRight className="ml-2 h-5 w-5" /></Link>
              </Button>
           </div>
         </div>
