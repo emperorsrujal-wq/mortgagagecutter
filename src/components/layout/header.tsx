@@ -2,7 +2,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Home, BookOpen, GraduationCap, Calculator, ChevronDown, Landmark, Zap } from 'lucide-react';
+import { Home, BookOpen, GraduationCap, Calculator, ChevronDown, Landmark, Zap, Trophy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { UserProfileButton } from '@/components/auth/user-profile-button';
 import { useUser } from '@/firebase';
@@ -23,8 +23,8 @@ export default function Header() {
       <div className="container mx-auto flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Home className="h-6 w-6 text-primary" />
-          <span className="text-xl font-bold tracking-tight">
-            MORTGAGE CUTTER
+          <span className="text-xl font-bold tracking-tight uppercase">
+            Mortgage Cutter
           </span>
         </Link>
         <div className="flex items-center gap-4">
@@ -32,9 +32,28 @@ export default function Header() {
             <Button variant="ghost" asChild>
               <Link href="/">Home</Link>
             </Button>
-            <Button variant="ghost" asChild>
-              <Link href="/learn"><GraduationCap className="mr-2 h-4 w-4" /> Learn</Link>
-            </Button>
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="gap-1">
+                  <GraduationCap className="mr-2 h-4 w-4 text-blue-500" /> Education <ChevronDown className="h-3 w-3 opacity-50" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>Learning Paths</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/learn" className="cursor-pointer">
+                    <Zap className="mr-2 h-4 w-4 text-yellow-500" /> Payoff Strategies
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/financial-academy" className="cursor-pointer">
+                    <Trophy className="mr-2 h-4 w-4 text-blue-500" /> Financial Academy
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             
             {user && (
               <DropdownMenu>
