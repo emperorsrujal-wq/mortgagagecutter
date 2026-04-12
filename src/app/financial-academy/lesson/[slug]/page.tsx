@@ -32,7 +32,10 @@ import {
   Umbrella,
   Activity,
   HeartPulse,
-  Flame
+  Flame,
+  LineChart,
+  BarChart3,
+  Waves
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -189,7 +192,7 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
                 {s.content}
               </p>
               <p className="text-slate-400 text-lg leading-relaxed italic border-l-2 border-blue-500/30 pl-6">
-                As a student of the Academy in ${selectedCountry}, you must recognize that your interactions with ${country.majorBanks[0]} and the ${country.taxAgency} are part of a larger economic game. The rules are often buried in fine print, but they are predictable. In Unit ${currentUnit?.number}, we provide the data points needed to negotiate better terms and optimize your cash flow velocity within the ${country.currencyCode} environment.
+                As a student of the Academy in {selectedCountry}, you must recognize that your interactions with {country.majorBanks[0]} and the {country.taxAgency} are part of a larger economic game. The rules are often buried in fine print, but they are predictable. In Unit {currentUnit?.number}, we provide the data points needed to negotiate better terms and optimize your cash flow velocity within the {country.currencyCode} environment.
               </p>
             </div>
           </section>
@@ -245,11 +248,71 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
               </h2>
             </div>
             <div className="space-y-6">
-              <p className="leading-relaxed text-slate-300 text-xl font-medium first-letter:text-5xl first-letter:font-black first-letter:text-blue-400 first-letter:mr-3 first-letter:float-left">
+              <p className="leading-relaxed text-slate-300 text-xl font-medium first-letter:text-5xl first-letter:font-black first-letter:text-emerald-400 first-letter:mr-3 first-letter:float-left">
                 {s.content}
               </p>
               <p className="text-slate-400 text-lg leading-relaxed italic border-l-2 border-emerald-500/30 pl-6">
-                As a student of the Academy in ${selectedCountry}, you must recognize that your contracts with ${country.majorInsurers[0]} are among the most important legal documents you own. In Unit ${currentUnit?.number}, we provide the strategy needed to negotiate better coverage and minimize premium drain within the ${country.currencyCode} environment.
+                As a student of the Academy in {selectedCountry}, you must recognize that your contracts with {country.majorInsurers[0]} are among the most important legal documents you own. In Unit {currentUnit?.number}, we provide the strategy needed to negotiate better coverage and minimize premium drain within the {country.currencyCode} environment.
+              </p>
+            </div>
+          </section>
+        ))}
+      </div>
+    );
+  };
+
+  const renderEconomicsDeepDive = (country: CountrySpecificInfo) => {
+    const sections = [
+      {
+        title: "01. The Pulse of the Machine",
+        icon: <LineChart className="h-6 w-6 text-blue-400" />,
+        content: `In the ${selectedCountry} economy, 'The Pulse' is the silent rhythm of capital flow. Whether you are in ${country.cities[0]} or ${country.cities[1]}, you are living inside a giant mathematical machine governed by the laws of Supply, Demand, and Credit. Most people see the economy as a series of random events—inflation spikes, stock market dips, or price increases at the grocery store. In reality, it is a highly predictable cycle driven by human psychology and the policy levers pulled by the ${country.centralBank}.`
+      },
+      {
+        title: "02. The Hand on the Lever",
+        icon: <Landmark className="h-6 w-6 text-emerald-400" />,
+        content: `The single most powerful force in {selectedCountry} is the ${country.centralBank}. By adjusting the base interest rate (currently ${country.rates.prime} for prime lending), they control the cost of money itself. When they lower the lever, credit flows easily, businesses in ${country.cities[2]} expand, and your mortgage at ${country.majorBanks[0]} becomes cheaper. When they pull the lever back, they are intentionally cooling the engine to fight inflation. Understanding this lever is the difference between being a victim of the cycle and being a strategist who predicts it.`
+      },
+      {
+        title: "03. The Inflationary Siphon",
+        icon: <Waves className="h-6 w-6 text-amber-400" />,
+        content: `Inflation is not just 'rising prices'; it is the slow, invisible devaluation of your life's work. As the ${country.centralBank} manages the national debt of ${country.nationalDebt}, the ${country.currencyCode} in your pocket loses purchasing power every day it sits idle. In the ${selectedCountry} market, if your wealth is not growing faster than the rate of inflation, you are effectively paying a 'silent tax' to the system. To survive, you must move your capital from 'depreciating buckets' (like cash) into 'productive assets' that the machine cannot easily siphon.`
+      },
+      {
+        title: "04. Recession & the Credit Cycle",
+        icon: <ShieldAlert className="h-6 w-6 text-red-400" />,
+        content: `Recessions in ${selectedCountry} are the machine's way of clearing out 'inefficient' debt. During these periods, liquidity dries up at ${country.majorBanks[1]} and fear becomes the dominant emotion in hubs like ${country.cities[0]}. But for the educated student of the Academy, a recession is not a disaster—it is a 'transfer event.' It is when assets move from the hands of the over-leveraged into the hands of the liquid. By maintaining a 'Debt-Free' fortress using our methods, you position yourself to be the buyer when everyone else is forced to be a seller.`
+      },
+      {
+        title: "05. The Actionable Economic Blueprint",
+        icon: <Target className="h-6 w-6 text-purple-400" />,
+        content: `To master the ${selectedCountry} economy, you must audit your relationship with the machine. Start by recognizing that your paycheck is a form of energy that the ${country.taxAgency} and ${country.majorBanks[0]} are constantly trying to capture. You must utilize regional shields like ${country.retirementAccounts[0]} and ${country.retirementAccounts[1]} to protect your growth. Shift your focus from 'saving' to 'velocity'—the speed at which your money works to reduce your liabilities and acquire ownership in the ${country.stockExchanges[0]}.`
+      },
+      {
+        title: "06. Advanced Economic Sovereignty",
+        icon: <Award className="h-6 w-6 text-yellow-400" />,
+        content: `True sovereignty in ${selectedCountry} comes from understanding that the ${country.centralBank} and the ${country.regulator} prioritize institutional stability over your personal wealth. By teaching your family the mechanics of ${country.currencyCode} and the true nature of the ${country.nationalDebt}, you build a generational shield. Once you see the machine's pulse, you stop reacting to the news and start positioning your family for the inevitable shifts in the cycle. This Unit ${currentUnit?.number} is your declaration of independence from a system designed to be misunderstood.`
+      }
+    ];
+
+    return (
+      <div className="space-y-20">
+        {sections.map((s, i) => (
+          <section key={i} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: `${i * 100}ms` }}>
+            <div className="flex items-center gap-4 border-b border-white/5 pb-6">
+              <div className="p-3 bg-slate-900 rounded-2xl border border-white/10 shadow-inner">
+                {s.icon}
+              </div>
+              <h2 className="text-3xl font-black text-white tracking-tight">
+                {s.title}
+              </h2>
+            </div>
+            <div className="space-y-6">
+              <p className="leading-relaxed text-slate-300 text-xl font-medium first-letter:text-5xl first-letter:font-black first-letter:text-blue-400 first-letter:mr-3 first-letter:float-left">
+                {s.content}
+              </p>
+              <p className="text-slate-400 text-lg leading-relaxed italic border-l-2 border-blue-500/30 pl-6">
+                As a student of the Academy in {selectedCountry}, you must recognize that the {country.centralBank} and the {country.taxAgency} are part of a larger economic game. The rules are predictable for those who watch the data. In Unit {currentUnit?.number}, we provide the blueprint needed to optimize your position within the {country.currencyCode} environment.
               </p>
             </div>
           </section>
@@ -302,7 +365,7 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
             <p className="leading-relaxed text-slate-300 text-xl font-medium">{s.content}</p>
             <p className="text-slate-400 text-lg leading-relaxed">
               Detailed analysis for the {selectedCountry} edition of "{currentLesson.title}" continues. 
-              As a student of the Academy, you must recognize that ${country.majorBanks[0]} and ${country.taxAgency} 
+              As a student of the Academy, you must recognize that {country.majorBanks[0]} and {country.taxAgency} 
               operate on rules that you can either follow blindly or master strategically. 
               The goal of this Unit {currentUnit?.number} deep dive is to give you the data points needed to 
               negotiate better terms and optimize your cash flow within the {country.currencyCode} environment.
@@ -318,6 +381,7 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
     switch (category) {
       case 'banking': return renderBankingDeepDive(country);
       case 'insurance': return renderInsuranceDeepDive(country);
+      case 'economics': return renderEconomicsDeepDive(country);
       default: return renderDefaultDeepDive(country);
     }
   };
@@ -363,7 +427,7 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
             {currentLesson.title} <br /><span className="text-blue-500 italic">in {selectedCountry}</span>
           </h1>
           <p className="text-xl text-slate-400 max-w-xl mx-auto font-medium italic">
-            "The system is designed to reward those who understand its mechanics and penalize those who don't."
+            "The economy is a machine. You can either understand how to operate it, or you can be its fuel."
           </p>
         </header>
 
@@ -381,15 +445,15 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
               <li className="flex gap-6 items-start">
                 <div className="h-8 w-8 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0 mt-1"><CheckCircle2 className="h-5 w-5 text-emerald-500" /></div>
                 <div>
-                  <strong className="text-white block mb-2 text-xl">Institutional Awareness</strong>
-                  <span className="text-slate-300 text-lg leading-relaxed">In {selectedCountry}, the ${country.regulator} provides the framework, but entities like ${country.majorBanks[0]} and ${country.majorBanks[1]} are primarily accountable to their shareholders. Every transaction you make is part of their profit model. Audit your current relationship and ensure your capital velocity is optimized for your benefit, not theirs.</span>
+                  <strong className="text-white block mb-2 text-xl">Cycle Awareness</strong>
+                  <span className="text-slate-300 text-lg leading-relaxed">In {selectedCountry}, the {country.centralBank} will inevitably shift policies. Your goal is to remain liquid and debt-free so that a recession becomes an opportunity to acquire assets in the {country.stockExchanges[0]} rather than a struggle for survival.</span>
                 </div>
               </li>
               <li className="flex gap-6 items-start">
                 <div className="h-8 w-8 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0 mt-1"><CheckCircle2 className="h-5 w-5 text-emerald-500" /></div>
                 <div>
-                  <strong className="text-white block mb-2 text-xl">Tax-Advantaged Growth</strong>
-                  <span className="text-slate-300 text-lg leading-relaxed">Your highest ROI often comes from minimizing what you lose to the ${country.taxAgency}. Maximize your utilization of ${country.retirementAccounts.join(' and ')} within the ${country.currencyCode} environment. These are not just savings accounts; they are strategic bunkers for your generational wealth.</span>
+                  <strong className="text-white block mb-2 text-xl">Inflation Protection</strong>
+                  <span className="text-slate-300 text-lg leading-relaxed">Maximize your utilization of {country.retirementAccounts.join(' and ')} within the {country.currencyCode} environment. These are your strategic bunkers that protect your capital from the inflationary siphon managed by the {country.centralBank}.</span>
                 </div>
               </li>
             </ul>
