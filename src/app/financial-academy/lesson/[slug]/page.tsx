@@ -271,7 +271,7 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
       {
         title: "02. The Hand on the Lever",
         icon: <Landmark className="h-6 w-6 text-emerald-400" />,
-        content: `The single most powerful force in {selectedCountry} is the ${country.centralBank}. By adjusting the base interest rate (currently ${country.rates.prime} for prime lending), they control the cost of money itself. When they lower the lever, credit flows easily, businesses in ${country.cities[2]} expand, and your mortgage at ${country.majorBanks[0]} becomes cheaper. When they pull the lever back, they are intentionally cooling the engine to fight inflation. Understanding this lever is the difference between being a victim of the cycle and being a strategist who predicts it.`
+        content: `The single most powerful force in ${selectedCountry} is the ${country.centralBank}. By adjusting the base interest rate (currently ${country.rates.prime} for prime lending), they control the cost of money itself. When they lower the lever, credit flows easily, businesses in ${country.cities[2]} expand, and your mortgage at ${country.majorBanks[0]} becomes cheaper. When they pull the lever back, they are intentionally cooling the engine to fight inflation. Understanding this lever is the difference between being a victim of the cycle and being a strategist who predicts it.`
       },
       {
         title: "03. The Inflationary Siphon",
@@ -313,6 +313,306 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
               </p>
               <p className="text-slate-400 text-lg leading-relaxed italic border-l-2 border-blue-500/30 pl-6">
                 As a student of the Academy in {selectedCountry}, you must recognize that the {country.centralBank} and the {country.taxAgency} are part of a larger economic game. The rules are predictable for those who watch the data. In Unit {currentUnit?.number}, we provide the blueprint needed to optimize your position within the {country.currencyCode} environment.
+              </p>
+            </div>
+          </section>
+        ))}
+      </div>
+    );
+  };
+
+  const renderGovernmentDeepDive = (country: CountrySpecificInfo) => {
+    const sections = [
+      {
+        title: "01. The Social Contract",
+        icon: <Landmark className="h-6 w-6 text-blue-400" />,
+        content: `In the ${selectedCountry} context, the government is not just a regulatory body; it is the architect of the environment in which your money lives. From the streets of ${country.cities[0]} to the policy halls of the capital, the government operates on a 'Social Contract.' You contribute a portion of your energy (tax) in exchange for infrastructure, security, and a framework of law. Most people see the ${country.taxAgency} as a burden, but the strategist sees it as a business partner—one that has established the rules of the game you are forced to play.`
+      },
+      {
+        title: "02. The National Ledger",
+        icon: <TrendingUp className="h-6 w-6 text-emerald-400" />,
+        content: `Every year, your government releases a Budget—a massive declaration of priorities. In ${selectedCountry}, this ledger balances the competing needs of healthcare, defense, and social programs like ${country.programs[0]}. When you see the national debt of ${country.nationalDebt}, you are seeing the 'Overdraft' of the nation. This debt is serviced by the future production of its citizens. By understanding the ledger of ${selectedCountry}, you can predict where taxes might rise and where incentives might be placed to encourage specific economic behaviors.`
+      },
+      {
+        title: "03. The Revenue Engine: Taxation",
+        icon: <Zap className="h-6 w-6 text-amber-400" />,
+        content: `The primary fuel for the government machine is the ${country.taxAgency}. In ${selectedCountry}, taxation is not a flat fee; it is a progressive system designed to capture more 'energy' as you become more successful. From income tax to consumption taxes, the engine is relentless. However, the ${country.taxAgency} also provides 'Safety Valves'—legal ways to keep more of your money. Utilizing ${country.retirementAccounts[0]} and ${country.retirementAccounts[1]} is your way of legally opting out of a portion of this capture, allowing your wealth to compound inside a government-approved shield.`
+      },
+      {
+        title: "04. The Deficit Dilemma",
+        icon: <ShieldAlert className="h-6 w-6 text-red-400" />,
+        content: `When the government of ${selectedCountry} spends more than it collects, it creates a deficit. To bridge this gap, they issue bonds—legally promising to pay back lenders with future tax revenue. With a national debt of ${country.nationalDebt}, ${selectedCountry} is in a constant state of debt service. This creates a hidden pressure on the ${country.centralBank} to keep interest rates in a specific range to ensure the nation doesn't default. As a citizen, you must realize that your personal savings are the collateral for this national debt.`
+      },
+      {
+        title: "05. Benefits, Burdens & The Net Result",
+        icon: <Target className="h-6 w-6 text-purple-400" />,
+        content: `While the government captures revenue, it also redistributes it through programs like ${country.programs.join(' and ')}. In hubs like ${country.cities[1]} and ${country.cities[2]}, these benefits form the baseline of social stability. To win, you must calculate your 'Net Relationship' with the state. Are you a net contributor or a net beneficiary? The goal of this Unit ${currentUnit?.number} is to help you move from being a passive taxpayer to a proactive citizen who utilizes every available grant, credit, and shield provided by the ${country.taxAgency} framework.`
+      },
+      {
+        title: "06. Strategic Citizenship",
+        icon: <Award className="h-6 w-6 text-yellow-400" />,
+        content: `True mastery of the ${selectedCountry} financial landscape requires 'Strategic Citizenship.' This means understanding the ${country.regulator} rules and the ${country.taxAgency} codes as if they were the manual to a high-performance machine. By teaching your family that the government is an entity with its own balance sheet and motivations, you build a generational shield. Once you see how ${country.currencyCode} flows through the halls of power, you stop being a victim of policy and start being a strategist who positions themselves for the next legislative shift.`
+      }
+    ];
+
+    return (
+      <div className="space-y-20">
+        {sections.map((s, i) => (
+          <section key={i} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: `${i * 100}ms` }}>
+            <div className="flex items-center gap-4 border-b border-white/5 pb-6">
+              <div className="p-3 bg-slate-900 rounded-2xl border border-white/10 shadow-inner">
+                {s.icon}
+              </div>
+              <h2 className="text-3xl font-black text-white tracking-tight">
+                {s.title}
+              </h2>
+            </div>
+            <div className="space-y-6">
+              <p className="leading-relaxed text-slate-300 text-xl font-medium first-letter:text-5xl first-letter:font-black first-letter:text-purple-400 first-letter:mr-3 first-letter:float-left">
+                {s.content}
+              </p>
+              <p className="text-slate-400 text-lg leading-relaxed italic border-l-2 border-purple-500/30 pl-6">
+                In {selectedCountry}, your interaction with the {country.taxAgency} is the most consistent financial relationship you will ever have. It lasts from your first job to your final inheritance. By mastering the rules of Unit {currentUnit?.number}, you ensure that this partnership is as efficient as possible, keeping more {country.currencyCode} on your family's balance sheet.
+              </p>
+            </div>
+          </section>
+        ))}
+      </div>
+    );
+  };
+
+  const renderDebtDeepDive = (country: CountrySpecificInfo) => {
+    const sections = [
+      {
+        title: "01. The Debt Paradigm",
+        icon: <Flame className="h-6 w-6 text-red-500" />,
+        content: `In the ${selectedCountry} economy, debt is often sold as 'Opportunity,' but it is more accurately described as 'Future Work Already Spent.' When you sign a credit agreement with an entity like ${country.majorBanks[0]}, you are legally granting them a lien on your future energy. From the high-rises of ${country.cities[0]} to the suburbs of ${country.cities[1]}, consumer debt is the 'Gravity' that pulls wealth away from families and towards institutional balance sheets. To win, you must stop seeing debt as a tool for lifestyle and start seeing it as a calculation of interest-velocity.`
+      },
+      {
+        title: "02. The Compound Interest Trap",
+        icon: <Activity className="h-6 w-6 text-orange-500" />,
+        content: `Under the gaze of the ${country.regulator}, lenders in ${selectedCountry} utilize the 'Power of Compounding' against you. On a credit card or high-interest loan from ${country.majorBanks[1]}, interest is not just charged on the principal; it is charged on the interest from the previous month. This creates a 'Death Spiral' where the balance grows faster than your ability to repay it. In ${selectedCountry}, the average household carries debt that costs them ${country.rates.mortgage} or more in interest—a silent siphon that destroys the ability to save for retirement.`
+      },
+      {
+        title: "03. Good Debt vs. Bad Debt: The Spread",
+        icon: <Scale className="h-6 w-6 text-amber-500" />,
+        content: `Not all debt is created equal in ${selectedCountry}. 'Bad Debt' is used to buy depreciating assets (like cars or gadgets) at high interest rates. 'Good Debt'—which we focus on in Unit ${currentUnit?.number}—is debt that is structured to be 'Low-Velocity' or 'Tax-Efficient.' By understanding the 'Spread' between what you pay in interest and what you earn in growth, you can begin to use institutional money to your advantage. The goal is to move your capital from high-interest captures into low-interest, strategic vehicles regulated by the ${country.regulator}.`
+      },
+      {
+        title: "04. Strategic Pitfalls & Credit Scores",
+        icon: <ShieldAlert className="h-6 w-6 text-red-400" />,
+        content: `The greatest risk in the ${selectedCountry} debt landscape is the 'Minimum Payment Illusion.' Lenders like ${country.majorBanks[2]} calculate a minimum payment that barely covers the interest, ensuring you stay in debt for decades. Additionally, your 'Credit Score' is simply a measure of how good you are at being a profitable customer for the bank. In ${selectedCountry}, you must move beyond the 'Score' and focus on the 'Balance.' Complexity is used to hide the true cost of borrowing; your job is to strip away the jargon and look at the raw numbers.`
+      },
+      {
+        title: "05. The Debt Liquidation Audit",
+        icon: <Target className="h-6 w-6 text-purple-400" />,
+        content: `To build a fortress in ${selectedCountry}, you must perform a 'Debt Audit.' List every liability you have, from your mortgage at ${country.majorBanks[0]} to your smallest credit line. In ${selectedCountry}, your highest ROI comes from 'Choking' high-interest debt first. This isn't just about 'Paying Off'; it's about 'Neutralizing.' Shift your focus to 'Debt Velocity'—the speed at which you can reduce your total liability and redirect that saved interest into your ${country.retirementAccounts[0]} or other productive assets.`
+      },
+      {
+        title: "06. Advanced Debt Sovereignty",
+        icon: <Award className="h-6 w-6 text-yellow-400" />,
+        content: `Mastering the ${selectedCountry} debt landscape requires an understanding of the 'Lien Hierarchy.' By teaching your family that debt is a strategic tool rather than a way of life, you build a culture of financial sovereignty. Once you master the mechanics of debt in ${selectedCountry}, you stop being a servant to interest and start being the architect of your own balance sheet. Once the gravity of debt is removed, your wealth can finally take flight in the ${country.stockExchanges[0]} and beyond.`
+      }
+    ];
+
+    return (
+      <div className="space-y-20">
+        {sections.map((s, i) => (
+          <section key={i} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: `${i * 100}ms` }}>
+            <div className="flex items-center gap-4 border-b border-white/5 pb-6">
+              <div className="p-3 bg-slate-900 rounded-2xl border border-white/10 shadow-inner">
+                {s.icon}
+              </div>
+              <h2 className="text-3xl font-black text-white tracking-tight">
+                {s.title}
+              </h2>
+            </div>
+            <div className="space-y-6">
+              <p className="leading-relaxed text-slate-300 text-xl font-medium first-letter:text-5xl first-letter:font-black first-letter:text-red-500 first-letter:mr-3 first-letter:float-left">
+                {s.content}
+              </p>
+              <p className="text-slate-400 text-lg leading-relaxed italic border-l-2 border-red-500/30 pl-6">
+                In {selectedCountry}, debt is the most common financial trap. It is designed to be invisible and easy to acquire. By mastering the strategies of Unit {currentUnit?.number}, you stop being the 'Fuel' for the bank's profit machine and start being the owner of your own time.
+              </p>
+            </div>
+          </section>
+        ))}
+      </div>
+    );
+  };
+
+  const renderInvestingDeepDive = (country: CountrySpecificInfo) => {
+    const sections = [
+      {
+        title: "01. The Ownership Mindset",
+        icon: <TrendingUp className="h-6 w-6 text-blue-400" />,
+        content: `In the ${selectedCountry} wealth ladder, there is a fundamental divide: there are those who work for money, and those who own the machines that produce it. Investing is the act of transition from laborer to owner. Whether you are buying shares on the ${country.stockExchanges[0]} or acquiring property in ${country.cities[0]}, you are moving your ${country.currencyCode} from a 'spending' bucket into an 'ownership' bucket. Most people fear the market because they see it as gambling; in reality, it is the only way to participate in the growth of the global economy.`
+      },
+      {
+        title: "02. The Market Machine",
+        icon: <BarChart3 className="h-6 w-6 text-emerald-400" />,
+        content: `The ${country.stockExchanges[0]} is not just a screen with flickering numbers; it is a marketplace for human ingenuity. In ${selectedCountry}, thousands of companies compete daily to provide value to consumers. When you invest, you are betting on the collective productivity of your nation. Under the oversight of the ${country.regulator}, this machine operates on cycles of fear and greed. To win, you must learn to ignore the 'noise' of ${country.cities[1]} news cycles and focus on the 'signal' of long-term value creation and compounding interest.`
+      },
+      {
+        title: "03. The Tax-Advantaged Shield",
+        icon: <ShieldCheck className="h-6 w-6 text-amber-400" />,
+        content: `The single greatest multiplier of investment returns in ${selectedCountry} is the tax shield. The ${country.taxAgency} has created specific 'Bunkers' to encourage long-term growth. Utilizing tools like ${country.retirementAccounts[0]} and ${country.retirementAccounts[1]} allows your ${country.currencyCode} to grow without the 'drag' of annual taxation. This creates an exponential effect where money that would have gone to the government instead works for you. In ${selectedCountry}, failing to maximize these shields is the equivalent of a silent 20-30% penalty on your future wealth.`
+      },
+      {
+        title: "04. Risk, Diversification & The Spread",
+        icon: <Activity className="h-6 w-6 text-red-400" />,
+        content: `The greatest risk in the ${selectedCountry} market isn't a crash—it's a lack of diversification. In hubs like ${country.cities[2]}, many investors over-allocate to a single sector or company. You must understand that risk is the price you pay for returns. By utilizing 'Index' strategies that capture the entire ${country.stockExchanges[0]}, you minimize 'Unsystematic Risk' and ensure you capture the average growth of the machine. Remember: the ${country.majorBanks[0]} wants to sell you high-fee products that eat your returns; your goal is to minimize their spread and maximize your own.`
+      },
+      {
+        title: "05. The Strategic Portfolio Audit",
+        icon: <Target className="h-6 w-6 text-purple-400" />,
+        content: `To optimize your fortress in ${selectedCountry}, you must audit your relationship with your 'Assets.' Are they productive or are they just sitting idle? Start by questioning the fees you pay to ${country.majorBanks[1]} or ${country.majorBanks[2]}. In ${selectedCountry}, even a 1% management fee can cost you hundreds of thousands over a lifetime. Shift your focus to 'Low-Cost, High-Velocity' vehicles that align with the ${country.regulator} standards while keeping the majority of the growth on your balance sheet.`
+      },
+      {
+        title: "06. Advanced Generative Wealth",
+        icon: <Award className="h-6 w-6 text-yellow-400" />,
+        content: `True sovereignty in ${selectedCountry} comes from building a 'Generative Machine' that pays for your life without requiring your presence. By teaching your family the mechanics of the ${country.stockExchanges[0]} and the protections of the ${country.taxAgency}, you create a legacy of financial literacy. Once you master the architecture of ownership in ${selectedCountry}, you stop being a consumer of the economy and start being its architect. This Unit ${currentUnit?.number} is your blueprint for moving from 'Saving' to 'Owning'.`
+      }
+    ];
+
+    return (
+      <div className="space-y-20">
+        {sections.map((s, i) => (
+          <section key={i} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: `${i * 100}ms` }}>
+            <div className="flex items-center gap-4 border-b border-white/5 pb-6">
+              <div className="p-3 bg-slate-900 rounded-2xl border border-white/10 shadow-inner">
+                {s.icon}
+              </div>
+              <h2 className="text-3xl font-black text-white tracking-tight">
+                {s.title}
+              </h2>
+            </div>
+            <div className="space-y-6">
+              <p className="leading-relaxed text-slate-300 text-xl font-medium first-letter:text-5xl first-letter:font-black first-letter:text-emerald-400 first-letter:mr-3 first-letter:float-left">
+                {s.content}
+              </p>
+              <p className="text-slate-400 text-lg leading-relaxed italic border-l-2 border-emerald-500/30 pl-6">
+                As a student of the Academy in {selectedCountry}, you must recognize that your investment portfolio is your most powerful tool for independence. In Unit {currentUnit?.number}, we provide the data points needed to negotiate lower fees and optimize your tax strategy within the {country.currencyCode} environment.
+              </p>
+            </div>
+          </section>
+        ))}
+      </div>
+    );
+  };
+
+  const renderFamilyDeepDive = (country: CountrySpecificInfo) => {
+    const sections = [
+      {
+        title: "01. The Energy of Value",
+        icon: <HeartPulse className="h-6 w-6 text-pink-400" />,
+        content: `Teaching the next generation about ${country.currencyCode} starts by explaining that money is not just paper or numbers on a screen—it is 'Stored Energy.' Whether you are in ${country.cities[0]} or a small town, every dollar earned represents a piece of your time and effort. By helping your children understand that spending is 'Releasing Energy' and saving is 'Storing Energy,' you build a foundation of respect for the work required to build a legacy in ${selectedCountry}.`
+      },
+      {
+        title: "02. The Spend, Save, Give Machine",
+        icon: <Waves className="h-6 w-6 text-blue-400" />,
+        content: `A family financial fortress in ${selectedCountry} is built on the three pillars of cash flow: Spend, Save, and Give. By implementing a physical or digital 'Three-Bucket' system, you teach children that every ${country.currencySymbol} they receive must be allocated strategically. This simple mechanic, practiced early in hubs like ${country.cities[1]}, builds the muscle of 'Delayed Gratification'— the single most important predictor of future success in the ${country.regulator} economy.`
+      },
+      {
+        title: "03. The Power of Time: Compound Magic",
+        icon: <Zap className="h-6 w-6 text-amber-400" />,
+        content: `The greatest asset a child in ${selectedCountry} has is not their inheritance, but their 'Time Horizon.' Explaining compounding interest as a 'Money Snowball' that starts small in a ${country.majorBanks[0]} account but grows into a mountain over decades is critical. By showing them how a dollar today can become ten dollars in the future inside a shield like ${country.retirementAccounts[0]}, you turn them into young strategists who value the future as much as the present.`
+      },
+      {
+        title: "04. The Advertising & Consumption Trap",
+        icon: <ShieldAlert className="h-6 w-6 text-red-400" />,
+        content: `Modern children in ${selectedCountry} are targeted by billions of dollars in advertising designed to foster 'Instant Gratification.' Whether it's through social media or gaming in ${country.cities[2]}, the machine wants them to be consumers, not owners. Your job as a parent is to expose the 'Illusions' of marketing and teach them to ask: 'Does this purchase help me build my machine, or does it just Release my Energy?' This awareness is the ultimate shield against the consumer debt traps of ${selectedCountry}.`
+      },
+      {
+        title: "05. The Strategic Allowance Audit",
+        icon: <Target className="h-6 w-6 text-purple-400" />,
+        content: `To build financial mastery, children need to practice with real ${country.currencyCode}. Use an allowance not as a gift, but as a 'Management Training Tool.' In ${selectedCountry}, encourage them to audit their own spending and celebrate when they hit 'Storing Energy' targets. Teaching them to research the cost of living in ${country.cities[0]} vs. ${country.cities[1]} helps them understand the regional economics they will one day navigate as adults under the ${country.regulator} framework.`
+      },
+      {
+        title: "06. Advanced Generational Sovereignty",
+        icon: <Award className="h-6 w-6 text-yellow-400" />,
+        content: `Mastering the ${selectedCountry} family legacy requires an understanding that financial literacy is a 'Linguistic Skill.' By teaching your family the vocabulary of ${country.currencyCode}, ${country.stockExchanges[0]}, and the ${country.taxAgency}, you ensure that wealth is not just transferred, but 'Managed.' Once your children see the economy as a predictable machine, they stop being victims of uncertainty and start being the architects of their own generational wealth. This Unit ${currentUnit?.number} is your family's declaration of independence.`
+      }
+    ];
+
+    return (
+      <div className="space-y-20">
+        {sections.map((s, i) => (
+          <section key={i} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: `${i * 100}ms` }}>
+            <div className="flex items-center gap-4 border-b border-white/5 pb-6">
+              <div className="p-3 bg-slate-900 rounded-2xl border border-white/10 shadow-inner">
+                {s.icon}
+              </div>
+              <h2 className="text-3xl font-black text-white tracking-tight">
+                {s.title}
+              </h2>
+            </div>
+            <div className="space-y-6">
+              <p className="leading-relaxed text-slate-300 text-xl font-medium first-letter:text-5xl first-letter:font-black first-letter:text-pink-400 first-letter:mr-3 first-letter:float-left">
+                {s.content}
+              </p>
+              <p className="text-slate-400 text-lg leading-relaxed italic border-l-2 border-pink-500/30 pl-6">
+                In {selectedCountry}, the greatest gift you can give your family is the ability to navigate the {country.currencyCode} machine. It is a language that is rarely taught in schools but is required for survival. By mastering Unit {currentUnit?.number} together, you build a generational shield that no institutional shift can dismantle.
+              </p>
+            </div>
+          </section>
+        ))}
+      </div>
+    );
+  };
+
+  const renderMortgageDeepDive = (country: CountrySpecificInfo) => {
+    const sections = [
+      {
+        title: "01. The Amortization Illusion",
+        icon: <Home className="h-6 w-6 text-blue-400" />,
+        content: `When you sign for a home in ${country.cities[0]} or ${country.cities[1]}, you aren't just buying a house; you are signing a 30-year labor contract with a lender like ${country.majorBanks[0]}. The 'Amortization Table' is the most expensive document you will ever sign. It is a mathematical front-loading machine designed to capture the majority of your interest in the first 10-15 years. In ${selectedCountry}, by the time you've paid off your home, you have often paid for it twice—once to the builder, and once to the bank.`
+      },
+      {
+        title: "02. The Daily Interest Machine",
+        icon: <Activity className="h-6 w-6 text-emerald-400" />,
+        content: `Under the rules of the ${country.regulator}, mortgage interest in ${selectedCountry} is calculated based on your remaining balance. Most homeowners see their mortgage as a monthly bill; the strategist sees it as a 'Daily Interest Calculation.' Every dollar you keep sitting in a low-interest savings account earning ${country.rates.savings} while your mortgage costs you ${country.rates.mortgage} is a loss of wealth. To win, you must minimize the 'Average Daily Balance' of your debt, forcing the bank to calculate interest on a smaller number every single morning.`
+      },
+      {
+        title: "03. The Equity Trap vs. Liquidity",
+        icon: <Waves className="h-6 w-6 text-amber-400" />,
+        content: `In ${selectedCountry}, 'Home Equity' is often a 'Dead Asset.' It is money trapped in the walls of your house that you cannot spend without permission from ${country.majorBanks[1]}. By utilizing tools like ${country.productName || 'a HELOC'} or ${country.retirementAccounts[0]} offsets, you can keep your capital 'Liquid' while still reducing your mortgage interest. The goal is 'Efficiency'—ensuring your money works 24/7 to reduce your liability without losing access to it for emergencies or opportunities in the ${country.stockExchanges[0]}.`
+      },
+      {
+        title: "04. Strategic Refinancing & Renewals",
+        icon: <ShieldAlert className="h-6 w-6 text-red-400" />,
+        content: `The greatest risk in the ${selectedCountry} mortgage market is the 'Renewal Trap.' In markets like Canada or the UK, mortgages renew every few years, exposing you to the current prime rate of ${country.rates.prime}. In the USA, the 30-year fixed rate can lock you into an inefficient structure for decades. You must move beyond being a passive 'Borrower' and become a 'Lender Analyst.' Perform a 'Stress Test' on your mortgage to see how a 2% rate hike would impact your cash flow in ${country.cities[2]}.`
+      },
+      {
+        title: "05. The Mortgage Optimization Blueprint",
+        icon: <Target className="h-6 w-6 text-purple-400" />,
+        content: `To optimize your mortgage in ${selectedCountry}, you must audit your relationship with ${country.majorBanks[0]}. Start by questioning why your money is siloed in accounts that benefit the bank's balance sheet more than yours. Utilize 'Accelerated' strategies that hit the principal early and often. In ${selectedCountry}, your highest ROI comes from 'Neutralizing' the interest calculations regulated by the ${country.regulator}. Shift your mindset from 'Monthly Payments' to 'Principal Velocity.'`
+      },
+      {
+        title: "06. Advanced Home Sovereignty",
+        icon: <Award className="h-6 w-6 text-yellow-400" />,
+        content: `Mastering the ${selectedCountry} mortgage landscape requires an understanding of the ${country.regulator} framework and the protection offered by ${country.protection}. By teaching your family that your house is a 'Liability' until it is paid off, you build a generational culture of ownership. Once you master the architecture of home loans in ${selectedCountry}, you stop being a tenant of the bank and start being the architect of your own financial legacy. This Unit ${currentUnit?.number} is your final step to true freedom.`
+      }
+    ];
+
+    return (
+      <div className="space-y-20">
+        {sections.map((s, i) => (
+          <section key={i} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: `${i * 100}ms` }}>
+            <div className="flex items-center gap-4 border-b border-white/5 pb-6">
+              <div className="p-3 bg-slate-900 rounded-2xl border border-white/10 shadow-inner">
+                {s.icon}
+              </div>
+              <h2 className="text-3xl font-black text-white tracking-tight">
+                {s.title}
+              </h2>
+            </div>
+            <div className="space-y-6">
+              <p className="leading-relaxed text-slate-300 text-xl font-medium first-letter:text-5xl first-letter:font-black first-letter:text-blue-400 first-letter:mr-3 first-letter:float-left">
+                {s.content}
+              </p>
+              <p className="text-slate-400 text-lg leading-relaxed italic border-l-2 border-blue-500/30 pl-6">
+                In {selectedCountry}, your mortgage is likely your largest financial commitment. It can either be a 30-year weight or a 10-year springboard. By mastering the rules of Unit {currentUnit?.number}, you ensure that your home becomes a true asset for your family, not just a profit center for {country.majorBanks[0]}.
               </p>
             </div>
           </section>
@@ -382,6 +682,11 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
       case 'banking': return renderBankingDeepDive(country);
       case 'insurance': return renderInsuranceDeepDive(country);
       case 'economics': return renderEconomicsDeepDive(country);
+      case 'government': return renderGovernmentDeepDive(country);
+      case 'debt': return renderDebtDeepDive(country);
+      case 'investing': return renderInvestingDeepDive(country);
+      case 'family': return renderFamilyDeepDive(country);
+      case 'mortgage': return renderMortgageDeepDive(country);
       default: return renderDefaultDeepDive(country);
     }
   };
