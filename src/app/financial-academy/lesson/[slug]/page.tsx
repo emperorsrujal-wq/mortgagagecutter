@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { use, useState, useEffect } from 'react';
@@ -148,32 +149,38 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
       {
         title: "01. The Illusion of the Vault",
         icon: <Landmark className="h-6 w-6 text-blue-500" />,
-        content: `When you walk into a branch of ${country.majorBanks[0]} in ${country.cities[0]}, the atmosphere is designed to scream 'Security.' The polished marble and heavy doors suggest your ${country.currencyCode} is sitting in a physical vault, safely locked away. This is the first great illusion of modern finance. In reality, your deposit is not a box of cash with your name on it; it is a legally binding unsecured loan you have granted to the bank. Under the rules of the ${country.regulator}, the bank is only a pass-through entity for your hard-earned energy.`
+        content: `When you walk into a branch of ${country.majorBanks[0]} in ${country.cities[0]}, the atmosphere is designed to scream 'Security.' The polished marble and heavy doors suggest your ${country.currencyCode} is sitting in a physical vault, safely locked away. This is the first great illusion of modern finance. In reality, a bank is not a storage unit; it is a financial intermediary—a spread merchant that borrows money from you (depositors) at a low cost and lends it to others at a high price. Your deposit is not a box of cash with your name on it; it is a legally binding unsecured loan you have granted to the bank. Under the rules of the ${country.regulator}, the bank is only a pass-through entity for your hard-earned energy.`
       },
       {
         title: "02. The Fractional Reserve Machine",
         icon: <TrendingUp className="h-6 w-6 text-emerald-500" />,
-        content: `Under the oversight of the ${country.centralBank}, the system in ${selectedCountry} operates on 'Fractional Reserve' mechanics. For every ${country.currencySymbol}1,000 you deposit, the bank is only required to keep a tiny fraction in reserve. They lend out the remaining 90% or more to other consumers for mortgages and car loans. Through this cycle, banks literally 'create' money out of thin air, all while charging compound interest on every cent of it. You are effectively providing the raw material for their profit machine.`
+        content: `Under the oversight of the ${country.centralBank}, the system in ${selectedCountry} operates on 'Fractional Reserve' mechanics. For every ${country.currencySymbol}1,000 you deposit, the bank is only required to keep a tiny fraction in reserve. They lend out the remaining 90% or more to other consumers for mortgages and car loans. Through this cycle, banks literally 'create' money out of thin air, all while charging compound interest on every cent of it. You are effectively providing the raw material for their profit machine, while they keep the lion's share of the productivity your capital generates in the wider economy.`
       },
       {
-        title: "03. The Toolset: Checking, Savings & Term Locks",
+        title: "03. The Toolset: Transactional vs. Stored Capital",
         icon: <Coins className="h-6 w-6 text-amber-500" />,
-        content: `To capture your capital, ${country.majorBanks[0]} offers a suite of specialized tools. The 'Checking Account' is your Transaction Hub—designed for high frequency, it pays zero interest because it is where your money is most volatile. The 'Savings Account' is your Liquidity Bucket, offering a symbolic interest rate of ${country.rates.savings} to discourage you from leaving. For those seeking 'Safety', they offer ${termDeposit}s—the Time Lock. In a ${termDeposit}, you freeze your ${country.currencyCode} for a set period in exchange for a slightly higher rate, which the bank immediately lends out at the Prime Rate of ${country.rates.prime}.`
+        content: `To capture your capital, ${country.majorBanks[0]} offers a suite of specialized tools designed for different stages of your financial flow. 
+        
+        The 'Checking Account' is your Transaction Hub—designed for high frequency and maximum liquidity. Because your money is constantly moving in and out to pay for life in ${country.cities[1]}, the bank pays zero interest. They offer this "convenience" because it provides them with a constant stream of free capital they can use to meet their reserve requirements without paying you a dime for the privilege. 
+        
+        The 'Savings Account' is your Liquidity Bucket. It is marketed as a place to build an emergency fund, offering a symbolic interest rate of ${country.rates.savings}. This rate is intentionally set just high enough to discourage you from leaving, but rarely high enough to beat inflation. It acts as a holding pen for your "idle" cash, ensuring the bank has a stable pool of money to lend out at the Prime Rate of ${country.rates.prime}.
+        
+        For those seeking 'Safety', they offer ${termDeposit}s—the Time Lock. In a ${termDeposit}, you legally agree to freeze your ${country.currencyCode} for a set period, typically 1 to 5 years. In exchange for surrendering your liquidity, the bank pays a slightly higher rate. This is the ultimate win for the bank: they get guaranteed, long-term capital that they can immediately leverage into 30-year mortgages, knowing you cannot withdraw it without a penalty.`
       },
       {
         title: "04. The Spread: Your Effort, Their Profit",
         icon: <Zap className="h-6 w-6 text-amber-500" />,
-        content: `The primary profit engine for banks in ${selectedCountry} is the 'Spread.' They pay you ${country.rates.savings} on your savings while charging you ${country.rates.mortgage} on your debt. This difference—the spread—is what funds the skyscrapers owned by ${country.majorBanks[1]}. They take your 'idle' capital, pay you almost nothing for the privilege of holding it, and then sell it back to your community at a massive premium. To win, you must learn how to minimize this spread in your own household.`
+        content: `The primary profit engine for banks in ${selectedCountry} is the 'Spread.' They pay you ${country.rates.savings} on your savings while charging you ${country.rates.mortgage} on your debt. This difference—the spread—is what funds the skyscrapers owned by ${country.majorBanks[1]}. They take your 'idle' capital, pay you almost nothing for the privilege of holding it, and then sell it back to your community at a massive premium. To win, you must learn how to minimize this spread in your own household by ensuring your money never sits in a low-interest bucket while high-interest debt exists.`
       },
       {
         title: "05. Strategic Pitfalls & Inflation Erosion",
         icon: <ShieldAlert className="h-6 w-6 text-red-500" />,
-        content: `The biggest risk in the ${selectedCountry} banking system isn't a bank run—it's the silent erosion of your purchasing power. While your balance at ${country.majorBanks[1]} might look stable, the ${country.centralBank} manages the national debt of ${country.nationalDebt} by allowing inflation to exist. If the inflation rate is higher than your savings rate, you are effectively paying the bank to lose money every day. Keeping large sums in a 'safe' savings account in hubs like ${country.cities[1]} is a guaranteed way to lose wealth relative to the cost of living.`
+        content: `The biggest risk in the ${selectedCountry} banking system isn't a bank run—it's the silent erosion of your purchasing power. While your balance at ${country.majorBanks[1]} might look stable on a screen, the ${country.centralBank} manages the national debt of ${country.nationalDebt} by allowing inflation to exist. If the inflation rate is higher than your savings rate, you are effectively paying the bank to lose money every day. Keeping large sums in a 'safe' savings account in hubs like ${country.cities[1]} is a guaranteed way to lose wealth relative to the cost of living over any meaningful time horizon.`
       },
       {
         title: "06. The Strategic Action Plan",
         icon: <Target className="h-6 w-6 text-purple-500" />,
-        content: `To move from 'consumer' to 'strategist,' you must audit your relationship with ${country.majorBanks[0]}. Start by questioning why your money is siloed in accounts that benefit the bank's balance sheet more than yours. Shift your focus from 'saving' to 'velocity'—ensuring your money hits your debt immediately to neutralize the interest calculations regulated by the ${country.regulator}. Your goal is to move from being the 'Fuel' of the bank to being the 'Owner' of your own capital flow.`
+        content: `To move from 'consumer' to 'strategist,' you must audit your relationship with ${country.majorBanks[0]}. Start by questioning why your money is siloed in accounts that benefit the bank's balance sheet more than yours. Shift your focus from 'saving' to 'velocity'—ensuring your money hits your debt immediately to neutralize the interest calculations regulated by the ${country.regulator}. Your goal is to move from being the 'Fuel' of the bank's machine to being the 'Owner' of your own capital flow, using their products only when they serve your speed of payoff.`
       }
     ];
 
@@ -190,9 +197,9 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
               </h2>
             </div>
             <div className="space-y-6">
-              <p className="leading-relaxed text-slate-300 text-xl font-medium first-letter:text-5xl first-letter:font-black first-letter:text-blue-500 first-letter:mr-3 first-letter:float-left">
+              <div className="leading-relaxed text-slate-300 text-xl font-medium whitespace-pre-wrap">
                 {s.content}
-              </p>
+              </div>
             </div>
           </section>
         ))}
@@ -205,32 +212,38 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
       {
         title: "01. The Architecture of Risk",
         icon: <Umbrella className="h-6 w-6 text-blue-400" />,
-        content: `In the ${selectedCountry} market, insurance is often sold as a safety net, but it is more accurately described as the 'Architecture of Certainty.' When you pay a premium to ${country.majorInsurers[0]}, you are legally transferring the financial consequence of a catastrophic event to a larger balance sheet. This 'Transfer of Risk' is the cornerstone of generational wealth. Without it, one medical emergency or property disaster in ${country.cities[0]} can wipe out decades of disciplined savings.`
+        content: `In the ${selectedCountry} market, insurance is often sold as a safety net, but it is more accurately described as the 'Architecture of Certainty.' When you pay a premium to ${country.majorInsurers[0]}, you are legally transferring the financial consequence of a catastrophic event to a larger balance sheet. This 'Transfer of Risk' is the cornerstone of generational wealth. Without it, one medical emergency or property disaster in ${country.cities[0]} can wipe out decades of disciplined savings and labor.`
       },
       {
         title: "02. The Actuarial Machine",
         icon: <Activity className="h-6 w-6 text-emerald-400" />,
-        content: `Under the gaze of the ${country.insuranceRegulator}, players like ${country.majorInsurers[1]} operate the 'Actuarial Machine.' This is a mathematical engine that uses the 'Law of Large Numbers' to predict the future. They know exactly how many houses will burn and how many people will fall ill in ${selectedCountry} this year. They don't bet on individuals; they bet on the collective. By understanding that your premium is a calculated bet where the house always has the edge, you can begin to choose policies that cover true catastrophes only.`
+        content: `Under the gaze of the ${country.insuranceRegulator}, players like ${country.majorInsurers[1]} operate the 'Actuarial Machine.' This is a mathematical engine that uses the 'Law of Large Numbers' to predict the future with terrifying accuracy. They know exactly how many houses will burn and how many people will fall ill in ${selectedCountry} this year. They don't bet on individuals; they bet on the collective. By understanding that your premium is a calculated bet where the house always has the edge, you can begin to choose policies that cover true catastrophes only, rather than "maintenance" events.`
       },
       {
         title: "03. The Toolset: Term Protection vs. Complexity Traps",
         icon: <ShieldCheck className="h-6 w-6 text-amber-400" />,
-        content: `In ${selectedCountry}, life insurance is divided into two roles. 'Term Life' is Pure Protection—it covers you for a set time for the lowest ${country.currencyCode} cost. 'Whole' or 'Universal Life' are the Complexity Traps—they bundle insurance with high-fee investment components that often benefit the agent more than you. Then there are 'Living Benefits' like Disability insurance, designed to protect your ability to earn income if you are injured in ${country.cities[1]}. Each product is a tool; choosing the wrong one is a multi-decade drag on your wealth.`
+        content: `In ${selectedCountry}, the insurance inventory is divided into distinct roles. 
+        
+        'Term Life' is Pure Protection—it covers you for a set time for the lowest ${country.currencyCode} cost. It is the most efficient use of capital for risk transfer. 
+        
+        'Whole' or 'Universal Life' are the Complexity Traps—they bundle insurance with high-fee investment components that often benefit the agent's commission more than your family's net worth. 
+        
+        Then there are 'Living Benefits' like Disability and Critical Illness, designed to protect your "Income Engine"—your ability to earn ${country.currencyCode} if you are injured in ${country.cities[1]}. Each product is a tool; choosing the wrong one creates a multi-decade drag on your financial velocity.`
       },
       {
         title: "04. Property, Auto & The Deductible Lever",
         icon: <Scale className="h-6 w-6 text-amber-400" />,
-        content: `Just as banks profit from interest spreads, ${country.majorInsurers[2]} profits from the gap between premiums collected and claims paid. In ${selectedCountry}, this 'Underwriting Profit' is supplemented by 'Investment Float.' Between the time you pay and the time they pay out a claim, they invest your money in the ${country.stockExchanges[0]}. You can fight back by using the 'Deductible Lever'—raising your deductibles to the maximum you can handle, which lowers your premium and keeps more ${country.currencyCode} on your balance sheet.`
+        content: `Just as banks profit from interest spreads, ${country.majorInsurers[2]} profits from the gap between premiums collected and claims paid. In ${selectedCountry}, this 'Underwriting Profit' is supplemented by 'Investment Float.' Between the time you pay and the time they pay out a claim, they invest your money in the ${country.stockExchanges[0]}. You can fight back by using the 'Deductible Lever'—raising your deductibles to the maximum you can handle, which lowers your premium and keeps more ${country.currencyCode} on your balance sheet for debt reduction.`
       },
       {
         title: "05. Strategic Pitfalls & The Policy Illusion",
         icon: <ShieldAlert className="h-6 w-6 text-red-400" />,
-        content: `The greatest risk in the ${selectedCountry} insurance landscape is the 'Policy Illusion.' Many homeowners in ${country.cities[2]} believe they are fully covered, only to discover 'exclusions' buried in the fine print during a crisis. Complexity is a feature, not a bug—it allows ${country.majorInsurers[0]} to deny claims based on technicalities. You must perform a 'Stress Test' on your policies to ensure they actually function when the pressure is applied.`
+        content: `The greatest risk in the ${selectedCountry} insurance landscape is the 'Policy Illusion.' Many homeowners in ${country.cities[2]} believe they are fully covered, only to discover 'exclusions' buried in the fine print during a crisis. Complexity is a feature, not a bug—it allows ${country.majorInsurers[0]} to deny claims based on technicalities. You must perform a 'Stress Test' on your policies to ensure they actually function when the pressure is applied, rather than just providing a false sense of security.`
       },
       {
         title: "06. The Strategic Insurance Audit",
         icon: <Award className="h-6 w-6 text-yellow-400" />,
-        content: `To optimize your fortress in ${selectedCountry}, you must audit your relationship with ${country.majorInsurers[1]}. Start by questioning why you are paying for low-deductible policies that encourage 'premium leakage.' Your highest ROI comes from increasing your deductibles and redirecting that saved premium into your ${country.retirementAccounts[0]} or debt reduction. This shifts the Actuarial Machine's math in your favor, keeping your wealth in your family's control.`
+        content: `To optimize your fortress in ${selectedCountry}, you must audit your relationship with ${country.majorInsurers[1]}. Start by questioning why you are paying for low-deductible policies that encourage 'premium leakage.' Your highest ROI comes from increasing your deductibles and redirecting that saved premium into your ${country.retirementAccounts[0]} or debt reduction. This shifts the Actuarial Machine's math in your favor, keeping your wealth within your family's control.`
       }
     ];
 
@@ -247,9 +260,9 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
               </h2>
             </div>
             <div className="space-y-6">
-              <p className="leading-relaxed text-slate-300 text-xl font-medium first-letter:text-5xl first-letter:font-black first-letter:text-emerald-400 first-letter:mr-3 first-letter:float-left">
+              <div className="leading-relaxed text-slate-300 text-xl font-medium whitespace-pre-wrap">
                 {s.content}
-              </p>
+              </div>
             </div>
           </section>
         ))}
@@ -262,17 +275,23 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
       {
         title: "01. The Debt Paradigm",
         icon: <Flame className="h-6 w-6 text-red-500" />,
-        content: `In the ${selectedCountry} economy, debt is often sold as 'Opportunity,' but it is more accurately described as 'Future Work Already Spent.' When you sign a credit agreement with ${country.majorBanks[0]}, you are granting them a lien on your future energy. From the high-rises of ${country.cities[0]} to the suburbs, consumer debt is the 'Gravity' that pulls wealth away from families and towards institutional balance sheets. To win, you must stop seeing debt as a tool for lifestyle and start seeing it as a calculation.`
+        content: `In the ${selectedCountry} economy, debt is often sold as 'Opportunity,' but it is more accurately described as 'Future Work Already Spent.' When you sign a credit agreement with ${country.majorBanks[0]}, you are granting them a lien on your future energy. From the high-rises of ${country.cities[0]} to the suburbs, consumer debt is the 'Gravity' that pulls wealth away from families and towards institutional balance sheets. To win, you must stop seeing debt as a tool for lifestyle and start seeing it as a mathematical calculation.`
       },
       {
         title: "02. The Compound Interest Trap",
         icon: <Activity className="h-6 w-6 text-orange-500" />,
-        content: `Under the gaze of the ${country.regulator}, lenders in ${selectedCountry} utilize the 'Power of Compounding' against you. Interest is not just charged on the principal; it is charged on the interest from the previous month. This creates a 'Death Spiral' where the balance grows faster than your ability to repay it. In ${selectedCountry}, the average household carries debt that costs them ${country.rates.mortgage} or more in interest—a silent siphon that destroys generational wealth.`
+        content: `Under the gaze of the ${country.regulator}, lenders in ${selectedCountry} utilize the 'Power of Compounding' against you. Interest is not just charged on the principal; it is often charged on the interest from the previous month. This creates a 'Death Spiral' where the balance can grow faster than your ability to repay it. In ${selectedCountry}, the average household carries debt that costs them far more in interest than they earn in savings—a silent siphon that destroys generational wealth.`
       },
       {
         title: "03. The Toolset: Cards, Cars & Structural Bridges",
         icon: <ShieldCheck className="h-6 w-6 text-amber-500" />,
-        content: `Debt products in ${selectedCountry} are designed for specific captures. 'Credit Cards' are High-Velocity Traps, offering convenience but charging rates upwards of 20% if not cleared instantly. 'Car Loans' are Depreciating Asset Debt—you borrow ${country.currencyCode} to buy an asset that loses value daily, ensuring the debt is always 'underwater.' 'Personal Loans' and 'Lines of Credit' are Structural Bridges, often used to consolidate debt but frequently resetting the trap for another 5-10 years.`
+        content: `Debt products in ${selectedCountry} are designed for specific captures. 
+        
+        'Credit Cards' are High-Velocity Traps, offering convenience but charging rates upwards of 20% if not cleared instantly. They are designed to keep you in a cycle of minimum payments. 
+        
+        'Car Loans' are Depreciating Asset Debt—you borrow ${country.currencyCode} to buy an asset that loses value daily, ensuring the debt is often 'underwater' compared to the vehicle's worth. 
+        
+        'Personal Loans' and 'Lines of Credit' are Structural Bridges, often used to consolidate debt but frequently resetting the interest trap for another 5-10 years if the root spending cause isn't addressed.`
       },
       {
         title: "04. Good Debt vs. Bad Debt: The Spread",
@@ -282,12 +301,12 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
       {
         title: "05. Strategic Pitfalls & Credit Scores",
         icon: <ShieldAlert className="h-6 w-6 text-red-400" />,
-        content: `The greatest risk in the ${selectedCountry} debt landscape is the 'Minimum Payment Illusion.' Lenders calculate a minimum payment that barely covers the interest, ensuring you stay in debt for decades. Additionally, your 'Credit Score' is simply a measure of how good you are at being a profitable customer for ${country.majorBanks[1]}. In ${selectedCountry}, you must move beyond the 'Score' and focus on the 'Balance.' Complexity is used to hide the true cost of borrowing.`
+        content: `The greatest risk in the ${selectedCountry} debt landscape is the 'Minimum Payment Illusion.' Lenders calculate a payment that barely covers the interest, ensuring you stay in debt for decades. Additionally, your 'Credit Score' is simply a measure of how good you are at being a profitable customer for ${country.majorBanks[1]}. In ${selectedCountry}, you must move beyond the 'Score' and focus on the 'Balance.' Complexity is used to hide the true cost of your borrowing.`
       },
       {
         title: "06. The Debt Liquidation Audit",
         icon: <Award className="h-6 w-6 text-yellow-400" />,
-        content: `To build a fortress in ${selectedCountry}, you must perform a 'Debt Audit.' List every liability you have, from your mortgage to your smallest credit line. Your highest ROI comes from 'Choking' high-interest debt first. This isn't just about 'Paying Off'; it's about 'Neutralizing.' Shift your focus to 'Debt Velocity'—the speed at which you can reduce your total liability and redirect that saved interest into your ${country.retirementAccounts[0]}.`
+        content: `To build a fortress in ${selectedCountry}, you must perform a 'Debt Audit.' List every liability you have, from your mortgage to your smallest credit line. Your highest ROI comes from 'Choking' high-interest debt first. This isn't just about 'Paying Off'; it's about 'Neutralizing' interest. Shift your focus to 'Debt Velocity'—the speed at which you can reduce your total liability and redirect that saved interest into your ${country.retirementAccounts[0]}.`
       }
     ];
 
@@ -304,9 +323,9 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
               </h2>
             </div>
             <div className="space-y-6">
-              <p className="leading-relaxed text-slate-300 text-xl font-medium first-letter:text-5xl first-letter:font-black first-letter:text-red-500 first-letter:mr-3 first-letter:float-left">
+              <div className="leading-relaxed text-slate-300 text-xl font-medium whitespace-pre-wrap">
                 {s.content}
-              </p>
+              </div>
             </div>
           </section>
         ))}
@@ -319,32 +338,38 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
       {
         title: "01. The Ownership Mindset",
         icon: <TrendingUp className="h-6 w-6 text-blue-400" />,
-        content: `In the ${selectedCountry} wealth ladder, there is a fundamental divide: those who work for money, and those who own the machines that produce it. Investing is the act of transition from laborer to owner. Whether you are buying shares on the ${country.stockExchanges[0]} or acquiring property in ${country.cities[0]}, you are moving your ${country.currencyCode} from a 'spending' bucket into an 'ownership' bucket. Most people fear the market because they see it as gambling; in reality, it is the only way to participate in national growth.`
+        content: `In the ${selectedCountry} wealth ladder, there is a fundamental divide: those who work for money, and those who own the machines that produce it. Investing is the act of transition from laborer to owner. Whether you are buying shares on the ${country.stockExchanges[0]} or acquiring property in ${country.cities[0]}, you are moving your ${country.currencyCode} from a 'spending' bucket into an 'ownership' bucket. Most people fear the market because they see it as gambling; in reality, it is the only way to participate in national and global growth.`
       },
       {
         title: "02. The Market Machine",
         icon: <BarChart3 className="h-6 w-6 text-emerald-400" />,
-        content: `The ${country.stockExchanges[0]} is not just a screen with flickering numbers; it is a marketplace for human ingenuity. In ${selectedCountry}, thousands of companies compete daily to provide value. When you invest, you are betting on the collective productivity of your nation. Under the oversight of the ${country.regulator}, this machine operates on cycles of fear and greed. To win, you must learn to ignore the news cycles and focus on the signal of long-term value creation.`
+        content: `The ${country.stockExchanges[0]} is not just a screen with flickering numbers; it is a marketplace for human ingenuity. In ${selectedCountry}, thousands of companies compete daily to provide value. When you invest, you are betting on the collective productivity of your nation. Under the oversight of the ${country.regulator}, this machine operates on cycles of fear and greed. To win, you must learn to ignore the news cycles and focus on the signals of long-term value creation.`
       },
       {
         title: "03. The Toolset: Units, Debt & Shells",
         icon: <Coins className="h-6 w-6 text-amber-400" />,
-        content: `The investing inventory in ${selectedCountry} consists of four primary vehicles. 'Stocks' are Ownership Units—you own a piece of a company's future profits. 'Bonds' are Debt Units—you lend your ${country.currencyCode} to governments or corporations. 'ETFs' and 'Mutual Funds' are Diversification Shells—they bundle hundreds of stocks together to reduce risk. Each product has a different 'Velocity' and 'Risk Profile' within the ${country.regulator} framework. Understanding these is the key to moving from consumer to owner.`
+        content: `The investing inventory in ${selectedCountry} consists of four primary vehicles. 
+        
+        'Stocks' are Ownership Units—you own a piece of a company's future profits. 
+        
+        'Bonds' are Debt Units—you lend your ${country.currencyCode} to governments or corporations in exchange for interest. 
+        
+        'ETFs' and 'Mutual Funds' are Diversification Shells—they bundle hundreds of stocks or bonds together to reduce individual company risk. Each product has a different 'Velocity' and 'Risk Profile' within the ${country.regulator} framework. Understanding these is the key to moving from consumer to owner.`
       },
       {
         title: "04. The Tax-Advantaged Shield",
         icon: <ShieldCheck className="h-6 w-6 text-amber-400" />,
-        content: `The single greatest multiplier of returns in ${selectedCountry} is the tax shield. The ${country.taxAgency} has created specific 'Bunkers' to encourage growth. Utilizing tools like ${country.retirementAccounts[0]} and ${country.retirementAccounts[1]} allows your wealth to grow without the drag of annual taxation. This creates an exponential effect where money that would have gone to the government instead works for you. In ${selectedCountry}, failing to maximize these shields is a silent penalty on your future.`
+        content: `The single greatest multiplier of returns in ${selectedCountry} is the tax shield. The ${country.taxAgency} has created specific 'Bunkers' to encourage capital growth. Utilizing tools like ${country.retirementAccounts[0]} and ${country.retirementAccounts[1]} allows your wealth to compound without the heavy drag of annual taxation. This creates an exponential effect where money that would have gone to the government instead works for you. In ${selectedCountry}, failing to maximize these shields is a silent penalty on your future.`
       },
       {
         title: "05. Risk, Diversification & The Fee Spread",
         icon: <Activity className="h-6 w-6 text-red-400" />,
-        content: `The greatest risk in the ${selectedCountry} market isn't a crash—it's a lack of diversification. In hubs like ${country.cities[2]}, many investors over-allocate to one sector. Furthermore, you must audit the fees you pay to ${country.majorBanks[1]}. In ${selectedCountry}, even a 1% management fee can cost you hundreds of thousands over a lifetime. Shift your focus to 'Low-Cost, High-Velocity' index funds that keep the majority of growth on your balance sheet.`
+        content: `The greatest risk in the ${selectedCountry} market isn't a crash—it's a lack of diversification. In hubs like ${country.cities[2]}, many investors over-allocate to one sector. Furthermore, you must audit the fees you pay to ${country.majorBanks[1]}. In ${selectedCountry}, even a 1% management fee can cost you hundreds of thousands over a lifetime. Shift your focus to 'Low-Cost, High-Velocity' index funds that keep the majority of growth on your family's balance sheet.`
       },
       {
         title: "06. The Strategic Portfolio Audit",
         icon: <Target className="h-6 w-6 text-purple-400" />,
-        content: `To optimize your fortress in ${selectedCountry}, you must audit your 'Assets.' Start by questioning high-fee products sold by ${country.majorBanks[0]}. Move toward index strategies that capture the entire ${country.stockExchanges[0]}. Remember: the machine is designed to capture your capital through fees; your goal is to minimize that leakage and maximize compounding. This Unit is your blueprint for moving from 'Labor' to 'Legacy'.`
+        content: `To optimize your fortress in ${selectedCountry}, you must audit your 'Assets.' Start by questioning high-fee products sold by ${country.majorBanks[0]}. Move toward index strategies that capture the entire ${country.stockExchanges[0]}. Remember: the financial machine is designed to capture your capital through fees; your goal is to minimize that leakage and maximize compounding. This Unit is your blueprint for moving from 'Labor' to 'Legacy'.`
       }
     ];
 
@@ -361,66 +386,9 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
               </h2>
             </div>
             <div className="space-y-6">
-              <p className="leading-relaxed text-slate-300 text-xl font-medium first-letter:text-5xl first-letter:font-black first-letter:text-emerald-400 first-letter:mr-3 first-letter:float-left">
+              <div className="leading-relaxed text-slate-300 text-xl font-medium whitespace-pre-wrap">
                 {s.content}
-              </p>
-            </div>
-          </section>
-        ))}
-      </div>
-    );
-  };
-
-  const renderMortgageDeepDive = (country: CountrySpecificInfo) => {
-    const sections = [
-      {
-        title: "01. The Amortization Illusion",
-        icon: <Home className="h-6 w-6 text-blue-400" />,
-        content: `When you sign for a home in ${country.cities[0]}, you aren't just buying a house; you are signing a 30-year labor contract with ${country.majorBanks[0]}. The 'Amortization Table' is the most expensive document you will ever sign. It is a mathematical front-loading machine designed to capture the majority of your interest in the first 10-15 years. In ${selectedCountry}, by the time you've paid off your home, you have often paid for it twice—once to the builder, and once to the bank.`
-      },
-      {
-        title: "02. The Daily Interest Machine",
-        icon: <Activity className="h-6 w-6 text-emerald-400" />,
-        content: `Under the rules of the ${country.regulator}, mortgage interest in ${selectedCountry} is calculated based on your remaining balance. Most homeowners see their mortgage as a monthly bill; the strategist sees it as a 'Daily Interest Calculation.' Every dollar you keep in a low-interest savings account earning ${country.rates.savings} while your mortgage costs you ${country.rates.mortgage} is a loss of wealth. To win, you must minimize the 'Average Daily Balance' of your debt.`
-      },
-      {
-        title: "03. The Toolset: Fixed, Variable & Strategic Valves",
-        icon: <Zap className="h-6 w-6 text-amber-400" />,
-        content: `Home loans in ${selectedCountry} come in three primary structures. 'Fixed Rate' mortgages offer the Certainty Premium—you pay more for stability. 'Variable' or 'Adjustable' rates are the Market Mirror—they reflect the ${country.centralBank} policy instantly. 'Strategic' tools like HELOCs or Offset accounts are the Strategic Valves—they allow you to deposit income directly against principal, dropping the interest charges regulated by the ${country.regulator} instantly. Choosing the right tool is the difference between 30 years of labor and 10.`
-      },
-      {
-        title: "04. The Equity Trap vs. Liquidity",
-        icon: <Waves className="h-6 w-6 text-amber-400" />,
-        content: `In ${selectedCountry}, 'Home Equity' is often a 'Dead Asset.' It is money trapped in your walls that you cannot spend without permission from ${country.majorBanks[1]}. By utilizing a ${country.productName || 'HELOC'}, you can keep your capital 'Liquid' while still reducing your mortgage interest. The goal is 'Efficiency'—ensuring your money works 24/7 to reduce your liability without losing access to it for emergencies in ${country.cities[1]} or opportunities in the ${country.stockExchanges[0]}.`
-      },
-      {
-        title: "05. Strategic Refinancing & Renewals",
-        icon: <ShieldAlert className="h-6 w-6 text-red-400" />,
-        content: `The greatest risk in the ${selectedCountry} mortgage market is the 'Renewal Trap.' In markets like Canada or the UK, mortgages renew every few years, exposing you to the prime rate of ${country.rates.prime}. You must move beyond being a passive borrower and become a 'Lender Analyst.' Perform a 'Stress Test' on your mortgage to see how a rate hike would impact your cash flow in ${country.cities[2]} before your next renewal cycle.`
-      },
-      {
-        title: "06. The Mortgage Optimization Blueprint",
-        icon: <Target className="h-6 w-6 text-purple-400" />,
-        content: `To optimize your mortgage in ${selectedCountry}, you must audit your relationship with ${country.majorBanks[0]}. Start by questioning why your money is siloed in accounts that benefit the bank's balance sheet more than yours. Utilize 'Accelerated' strategies that hit the principal early and often. Shift your mindset from 'Monthly Payments' to 'Principal Velocity.' Mastering the architecture of home loans is your final step to true financial sovereignty.`
-      }
-    ];
-
-    return (
-      <div className="space-y-20">
-        {sections.map((s, i) => (
-          <section key={i} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: `${i * 100}ms` }}>
-            <div className="flex items-center gap-4 border-b border-white/5 pb-6">
-              <div className="p-3 bg-slate-900 rounded-2xl border border-white/10 shadow-inner">
-                {s.icon}
               </div>
-              <h2 className="text-3xl font-black text-white tracking-tight">
-                {s.title}
-              </h2>
-            </div>
-            <div className="space-y-6">
-              <p className="leading-relaxed text-slate-300 text-xl font-medium first-letter:text-5xl first-letter:font-black first-letter:text-blue-400 first-letter:mr-3 first-letter:float-left">
-                {s.content}
-              </p>
             </div>
           </section>
         ))}
@@ -438,17 +406,23 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
       {
         title: "02. The Hand on the Lever",
         icon: <Landmark className="h-6 w-6 text-emerald-400" />,
-        content: `The single most powerful force in ${selectedCountry} is the ${country.centralBank}. By adjusting the base interest rate (currently ${country.rates.prime} for prime lending), they control the cost of money itself. When they lower the lever, credit flows easily and your mortgage at ${country.majorBanks[0]} becomes cheaper. When they pull the lever back, they are cooling the engine to fight inflation. Understanding this lever is the difference between being a victim and being a strategist.`
+        content: `The single most powerful force in ${selectedCountry} is the ${country.centralBank}. By adjusting the base interest rate (currently affecting the prime lending rate of ${country.rates.prime}), they control the cost of money itself. When they lower the lever, credit flows easily and your mortgage at ${country.majorBanks[0]} becomes cheaper. When they pull the lever back, they are cooling the engine to fight inflation. Understanding this lever is the difference between being a victim and being a strategist.`
       },
       {
         title: "03. The Economic Product Mix: Debt vs. Credit",
         icon: <Zap className="h-6 w-6 text-amber-400" />,
-        content: `The ${selectedCountry} economy functions through specific financial vehicles. 'Government Bonds' are the foundation of national debt, allowing the state to fund programs by borrowing your ${country.currencyCode}. 'Consumer Credit' products are the grease that keeps the retail wheels turning in ${country.cities[2]}, but they also act as the primary capture point for your future income. 'Mortgages' are the structural pillars of the housing market, regulated by the ${country.regulator} to ensure institutional stability.`
+        content: `The ${selectedCountry} economy functions through specific financial vehicles. 
+        
+        'Government Bonds' are the foundation of national debt, allowing the state to fund programs by borrowing your ${country.currencyCode}. 
+        
+        'Consumer Credit' products are the grease that keeps the retail wheels turning in ${country.cities[2]}, but they also act as the primary capture point for your future income. 
+        
+        'Mortgages' are the structural pillars of the housing market, regulated by the ${country.regulator} to ensure institutional stability while often locking families into 30-year debt cycles.`
       },
       {
         title: "04. The Inflationary Siphon",
         icon: <Waves className="h-6 w-6 text-amber-400" />,
-        content: `Inflation is not just 'rising prices'; it is the slow, invisible devaluation of your life's work. As the ${country.centralBank} manages the national debt of ${country.nationalDebt}, the ${country.currencyCode} in your pocket loses purchasing power every day it sits idle. If your wealth is not growing faster than inflation, you are effectively paying a 'silent tax.' To survive, you must move capital from 'depreciating buckets' into 'productive assets' that the machine cannot easily siphon.`
+        content: `Inflation is not just 'rising prices'; it is the slow, invisible devaluation of your life's work. As the ${country.centralBank} manages the national debt of ${country.nationalDebt}, the ${country.currencyCode} in your pocket loses purchasing power every day it sits idle. If your wealth is not growing faster than inflation, you are effectively paying a 'silent tax' to the system. To survive, you must move capital from 'depreciating buckets' into 'productive assets' that the machine cannot easily siphon.`
       },
       {
         title: "05. Recession & the Credit Cycle",
@@ -475,9 +449,9 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
               </h2>
             </div>
             <div className="space-y-6">
-              <p className="leading-relaxed text-slate-300 text-xl font-medium first-letter:text-5xl first-letter:font-black first-letter:text-blue-400 first-letter:mr-3 first-letter:float-left">
+              <div className="leading-relaxed text-slate-300 text-xl font-medium whitespace-pre-wrap">
                 {s.content}
-              </p>
+              </div>
             </div>
           </section>
         ))}
@@ -500,17 +474,17 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
       {
         title: "03. The Revenue Engine: Taxation",
         icon: <Zap className="h-6 w-6 text-amber-400" />,
-        content: `The primary fuel for the government machine is the ${country.taxAgency}. In ${selectedCountry}, taxation is a progressive system designed to capture more energy as you become more successful. From income tax to consumption taxes, the engine is relentless. However, the ${country.taxAgency} also provides 'Safety Valves'—legal ways to keep more of your money. Utilizing ${country.retirementAccounts[0]} is your way of legally opting out of a portion of this capture, allowing wealth to compound inside a shield.`
+        content: `The primary fuel for the government machine is the ${country.taxAgency}. In ${selectedCountry}, taxation is a progressive system designed to capture more energy as you become more successful. From income tax to consumption taxes, the engine is relentless. However, the ${country.taxAgency} also provides 'Safety Valves'—legal ways to keep more of your money. Utilizing shields like ${country.retirementAccounts[0]} is your way of legally opting out of a portion of this capture, allowing wealth to compound inside a protected environment.`
       },
       {
         title: "04. The Deficit Dilemma",
         icon: <ShieldAlert className="h-6 w-6 text-red-400" />,
-        content: `When ${selectedCountry} spends more than it collects, it creates a deficit. To bridge this gap, they issue bonds—legally promising to pay back lenders with future tax revenue. With a national debt of ${country.nationalDebt}, the nation is in a state of debt service. This creates hidden pressure on the ${country.centralBank} to keep interest rates in a specific range. As a citizen, your personal savings are effectively the collateral for the national overdraft.`
+        content: `When ${selectedCountry} spends more than it collects, it creates a deficit. To bridge this gap, they issue bonds—legally promising to pay back lenders with future tax revenue. With a national debt of ${country.nationalDebt}, the nation is in a state of debt service. This creates hidden pressure on the ${country.centralBank} to keep interest rates in a specific range. As a citizen, your personal savings are effectively part of the collateral for the national overdraft.`
       },
       {
         title: "05. Benefits, Burdens & The Net Result",
         icon: <Target className="h-6 w-6 text-purple-400" />,
-        content: `While the government captures revenue, it also redistributes it through programs like ${country.programs.join(' and ')}. In hubs like ${country.cities[1]}, these benefits form the baseline of social stability. To win, you must calculate your 'Net Relationship' with the state. Are you a net contributor or a net beneficiary? The goal is to move from being a passive taxpayer to a proactive strategist who utilizes every grant and shield provided by the ${country.taxAgency}.`
+        content: `While the government captures revenue, it also redistributes it through programs like ${country.programs.join(' and ')}. In hubs like ${country.cities[1]}, these benefits form the baseline of social stability. To win, you must calculate your 'Net Relationship' with the state. Are you a net contributor or a net beneficiary? The goal is to move from being a passive taxpayer to a proactive strategist who utilizes every grant and shield provided by the ${country.taxAgency} code.`
       },
       {
         title: "06. Strategic Citizenship",
@@ -532,9 +506,9 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
               </h2>
             </div>
             <div className="space-y-6">
-              <p className="leading-relaxed text-slate-300 text-xl font-medium first-letter:text-5xl first-letter:font-black first-letter:text-purple-400 first-letter:mr-3 first-letter:float-left">
+              <div className="leading-relaxed text-slate-300 text-xl font-medium whitespace-pre-wrap">
                 {s.content}
-              </p>
+              </div>
             </div>
           </section>
         ))}
@@ -557,7 +531,13 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
       {
         title: "03. The Family Toolset: Allowances & First Accounts",
         icon: <Zap className="h-6 w-6 text-amber-400" />,
-        content: `To build mastery, children need practice. The 'Allowance' is a Management Training Tool—not a gift. 'Kids' Accounts' at ${country.majorBanks[0]} are the Storing Energy Bunkers, where they can watch their first few dollars earn interest. Modern savings apps are the Digital Dashboards, helping them visualize progress toward goals in ${country.cities[2]}. Each tool should be introduced as a way to manage energy more efficiently under ${country.regulator} standards.`
+        content: `To build mastery, children need practical experience. 
+        
+        The 'Allowance' is a Management Training Tool—not a gift. It should be tied to responsibilities and allocated across the Spend, Save, and Give buckets. 
+        
+        'Kids' Accounts' at ${country.majorBanks[0]} are the Storing Energy Bunkers, where they can watch their first few dollars earn interest. 
+        
+        Modern savings apps are the Digital Dashboards, helping them visualize progress toward goals in ${country.cities[2]}. Each tool should be introduced as a way to manage energy more efficiently under ${country.regulator} standards.`
       },
       {
         title: "04. The Power of Time: Compound Magic",
@@ -589,9 +569,72 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
               </h2>
             </div>
             <div className="space-y-6">
-              <p className="leading-relaxed text-slate-300 text-xl font-medium first-letter:text-5xl first-letter:font-black first-letter:text-pink-400 first-letter:mr-3 first-letter:float-left">
+              <div className="leading-relaxed text-slate-300 text-xl font-medium whitespace-pre-wrap">
                 {s.content}
-              </p>
+              </div>
+            </div>
+          </section>
+        ))}
+      </div>
+    );
+  };
+
+  const renderMortgageDeepDive = (country: CountrySpecificInfo) => {
+    const sections = [
+      {
+        title: "01. The Amortization Illusion",
+        icon: <Home className="h-6 w-6 text-blue-400" />,
+        content: `When you sign for a home in ${country.cities[0]}, you aren't just buying a house; you are signing a 30-year labor contract with ${country.majorBanks[0]}. The 'Amortization Table' is the most expensive document you will ever sign. It is a mathematical front-loading machine designed to capture the majority of your interest in the first 10-15 years. In ${selectedCountry}, by the time you've paid off your home, you have often paid for it twice—once to the builder, and once to the bank in interest.`
+      },
+      {
+        title: "02. The Daily Interest Machine",
+        icon: <Activity className="h-6 w-6 text-emerald-400" />,
+        content: `Under the rules of the ${country.regulator}, mortgage interest in ${selectedCountry} is calculated based on your remaining balance. Most homeowners see their mortgage as a monthly bill; the strategist sees it as a 'Daily Interest Calculation.' Every dollar you keep in a low-interest savings account earning ${country.rates.savings} while your mortgage costs you ${country.rates.mortgage} is a direct loss of wealth. To win, you must minimize the 'Average Daily Balance' of your debt by making every dollar work 24/7.`
+      },
+      {
+        title: "03. The Toolset: Fixed, Variable & Strategic Valves",
+        icon: <Zap className="h-6 w-6 text-amber-400" />,
+        content: `Home loans in ${selectedCountry} come in three primary structures. 
+        
+        'Fixed Rate' mortgages offer the Certainty Premium—you pay a higher price for stability and peace of mind. 
+        
+        'Variable' or 'Adjustable' rates are the Market Mirror—they reflect the ${country.centralBank} policy changes instantly, often making them more volatile but potentially cheaper over the long run. 
+        
+        'Strategic' tools like HELOCs or Offset accounts are the Strategic Valves—they allow you to deposit income directly against principal, dropping the interest charges instantly. Choosing the right tool is the difference between 30 years of labor and 10.`
+      },
+      {
+        title: "04. The Equity Trap vs. Liquidity",
+        icon: <Waves className="h-6 w-6 text-amber-400" />,
+        content: `In ${selectedCountry}, 'Home Equity' is often a 'Dead Asset.' It is money trapped in your walls that you cannot spend without permission from ${country.majorBanks[1]}. By utilizing a ${country.productName || 'HELOC'}, you can keep your capital 'Liquid' while still reducing your mortgage interest. The goal is 'Efficiency'—ensuring your money works to reduce your liability without losing access to it for emergencies in ${country.cities[1]} or opportunities in the ${country.stockExchanges[0]}.`
+      },
+      {
+        title: "05. Strategic Refinancing & Renewals",
+        icon: <ShieldAlert className="h-6 w-6 text-red-400" />,
+        content: `The greatest risk in the ${selectedCountry} mortgage market is the 'Renewal Trap.' In markets like Canada or the UK, mortgages renew every few years, exposing you to the current prime rate of ${country.rates.prime}. You must move beyond being a passive borrower and become a 'Lender Analyst.' Perform a 'Stress Test' on your mortgage to see how a rate hike would impact your family's cash flow in ${country.cities[2]} before your next renewal cycle occurs.`
+      },
+      {
+        title: "06. The Mortgage Optimization Blueprint",
+        icon: <Target className="h-6 w-6 text-purple-400" />,
+        content: `To optimize your mortgage in ${selectedCountry}, you must audit your relationship with ${country.majorBanks[0]}. Start by questioning why your money is siloed in accounts that benefit the bank's balance sheet more than yours. Utilize 'Accelerated' strategies that hit the principal early and often. Shift your mindset from 'Monthly Payments' to 'Principal Velocity.' Mastering the architecture of your home loan is your final step to true financial sovereignty.`
+      }
+    ];
+
+    return (
+      <div className="space-y-20">
+        {sections.map((s, i) => (
+          <section key={i} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: `${i * 100}ms` }}>
+            <div className="flex items-center gap-4 border-b border-white/5 pb-6">
+              <div className="p-3 bg-slate-900 rounded-2xl border border-white/10 shadow-inner">
+                {s.icon}
+              </div>
+              <h2 className="text-3xl font-black text-white tracking-tight">
+                {s.title}
+              </h2>
+            </div>
+            <div className="space-y-6">
+              <div className="leading-relaxed text-slate-300 text-xl font-medium whitespace-pre-wrap">
+                {s.content}
+              </div>
             </div>
           </section>
         ))}
