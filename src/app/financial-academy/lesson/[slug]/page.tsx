@@ -320,6 +320,71 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
     );
   };
 
+  const renderGovernmentDeepDive = (country: CountrySpecificInfo) => {
+    const sections = [
+      {
+        title: "01. The Social Contract (The Rules of the Game)",
+        icon: <Landmark className="h-6 w-6 text-blue-400" />,
+        content: `In the ${selectedCountry} context, the government is the primary architect of the environment in which your money lives. From policy halls to the streets of ${country.cities[0]}, the government operates on a 'Social Contract.' You contribute a portion of your energy (taxes) in exchange for infrastructure, national security, and the rule of law. Most see the ${country.taxAgency} as an adversary, but the strategist understands it as a mandatory business partner—one that has established the rules of the game you are forced to play. Understanding the contract is the first step to legally optimizing your position within it.`
+      },
+      {
+        title: "02. The National Ledger (Where the Money Goes)",
+        icon: <TrendingUp className="h-6 w-6 text-emerald-400" />,
+        content: `Every year, your government releases a Budget—a massive declaration of national priorities. In ${selectedCountry}, this ledger balances the competing needs of healthcare, defense, and social safety nets like ${country.programs[0]}. When you see the national debt of ${country.nationalDebt}, you are looking at the 'Overdraft' of the nation. This debt is serviced by the future production of its citizens—your future work. By understanding this ledger, you can predict where the ${country.regulator} might increase taxes and where they might place incentives to encourage the behavior they need from the populace.`
+      },
+      {
+        title: "03. The Revenue Engine: Taxation Mechanics",
+        icon: <Zap className="h-6 w-6 text-amber-400" />,
+        content: `The ${country.taxAgency} is the primary fuel for the state machine. In ${selectedCountry}, taxation is not a single bill, but a multi-layered capture system. 
+        
+        'Income Tax' is a progressive levy on your production—the more value you provide, the higher the percentage the state captures. 
+        
+        'Consumption Tax' (like GST or Sales Tax) captures revenue every time money moves through the economy in cities like ${country.cities[1]}. 
+        
+        'Property Tax' is a recurring storage fee on your home equity. 
+        
+        The engine is relentless, designed to capture energy at every point of the economic cycle. However, the ${country.taxAgency} also provides 'Safety Valves'—legal ways to keep more of your money through strategic deductions and credits.`
+      },
+      {
+        title: "04. The Deficit Dilemma & The Debt Trap",
+        icon: <ShieldAlert className="h-6 w-6 text-red-400" />,
+        content: `When ${selectedCountry} spends more than it collects in tax revenue, it creates a 'Deficit.' To bridge this gap, they issue government bonds—legally promising to pay back lenders with future citizen energy. With a national debt of ${country.nationalDebt}, the nation is in a permanent state of debt service. This creates a hidden 'Debt Trap' for the ${country.centralBank}, which must keep interest rates in a range that prevents the government from defaulting. As a citizen, your personal savings are effectively part of the collateral for this national overdraft, and inflation is the tool the state uses to shrink the 'real' value of that debt over time.`
+      },
+      {
+        title: "05. Benefits, Entitlements & The Net Relationship",
+        icon: <Target className="h-6 w-6 text-purple-400" />,
+        content: `While the government captures revenue, it also redistributes it through programs like ${country.programs.join(' and ')}. In hubs like ${country.cities[2]}, these benefits form the baseline of social stability. To win, you must calculate your 'Net Relationship' with the state. Are you a net contributor or a net beneficiary? Most citizens are passive participants, but the strategist utilizes every grant, rebate, and social shield provided by the ${country.taxAgency} code. This isn't about avoiding your duty; it's about utilizing the rules exactly as they were written to build your own family's fortress.`
+      },
+      {
+        title: "06. Strategic Citizenship: The Tax Shield",
+        icon: <Award className="h-6 w-6 text-yellow-400" />,
+        content: `True financial mastery requires 'Strategic Citizenship.' This means understanding the ${country.regulator} rules and the ${country.taxAgency} codes as the manual to a high-performance machine. By utilizing 'Bunkers' like ${country.retirementAccounts[0]} and ${country.retirementAccounts[1]}, you are legally opting out of immediate taxation, allowing your wealth to compound inside a protected environment. Once you see how ${country.currencyCode} flows through the halls of power, you stop being a victim of policy and start being a strategist who positions themselves for the next legislative shift in ${selectedCountry}.`
+      }
+    ];
+
+    return (
+      <div className="space-y-20">
+        {sections.map((s, i) => (
+          <section key={i} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: `${i * 100}ms` }}>
+            <div className="flex items-center gap-4 border-b border-white/5 pb-6">
+              <div className="p-3 bg-slate-900 rounded-2xl border border-white/10 shadow-inner">
+                {s.icon}
+              </div>
+              <h2 className="text-3xl font-black text-white tracking-tight">
+                {s.title}
+              </h2>
+            </div>
+            <div className="space-y-6">
+              <div className="leading-relaxed text-slate-300 text-xl font-medium whitespace-pre-wrap">
+                {s.content}
+              </div>
+            </div>
+          </section>
+        ))}
+      </div>
+    );
+  };
+
   const renderDebtDeepDive = (country: CountrySpecificInfo) => {
     const sections = [
       {
@@ -420,63 +485,6 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
         title: "06. The Strategic Portfolio Audit",
         icon: <Target className="h-6 w-6 text-purple-400" />,
         content: `To optimize your fortress in ${selectedCountry}, you must audit your 'Assets.' Start by questioning high-fee products sold by ${country.majorBanks[0]}. Move toward index strategies that capture the entire ${country.stockExchanges[0]}. Remember: the financial machine is designed to capture your capital through fees; your goal is to minimize that leakage and maximize compounding. This Unit is your blueprint for moving from 'Labor' to 'Legacy'.`
-      }
-    ];
-
-    return (
-      <div className="space-y-20">
-        {sections.map((s, i) => (
-          <section key={i} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: `${i * 100}ms` }}>
-            <div className="flex items-center gap-4 border-b border-white/5 pb-6">
-              <div className="p-3 bg-slate-900 rounded-2xl border border-white/10 shadow-inner">
-                {s.icon}
-              </div>
-              <h2 className="text-3xl font-black text-white tracking-tight">
-                {s.title}
-              </h2>
-            </div>
-            <div className="space-y-6">
-              <div className="leading-relaxed text-slate-300 text-xl font-medium whitespace-pre-wrap">
-                {s.content}
-              </div>
-            </div>
-          </section>
-        ))}
-      </div>
-    );
-  };
-
-  const renderGovernmentDeepDive = (country: CountrySpecificInfo) => {
-    const sections = [
-      {
-        title: "01. The Social Contract",
-        icon: <Landmark className="h-6 w-6 text-blue-400" />,
-        content: `In the ${selectedCountry} context, the government is the architect of the environment in which your money lives. From ${country.cities[0]} to the policy halls, the government operates on a 'Social Contract.' You contribute a portion of your energy (tax) in exchange for infrastructure, security, and law. Most see the ${country.taxAgency} as a burden, but the strategist sees it as a business partner—one that has established the rules of the game you are forced to play.`
-      },
-      {
-        title: "02. The National Ledger",
-        icon: <TrendingUp className="h-6 w-6 text-emerald-400" />,
-        content: `Every year, your government releases a Budget—a declaration of priorities. In ${selectedCountry}, this ledger balances the needs of healthcare, defense, and social programs like ${country.programs[0]}. When you see the national debt of ${country.nationalDebt}, you are seeing the 'Overdraft' of the nation. This debt is serviced by the future production of its citizens. By understanding the ledger, you can predict where taxes might rise and where incentives might be placed.`
-      },
-      {
-        title: "03. The Revenue Engine: Taxation",
-        icon: <Zap className="h-6 w-6 text-amber-400" />,
-        content: `The primary fuel for the government machine is the ${country.taxAgency}. In ${selectedCountry}, taxation is a progressive system designed to capture more energy as you become more successful. From income tax to consumption taxes, the engine is relentless. However, the ${country.taxAgency} also provides 'Safety Valves'—legal ways to keep more of your money. Utilizing shields like ${country.retirementAccounts[0]} is your way of legally opting out of a portion of this capture, allowing wealth to compound inside a protected environment.`
-      },
-      {
-        title: "04. The Deficit Dilemma",
-        icon: <ShieldAlert className="h-6 w-6 text-red-400" />,
-        content: `When ${selectedCountry} spends more than it collects, it creates a deficit. To bridge this gap, they issue bonds—legally promising to pay back lenders with future tax revenue. With a national debt of ${country.nationalDebt}, the nation is in a state of debt service. This creates hidden pressure on the ${country.centralBank} to keep interest rates in a specific range. As a citizen, your personal savings are effectively part of the collateral for the national overdraft.`
-      },
-      {
-        title: "05. Benefits, Burdens & The Net Result",
-        icon: <Target className="h-6 w-6 text-purple-400" />,
-        content: `While the government captures revenue, it also redistributes it through programs like ${country.programs.join(' and ')}. In hubs like ${country.cities[1]}, these benefits form the baseline of social stability. To win, you must calculate your 'Net Relationship' with the state. Are you a net contributor or a net beneficiary? The goal is to move from being a passive taxpayer to a proactive strategist who utilizes every grant and shield provided by the ${country.taxAgency} code.`
-      },
-      {
-        title: "06. Strategic Citizenship",
-        icon: <Award className="h-6 w-6 text-yellow-400" />,
-        content: `True mastery requires 'Strategic Citizenship.' This means understanding the ${country.regulator} rules and the ${country.taxAgency} codes as the manual to a high-performance machine. By teaching your family that the government is an entity with its own motivations, you build a generational shield. Once you see how ${country.currencyCode} flows through the halls of power, you stop being a victim of policy and start being a strategist for the next legislative shift.`
       }
     ];
 
