@@ -2,9 +2,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useUser, useFirestore, useMemoFirebase } from '@/firebase';
+import { useUser, useFirestore } from '@/firebase';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
-import { academyUnits, AcademyUnit } from '@/lib/academy/curriculum';
+import { academyUnits } from '@/lib/academy/curriculum';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -19,9 +19,7 @@ import {
   Globe, 
   Lock, 
   Trophy,
-  Loader2,
-  Clock,
-  FileText
+  Loader2
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -34,13 +32,20 @@ export default function FinancialAcademyHub() {
   const [isLoadingProgress, setIsLoadingProgress] = useState(true);
 
   useEffect(() => {
+    // Initial load from localStorage for speed
+    const cached = localStorage.getItem('mc_academy_country');
+    if (cached) setSelectedCountry(cached);
+
     async function loadProgress() {
       if (!user || !firestore) return;
       const docRef = doc(firestore, 'userFinancialProgress', user.uid);
       const snap = await getDoc(docRef);
       if (snap.exists()) {
         const data = snap.data();
-        setSelectedCountry(data.selectedCountry || 'Canada');
+        if (data.selectedCountry) {
+          setSelectedCountry(data.selectedCountry);
+          localStorage.setItem('mc_academy_country', data.selectedCountry);
+        }
         setCompletedLessons(data.completedLessons || []);
       }
       setIsLoadingProgress(false);
@@ -50,8 +55,12 @@ export default function FinancialAcademyHub() {
 
   const handleCountryChange = async (val: string) => {
     setSelectedCountry(val);
+    localStorage.setItem('mc_academy_country', val);
     if (user && firestore) {
       await setDoc(doc(firestore, 'userFinancialProgress', user.uid), {
+        id: user.uid,
+        userId: user.uid,
+        email: user.email,
         selectedCountry: val,
         lastAccessedAt: serverTimestamp(),
       }, { merge: true });
@@ -84,7 +93,6 @@ export default function FinancialAcademyHub() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 pb-24">
-      {/* HEADER */}
       <header className="relative py-20 px-4 overflow-hidden border-b border-white/5">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-slate-950 to-slate-950 -z-10" />
         <div className="container mx-auto max-w-5xl text-center">
@@ -95,13 +103,12 @@ export default function FinancialAcademyHub() {
             What Nobody Taught You <br /><span className="text-blue-500 italic">About Money</span>
           </h1>
           <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            Master the hidden mechanics of banking, insurance, and the economy used by the top 1% to build generational wealth.
+            Master the hidden mechanics of banking, insurance, and the economy used by the top 1% to build generational wealth in {selectedCountry}.
           </p>
         </div>
       </header>
 
       <main className="container mx-auto max-w-5xl px-4 py-12 space-y-12">
-        {/* TOP BAR: COUNTRY & PROGRESS */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center bg-slate-900/50 p-8 rounded-3xl border border-white/10 backdrop-blur-sm shadow-2xl">
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-blue-400 font-bold uppercase tracking-widest text-xs">
@@ -138,7 +145,6 @@ export default function FinancialAcademyHub() {
           </div>
         </div>
 
-        {/* CURRICULUM GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {academyUnits.map((unit) => {
             const unitCompleted = unit.lessons.filter(l => completedLessons.includes(l.id)).length;
@@ -181,47 +187,11 @@ export default function FinancialAcademyHub() {
                       </Link>
                     ))}
                   </div>
-                  
-                  <div className="pt-4 border-t border-white/5 flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-500">
-                    <span>{unit.lessons.length} Lessons</span>
-                    <span className={unitPercent === 100 ? "text-emerald-500" : ""}>{unitPercent}% Complete</span>
-                  </div>
                 </CardContent>
               </Card>
             );
           })}
         </div>
-
-        {/* GRADUATION / CERTIFICATE SECTION */}
-        {progressPercent === 100 && (
-          <div className="bg-gradient-to-br from-yellow-600 to-amber-800 p-1 rounded-3xl shadow-2xl">
-            <div className="bg-slate-950 p-12 rounded-[22px] text-center space-y-8">
-              <div className="relative inline-block">
-                <Trophy className="h-24 w-24 text-yellow-500 mx-auto animate-bounce" />
-                <div className="absolute inset-0 blur-3xl bg-yellow-500/20 -z-10" />
-              </div>
-              <div className="space-y-2">
-                <h2 className="text-4xl font-black text-white italic">You've Graduated!</h2>
-                <p className="text-slate-400 text-lg">You have completed the full Financial Education Academy: {selectedCountry} Edition.</p>
-              </div>
-              <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-slate-950 font-black px-12 py-8 text-xl rounded-2xl shadow-xl shadow-yellow-500/20">
-                <Award className="mr-2 h-6 w-6" /> Claim My Certificate
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* CONVERSION CTA */}
-        <section className="bg-blue-600 rounded-[48px] p-12 text-center space-y-8 shadow-2xl relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('https://picsum.photos/seed/pattern/1200/800')] opacity-10 mix-blend-overlay" />
-          <div className="relative z-10 space-y-6">
-            <h2 className="text-3xl md:text-4xl font-black text-white leading-tight">Ready to Put Your Knowledge <br />Into Practice?</h2>
-            <p className="text-blue-100 text-lg max-w-xl mx-auto">Use our advanced calculators to see exactly how your optimized financial foundation collapses your mortgage timeline.</p>
-            <Button asChild size="lg" className="bg-white text-blue-600 hover:bg-slate-50 font-black px-10 py-7 text-lg rounded-2xl">
-              <Link href="/questionnaire">Launch Savings Calculator →</Link>
-            </Button>
-          </div>
-        </section>
       </main>
     </div>
   );
