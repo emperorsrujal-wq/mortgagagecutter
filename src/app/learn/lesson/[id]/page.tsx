@@ -1,3 +1,4 @@
+
 'use client';
 import React, { use } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
@@ -76,8 +77,6 @@ function LessonContent({ id }: { id: number }) {
 
   const nextLesson = () => {
     if (id === 1) {
-        // For sales strategy, point them to the comparison/purchase if not "completed"
-        // But for this UI, we allow the "Next" click to take them to the tease
         completeLesson(id);
         router.push(`/learn/lesson/${id + 1}`);
     } else {
@@ -95,7 +94,7 @@ function LessonContent({ id }: { id: number }) {
   const formatCurrency = (val: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: country.currency, maximumFractionDigits: 0 }).format(val);
 
   return (
-    <div className="min-h-screen bg-[#FAFBFD] font-dm-sans pb-24">
+    <div className="min-h-screen bg-[#FAFBFD] font-body pb-24">
       <ProgressBar current={id} />
       
       <div className="max-w-[720px] mx-auto px-4 py-12 space-y-10">
@@ -123,7 +122,7 @@ function LessonContent({ id }: { id: number }) {
                     <TranslatedText>The Tale of the Invisible House</TranslatedText>
                   </h2>
                   <p className="text-lg leading-relaxed">
-                    <TranslatedText>{`Look, let's be blunt. When you sign for a ${formatCurrency(country.avgHome)} mortgage in ${country.name}, you think you're buying a home. You aren't. You're actually buying TWO houses.`}</TranslatedText>
+                    <TranslatedText>{`Look, let's be blunt. When you sign for a ${formatCurrency(country.avgHome)} mortgage in ${country.name}, you think you're buying a home. You aren't. You're actually buying TWO houses. This is the structural reality of modern banking—a system where you provide the labor, and the institution provides the "permission" to live in your own home, for a price that often exceeds the cost of the bricks themselves.`}</TranslatedText>
                   </p>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
@@ -133,7 +132,7 @@ function LessonContent({ id }: { id: number }) {
                       </div>
                       <h4 className="font-black text-green-800 uppercase text-xs tracking-widest"><TranslatedText>House #1: Yours</TranslatedText></h4>
                       <p className="text-sm text-green-700 font-medium leading-relaxed">
-                        <TranslatedText>{`This is the one you live in. You paint the walls, you mow the lawn, and you struggle to pay for it every single month.`}</TranslatedText>
+                        <TranslatedText>{`This is the one you live in. You paint the walls, you mow the lawn, and you struggle to pay for it every single month. It is your sanctuary, but under the current system, it is also your largest liability.`}</TranslatedText>
                       </p>
                     </div>
                     <div className="bg-red-50 p-6 rounded-2xl border border-red-100 space-y-3 relative overflow-hidden group">
@@ -142,14 +141,24 @@ function LessonContent({ id }: { id: number }) {
                       </div>
                       <h4 className="font-black text-red-800 uppercase text-xs tracking-widest"><TranslatedText>House #2: The Bank's</TranslatedText></h4>
                       <p className="text-sm text-red-700 font-medium leading-relaxed">
-                        <TranslatedText>{`This house is invisible. It's built entirely of your sweat, your overtime hours, and your interest payments. It's the PURE PROFIT your bank takes while you pay off House #1.`}</TranslatedText>
+                        <TranslatedText>{`This house is invisible. It's built entirely of your sweat, your overtime hours, and your interest payments. It's the PURE PROFIT your bank takes while you pay off House #1. They have no risk, no maintenance, and no mortgage of their own.`}</TranslatedText>
                       </p>
                     </div>
                   </div>
 
-                  <p className="font-bold text-[#1A1D26] border-t pt-6">
-                    <TranslatedText>{`In ${country.name}, by the time you've paid off House #1, you have given the bank enough money to buy House #2 in CASH. They didn't build it. They didn't mow the lawn. But they own your future for the next 30 years.`}</TranslatedText>
+                  <p className="text-lg leading-relaxed text-[#5A6175]">
+                    <TranslatedText>{`In ${country.name}, by the time you've finally paid off House #1, you have given the bank enough money to buy House #2 in CASH. They didn't build it. They didn't mow the lawn. But they own your future for the next 30 years. Most homeowners accept this as a "fact of life," but it is actually a precise mathematical choice made by the lender to front-load their profit and back-load your equity.`}</TranslatedText>
                   </p>
+
+                  <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200 space-y-4">
+                    <h3 className="font-black text-slate-900 flex items-center gap-2">
+                      <Target className="h-5 w-5 text-red-600" />
+                      <TranslatedText>The Amortization Illusion</TranslatedText>
+                    </h3>
+                    <p className="text-sm leading-relaxed">
+                      <TranslatedText>{`The "monthly payment" is a single number designed to hide two very different transactions. In the first 15 years of a traditional 30-year loan, nearly 70-80% of your payment is flushed directly into the bank's interest ledger. You are essentially renting your own house from the bank while the principal balance—the number that actually matters—barely moves. This is the structural heist that keeps families on the labor treadmill for decades.`}</TranslatedText>
+                    </p>
+                  </div>
                 </div>
               </CourseCard>
 
@@ -171,13 +180,13 @@ function LessonContent({ id }: { id: number }) {
                     <TranslatedText>The 19-Year "Siphon" Trap</TranslatedText>
                   </h2>
                   <p className="text-slate-300 text-lg leading-relaxed">
-                    <TranslatedText>{`The bank is smarter than you think. They don't take their profit evenly. They SIPHON it from you at the very beginning when you are most vulnerable.`}</TranslatedText>
+                    <TranslatedText>{`The bank is smarter than you think. They don't take their profit evenly over the life of the loan. They SIPHON it from you at the very beginning when you are most vulnerable and your balance is highest. This is why "paying extra" at the end of a mortgage feels good but does almost nothing—the bank has already taken their cut.`}</TranslatedText>
                   </p>
                   <p className="text-white font-bold text-xl">
-                    <TranslatedText>{`On a 30-year loan, it takes nearly 19 YEARS before your monthly payment actually starts paying off more principal than interest.`}</TranslatedText>
+                    <TranslatedText>{`On a 30-year loan, it takes nearly 19 YEARS before your monthly payment actually starts paying off more principal than interest. For 63% of your mortgage's lifespan, you are an interest-generating machine for the institution.`}</TranslatedText>
                   </p>
                   <p className="text-slate-400">
-                    <TranslatedText>Press PLAY below. Watch how for nearly two decades, your life's work is being funneled into the Bank's "Invisible House" before a single brick of your own is truly paid for.</TranslatedText>
+                    <TranslatedText>Press PLAY below. Watch how for nearly two decades, your life's work is being funneled into the Bank's "Invisible House" before a single brick of your own is truly paid for. This is the "Front-Loading" secret that keeps the middle class in debt.</TranslatedText>
                   </p>
                 </div>
               </div>
@@ -191,7 +200,7 @@ function LessonContent({ id }: { id: number }) {
                     <TranslatedText>What if you could Nuke the trap?</TranslatedText>
                   </h2>
                   <p className="text-[#5A6175] text-lg max-w-2xl mx-auto leading-relaxed">
-                    <TranslatedText>Most people see these numbers and accept them as a "fact of life." They shouldn't. There is a specific, bank-agnostic strategy used by the top 1% of homeowners to collapse this timeline.</TranslatedText>
+                    <TranslatedText>Most people see these numbers and accept them as a "fact of life." They shouldn't. There is a specific, bank-agnostic strategy used by the top 1% of homeowners to collapse this timeline by using the bank's own daily interest calculations against them.</TranslatedText>
                   </p>
                 </div>
 
@@ -245,7 +254,7 @@ function LessonContent({ id }: { id: number }) {
 
         {id === 2 && (
           <div className="space-y-12 animate-in slide-in-from-right duration-700">
-            {/* TEASE OVERLAY FOR LATER LESSONS */}
+            {/* STRATEGY HEADER */}
             <header className="space-y-4">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-black uppercase tracking-widest text-[#2563EB] px-3 py-1 bg-blue-50 rounded-full">
@@ -265,17 +274,17 @@ function LessonContent({ id }: { id: number }) {
                 <TranslatedText>{meta.title}</TranslatedText>
               </h1>
               <p className="text-[#5A6175] text-xl leading-relaxed">
-                <TranslatedText>How to break the trap using the 'Open System' logic that the wealthy have used for decades.</TranslatedText>
+                <TranslatedText>How to break the trap using the 'Open System' logic—the same mathematical leverage that the top 1% have used for decades to keep their money working 24/7.</TranslatedText>
               </p>
             </header>
 
-            <section className="space-y-6">
+            <section className="space-y-8">
               <div className="flex items-center gap-3 text-2xl font-fraunces font-bold text-[#1A1D26]">
                 <Droplets className="text-blue-500 h-8 w-8" />
                 <h2><TranslatedText>The "Closed" vs. "Open" Concept</TranslatedText></h2>
               </div>
               <p className="text-lg leading-relaxed text-[#5A6175]">
-                <TranslatedText>{`To understand how to pay off your home faster, you first have to understand that your current mortgage is a "Closed System". Your money goes in once a month, and it is locked away forever.`}</TranslatedText>
+                <TranslatedText>{`To understand how to pay off your home faster, you first have to understand that your current mortgage is a "Closed System". In a closed system, your financial energy is siloed. Your paycheck goes into one account, your bills go out of another, and your mortgage sits in a third, high-walled vault that only accepts a tiny tribute once a month.`}</TranslatedText>
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -284,11 +293,11 @@ function LessonContent({ id }: { id: number }) {
                     <ShieldAlert className="h-5 w-5" />
                     <TranslatedText>The Closed System (Traditional)</TranslatedText>
                   </div>
-                  <p className="text-sm mb-4"><TranslatedText>{`Think of this like a Sealed Water Tank. You can only pour a tiny cup of water into the tank once a month. The rest of your money sits in a separate bucket (your checking account) doing nothing while the tank's water level (your debt) stays high.`}</TranslatedText></p>
+                  <p className="text-sm mb-4 leading-relaxed"><TranslatedText>{`Think of this like a Sealed Water Tank. You can only pour a tiny cup of water into the tank once a month. For the other 29 days, your money sits in a separate bucket (your checking account) earning 0% interest while the tank's water level (your debt) stays high, accumulating interest on every single gallon every single night. The bank profits from your "idle time".`}</TranslatedText></p>
                   <ul className="text-xs space-y-2 text-red-800/70 font-medium">
-                    <li className="flex gap-2">❌ <TranslatedText>Savings sit idle while debt costs you money</TranslatedText></li>
-                    <li className="flex gap-2">❌ <TranslatedText>Interest is calculated on the full balance every month</TranslatedText></li>
-                    <li className="flex gap-2">❌ <TranslatedText>Lender controls the speed of payoff</TranslatedText></li>
+                    <li className="flex gap-2">❌ <TranslatedText>Savings sit idle while debt costs you money every night</TranslatedText></li>
+                    <li className="flex gap-2">❌ <TranslatedText>Interest is calculated on the full balance for 30 days straight</TranslatedText></li>
+                    <li className="flex gap-2">❌ <TranslatedText>The lender controls the speed of your payoff</TranslatedText></li>
                   </ul>
                 </CourseCard>
 
@@ -297,13 +306,23 @@ function LessonContent({ id }: { id: number }) {
                     <Zap className="h-5 w-5" />
                     <TranslatedText>The Open System (Offset/HELOC)</TranslatedText>
                   </div>
-                  <p className="text-sm mb-4"><TranslatedText>{`This is the "Bathtub" model. Your mortgage and your checking account are combined. Every dollar you earn flows into the tub immediately, dropping the water level (debt) instantly. You only pay for what's left in the tub each day.`}</TranslatedText></p>
+                  <p className="text-sm mb-4 leading-relaxed"><TranslatedText>{`This is the "Bathtub" model. Your mortgage and your checking account are merged into a single, fluid vessel. Every dollar you earn flows into the tub immediately, dropping the water level (the debt) instantly. Because interest is calculated DAILY, every dollar you keep in the tub tonight saves you interest tomorrow. You only pay for what's left in the tub each night.`}</TranslatedText></p>
                   <ul className="text-xs space-y-2 text-emerald-800/70 font-medium">
-                    <li className="flex gap-2">✅ <TranslatedText>Every dollar works 24/7 to lower interest</TranslatedText></li>
-                    <li className="flex gap-2">✅ <TranslatedText>Interest is recalculated DAILY</TranslatedText></li>
-                    <li className="flex gap-2">✅ <TranslatedText>YOU control the speed of payoff</TranslatedText></li>
+                    <li className="flex gap-2">✅ <TranslatedText>Every dollar works 24/7 to lower interest calculations</TranslatedText></li>
+                    <li className="flex gap-2">✅ <TranslatedText>Interest is recalculated DAILY on the lowest possible balance</TranslatedText></li>
+                    <li className="flex gap-2">✅ <TranslatedText>YOU control the velocity and the finish date</TranslatedText></li>
                   </ul>
                 </CourseCard>
+              </div>
+
+              <div className="p-8 bg-blue-50 rounded-[32px] border border-blue-100 space-y-6">
+                <h3 className="text-xl font-black text-blue-900 flex items-center gap-2">
+                  <BarChart className="h-6 w-6" />
+                  <TranslatedText>The "Average Daily Balance" Secret</TranslatedText>
+                </h3>
+                <p className="text-[#5A6175] leading-relaxed">
+                  <TranslatedText>{`Most people think interest is a monthly fee. It's not. It's a daily calculation. When you leave ${formatCurrency(5000)} sitting in a checking account for 20 days while waiting to pay bills, you are effectively giving the bank a free gift. In an "Open System," that same ${formatCurrency(5000)} sits inside your mortgage for those 20 days, "choking" the interest engine. You aren't earning interest; you are NEUTRALIZING interest. This is the most efficient way to use your capital because the interest you save is tax-free and guaranteed.`}</TranslatedText>
+                </p>
               </div>
             </section>
 
@@ -313,29 +332,29 @@ function LessonContent({ id }: { id: number }) {
                 <TranslatedText>A Day in the Life of the Open System</TranslatedText>
               </h3>
               <p className="text-slate-400 leading-relaxed">
-                <TranslatedText>{`Let's look at how Dave and Sarah's month changes when they switch to a ${country.productShort} in ${country.name}. They haven't earned an extra cent, but watch what happens to their interest.`}</TranslatedText>
+                <TranslatedText>{`Let's look at how Dave and Sarah's month changes when they switch to a ${country.productShort} in ${country.name}. They haven't earned an extra cent, they haven't changed their lifestyle, but watch what happens to their interest velocity.`}</TranslatedText>
               </p>
 
               <div className="space-y-4">
                 <div className="flex gap-4 items-start border-l-2 border-blue-500/30 pl-6 pb-6">
                   <div className="bg-blue-500 h-8 w-8 rounded-full flex items-center justify-center shrink-0 font-bold text-sm">1</div>
                   <div className="space-y-1">
-                    <p className="font-bold text-blue-400 uppercase text-xs tracking-widest"><TranslatedText>Payday</TranslatedText></p>
-                    <p className="text-sm text-slate-200"><TranslatedText>{`Dave deposits his ${formatCurrency(country.avgIncome / 2)} paycheck. In a traditional loan, this would sit in checking. Here, it goes straight against the ${country.productShort} balance. For the next two weeks, the bank charges Dave interest on ${formatCurrency(country.avgIncome / 2)} LESS than before.`}</TranslatedText></p>
+                    <p className="font-bold text-blue-400 uppercase text-xs tracking-widest"><TranslatedText>Payday: The Injection</TranslatedText></p>
+                    <p className="text-sm text-slate-200 leading-relaxed"><TranslatedText>{`Dave deposits his ${formatCurrency(country.avgIncome / 2)} paycheck. In a traditional loan, this would sit idle in a checking account for 15 days. Here, it goes straight against the ${country.productShort} balance. For the next two weeks, the bank is legally forced to charge Dave interest on ${formatCurrency(country.avgIncome / 2)} LESS than before. The debt is being "choked" from the moment the money hits the account.`}</TranslatedText></p>
                   </div>
                 </div>
                 <div className="flex gap-4 items-start border-l-2 border-blue-500/30 pl-6 pb-6">
                   <div className="bg-blue-500 h-8 w-8 rounded-full flex items-center justify-center shrink-0 font-bold text-sm">2</div>
                   <div className="space-y-1">
-                    <p className="font-bold text-blue-400 uppercase text-xs tracking-widest"><TranslatedText>Expense Day</TranslatedText></p>
-                    <p className="text-sm text-slate-200"><TranslatedText>{`Sarah needs ${country.symbol}200 for groceries. She withdraws it from the ${country.productShort} (or linked account). The balance goes up slightly, but only for the remaining days of the month. She only paid interest on that ${country.symbol}200 for the days it was actually spent, not the whole month.`}</TranslatedText></p>
+                    <p className="font-bold text-blue-400 uppercase text-xs tracking-widest"><TranslatedText>Expense Day: The Controlled Flow</TranslatedText></p>
+                    <p className="text-sm text-slate-200 leading-relaxed"><TranslatedText>{`Sarah needs ${country.symbol}200 for groceries. She withdraws it from the ${country.productShort} (or linked account). The balance goes up slightly, but only for the remaining days of the month. She only paid interest on that ${country.symbol}200 for the days it was actually spent, not the whole month. Her money worked for her for 20 days before it was released.`}</TranslatedText></p>
                   </div>
                 </div>
                 <div className="flex gap-4 items-start border-l-2 border-blue-500/30 pl-6">
                   <div className="bg-blue-500 h-8 w-8 rounded-full flex items-center justify-center shrink-0 font-bold text-sm">3</div>
                   <div className="space-y-1">
-                    <p className="font-bold text-blue-400 uppercase text-xs tracking-widest"><TranslatedText>Month End</TranslatedText></p>
-                    <p className="text-sm text-slate-200"><TranslatedText>{`Because Dave and Sarah kept their "Idle Cash" inside the home loan account for an average of 15-20 days longer each month, the total interest charged is hundreds of dollars lower. This "saved interest" effectively becomes a principal payment, snowballing the payoff.`}</TranslatedText></p>
+                    <p className="font-bold text-blue-400 uppercase text-xs tracking-widest"><TranslatedText>Month End: The Snowball</TranslatedText></p>
+                    <p className="text-sm text-slate-200 leading-relaxed"><TranslatedText>{`Because Dave and Sarah kept their "Idle Cash" inside the home loan account for an average of 15-20 days longer each month, the total interest charged is hundreds of dollars lower. This "saved interest" never leaves their pocket. It stays inside the account, effectively becoming an automatic principal payment. This creates a compounding snowball that collapses their 30-year term into 10-12 years.`}</TranslatedText></p>
                   </div>
                 </div>
               </div>
@@ -349,7 +368,7 @@ function LessonContent({ id }: { id: number }) {
                 <TranslatedText>End of Lesson 2</TranslatedText>
               </div>
               <h3 className="text-3xl font-fraunces font-black"><TranslatedText>Ready to Turbocharge?</TranslatedText></h3>
-              <p className="opacity-90 max-w-md mx-auto text-lg"><TranslatedText>You've seen the engine. Now it's time to add the fuel. In Lesson 3, we reveal the "Credit Card Trick" and other advanced strategies to cut even more years off your term.</TranslatedText></p>
+              <p className="opacity-90 max-w-md mx-auto text-lg"><TranslatedText>You've seen the engine. Now it's time to add the high-octane fuel. In Lesson 3, we reveal the "Credit Card Trick" and advanced "Float" strategies to force the bank to pay for your life while your money kills your debt.</TranslatedText></p>
               <button className="bg-white text-blue-600 hover:bg-slate-50 font-bold px-8 py-4 rounded-2xl text-lg group flex items-center gap-2 mx-auto transition-all" onClick={nextLesson}>
                 <TranslatedText>Unlock Turbo Strategies</TranslatedText>
                 <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -358,7 +377,6 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* REST OF LESSONS (3, 4, 5) ... Keep existing code from previous implementations */}
         {id >= 3 && (
             <div className="space-y-12">
                 <section className="bg-white p-12 rounded-[40px] border-2 border-dashed border-slate-200 text-center space-y-8 shadow-inner">
