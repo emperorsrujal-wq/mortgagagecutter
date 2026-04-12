@@ -98,7 +98,7 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
       await setDoc(doc(firestore, 'userFinancialProgress', user.uid), {
         id: user.uid,
         userId: user.uid,
-        email: user.email,
+        email: user.email || '',
         selectedCountry: val,
         lastAccessedAt: serverTimestamp(),
       }, { merge: true });
@@ -158,7 +158,7 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
       {
         title: "03. The Toolset: Checking, Savings & Term Locks",
         icon: <Coins className="h-6 w-6 text-amber-500" />,
-        content: `To capture your capital, ${country.majorBanks[0]} offers a suite of specialized tools. The 'Checking Account' is your Transaction Hub—designed for high frequency, it pays zero interest because it is where your money is most volatile. The 'Savings Account' is your Liquidity Bucket, offering a symbolic interest rate of ${country.rates.savings} to discourage you from leaving. For those seeking 'Safety,' they offer ${termDeposit}s—the Time Lock. In a ${termDeposit}, you freeze your ${country.currencyCode} for a set period in exchange for a slightly higher rate, which the bank immediately lends out at the Prime Rate of ${country.rates.prime}.`
+        content: `To capture your capital, ${country.majorBanks[0]} offers a suite of specialized tools. The 'Checking Account' is your Transaction Hub—designed for high frequency, it pays zero interest because it is where your money is most volatile. The 'Savings Account' is your Liquidity Bucket, offering a symbolic interest rate of ${country.rates.savings} to discourage you from leaving. For those seeking 'Safety', they offer ${termDeposit}s—the Time Lock. In a ${termDeposit}, you freeze your ${country.currencyCode} for a set period in exchange for a slightly higher rate, which the bank immediately lends out at the Prime Rate of ${country.rates.prime}.`
       },
       {
         title: "04. The Spread: Your Effort, Their Profit",
