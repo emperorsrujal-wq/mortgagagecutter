@@ -29,11 +29,21 @@ import {
   PieChart,
   ShieldCheck,
   Zap,
-  Target
+  Target,
+  Globe,
+  Wallet
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export default function AcademyLessonPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
@@ -41,7 +51,7 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
   const firestore = useFirestore();
   const router = useRouter();
   
-  const [selectedCountry, setSelectedCountry] = useState('Canada');
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
   const [completedLessons, setCompletedLessons] = useState<string[]>([]);
   const [isMarking, setIsMarking] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -63,11 +73,23 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
       if (snap.exists()) {
         setSelectedCountry(snap.data().selectedCountry || 'Canada');
         setCompletedLessons(snap.data().completedLessons || []);
+      } else {
+        setSelectedCountry('Canada');
       }
       setIsLoading(false);
     }
     if (!isUserLoading) loadUser();
   }, [user, firestore, isUserLoading]);
+
+  const handleCountryChange = async (val: string) => {
+    setSelectedCountry(val);
+    if (user && firestore) {
+      await setDoc(doc(firestore, 'userFinancialProgress', user.uid), {
+        selectedCountry: val,
+        lastAccessedAt: serverTimestamp(),
+      }, { merge: true });
+    }
+  };
 
   const toggleComplete = async () => {
     if (!user || !firestore || !currentLesson) return;
@@ -90,7 +112,7 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
     setIsMarking(false);
   };
 
-  if (isUserLoading || isLoading) {
+  if (isUserLoading || isLoading || !selectedCountry) {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white">
         <Loader2 className="animate-spin h-12 w-12 text-blue-500 mb-4" />
@@ -232,6 +254,7 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
           </>
         );
       case 'Debt':
+      case 'Mortgage':
         return (
           <>
             <section className="space-y-6">
@@ -243,6 +266,19 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
               </p>
               <p>
                 By learning the {selectedCountry} credit scoring system, you can leverage your position to secure lower rates and accelerate your payoff.
+              </p>
+            </section>
+          </>
+        );
+      case 'Family':
+        return (
+          <>
+            <section className="space-y-6">
+              <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
+                <Baby className="h-6 w-6 text-sky-500" /> Financial Legacy in {selectedCountry}
+              </h2>
+              <p>
+                Teaching children in {selectedCountry} about money starts with understanding how to use accounts like the {country.retirementAccounts[3] || 'savings plan'}. It's about showing them that {country.currencySymbol}1 today is the seed for a forest tomorrow.
               </p>
             </section>
           </>
@@ -268,13 +304,34 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
           <Link href="/financial-academy" className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors font-bold text-sm">
             <Home className="h-4 w-4" /> Academy Hub
           </Link>
+          
           <div className="flex flex-col items-center gap-1">
             <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest">Unit {currentUnit?.number}: {currentUnit?.title}</p>
             <div className="w-32 h-1.5 bg-slate-800 rounded-full overflow-hidden">
               <div className="h-full bg-blue-500 transition-all" style={{ width: `${(currentLesson.number / (currentUnit?.lessons.length || 1)) * 100}%` }} />
             </div>
           </div>
-          <Badge variant="outline" className="text-[10px] font-bold border-blue-500/30 text-blue-400 uppercase tracking-widest">{selectedCountry} Edition</Badge>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="bg-slate-900 border-white/10 text-[10px] font-bold text-blue-400 uppercase tracking-widest h-8 px-3">
+                <Globe className="mr-2 h-3 w-3" /> {selectedCountry} Edition
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="bg-slate-900 border-white/10 text-white">
+              <DropdownMenuLabel className="text-slate-400 text-[10px] uppercase">Select Region</DropdownMenuLabel>
+              <DropdownMenuSeparator className="bg-white/5" />
+              {['Canada', 'USA', 'UK', 'Australia'].map(c => (
+                <DropdownMenuItem 
+                  key={c} 
+                  onClick={() => handleCountryChange(c)}
+                  className="cursor-pointer hover:bg-white/5"
+                >
+                  <span className={cn("text-xs font-bold", selectedCountry === c ? "text-blue-400" : "text-slate-300")}>{c}</span>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </nav>
 
