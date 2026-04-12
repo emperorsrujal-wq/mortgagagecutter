@@ -38,7 +38,7 @@ export const countryContentMap: Record<string, CountrySpecificInfo> = {
     insuranceRegulator: 'Provincial Insurance Regulators (e.g., FSRA in Ontario)',
     protection: 'CDIC (Canada Deposit Insurance Corporation)',
     cities: ['Toronto', 'Vancouver', 'Calgary', 'Montreal'],
-    programs: ['CPP', 'OAS', 'GST Rebates'],
+    programs: ['CPP (Canada Pension Plan)', 'OAS', 'GST Rebates'],
     nationalDebt: '$1.2 Trillion',
   },
   'USA': {

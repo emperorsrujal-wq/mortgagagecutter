@@ -5,7 +5,7 @@ import React, { use, useState, useEffect } from 'react';
 import { useUser, useFirestore } from '@/firebase';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { academyUnits } from '@/lib/academy/curriculum';
-import { countryContentMap, CountrySpecificInfo } from '@/lib/academy/content-data';
+import { countryContentMap } from '@/lib/academy/content-data';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
@@ -19,7 +19,6 @@ import {
   Loader2,
   CheckCircle,
   Info,
-  ShieldCheck,
   TrendingUp,
   Landmark,
   ShieldAlert,
@@ -27,7 +26,10 @@ import {
   Scale,
   Baby,
   Building2,
-  PieChart
+  PieChart,
+  ShieldCheck,
+  Zap,
+  Target
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -89,7 +91,12 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
   };
 
   if (isUserLoading || isLoading) {
-    return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white"><Loader2 className="animate-spin mr-2" /> Loading Localized Lesson...</div>;
+    return (
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white">
+        <Loader2 className="animate-spin h-12 w-12 text-blue-500 mb-4" />
+        <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Assembling Regional Lesson...</p>
+      </div>
+    );
   }
 
   if (!currentLesson) return <div className="p-20 text-center">Lesson not found.</div>;
@@ -121,7 +128,7 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
               <p>
                 In {selectedCountry}, {country.centralBank} sets the base rate (currently {country.rates.prime} for prime lending). This "Cost of Money" dictates everything from your mortgage at {country.majorBanks[2]} to the interest you earn.
               </p>
-              <div className="bg-slate-900 p-8 rounded-3xl border border-white/5 space-y-4">
+              <div className="bg-slate-900/50 p-8 rounded-3xl border border-white/5 space-y-4">
                 <h4 className="flex items-center gap-2 font-bold text-white uppercase tracking-widest text-xs text-blue-400"><Info className="h-4 w-4" /> Regional Insight: {selectedCountry}</h4>
                 <p className="text-sm text-slate-400 leading-relaxed">
                   When you take a loan in {country.cities[1]} or {country.cities[2]}, the bank doesn't just "lend" you other people's money. They create a new liability on their balance sheet, expanding the money supply.
@@ -135,24 +142,24 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
           <>
             <section className="space-y-6">
               <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
-                <ShieldAlert className="h-6 w-6 text-blue-500" /> The {selectedCountry} Protection Landscape
+                <ShieldAlert className="h-6 w-6 text-emerald-500" /> The {selectedCountry} Risk Market
               </h2>
               <p>
                 Whether you are dealing with {country.majorInsurers[0]} or {country.majorInsurers[1]}, insurance in {selectedCountry} is about the transfer of risk. You pay a premium so that the insurer carries the burden of a potential {country.currencySymbol}1 Million catastrophe.
               </p>
               <p>
-                Under the oversight of {country.insuranceRegulator}, these companies pools the premiums of millions of citizens in {country.cities[0]} and {country.cities[1]} to ensure solvency when claims arise.
+                Under the oversight of the {country.insuranceRegulator}, these companies pool the premiums of millions of citizens in {country.cities[0]} and {country.cities[1]} to ensure solvency when claims arise.
               </p>
             </section>
             <section className="space-y-6">
               <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
-                <PieChart className="h-6 w-6 text-blue-500" /> The Actuarial Math
+                <PieChart className="h-6 w-6 text-emerald-500" /> The Actuarial Logic
               </h2>
               <p>
-                In {selectedCountry}, insurers use historical data to predict the future. They know exactly how many people in {country.cities[2]} will require a payout this year. The "Deductible" is your skin in the game, designed by {country.majorInsurers[2]} to prevent moral hazard.
+                In {selectedCountry}, insurers use historical data to predict the future. They know exactly how many people in {country.cities[2]} will require a payout this year. The "Deductible" is your skin in the game, designed by companies like {country.majorInsurers[2]} to prevent moral hazard.
               </p>
-              <div className="bg-slate-900 p-8 rounded-3xl border border-white/5 space-y-4">
-                <h4 className="flex items-center gap-2 font-bold text-white uppercase tracking-widest text-xs text-blue-400"><Info className="h-4 w-4" /> Regional Insight: {selectedCountry}</h4>
+              <div className="bg-emerald-950/20 p-8 rounded-3xl border border-emerald-500/10 space-y-4">
+                <h4 className="flex items-center gap-2 font-bold text-emerald-400 uppercase tracking-widest text-xs"><Info className="h-4 w-4" /> Policy Strategy: {selectedCountry}</h4>
                 <p className="text-sm text-slate-400 leading-relaxed">
                   The {country.insuranceRegulator} ensures that for every {country.currencySymbol}1 of risk taken, companies like {country.majorInsurers[3]} hold enough capital to remain bulletproof during economic downturns.
                 </p>
@@ -165,7 +172,7 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
           <>
             <section className="space-y-6">
               <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
-                <Scale className="h-6 w-6 text-blue-500" /> The {selectedCountry} Macro Picture
+                <Scale className="h-6 w-6 text-amber-500" /> The {selectedCountry} Macro Picture
               </h2>
               <p>
                 Economics in {selectedCountry} is the study of how {country.centralBank} balances the scales of growth and inflation. With a national debt of {country.nationalDebt}, the government's decisions in {country.cities[0]} ripple through every household budget.
@@ -176,7 +183,7 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
             </section>
             <section className="space-y-6">
               <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
-                <Landmark className="h-6 w-6 text-blue-500" /> Inflation & The Base Rate
+                <Landmark className="h-6 w-6 text-amber-500" /> Inflation & Rates
               </h2>
               <p>
                 When inflation rises in {selectedCountry}, {country.centralBank} increases the base rate (prime is currently {country.rates.prime}). This makes borrowing more expensive at {country.majorBanks[0]}, slowing down the economy to protect the purchasing power of your {country.currencySymbol}1.
@@ -189,7 +196,7 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
           <>
             <section className="space-y-6">
               <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
-                <Coins className="h-6 w-6 text-blue-500" /> Wealth Creation in {selectedCountry}
+                <Coins className="h-6 w-6 text-purple-500" /> Wealth Creation in {selectedCountry}
               </h2>
               <p>
                 To build wealth in {selectedCountry}, you must move from being a consumer to an owner. By utilizing the {country.stockExchanges[0]}, you can own a piece of the most productive companies in {country.cities[0]} and beyond.
@@ -200,7 +207,7 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
             </section>
             <section className="space-y-6">
               <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
-                <TrendingUp className="h-6 w-6 text-blue-500" /> The Power of Compounding
+                <TrendingUp className="h-6 w-6 text-purple-500" /> The Power of Compounding
               </h2>
               <p>
                 Investing {country.currencySymbol}1,000 today in a diversified portfolio on the {country.stockExchanges[0]} is the first step. Over decades, your returns are shielded from {country.taxAgency} within your {country.retirementAccounts[1]}, allowing for exponential growth.
@@ -213,7 +220,7 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
           <>
             <section className="space-y-6">
               <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
-                <Building2 className="h-6 w-6 text-blue-500" /> The {selectedCountry} Fiscal Machine
+                <Building2 className="h-6 w-6 text-blue-400" /> The {selectedCountry} Fiscal Machine
               </h2>
               <p>
                 The {country.taxAgency} is the engine that powers {selectedCountry}. Your tax dollars fund everything from infrastructure in {country.cities[0]} to social programs like {country.programs[0]}.
@@ -224,15 +231,18 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
             </section>
           </>
         );
-      case 'Family':
+      case 'Debt':
         return (
           <>
             <section className="space-y-6">
               <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
-                <Baby className="h-6 w-6 text-blue-500" /> Generational Literacy
+                <Target className="h-6 w-6 text-red-500" /> The {selectedCountry} Interest Trap
               </h2>
               <p>
-                Teaching the next generation in {selectedCountry} about {country.currencySymbol} and {country.currencyCode} is the ultimate legacy. Whether they grow up in {country.cities[0]} or {country.cities[2]}, they need to understand that {country.majorBanks[0]} is a business, not a vault.
+                Consumer debt in {selectedCountry} is designed to be sticky. Whether it's a high-interest card from {country.majorBanks[0]} or a personal loan, the goal of the lender is to keep you paying interest for as long as possible.
+              </p>
+              <p>
+                By learning the {selectedCountry} credit scoring system, you can leverage your position to secure lower rates and accelerate your payoff.
               </p>
             </section>
           </>
@@ -241,9 +251,10 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
         return (
           <section className="space-y-6">
             <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
-              <TrendingUp className="h-6 w-6 text-blue-500" /> The {selectedCountry} Reality
+              <Zap className="h-6 w-6 text-blue-500" /> Regional Lesson: {selectedCountry}
             </h2>
-            <p>Content for the {currentLesson.category} category in {selectedCountry} is being dynamically generated...</p>
+            <p>Mastering the financial mechanics of {selectedCountry} is the foundation of your family's future wealth.</p>
+            <p>In {country.cities[0]} and across the nation, institutions like {country.majorBanks[0]} and {country.taxAgency} set the rules. This lesson shows you how to play the game to win.</p>
           </section>
         );
     }
@@ -276,7 +287,7 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
             <Badge variant="secondary" className="bg-blue-500/10 text-blue-400 border-none">{currentLesson.category}</Badge>
           </div>
           <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-tight">
-            {currentLesson.title} <br /><span className="text-blue-500">in {selectedCountry}</span>
+            {currentLesson.title} <br /><span className="text-blue-500 italic">in {selectedCountry}</span>
           </h1>
           <p className="text-slate-400 text-lg italic max-w-2xl mx-auto">
             "Mastering {currentLesson.category.toLowerCase()} in {country.cities[0]} is the foundation of your financial sovereignty."
@@ -286,7 +297,7 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
         {/* CONTENT SECTIONS */}
         <div className="prose prose-invert prose-blue max-w-none space-y-16 leading-relaxed text-slate-300 text-lg">
           
-          {/* DYNAMIC CONTENT BASED ON CATEGORY */}
+          {/* DYNAMIC CONTENT BASED ON CATEGORY & COUNTRY */}
           {renderCategoryContent()}
 
           {/* SHARED TAKEAWAYS */}
@@ -305,7 +316,7 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
               <li className="flex gap-4 items-start">
                 <div className="h-6 w-6 rounded bg-emerald-500/20 flex items-center justify-center shrink-0 mt-1"><CheckCircle2 className="h-4 w-4 text-emerald-500" /></div>
                 <div>
-                  <strong className="text-white block mb-1">Tax Agency Shielding</strong>
+                  <strong className="text-white block mb-1">{country.taxAgency} Shielding</strong>
                   <span>Always utilize {country.retirementAccounts.slice(0, 2).join(' and ')} to shield your assets from {country.taxAgency} impact in cities like {country.cities[0]}.</span>
                 </div>
               </li>
