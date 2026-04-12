@@ -37,7 +37,8 @@ import {
   LineChart,
   BarChart3,
   Waves,
-  UserCircle2
+  UserCircle2,
+  Lock
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -147,17 +148,17 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
     const termDeposit = selectedCountry === 'Canada' ? 'GIC' : selectedCountry === 'USA' ? 'CD' : 'Term Deposit';
     const sections = [
       {
-        title: "01. What is a Bank?",
+        title: "01. What is a Bank? (The Spread Merchant)",
         icon: <Landmark className="h-6 w-6 text-blue-500" />,
         content: `In the ${selectedCountry} context, a bank is not a storage facility for your cash; it is a financial intermediary—a spread merchant that survives on the gap between what it pays you and what it charges others. When you walk into a branch of ${country.majorBanks[0]}, you are technically granting the bank an unsecured loan of your ${country.currencyCode}. Under the oversight of the ${country.regulator}, the bank is allowed to use your deposit as the raw material for its lending operations. It is a legally licensed entity designed to capture your capital at the lowest possible cost so it can sell that same capital back to the community at a high interest rate.`
       },
       {
-        title: "02. The Checking Account (Transaction Hub)",
+        title: "02. The Checking Account (The Transaction Hub)",
         icon: <Zap className="h-6 w-6 text-emerald-500" />,
         content: `The checking account is your primary Transaction Hub, designed for high-frequency movement and maximum liquidity. Because life in cities like ${country.cities[0]} requires constant spending, the bank offers this "convenience" typically for free or a nominal fee while paying you zero interest. They do this because checking accounts provide them with a constant, high-velocity stream of free capital. By keeping your money in a checking account at ${country.majorBanks[1]}, you are providing the bank with an interest-free loan that they can use to meet their reserve requirements while you handle the daily friction of bills and expenses.`
       },
       {
-        title: "03. The Savings Account (Liquidity Bucket)",
+        title: "03. The Savings Account (The Liquidity Bucket)",
         icon: <Coins className="h-6 w-6 text-amber-500" />,
         content: `The savings account is marketed as your "Safety Bucket," offering a symbolic interest rate of ${country.rates.savings}. In reality, this rate is intentionally set just high enough to discourage you from moving your capital to a competitor, but rarely high enough to beat inflation. It is a "holding pen" for your idle cash. While your balance at ${country.majorBanks[0]} looks stable on a screen, the purchasing power of that money is silently eroding as the ${country.centralBank} manages the national debt. Keeping large sums in a "safe" savings account is a guaranteed way to lose wealth relative to the cost of living in ${selectedCountry} over any meaningful time horizon.`
       },
@@ -232,6 +233,67 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
         title: "06. Property, Auto & The Deductible Lever",
         icon: <Scale className="h-6 w-6 text-amber-400" />,
         content: `Property and Auto insurance are "Legal Requirements" that also serve as "Wealth Protectors." In hubs like ${country.cities[2]}, many homeowners fall into the trap of "Premium Leakage"—paying extra for low deductibles. You can fight back by using the "Deductible Lever." By raising your deductibles to the maximum you can comfortably handle (e.g., ${country.currencySymbol}2,500 or higher), you instantly lower your annual premium. You then redirect that saved premium into your debt-reduction strategy or your ${country.retirementAccounts[1]}. This shift moves you from being a "passive consumer" of ${country.majorInsurers[1]}'s products to being a strategist who manages their own risk-retention level.`
+      }
+    ];
+
+    return (
+      <div className="space-y-20">
+        {sections.map((s, i) => (
+          <section key={i} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: `${i * 100}ms` }}>
+            <div className="flex items-center gap-4 border-b border-white/5 pb-6">
+              <div className="p-3 bg-slate-900 rounded-2xl border border-white/10 shadow-inner">
+                {s.icon}
+              </div>
+              <h2 className="text-3xl font-black text-white tracking-tight">
+                {s.title}
+              </h2>
+            </div>
+            <div className="space-y-6">
+              <div className="leading-relaxed text-slate-300 text-xl font-medium whitespace-pre-wrap">
+                {s.content}
+              </div>
+            </div>
+          </section>
+        ))}
+      </div>
+    );
+  };
+
+  const renderEconomicsDeepDive = (country: CountrySpecificInfo) => {
+    const sections = [
+      {
+        title: "01. The Macro Machine & GDP (National Output)",
+        icon: <LineChart className="h-6 w-6 text-blue-400" />,
+        content: `In the ${selectedCountry} economy, the 'Macro Machine' is the total environment in which your wealth lives. The most important terminology to understand is GDP (Gross Domestic Product). This represents the total value of all goods and services produced within hubs like ${country.cities[0]} and beyond. Think of GDP as the 'National Energy Output.' When GDP grows, businesses expand and jobs are plentiful; when it shrinks, the machine enters a recession. Understanding GDP is critical because it dictates the 'Consumer Sentiment' that either drives prices up or forces the ${country.centralBank} to intervene in your personal finances.`
+      },
+      {
+        title: "02. Interest Rates (The Hand on the Lever)",
+        icon: <Landmark className="h-6 w-6 text-emerald-400" />,
+        content: `Interest rates are the single most powerful force affecting your mortgage and your speed of payoff. Controlled by the ${country.centralBank} (currently impacting the prime rate of ${country.rates.prime}), interest rates are the 'Price of Money.' When the ${country.centralBank} lowers the lever, they are encouraging citizens in ${selectedCountry} to borrow and spend, heating up the engine. When they pull the lever up, they are intentionally making borrowing more expensive to cool down inflation. For the strategist, interest rates are not just a monthly expense; they are the 'Gravity' that determines how much work is required to clear your debt at ${country.majorBanks[0]}.`
+      },
+      {
+        title: "03. Inflation (The Purchasing Power Siphon)",
+        icon: <Waves className="h-6 w-6 text-amber-400" />,
+        content: `Inflation is the term people hear most but understand least. It is the steady devaluation of the ${country.currencyCode} in your pocket. As the government manages a national debt of ${country.nationalDebt}, inflation acts as a 'Silent Tax' that siphons value from cash-savers and transfers it to asset-owners. If inflation is 4% and your savings account at ${country.majorBanks[1]} pays only ${country.rates.savings}, you are losing wealth every single day. This is why our method focuses on 'Debt Velocity'—the only way to stay ahead of the inflationary siphon is to move capital from depreciating cash into productive equity faster than the currency shrinks.`
+      },
+      {
+        title: "04. The Product Mix: Supply, Demand & Credit",
+        icon: <Zap className="h-6 w-6 text-purple-400" />,
+        content: `The economy functions through the law of 'Supply and Demand,' but in ${selectedCountry}, it is greased by 'Credit.' 
+        
+        'Supply' is the availability of goods in markets like ${country.cities[1]}, while 'Demand' is the desire of citizens to buy them. 
+        
+        'Credit' is the magic multiplier that allows people to buy today with money they haven't earned yet. This creates the 'Economic Cycle.' When credit is easy to get from ${country.majorBanks[0]}, demand spikes and prices rise. When credit tightens due to ${country.regulator} policy, demand falls. Understanding this relationship allows you to predict when the machine is about to shift from growth to contraction.`
+      },
+      {
+        title: "05. Recession & the Credit Cleanse",
+        icon: <ShieldAlert className="h-6 w-6 text-red-400" />,
+        content: `A 'Recession' is officially defined as two consecutive quarters of negative GDP growth. In ${selectedCountry}, a recession is the machine's way of clearing out 'Inefficient Debt.' During these periods, liquidity dries up and fear becomes the dominant emotion in ${country.cities[2]}. However, for the educated student, a recession is a 'Transfer Event.' It is the moment when assets move from the over-leveraged to the liquid. By using our payoff methods to maintain a 'Debt-Free Fortress,' you position yourself to be the buyer when others are forced to sell during the cycle's cleanse.`
+      },
+      {
+        title: "06. Economic Sovereignty (The Strategy)",
+        icon: <Award className="h-6 w-6 text-yellow-400" />,
+        content: `True sovereignty in ${selectedCountry} comes from realizing that the ${country.centralBank} prioritizes institutional stability over your personal net worth. By mastering the terminology of GDP, Inflation, and Interest Rates, you stop reacting to the headlines and start positioning your family for the next shift in the ${country.regulator} landscape. Your goal is to move capital out of the 'Inflated Siphon' and into 'Strategic Bunkers' like ${country.retirementAccounts[0]} and home equity. This Unit is your declaration of independence from an economic system designed to keep you as its fuel.`
       }
     ];
 
@@ -358,69 +420,6 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
         title: "06. The Strategic Portfolio Audit",
         icon: <Target className="h-6 w-6 text-purple-400" />,
         content: `To optimize your fortress in ${selectedCountry}, you must audit your 'Assets.' Start by questioning high-fee products sold by ${country.majorBanks[0]}. Move toward index strategies that capture the entire ${country.stockExchanges[0]}. Remember: the financial machine is designed to capture your capital through fees; your goal is to minimize that leakage and maximize compounding. This Unit is your blueprint for moving from 'Labor' to 'Legacy'.`
-      }
-    ];
-
-    return (
-      <div className="space-y-20">
-        {sections.map((s, i) => (
-          <section key={i} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: `${i * 100}ms` }}>
-            <div className="flex items-center gap-4 border-b border-white/5 pb-6">
-              <div className="p-3 bg-slate-900 rounded-2xl border border-white/10 shadow-inner">
-                {s.icon}
-              </div>
-              <h2 className="text-3xl font-black text-white tracking-tight">
-                {s.title}
-              </h2>
-            </div>
-            <div className="space-y-6">
-              <div className="leading-relaxed text-slate-300 text-xl font-medium whitespace-pre-wrap">
-                {s.content}
-              </div>
-            </div>
-          </section>
-        ))}
-      </div>
-    );
-  };
-
-  const renderEconomicsDeepDive = (country: CountrySpecificInfo) => {
-    const sections = [
-      {
-        title: "01. The Pulse of the Machine",
-        icon: <LineChart className="h-6 w-6 text-blue-400" />,
-        content: `In the ${selectedCountry} economy, 'The Pulse' is the rhythm of capital flow. Whether you are in ${country.cities[0]} or ${country.cities[1]}, you are living inside a mathematical machine governed by Supply, Demand, and Credit. Most people see the economy as random events—inflation spikes or price increases. In reality, it is a predictable cycle driven by human psychology and the policy levers pulled by the ${country.centralBank}.`
-      },
-      {
-        title: "02. The Hand on the Lever",
-        icon: <Landmark className="h-6 w-6 text-emerald-400" />,
-        content: `The single most powerful force in ${selectedCountry} is the ${country.centralBank}. By adjusting the base interest rate (currently affecting the prime lending rate of ${country.rates.prime}), they control the cost of money itself. When they lower the lever, credit flows easily and your mortgage at ${country.majorBanks[0]} becomes cheaper. When they pull the lever back, they are cooling the engine to fight inflation. Understanding this lever is the difference between being a victim and being a strategist.`
-      },
-      {
-        title: "03. The Economic Product Mix: Debt vs. Credit",
-        icon: <Zap className="h-6 w-6 text-amber-400" />,
-        content: `The ${selectedCountry} economy functions through specific financial vehicles. 
-        
-        'Government Bonds' are the foundation of national debt, allowing the state to fund programs by borrowing your ${country.currencyCode}. 
-        
-        'Consumer Credit' products are the grease that keeps the retail wheels turning in ${country.cities[2]}, but they also act as the primary capture point for your future income. 
-        
-        'Mortgages' are the structural pillars of the housing market, regulated by the ${country.regulator} to ensure institutional stability while often locking families into 30-year debt cycles.`
-      },
-      {
-        title: "04. The Inflationary Siphon",
-        icon: <Waves className="h-6 w-6 text-amber-400" />,
-        content: `Inflation is not just 'rising prices'; it is the slow, invisible devaluation of your life's work. As the ${country.centralBank} manages the national debt of ${country.nationalDebt}, the ${country.currencyCode} in your pocket loses purchasing power every day it sits idle. If your wealth is not growing faster than inflation, you are effectively paying a 'silent tax' to the system. To survive, you must move capital from 'depreciating buckets' into 'productive assets' that the machine cannot easily siphon.`
-      },
-      {
-        title: "05. Recession & the Credit Cycle",
-        icon: <ShieldAlert className="h-6 w-6 text-red-400" />,
-        content: `Recessions in ${selectedCountry} are the machine's way of clearing out inefficient debt. During these periods, liquidity dries up at ${country.majorBanks[1]} and fear becomes dominant in hubs like ${country.cities[0]}. But for the educated student, a recession is a 'transfer event.' It is when assets move from the over-leveraged to the liquid. By maintaining a 'Debt-Free' fortress using our methods, you position yourself to be the buyer in the next cycle.`
-      },
-      {
-        title: "06. Advanced Economic Sovereignty",
-        icon: <Award className="h-6 w-6 text-yellow-400" />,
-        content: `True sovereignty in ${selectedCountry} comes from understanding that the ${country.centralBank} prioritizes institutional stability over your personal wealth. By teaching your family the mechanics of ${country.currencyCode} and the nature of ${country.nationalDebt}, you build a generational shield. Once you see the machine's pulse, you stop reacting to the news and start positioning your family for the inevitable shifts. This is your declaration of independence.`
       }
     ];
 
