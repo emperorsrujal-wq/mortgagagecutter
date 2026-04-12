@@ -21,7 +21,13 @@ import {
   Info,
   ShieldCheck,
   TrendingUp,
-  Landmark
+  Landmark,
+  ShieldAlert,
+  Coins,
+  Scale,
+  Baby,
+  Building2,
+  PieChart
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -91,6 +97,158 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
   const isCompleted = completedLessons.includes(currentLesson.id);
   const country = countryContentMap[selectedCountry] || countryContentMap['Canada'];
 
+  // Dynamic Category Rendering Logic
+  const renderCategoryContent = () => {
+    switch (currentLesson.category) {
+      case 'Banking':
+        return (
+          <>
+            <section className="space-y-6">
+              <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
+                <TrendingUp className="h-6 w-6 text-blue-500" /> The {selectedCountry} Banking Reality
+              </h2>
+              <p>
+                Imagine walking into {country.majorBanks[0]} or {country.majorBanks[1]} in {country.cities[0]}. You deposit {country.currencySymbol}5,000 into your {country.retirementAccounts[0]} or a standard savings account. In your mind, that money is sitting safely in a vault.
+              </p>
+              <p>
+                The reality in {selectedCountry} is that under {country.regulator}, the system operates on fractional reserves. Your deposit is the raw material for {country.majorBanks[0]} to lend out ten times that amount at {country.rates.mortgage} APR.
+              </p>
+            </section>
+            <section className="space-y-6">
+              <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
+                <Landmark className="h-6 w-6 text-blue-500" /> The Fractional Engine
+              </h2>
+              <p>
+                In {selectedCountry}, {country.centralBank} sets the base rate (currently {country.rates.prime} for prime lending). This "Cost of Money" dictates everything from your mortgage at {country.majorBanks[2]} to the interest you earn.
+              </p>
+              <div className="bg-slate-900 p-8 rounded-3xl border border-white/5 space-y-4">
+                <h4 className="flex items-center gap-2 font-bold text-white uppercase tracking-widest text-xs text-blue-400"><Info className="h-4 w-4" /> Regional Insight: {selectedCountry}</h4>
+                <p className="text-sm text-slate-400 leading-relaxed">
+                  When you take a loan in {country.cities[1]} or {country.cities[2]}, the bank doesn't just "lend" you other people's money. They create a new liability on their balance sheet, expanding the money supply.
+                </p>
+              </div>
+            </section>
+          </>
+        );
+      case 'Insurance':
+        return (
+          <>
+            <section className="space-y-6">
+              <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
+                <ShieldAlert className="h-6 w-6 text-blue-500" /> The {selectedCountry} Protection Landscape
+              </h2>
+              <p>
+                Whether you are dealing with {country.majorInsurers[0]} or {country.majorInsurers[1]}, insurance in {selectedCountry} is about the transfer of risk. You pay a premium so that the insurer carries the burden of a potential {country.currencySymbol}1 Million catastrophe.
+              </p>
+              <p>
+                Under the oversight of {country.insuranceRegulator}, these companies pools the premiums of millions of citizens in {country.cities[0]} and {country.cities[1]} to ensure solvency when claims arise.
+              </p>
+            </section>
+            <section className="space-y-6">
+              <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
+                <PieChart className="h-6 w-6 text-blue-500" /> The Actuarial Math
+              </h2>
+              <p>
+                In {selectedCountry}, insurers use historical data to predict the future. They know exactly how many people in {country.cities[2]} will require a payout this year. The "Deductible" is your skin in the game, designed by {country.majorInsurers[2]} to prevent moral hazard.
+              </p>
+              <div className="bg-slate-900 p-8 rounded-3xl border border-white/5 space-y-4">
+                <h4 className="flex items-center gap-2 font-bold text-white uppercase tracking-widest text-xs text-blue-400"><Info className="h-4 w-4" /> Regional Insight: {selectedCountry}</h4>
+                <p className="text-sm text-slate-400 leading-relaxed">
+                  The {country.insuranceRegulator} ensures that for every {country.currencySymbol}1 of risk taken, companies like {country.majorInsurers[3]} hold enough capital to remain bulletproof during economic downturns.
+                </p>
+              </div>
+            </section>
+          </>
+        );
+      case 'Economics':
+        return (
+          <>
+            <section className="space-y-6">
+              <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
+                <Scale className="h-6 w-6 text-blue-500" /> The {selectedCountry} Macro Picture
+              </h2>
+              <p>
+                Economics in {selectedCountry} is the study of how {country.centralBank} balances the scales of growth and inflation. With a national debt of {country.nationalDebt}, the government's decisions in {country.cities[0]} ripple through every household budget.
+              </p>
+              <p>
+                The {country.currencyCode} isn't just paper; it's a reflection of the productivity of every worker from {country.cities[1]} to {country.cities[3]}.
+              </p>
+            </section>
+            <section className="space-y-6">
+              <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
+                <Landmark className="h-6 w-6 text-blue-500" /> Inflation & The Base Rate
+              </h2>
+              <p>
+                When inflation rises in {selectedCountry}, {country.centralBank} increases the base rate (prime is currently {country.rates.prime}). This makes borrowing more expensive at {country.majorBanks[0]}, slowing down the economy to protect the purchasing power of your {country.currencySymbol}1.
+              </p>
+            </section>
+          </>
+        );
+      case 'Investing':
+        return (
+          <>
+            <section className="space-y-6">
+              <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
+                <Coins className="h-6 w-6 text-blue-500" /> Wealth Creation in {selectedCountry}
+              </h2>
+              <p>
+                To build wealth in {selectedCountry}, you must move from being a consumer to an owner. By utilizing the {country.stockExchanges[0]}, you can own a piece of the most productive companies in {country.cities[0]} and beyond.
+              </p>
+              <p>
+                The secret is the tax-advantaged accounts provided by {country.taxAgency}, such as {country.retirementAccounts.join(' or ')}.
+              </p>
+            </section>
+            <section className="space-y-6">
+              <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
+                <TrendingUp className="h-6 w-6 text-blue-500" /> The Power of Compounding
+              </h2>
+              <p>
+                Investing {country.currencySymbol}1,000 today in a diversified portfolio on the {country.stockExchanges[0]} is the first step. Over decades, your returns are shielded from {country.taxAgency} within your {country.retirementAccounts[1]}, allowing for exponential growth.
+              </p>
+            </section>
+          </>
+        );
+      case 'Government':
+        return (
+          <>
+            <section className="space-y-6">
+              <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
+                <Building2 className="h-6 w-6 text-blue-500" /> The {selectedCountry} Fiscal Machine
+              </h2>
+              <p>
+                The {country.taxAgency} is the engine that powers {selectedCountry}. Your tax dollars fund everything from infrastructure in {country.cities[0]} to social programs like {country.programs[0]}.
+              </p>
+              <p>
+                Understanding how to navigate the {country.taxAgency}'s rules is the difference between keeping your wealth and losing it to the "Hidden Tax" of poor planning.
+              </p>
+            </section>
+          </>
+        );
+      case 'Family':
+        return (
+          <>
+            <section className="space-y-6">
+              <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
+                <Baby className="h-6 w-6 text-blue-500" /> Generational Literacy
+              </h2>
+              <p>
+                Teaching the next generation in {selectedCountry} about {country.currencySymbol} and {country.currencyCode} is the ultimate legacy. Whether they grow up in {country.cities[0]} or {country.cities[2]}, they need to understand that {country.majorBanks[0]} is a business, not a vault.
+              </p>
+            </section>
+          </>
+        );
+      default:
+        return (
+          <section className="space-y-6">
+            <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
+              <TrendingUp className="h-6 w-6 text-blue-500" /> The {selectedCountry} Reality
+            </h2>
+            <p>Content for the {currentLesson.category} category in {selectedCountry} is being dynamically generated...</p>
+          </section>
+        );
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 font-sans">
       {/* STICKY NAV */}
@@ -115,61 +273,23 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
           <div className="inline-flex items-center gap-4 text-xs font-black uppercase text-slate-500 tracking-widest">
             <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {currentLesson.readingTime}m Deep Dive</span>
             <span className="flex items-center gap-1"><FileText className="h-3 w-3" /> {currentLesson.wordCount} Words</span>
+            <Badge variant="secondary" className="bg-blue-500/10 text-blue-400 border-none">{currentLesson.category}</Badge>
           </div>
           <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-tight">
             {currentLesson.title} <br /><span className="text-blue-500">in {selectedCountry}</span>
           </h1>
           <p className="text-slate-400 text-lg italic max-w-2xl mx-auto">
-            "When you understand how {country.centralBank} influences your daily spending in {country.cities[0]}, your relationship with money changes forever."
+            "Mastering {currentLesson.category.toLowerCase()} in {country.cities[0]} is the foundation of your financial sovereignty."
           </p>
         </header>
 
         {/* CONTENT SECTIONS */}
         <div className="prose prose-invert prose-blue max-w-none space-y-16 leading-relaxed text-slate-300 text-lg">
           
-          {/* 1. THE OPENING HOOK */}
-          <section className="space-y-6">
-            <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
-              <TrendingUp className="h-6 w-6 text-blue-500" /> The {selectedCountry} Reality
-            </h2>
-            <p>
-              Imagine walking into {country.majorBanks[0]} or {country.majorBanks[1]} in the heart of {country.cities[0]}. You deposit {country.currencySymbol}5,000 into your {country.retirementAccounts[0]} or a standard savings account. In your mind, that money is sitting safely in a vault, waiting for you. 
-            </p>
-            <p>
-              The reality in {selectedCountry} is starkly different. Under the oversight of {country.regulator}, the banking system operates on a fractional reserve mechanism. Your {country.currencySymbol}5,000 isn't static; it's the raw material for {country.majorBanks[0]} to lend out ten times that amount in mortgages and personal loans at {country.rates.mortgage} APR.
-            </p>
-          </section>
+          {/* DYNAMIC CONTENT BASED ON CATEGORY */}
+          {renderCategoryContent()}
 
-          {/* 2. THE MECHANISM (Section 1-2) */}
-          <section className="space-y-6">
-            <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
-              <Landmark className="h-6 w-6 text-blue-500" /> The Fractional Engine
-            </h2>
-            <p>
-              In {selectedCountry}, {country.centralBank} sets the base rate (currently {country.rates.prime} for prime lending). This "Cost of Money" dictates everything from your mortgage at {country.majorBanks[2]} to the interest you earn on savings. 
-            </p>
-            <div className="bg-slate-900 p-8 rounded-3xl border border-white/5 space-y-4">
-              <h4 className="flex items-center gap-2 font-bold text-white uppercase tracking-widest text-xs text-blue-400"><Info className="h-4 w-4" /> Regional Insight: {selectedCountry}</h4>
-              <p className="text-sm text-slate-400 leading-relaxed">
-                When you take a loan in {country.cities[1]} or {country.cities[2]}, the bank doesn't "lend" you other people's money. They create a new liability. This expansion of the money supply is why inflation in {selectedCountry} is so difficult to control—there is more digital "credit" than physical value.
-              </p>
-            </div>
-          </section>
-
-          {/* 3. THE PROFIT MODELS (Section 3-4) */}
-          <section className="space-y-6">
-            <h2 className="text-3xl font-black text-white tracking-tight border-b border-white/5 pb-4 flex items-center gap-3">
-              <ShieldCheck className="h-6 w-6 text-blue-500" /> Protection & Risks
-            </h2>
-            <p>
-              Your deposits are protected by {country.protection} up to specific limits, but this protection only covers the "nominal" value of your money. It does not protect you from the hidden tax of inflation. 
-            </p>
-            <p>
-              If {country.majorBanks[3]} pays you {country.rates.savings} while {country.taxAgency} taxes your interest gains, your "Real Rate of Return" in {selectedCountry} is likely negative. You are effectively paying the bank to hold your capital.
-            </p>
-          </section>
-
-          {/* 4. KEY TAKEAWAYS */}
+          {/* SHARED TAKEAWAYS */}
           <section className="p-8 bg-emerald-500/5 border border-emerald-500/30 rounded-3xl space-y-8">
             <h3 className="text-2xl font-black text-emerald-400 flex items-center gap-2">
               <CheckCircle className="h-6 w-6" /> Localized Takeaways: {selectedCountry}
@@ -178,22 +298,15 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
               <li className="flex gap-4 items-start">
                 <div className="h-6 w-6 rounded bg-emerald-500/20 flex items-center justify-center shrink-0 mt-1"><CheckCircle2 className="h-4 w-4 text-emerald-500" /></div>
                 <div>
-                  <strong className="text-white block mb-1">The Spread Trap</strong>
-                  <span>Banks in {selectedCountry} earn the "Spread" between your {country.rates.savings} deposit and their {country.rates.mortgage} lending.</span>
+                  <strong className="text-white block mb-1">Knowledge is Leverage</strong>
+                  <span>Whether it's {country.majorBanks[0]} or {country.majorInsurers[0]}, these institutions rely on your lack of knowledge. By learning these {selectedCountry} mechanics, you flip the script.</span>
                 </div>
               </li>
               <li className="flex gap-4 items-start">
                 <div className="h-6 w-6 rounded bg-emerald-500/20 flex items-center justify-center shrink-0 mt-1"><CheckCircle2 className="h-4 w-4 text-emerald-500" /></div>
                 <div>
-                  <strong className="text-white block mb-1">{country.taxAgency} Implications</strong>
-                  <span>Understand that interest earned is often fully taxable, further reducing your purchasing power in cities like {country.cities[3]}.</span>
-                </div>
-              </li>
-              <li className="flex gap-4 items-start">
-                <div className="h-6 w-6 rounded bg-emerald-500/20 flex items-center justify-center shrink-0 mt-1"><CheckCircle2 className="h-4 w-4 text-emerald-500" /></div>
-                <div>
-                  <strong className="text-white block mb-1">Program Leverage</strong>
-                  <span>Utilize {country.retirementAccounts.join(' and ')} to shield your assets from the traditional banking drain.</span>
+                  <strong className="text-white block mb-1">Tax Agency Shielding</strong>
+                  <span>Always utilize {country.retirementAccounts.slice(0, 2).join(' and ')} to shield your assets from {country.taxAgency} impact in cities like {country.cities[0]}.</span>
                 </div>
               </li>
             </ul>
@@ -254,7 +367,7 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
         <section className="bg-slate-900 rounded-[48px] p-12 border border-blue-500/20 text-center space-y-6 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-transparent -z-10" />
           <h3 className="text-3xl font-black">Ready to Beat the Bank in {selectedCountry}?</h3>
-          <p className="text-slate-400 text-lg max-w-xl mx-auto">See how understanding these {selectedCountry} mechanics can save you {country.currencySymbol}30,000+ in interest using our advanced tools.</p>
+          <p className="text-slate-400 text-lg max-w-xl mx-auto">See how understanding these {selectedCountry} {currentLesson.category.toLowerCase()} mechanics can save you thousands in interest.</p>
           <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 font-black px-12 py-7 text-lg rounded-2xl shadow-2xl">
             <Link href="/questionnaire">Launch {selectedCountry} Savings Estimator</Link>
           </Button>
