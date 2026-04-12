@@ -1,4 +1,3 @@
-
 'use client';
 import React from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
@@ -8,9 +7,12 @@ import { countries } from '@/lib/course/countries';
 import Link from 'next/link';
 import { CheckCircle2, ChevronRight, Globe, Languages } from 'lucide-react';
 import { TranslatedText } from '@/components/course/TranslatedText';
+import { useUser } from '@/firebase';
 
 function LearnHub() {
   const { country, setCountryCode, language, setLanguage, progress } = useCourse();
+  const { user } = useUser();
+  const isPrivileged = user?.email === 'emperorsrujal@gmail.com';
 
   return (
     <div className="min-h-screen bg-[#FAFBFD] font-dm-sans">
@@ -67,7 +69,8 @@ function LearnHub() {
           <div className="space-y-3">
             {lessonMeta.map((lesson, idx) => {
               const isCompleted = progress.includes(lesson.id);
-              const isAvailable = idx === 0 || progress.includes(lessonMeta[idx-1].id);
+              // Admins see all lessons as available immediately
+              const isAvailable = idx === 0 || progress.includes(lessonMeta[idx-1].id) || isPrivileged;
 
               return (
                 <Link 

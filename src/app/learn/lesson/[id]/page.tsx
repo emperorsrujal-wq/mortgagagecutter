@@ -1,4 +1,3 @@
-
 'use client';
 import React, { use } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
@@ -41,7 +40,8 @@ import {
   Lock,
   Star,
   Gem,
-  CheckCircle
+  CheckCircle,
+  Award
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -82,15 +82,9 @@ function LessonContent({ id }: { id: number }) {
   const isLocked = id >= 3 && !isPrivileged;
 
   const nextLesson = () => {
-    if (id === 1 || isPrivileged || id < 3) {
-        completeLesson(id);
-        if (id < 5) router.push(`/learn/lesson/${id + 1}`);
-        else router.push('/');
-    } else {
-        completeLesson(id);
-        if (id < 5) router.push(`/learn/lesson/${id + 1}`);
-        else router.push('/');
-    }
+    completeLesson(id);
+    if (id < 5) router.push(`/learn/lesson/${id + 1}`);
+    else router.push('/');
   };
 
   const prevLesson = () => {
@@ -108,7 +102,6 @@ function LessonContent({ id }: { id: number }) {
         
         {id === 1 && (
           <div className="space-y-12 animate-in fade-in duration-1000">
-            {/* SALES HEADER */}
             <header className="space-y-6 text-center">
               <div className="inline-flex items-center gap-2 px-4 py-1 bg-red-100 text-red-700 rounded-full text-xs font-black uppercase tracking-widest mb-4">
                 <ShieldAlert className="h-3 w-3" />
@@ -200,7 +193,6 @@ function LessonContent({ id }: { id: number }) {
 
               <AmortViz />
 
-              {/* THE GLIMPSE (SALES TEASE) */}
               <section className="bg-gradient-to-br from-indigo-50 to-blue-50 p-8 md:p-12 rounded-[48px] border border-blue-100 shadow-xl space-y-10">
                 <div className="text-center space-y-4">
                   <h2 className="text-3xl md:text-4xl font-fraunces font-black text-[#1A1D26]">
@@ -261,7 +253,6 @@ function LessonContent({ id }: { id: number }) {
 
         {id === 2 && (
           <div className="space-y-12 animate-in slide-in-from-right duration-700">
-            {/* STRATEGY HEADER */}
             <header className="space-y-4">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-black uppercase tracking-widest text-[#2563EB] px-3 py-1 bg-blue-50 rounded-full">
