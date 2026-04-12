@@ -1,3 +1,4 @@
+
 'use client';
 import React, { use } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
@@ -554,34 +555,87 @@ function LessonContent({ id }: { id: number }) {
 
              {id === 4 && (
                <div className="space-y-16">
-                  <header className="p-12 bg-emerald-600 text-white rounded-[48px] shadow-2xl relative overflow-hidden">
+                  <header className="p-12 bg-indigo-600 text-white rounded-[48px] shadow-2xl relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-8 opacity-20">
-                      <Award className="h-32 w-32" />
+                      <Search className="h-32 w-32" />
                     </div>
                     <div className="relative z-10">
                       <div className="flex items-center gap-3 text-xs font-black uppercase tracking-[0.3em] opacity-80 mb-4">
-                        <Award className="h-5 w-5" /> VIP Access Granted
+                        <Award className="h-5 w-5" /> <TranslatedText>Advanced Module: The Audit</TranslatedText>
                       </div>
                       <h1 className="text-4xl md:text-6xl font-fraunces font-black leading-tight tracking-tight">
-                        <TranslatedText>{meta.title}</TranslatedText>
+                        <TranslatedText>The Lender Audit</TranslatedText>
                       </h1>
                       <p className="mt-6 text-xl opacity-90 leading-relaxed font-medium max-w-2xl">
-                        <TranslatedText>{`Welcome back, Administrator. You have full access to the ${meta.title} modules. Here is your executive summary of the high-velocity strategies.`}</TranslatedText>
+                        <TranslatedText>{`Most banks want to sell you a debt trap. Your job is to find the 'Strategic Valve'—the specific tool that allows you to control the velocity of your payoff.`}</TranslatedText>
                       </p>
                     </div>
                   </header>
 
                   <section className="space-y-12">
-                    <CourseCard title="🚀 Strategy Deep Dive: The Lender Audit" className="p-10 border-2 border-emerald-100">
-                      <div className="space-y-6 text-lg leading-relaxed text-[#334155]">
-                        <p>
-                            <TranslatedText>{`We've identified the top 3 lenders in ${country.name} that offer the 'Strategic Valve' features required for this method. Use the Bank Screener tool in your dashboard to track your calls to these specific institutions.`}</TranslatedText>
-                        </p>
-                        <p className="font-bold text-emerald-700">
-                            <TranslatedText>{`The goal of the audit is to find a product that allows for 'Daily Interest Recalculation' and 'Readvanceable Limits'. This is the structural foundation of the Mortgage Cutter Method.`}</TranslatedText>
-                        </p>
+                    <div className="flex items-center gap-4 text-3xl font-fraunces font-black text-[#1A1D26]">
+                      <div className="p-3 bg-indigo-100 rounded-2xl">
+                        <Landmark className="text-indigo-600 h-8 w-8" />
                       </div>
-                    </CourseCard>
+                      <h2><TranslatedText>Banks are Vendors, Not Partners</TranslatedText></h2>
+                    </div>
+
+                    <div className="space-y-8 leading-relaxed text-lg text-[#334155]">
+                      <p>
+                        <TranslatedText>{`The first step in your implementation is a mindset shift: Your bank is a vendor of financial energy. Most 'retail' loan officers are trained to sell you standard 30-year fixed mortgages because those are the most profitable for the institution. To execute the Mortgage Cutter Method, you must bypass the standard sales desk and audit for specific structural features.`}</TranslatedText>
+                      </p>
+                      
+                      <div className="p-10 bg-slate-50 rounded-[40px] border-2 border-indigo-100 space-y-8 shadow-inner">
+                        <h3 className="text-2xl font-black text-indigo-900 flex items-center gap-3">
+                          <CheckCircle className="h-7 w-7 text-indigo-600" />
+                          <TranslatedText>The 3 Non-Negotiables</TranslatedText>
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="space-y-3">
+                                <p className="font-black text-xs uppercase text-indigo-500 tracking-widest">01. Daily Recalculation</p>
+                                <p className="text-sm font-medium text-slate-600 leading-relaxed"><TranslatedText>{`The loan must recalculate interest DAILY based on the current balance. If it only recalculates once a month, 'The Float' strategy from Lesson 3 will not work.`}</TranslatedText></p>
+                            </div>
+                            <div className="space-y-3 border-l-0 md:border-l border-indigo-100 md:pl-6">
+                                <p className="font-black text-xs uppercase text-indigo-500 tracking-widest">02. Auto-Readvanceable</p>
+                                <p className="text-sm font-medium text-slate-600 leading-relaxed"><TranslatedText>{`As you pay down the principal, the 'available credit' should automatically increase. This ensures your equity stays liquid and accessible for the 'Chunking' phase.`}</TranslatedText></p>
+                            </div>
+                            <div className="space-y-3 border-l-0 md:border-l border-indigo-100 md:pl-6">
+                                <p className="font-black text-xs uppercase text-indigo-500 tracking-widest">03. Full Transactionality</p>
+                                <p className="text-sm font-medium text-slate-600 leading-relaxed"><TranslatedText>{`The account must behave like a checking account. You need a debit card, online bill pay, and direct deposit capability directly into the loan account.`}</TranslatedText></p>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-8">
+                        <h3 className="text-3xl font-fraunces font-black text-[#1A1D26] flex items-center gap-4">
+                            <MessageSquare className="h-8 w-8 text-indigo-600" />
+                            <TranslatedText>The Banker Script</TranslatedText>
+                        </h3>
+                        <p className="text-lg text-[#334155] leading-relaxed">
+                            <TranslatedText>{`When you call your bank, do NOT ask for a 'mortgage'. Instead, ask to speak with a Senior Loan Officer or a Private Wealth Manager regarding a 'First-Lien Revolving Line'. Use these specific questions to filter them out in under 5 minutes:`}</TranslatedText>
+                        </p>
+                        
+                        <div className="space-y-4">
+                            <ChatBubble role="you"><TranslatedText>Do you offer a HELOC that can be placed in the first-lien position to replace my entire mortgage?</TranslatedText></ChatBubble>
+                            <ChatBubble role="bank"><TranslatedText>Most HELOCs are second mortgages, but let me check if we can do a primary position line...</TranslatedText></ChatBubble>
+                            <ChatBubble role="you"><TranslatedText>Does this account allow for direct deposit of my payroll and standard online bill pay features directly from the line of credit?</TranslatedText></ChatBubble>
+                            <ChatBubble role="pro"><TranslatedText>Pro Tip: If they say 'You have to transfer funds to a checking account first,' they don't have the right product. You need the velocity of a direct-deposit-to-loan structure.</TranslatedText></ChatBubble>
+                        </div>
+                    </div>
+
+                    <div className="pt-12 text-center space-y-8">
+                      <h3 className="text-3xl font-fraunces font-black text-[#1A1D26]">
+                        <TranslatedText>Ready for your Final Action Plan?</TranslatedText>
+                      </h3>
+                      <button 
+                        onClick={nextLesson}
+                        className="bg-indigo-600 text-white hover:bg-indigo-700 font-black px-12 py-6 rounded-2xl text-2xl group flex items-center gap-4 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95"
+                      >
+                        <TranslatedText>Unlock Lesson 5: The Roadmap</TranslatedText>
+                        <ArrowRight className="h-8 w-8 group-hover:translate-x-2 transition-transform" />
+                      </button>
+                    </div>
                   </section>
                </div>
              )}
