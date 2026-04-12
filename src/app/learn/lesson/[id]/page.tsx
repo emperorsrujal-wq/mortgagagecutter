@@ -85,7 +85,7 @@ function LessonContent({ id }: { id: number }) {
   const nextLesson = () => {
     completeLesson(id);
     if (id < 5) router.push(`/learn/lesson/${id + 1}`);
-    else router.push('/');
+    else router.push('/questionnaire');
   };
 
   const prevLesson = () => {
@@ -660,13 +660,74 @@ function LessonContent({ id }: { id: number }) {
                   </header>
 
                   <section className="space-y-12">
-                    <CourseCard title="🎯 Your Action Plan" className="p-10 border-2 border-blue-100">
-                      <div className="space-y-6 text-lg leading-relaxed text-[#334155]">
-                        <p>
-                            <TranslatedText>{`Your implementation window starts with the debt consolidation phase. By moving high-interest balances into the ${country.productShort} first, you instantly increase your monthly net surplus by hundreds of dollars, feeding the principal-killing engine.`}</TranslatedText>
-                        </p>
+                    <div className="flex items-center gap-4 text-3xl font-fraunces font-black text-[#1A1D26]">
+                      <div className="p-3 bg-blue-100 rounded-2xl">
+                        <Target className="text-blue-600 h-8 w-8" />
+                      </div>
+                      <h2><TranslatedText>Your First 90 Days</TranslatedText></h2>
+                    </div>
+
+                    <div className="space-y-8 leading-relaxed text-lg text-[#334155]">
+                      <p>
+                        <TranslatedText>{`Success with the Mortgage Cutter Method isn't about working harder—it's about structural discipline. Once your 'Strategic Valve' is open, your only job is to manage the flow. Most members see their greatest acceleration in the first three months as they collapse stagnant silos and consolidate their financial energy.`}</TranslatedText>
+                      </p>
+                      
+                      <div className="grid grid-cols-1 gap-8">
+                        <div className="p-8 bg-white border border-slate-200 rounded-[40px] shadow-lg relative overflow-hidden group">
+                          <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:rotate-6 transition-transform">
+                            <ShieldCheck className="h-24 w-24 text-blue-600" />
+                          </div>
+                          <h4 className="font-black text-blue-600 uppercase text-xs tracking-widest mb-4"><TranslatedText>Phase 1: The Liquidity Injection (Day 1-30)</TranslatedText></h4>
+                          <div className="space-y-4 text-slate-700">
+                            <p><TranslatedText>{`The first move is to empty your stagnant silos. Every dollar sitting in a ${country.name} checking account earning 0% while your mortgage costs 6% is a daily wealth penalty. Move your emergency fund and all idle cash into the ${country.productShort} immediately. This 'Injection' instantly drops your principal and stops the interest calculation on that capital forever.`}</TranslatedText></p>
+                          </div>
+                        </div>
+
+                        <div className="p-8 bg-white border border-slate-200 rounded-[40px] shadow-lg relative overflow-hidden group">
+                          <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:rotate-6 transition-transform">
+                            <TrendingUp className="h-24 w-24 text-emerald-600" />
+                          </div>
+                          <h4 className="font-black text-emerald-600 uppercase text-xs tracking-widest mb-4"><TranslatedText>Phase 2: The Velocity Maintenance (Day 31-60)</TranslatedText></h4>
+                          <div className="space-y-4 text-slate-700">
+                            <p><TranslatedText>{`Now, establish your rhythm. Ensure 100% of your payroll is direct-deposited into the line of credit. Switch all bill payments to occurs at the absolute last day of the grace period. This ensures your capital stays anchored in House #1 for the maximum number of nights each month, starving the bank's interest engine.`}</TranslatedText></p>
+                          </div>
+                        </div>
+
+                        <div className="p-8 bg-white border border-slate-200 rounded-[40px] shadow-lg relative overflow-hidden group">
+                          <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:rotate-6 transition-transform">
+                            <Award className="h-24 w-24 text-indigo-600" />
+                          </div>
+                          <h4 className="font-black text-indigo-600 uppercase text-xs tracking-widest mb-4"><TranslatedText>Phase 3: The Optimization Audit (Day 61-90)</TranslatedText></h4>
+                          <div className="space-y-4 text-slate-700">
+                            <p><TranslatedText>{`By month three, you will see your 'Average Daily Balance' trending down. Perform an audit of your lifestyle friction. Can you increase your monthly surplus by $200? That $200 isn't just $200—it's a high-velocity employee that kills thousands in future interest. You are no longer a consumer; you are an architect of equity.`}</TranslatedText></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <CourseCard title="📝 Your Execution Checklist" className="p-10 border-2 border-blue-100 bg-blue-50/30">
+                      <div className="space-y-4">
+                        <TaskItem id="t1" label="Run your numbers in the Chunker Simulator." />
+                        <TaskItem id="t2" label="Call 3 local lenders using the Audit Script." />
+                        <TaskItem id="t3" label="Identify your 'Liquidity Injection' amount." />
+                        <TaskItem id="t4" label="Set up direct deposit to your new strategic line." />
+                        <TaskItem id="t5" label="Commit to the 30-Day Velocity Sweep." />
                       </div>
                     </CourseCard>
+
+                    <div className="bg-slate-900 text-white p-12 rounded-[48px] text-center space-y-8 shadow-2xl relative overflow-hidden">
+                      <div className="absolute top-0 left-0 p-8 opacity-10">
+                        <CheckCircle className="h-32 w-32" />
+                      </div>
+                      <h3 className="text-4xl md:text-5xl font-fraunces font-black leading-tight"><TranslatedText>Congratulations, Strategist.</TranslatedText></h3>
+                      <p className="text-slate-400 text-xl opacity-90 max-w-2xl mx-auto leading-relaxed font-medium">
+                        <TranslatedText>{`You have the map. You have the scripts. You have the math. The only thing left is to take the first step. Welcome to the movement of families reclaiming their lives from the bank.`}</TranslatedText>
+                      </p>
+                      <button className="bg-white text-blue-900 hover:bg-slate-100 font-black px-12 py-6 rounded-2xl text-2xl group flex items-center gap-4 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95" onClick={nextLesson}>
+                        <TranslatedText>Final Graduation</TranslatedText>
+                        <CheckCircle className="h-8 w-8 group-hover:scale-110 transition-transform" />
+                      </button>
+                    </div>
                   </section>
                </div>
              )}
