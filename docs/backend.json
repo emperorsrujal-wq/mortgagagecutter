@@ -1,126 +1,176 @@
-
 {
   "entities": {
-    "Lead": {
+    "FinancialLesson": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Lead",
+      "title": "FinancialLesson",
       "type": "object",
-      "description": "Represents a potential customer who has submitted their information.",
+      "description": "Represents a single lesson in the Financial Education Academy, including localized content for multiple countries. Content and metadata are stored as JSON strings due to schema output constraints.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the lead, typically the Firebase Auth UID."
+          "description": "Unique identifier for the FinancialLesson entity."
         },
-        "name": {
-          "type": "string",
-          "description": "Name of the lead."
+        "unitNumber": {
+          "type": "number",
+          "description": "The sequential number of the unit this lesson belongs to (e.g., 1 for 'How Banks Really Work')."
         },
-        "email": {
-          "type": "string",
-          "description": "Email address of the lead.",
-          "format": "email"
+        "lessonNumber": {
+          "type": "number",
+          "description": "The sequential number of the lesson within its unit (e.g., 1 for 'How Banks Really Work')."
         },
-        "phone": {
+        "title": {
           "type": "string",
-          "description": "Phone number of the lead."
+          "description": "The main, non-country-specific title of the financial education lesson."
         },
-        "submissionDate": {
+        "slug": {
           "type": "string",
-          "description": "Date and time the lead information was submitted.",
-          "format": "date-time"
+          "description": "A URL-friendly string identifier for the lesson (e.g., 'how-banks-work')."
+        },
+        "country": {
+          "type": "array",
+          "description": "An array of country codes (e.g., 'Canada', 'USA', 'UK', 'Australia') for which this lesson's content is available. Each country code refers to a specific sub-object within the 'content' JSON string.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "content": {
+          "type": "string",
+          "description": "A JSON string containing localized content for the lesson, keyed by country code. Example structure: {\"canada\": {\"title\": \"...\", \"hook\": \"...\", \"section1\": \"...\", \"section2\": \"...\", \"section3\": \"...\", \"section4\": \"...\", \"section5\": \"...\", \"section6\": \"...\", \"takeaways\": [\"...\"], \"wordCount\": 2800, \"readingTime\": 15}, \"usa\": {...}, ...}. Each country object includes a country-specific title, hook, multiple content sections (section1-section6), key takeaways (array of strings), wordCount (number), and readingTime (number)."
+        },
+        "metadata": {
+          "type": "string",
+          "description": "A JSON string containing administrative metadata for the lesson. Example structure: {\"published\": true, \"createdDate\": \"2023-01-01T12:00:00Z\", \"lastUpdated\": \"2023-01-01T12:00:00Z\", \"difficulty\": \"beginner\", \"category\": \"banking\"}. Timestamps are in ISO 8601 format."
         }
       },
       "required": [
         "id",
-        "submissionDate"
+        "unitNumber",
+        "lessonNumber",
+        "title",
+        "slug",
+        "country",
+        "content",
+        "metadata"
       ]
     },
-    "Mail": {
+    "UserFinancialProgress": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Mail",
+      "title": "UserFinancialProgress",
       "type": "object",
-      "description": "Document written to trigger the Firebase Trigger Email extension.",
+      "description": "Tracks a user's progress through the Financial Education Academy module.",
       "properties": {
-        "to": { "type": "string" },
-        "message": {
-          "type": "object",
-          "properties": {
-            "subject": { "type": "string" },
-            "html": { "type": "string" }
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the UserFinancialProgress entity, typically matching the authenticated user's ID."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the authenticated user's ID. (Relationship: User 1:1 UserFinancialProgress)"
+        },
+        "email": {
+          "type": "string",
+          "description": "The email address of the user from the authentication system.",
+          "format": "email"
+        },
+        "selectedCountry": {
+          "type": "string",
+          "description": "The country preference selected by the user for viewing lesson content (e.g., 'Canada', 'USA', 'UK', 'Australia')."
+        },
+        "completedLessons": {
+          "type": "array",
+          "description": "An array of `lessonNumber`s (integers) that the user has successfully completed.",
+          "items": {
+            "type": "number"
           }
+        },
+        "currentUnit": {
+          "type": "number",
+          "description": "The unit number the user is currently viewing or last accessed."
+        },
+        "currentLesson": {
+          "type": "number",
+          "description": "The lesson number within `currentUnit` that the user is currently viewing or last accessed."
+        },
+        "totalTimeSpent": {
+          "type": "number",
+          "description": "The total accumulated time in minutes the user has spent actively viewing lessons."
+        },
+        "startedAt": {
+          "type": "string",
+          "description": "The timestamp when the user first started the Financial Education Academy module. In ISO 8601 format.",
+          "format": "date-time"
+        },
+        "completedAt": {
+          "type": "string",
+          "description": "The timestamp when the user completed all lessons in the academy. Null if not yet completed. In ISO 8601 format.",
+          "format": "date-time"
+        },
+        "lastAccessedAt": {
+          "type": "string",
+          "description": "The timestamp of the user's most recent activity within the Financial Education Academy. In ISO 8601 format.",
+          "format": "date-time"
+        },
+        "certificateEarned": {
+          "type": "boolean",
+          "description": "A flag indicating whether the user has earned the completion certificate for the academy."
         }
       },
-      "required": ["to", "message"]
-    },
-    "BankScreenerResponse": {
-      "title": "BankScreenerResponse",
-      "description": "Stored data from the HELOC Bank Screener questionnaire.",
-      "type": "object",
-      "properties": {
-        "userId": { "type": "string" },
-        "bankName": { "type": "string" },
-        "formData": { "type": "object" },
-        "updatedAt": { "type": "string", "format": "date-time" }
-      }
-    },
-    "ChunkerState": {
-      "title": "ChunkerState",
-      "description": "Saved inputs for the HELOC-Assist Chunker Estimator.",
-      "type": "object",
-      "properties": {
-        "userId": { "type": "string" },
-        "inputs": { "type": "object" },
-        "updatedAt": { "type": "string", "format": "date-time" }
-      }
+      "required": [
+        "id",
+        "userId",
+        "email",
+        "selectedCountry",
+        "completedLessons",
+        "currentUnit",
+        "currentLesson",
+        "totalTimeSpent",
+        "startedAt",
+        "lastAccessedAt",
+        "certificateEarned"
+      ]
     }
   },
   "auth": {
     "providers": [
-      "google.com",
-      "apple.com",
-      "phone",
-      "password"
+      "password",
+      "anonymous"
     ]
   },
   "firestore": {
     "structure": [
       {
-        "path": "/leads/{leadId}",
+        "path": "/financialLessons/{lessonId}",
         "definition": {
-          "entityName": "Lead",
+          "entityName": "FinancialLesson",
           "schema": {
-            "$ref": "#/backend/entities/Lead"
+            "$ref": "#/backend/entities/FinancialLesson"
           },
-          "description": "Stores lead information."
+          "description": "Stores individual financial education lessons, including country-specific content. Documents are publicly readable by authenticated users. Write access is restricted to administrative operations (not directly via client rules). Includes denormalized 'content' field with country-specific lesson details to ensure authorization independence and efficient reads.",
+          "params": [
+            {
+              "name": "lessonId",
+              "description": "The unique identifier for a financial lesson."
+            }
+          ]
         }
       },
       {
-        "path": "/mail/{mailId}",
+        "path": "/userFinancialProgress/{userId}",
         "definition": {
-          "entityName": "Mail",
+          "entityName": "UserFinancialProgress",
           "schema": {
-            "$ref": "#/backend/entities/Mail"
+            "$ref": "#/backend/entities/UserFinancialProgress"
           },
-          "description": "Collection for triggering outgoing emails."
-        }
-      },
-      {
-        "path": "/leads/{leadId}/bankScreeners/{screenerId}",
-        "definition": {
-          "entityName": "BankScreenerResponse",
-          "schema": { "$ref": "#/backend/entities/BankScreenerResponse" },
-          "description": "User's saved bank screener data."
-        }
-      },
-      {
-        "path": "/leads/{leadId}/chunkerStates/{stateId}",
-        "definition": {
-          "entityName": "ChunkerState",
-          "schema": { "$ref": "#/backend/entities/ChunkerState" },
-          "description": "User's saved chunker estimator inputs."
+          "description": "Tracks the progress of individual users through the Financial Education Academy. Each document's ID is the authenticated user's ID (`request.auth.uid`). Includes denormalized 'userId' field for explicit ownership and authorization independence, ensuring owner-only read/write access.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the authenticated user."
+            }
+          ]
         }
       }
     ],
-    "reasoning": "Standard structure for lead capture and personalized member tools."
+    "reasoning": "The Firestore data structure for the 'Financial Education Academy' module is designed to adhere to the core principles of authorization independence, clarity of intent, DBAC, QAPs, and data invariants. It achieves this through a clear segregation of public content and user-specific data into distinct top-level collections.\n\n**Authorization Independence (CRITICAL):**\n1.  **`/financialLessons/{lessonId}`:** This collection stores the static, educational content. Since all authenticated users can read these lessons, there are no complex hierarchical authorization dependencies. The documents themselves are self-contained, meaning access to a lesson does not depend on attributes of a 'parent' document, thereby eliminating the need for `get()` calls in security rules for read operations. Write access is restricted to administrative processes, further simplifying client-side authorization. This structure inherently supports atomic read operations as each document contains all necessary content and metadata, including denormalized country-specific content within the `content` field.\n2.  **`/userFinancialProgress/{userId}`:** This collection stores each user's progress. Authorization independence is achieved by making the `userId` the document ID for each user's progress record. Additionally, the `userId` is explicitly stored as a field within the document (`definition.properties.userId`). This denormalization allows security rules to directly compare `request.auth.uid` with the document ID (which is `{userId}`) or the `userId` field within the document, without needing to `get()` any other document. This supports atomic read/write operations for a user's progress record.\n\n**QAPs (Rules are not Filters):**\n1.  **`/financialLessons/{lessonId}`:** All documents in this collection share the same security posture: readable by any authenticated user. This allows a client application to perform a `list` query (e.g., `db.collection('financialLessons').get()`) and retrieve all relevant documents without requiring further client-side filtering or complex, inefficient security rule filters. The rule `allow read: if request.auth != null;` explicitly enables this QAP.\n2.  **`/userFinancialProgress/{userId}`:** Access to this collection is strictly limited to the document owned by the currently authenticated user. The security rule `allow read, write: if request.auth.uid == userId;` ensures that a user can only interact with their own specific progress document. When a client requests `db.collection('userFinancialProgress').doc(request.auth.uid).get()`, the request naturally targets only the document the user is authorized to access, thus upholding the QAP. Any broader `list` query would automatically fail for documents the user does not own, preventing rules from acting as filters.\n\n**Structural Segregation:**\n*   The decision to create entirely new collections (`financialLessons`, `userFinancialProgress`) and not modify existing 'mortgage payoff strategies' directly implements Structural Segregation. Each new collection has a homogeneous security posture: `financialLessons` for public-read content, and `userFinancialProgress` for private, user-owned data. This greatly simplifies security rules and minimizes the risk of unintended data exposure or access conflicts.\n\n**Access Modeling:**\n*   **Private Data:** `/userFinancialProgress/{userId}` uses a Path-Based ownership model, where the document ID directly corresponds to the `userId`, making ownership explicit and rules straightforward.\n*   **Global Content:** `/financialLessons/{lessonId}` is structured for broad, authenticated read access, making it a "
   }
 }

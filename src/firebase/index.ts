@@ -1,46 +1,49 @@
-
 'use client';
 
 import { firebaseConfig } from '@/firebase/config';
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
-import { getAuth, Auth } from 'firebase/auth';
-import { getFirestore, Firestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore'
 
-/**
- * Initializes and returns the Firebase app, auth, and firestore instances.
- * This function is designed to be idempotent, meaning it can be called multiple
- * times without re-initializing the app, which is crucial in a Next.js environment
- * with Fast Refresh.
- *
- * @returns An object containing the initialized FirebaseApp, Auth, and Firestore instances.
- */
-export function initializeFirebase(): { firebaseApp: FirebaseApp; auth: Auth; firestore: Firestore } {
-  // Check if any Firebase apps have been initialized. If not, initialize one.
-  // If apps already exist, get the default app. This prevents re-initialization errors.
-  const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-  
-  const auth = getAuth(app);
-  const firestore = getFirestore(app);
-  
-  return { firebaseApp: app, auth, firestore };
+// IMPORTANT: DO NOT MODIFY THIS FUNCTION
+export function initializeFirebase() {
+  if (!getApps().length) {
+    // Important! initializeApp() is called without any arguments because Firebase App Hosting
+    // integrates with the initializeApp() function to provide the environment variables needed to
+    // populate the FirebaseOptions in production. It is critical that we attempt to call initializeApp()
+    // without arguments.
+    let firebaseApp;
+    try {
+      // Attempt to initialize via Firebase App Hosting environment variables
+      firebaseApp = initializeApp();
+    } catch (e) {
+      // Only warn in production because it's normal to use the firebaseConfig to initialize
+      // during development
+      if (process.env.NODE_ENV === "production") {
+        console.warn('Automatic initialization failed. Falling back to firebase config object.', e);
+      }
+      firebaseApp = initializeApp(firebaseConfig);
+    }
+
+    return getSdks(firebaseApp);
+  }
+
+  // If already initialized, return the SDKs with the already initialized App
+  return getSdks(getApp());
 }
 
+export function getSdks(firebaseApp: FirebaseApp) {
+  return {
+    firebaseApp,
+    auth: getAuth(firebaseApp),
+    firestore: getFirestore(firebaseApp)
+  };
+}
 
-// This file serves as a central "barrel" for exporting Firebase-related hooks and providers.
-// By re-exporting from other modules, we can avoid circular dependencies and keep the code organized.
-
-// Export the core providers and initialization logic
 export * from './provider';
 export * from './client-provider';
-
-// Export Firestore hooks
 export * from './firestore/use-collection';
 export * from './firestore/use-doc';
-
-// Export Auth hooks
-export * from './auth/use-user';
-
-// Export utility/helper functions
 export * from './non-blocking-updates';
 export * from './non-blocking-login';
 export * from './errors';

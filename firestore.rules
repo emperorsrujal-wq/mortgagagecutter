@@ -1,29 +1,82 @@
-
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /leads/{leadId} {
-      allow create: if request.auth != null && request.auth.uid == leadId;
-      allow get: if request.auth != null && request.auth.uid == leadId;
-      allow list: if false;
-      allow update: if request.auth != null && request.auth.uid == leadId;
-      
-      match /bankScreeners/{screenerId} {
-        allow read, write: if request.auth != null && request.auth.uid == leadId;
-      }
-      
-      match /chunkerStates/{stateId} {
-        allow read, write: if request.auth != null && request.auth.uid == leadId;
-      }
+
+    /**
+     * Financial Education Academy Security Rules
+     *
+     * CORE PHILOSOPHY:
+     * This ruleset enforces a strict user-ownership model for private progress data while 
+     * providing broad access to educational content for all authenticated users. It is 
+     * designed for rapid prototyping, ensuring high authorization security while remaining 
+     * flexible on the internal data structure of lessons.
+     *
+     * DATA STRUCTURE:
+     * - /financialLessons/{lessonId}: Global educational content, readable by all members.
+     * - /userFinancialProgress/{userId}: Private user-specific tracking data, accessible 
+     *   only by the owner.
+     *
+     * KEY SECURITY DECISIONS:
+     * - AUTHENTICATION: All access requires a valid Firebase Authentication session.
+     * - OWNERSHIP: User progress is secured by matching the document ID directly to the 
+     *   user's authenticated UID.
+     * - READ-ONLY CONTENT: The educational lessons collection is strictly read-only 
+     *   for clients; updates must be performed via administrative tools.
+     * - RELATIONAL INTEGRITY: Rules enforce that users can only create progress records 
+     *   linked to their own UID, preventing data spoofing.
+     */
+
+    // --- Global Helper Functions ---
+
+    /** @description Checks if the request is from a signed-in user. */
+    function isSignedIn() {
+      return request.auth != null;
     }
 
-    match /mail/{mailId} {
-      allow create: if request.auth != null;
-      allow read, update, delete: if false;
+    /** @description Checks if the authenticated user matches the provided ID. */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
     }
 
-    match /leads/{leadId}/{allSubcollections=**} {
-      allow read, write: if request.auth != null && request.auth.uid == leadId;
+    /** @description Checks if the user is the owner and the document exists. */
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
+    }
+
+    // --- Collection Rules ---
+
+    /**
+     * @description Rules for the global financial education lessons.
+     * @path /financialLessons/{lessonId}
+     * @allow (get, list) if the user is signed in.
+     * @deny (create, update, delete) for all client-side requests.
+     * @principle Grants broad read access to educational content while preventing unauthorized modifications.
+     */
+    match /financialLessons/{lessonId} {
+      allow get, list: if isSignedIn();
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Rules for tracking individual user progress through the academy.
+     * @path /userFinancialProgress/{userId}
+     * @allow (get, list, create, update, delete) if the user is the document owner.
+     * @deny (all) if the user attempts to access or modify another user's progress.
+     * @principle Enforces path-based ownership and validates relational integrity of the userId field.
+     */
+    match /userFinancialProgress/{userId} {
+      allow get, list: if isOwner(userId);
+      
+      // On create, ensure the internal userId and id fields match the path ID
+      allow create: if isOwner(userId) 
+                    && request.resource.data.userId == userId 
+                    && request.resource.data.id == userId;
+      
+      // On update, ensure the document exists and the ownership field is immutable
+      allow update: if isExistingOwner(userId) 
+                    && request.resource.data.userId == resource.data.userId;
+      
+      allow delete: if isExistingOwner(userId);
     }
   }
 }
