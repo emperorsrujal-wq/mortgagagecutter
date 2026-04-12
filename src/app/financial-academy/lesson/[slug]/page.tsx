@@ -147,35 +147,29 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
     const termDeposit = selectedCountry === 'Canada' ? 'GIC' : selectedCountry === 'USA' ? 'CD' : 'Term Deposit';
     const sections = [
       {
-        title: "01. The Illusion of the Vault",
+        title: "01. What is a Bank?",
         icon: <Landmark className="h-6 w-6 text-blue-500" />,
-        content: `When you walk into a branch of ${country.majorBanks[0]} in ${country.cities[0]}, the atmosphere is designed to scream 'Security.' The polished marble and heavy doors suggest your ${country.currencyCode} is sitting in a physical vault, safely locked away. This is the first great illusion of modern finance. In reality, a bank is not a storage unit; it is a financial intermediary—a spread merchant that borrows money from you (depositors) at a low cost and lends it to others at a high price. Your deposit is not a box of cash with your name on it; it is a legally binding unsecured loan you have granted to the bank. Under the rules of the ${country.regulator}, the bank is only a pass-through entity for your hard-earned energy.`
+        content: `In the ${selectedCountry} context, a bank is not a storage facility for your cash; it is a financial intermediary—a spread merchant that survives on the gap between what it pays you and what it charges others. When you walk into a branch of ${country.majorBanks[0]}, you are technically granting the bank an unsecured loan of your ${country.currencyCode}. Under the oversight of the ${country.regulator}, the bank is allowed to use your deposit as the raw material for its lending operations. It is a legally licensed entity designed to capture your capital at the lowest possible cost so it can sell that same capital back to the community at a high interest rate.`
       },
       {
-        title: "02. The Fractional Reserve Machine",
-        icon: <TrendingUp className="h-6 w-6 text-emerald-500" />,
-        content: `Under the oversight of the ${country.centralBank}, the system in ${selectedCountry} operates on 'Fractional Reserve' mechanics. For every ${country.currencySymbol}1,000 you deposit, the bank is only required to keep a tiny fraction in reserve. They lend out the remaining 90% or more to other consumers for mortgages and car loans. Through this cycle, banks literally 'create' money out of thin air, all while charging compound interest on every cent of it. You are effectively providing the raw material for their profit machine, while they keep the lion's share of the productivity your capital generates in the wider economy.`
+        title: "02. The Checking Account (Transaction Hub)",
+        icon: <Zap className="h-6 w-6 text-emerald-500" />,
+        content: `The checking account is your primary Transaction Hub, designed for high-frequency movement and maximum liquidity. Because life in cities like ${country.cities[0]} requires constant spending, the bank offers this "convenience" typically for free or a nominal fee while paying you zero interest. They do this because checking accounts provide them with a constant, high-velocity stream of free capital. By keeping your money in a checking account at ${country.majorBanks[1]}, you are providing the bank with an interest-free loan that they can use to meet their reserve requirements while you handle the daily friction of bills and expenses.`
       },
       {
-        title: "03. The Toolset: Transactional vs. Stored Capital",
+        title: "03. The Savings Account (Liquidity Bucket)",
         icon: <Coins className="h-6 w-6 text-amber-500" />,
-        content: `To capture your capital, ${country.majorBanks[0]} offers a suite of specialized tools designed for different stages of your financial flow. 
-        
-        The 'Checking Account' is your Transaction Hub—designed for high frequency and maximum liquidity. Because your money is constantly moving in and out to pay for life in ${country.cities[1]}, the bank pays zero interest. They offer this "convenience" because it provides them with a constant stream of free capital they can use to meet their reserve requirements without paying you a dime for the privilege. 
-        
-        The 'Savings Account' is your Liquidity Bucket. It is marketed as a place to build an emergency fund, offering a symbolic interest rate of ${country.rates.savings}. This rate is intentionally set just high enough to discourage you from leaving, but rarely high enough to beat inflation. It acts as a holding pen for your "idle" cash, ensuring the bank has a stable pool of money to lend out at the Prime Rate of ${country.rates.prime}.
-        
-        For those seeking 'Safety', they offer ${termDeposit}s—the Time Lock. In a ${termDeposit}, you legally agree to freeze your ${country.currencyCode} for a set period, typically 1 to 5 years. In exchange for surrendering your liquidity, the bank pays a slightly higher rate. This is the ultimate win for the bank: they get guaranteed, long-term capital that they can immediately leverage into 30-year mortgages, knowing you cannot withdraw it without a penalty.`
+        content: `The savings account is marketed as your "Safety Bucket," offering a symbolic interest rate of ${country.rates.savings}. In reality, this rate is intentionally set just high enough to discourage you from moving your capital to a competitor, but rarely high enough to beat inflation. It is a "holding pen" for your idle cash. While your balance at ${country.majorBanks[0]} looks stable on a screen, the purchasing power of that money is silently eroding as the ${country.centralBank} manages the national debt. Keeping large sums in a "safe" savings account is a guaranteed way to lose wealth relative to the cost of living in ${selectedCountry} over any meaningful time horizon.`
       },
       {
-        title: "04. The Spread: Your Effort, Their Profit",
-        icon: <Zap className="h-6 w-6 text-amber-500" />,
-        content: `The primary profit engine for banks in ${selectedCountry} is the 'Spread.' They pay you ${country.rates.savings} on your savings while charging you ${country.rates.mortgage} on your debt. This difference—the spread—is what funds the skyscrapers owned by ${country.majorBanks[1]}. They take your 'idle' capital, pay you almost nothing for the privilege of holding it, and then sell it back to your community at a massive premium. To win, you must learn how to minimize this spread in your own household by ensuring your money never sits in a low-interest bucket while high-interest debt exists.`
+        title: "04. Term Deposits: ${termDeposit}s (The Time Lock)",
+        icon: <Clock className="h-6 w-6 text-purple-500" />,
+        content: `For those seeking "Guaranteed Safety," banks offer ${termDeposit}s—the ultimate Time Lock. In a ${termDeposit}, you legally agree to freeze your ${country.currencyCode} for a fixed period, typically 1 to 5 years. In exchange for surrendering your liquidity, ${country.majorBanks[1]} pays a slightly higher interest rate than a savings account. This is a massive win for the bank's balance sheet: they secure long-term, predictable capital that they can leverage into 30-year mortgages, knowing you cannot withdraw it without a heavy penalty. You traded your most valuable asset—your flexibility—for a nominal return that often barely keeps pace with ${selectedCountry}'s cost of living.`
       },
       {
         title: "05. Strategic Pitfalls & Inflation Erosion",
         icon: <ShieldAlert className="h-6 w-6 text-red-500" />,
-        content: `The biggest risk in the ${selectedCountry} banking system isn't a bank run—it's the silent erosion of your purchasing power. While your balance at ${country.majorBanks[1]} might look stable on a screen, the ${country.centralBank} manages the national debt of ${country.nationalDebt} by allowing inflation to exist. If the inflation rate is higher than your savings rate, you are effectively paying the bank to lose money every day. Keeping large sums in a 'safe' savings account in hubs like ${country.cities[1]} is a guaranteed way to lose wealth relative to the cost of living over any meaningful time horizon.`
+        content: `The greatest risk in the ${selectedCountry} banking system isn't a bank run—it's the silent erosion of your purchasing power. While your balance at ${country.majorBanks[1]} might look stable on a screen, the ${country.centralBank} manages the national debt of ${country.nationalDebt} by allowing inflation to exist. If the inflation rate is higher than your savings rate, you are effectively paying the bank to lose money every day. Keeping large sums in a 'safe' savings account in hubs like ${country.cities[1]} is a guaranteed way to lose wealth relative to the cost of living over any meaningful time horizon.`
       },
       {
         title: "06. The Strategic Action Plan",
@@ -210,40 +204,34 @@ export default function AcademyLessonPage({ params }: { params: Promise<{ slug: 
   const renderInsuranceDeepDive = (country: CountrySpecificInfo) => {
     const sections = [
       {
-        title: "01. The Architecture of Risk",
+        title: "01. What is Insurance? (The Transfer of Risk)",
         icon: <Umbrella className="h-6 w-6 text-blue-400" />,
-        content: `In the ${selectedCountry} market, insurance is often sold as a safety net, but it is more accurately described as the 'Architecture of Certainty.' When you pay a premium to ${country.majorInsurers[0]}, you are legally transferring the financial consequence of a catastrophic event to a larger balance sheet. This 'Transfer of Risk' is the cornerstone of generational wealth. Without it, one medical emergency or property disaster in ${country.cities[0]} can wipe out decades of disciplined savings and labor.`
+        content: `In the ${selectedCountry} market, insurance is not a savings plan or a safety net—it is a legal contract for the 'Transfer of Risk.' When you pay a premium to ${country.majorInsurers[0]}, you are legally transferring the financial consequence of a catastrophic event from your personal balance sheet to a massive institutional one. This mechanism is the cornerstone of generational wealth. Without a robust risk-transfer strategy, one medical emergency, property disaster, or liability lawsuit in cities like ${country.cities[0]} can wipe out decades of disciplined labor and savings. Insurance is the "Architecture of Certainty" that ensures your family's future is not left to chance.`
       },
       {
-        title: "02. The Actuarial Machine",
+        title: "02. The Actuarial Machine (How it Works)",
         icon: <Activity className="h-6 w-6 text-emerald-400" />,
-        content: `Under the gaze of the ${country.insuranceRegulator}, players like ${country.majorInsurers[1]} operate the 'Actuarial Machine.' This is a mathematical engine that uses the 'Law of Large Numbers' to predict the future with terrifying accuracy. They know exactly how many houses will burn and how many people will fall ill in ${selectedCountry} this year. They don't bet on individuals; they bet on the collective. By understanding that your premium is a calculated bet where the house always has the edge, you can begin to choose policies that cover true catastrophes only, rather than "maintenance" events.`
+        content: `Under the oversight of the ${country.insuranceRegulator}, players like ${country.majorInsurers[1]} operate the 'Actuarial Machine.' This is a mathematical engine that uses the 'Law of Large Numbers' to predict the future with terrifying accuracy. They know exactly how many houses will burn and how many people will fall ill in ${selectedCountry} this year. They don't bet on individuals; they bet on the collective. By pooling the premiums of millions of citizens, they create a reservoir of capital that generates "Investment Float." By the time they pay out a claim, they have already made a profit on your money in the ${country.stockExchanges[0]}. Understanding that your premium is a calculated bet where the house always has the edge allows you to choose policies that cover true catastrophes only, rather than "maintenance" events.`
       },
       {
-        title: "03. The Toolset: Term Protection vs. Complexity Traps",
+        title: "03. Term Life Insurance (Pure Protection)",
         icon: <ShieldCheck className="h-6 w-6 text-amber-400" />,
-        content: `In ${selectedCountry}, the insurance inventory is divided into distinct roles. 
-        
-        'Term Life' is Pure Protection—it covers you for a set time for the lowest ${country.currencyCode} cost. It is the most efficient use of capital for risk transfer. 
-        
-        'Whole' or 'Universal Life' are the Complexity Traps—they bundle insurance with high-fee investment components that often benefit the agent's commission more than your family's net worth. 
-        
-        Then there are 'Living Benefits' like Disability and Critical Illness, designed to protect your "Income Engine"—your ability to earn ${country.currencyCode} if you are injured in ${country.cities[1]}. Each product is a tool; choosing the wrong one creates a multi-decade drag on your financial velocity.`
+        content: `Term Life insurance is "Pure Protection." It is designed to cover you for a specific period—typically 10, 20, or 30 years—for the lowest possible ${country.currencyCode} cost. In ${selectedCountry}, this is the most efficient use of capital for risk transfer. It provides a massive death benefit during your "vulnerability years"—when your mortgage is high and your children are young. Because it has no cash value and expires at the end of the term, ${country.majorInsurers[2]} can offer high coverage for very low premiums. For the strategist, Term Life is the "shield" that protects the family engine while your "Wealth Machine" (investments and equity) is still being built.`
       },
       {
-        title: "04. Property, Auto & The Deductible Lever",
+        title: "04. Permanent Insurance (The Complexity Trap)",
+        icon: <Lock className="h-6 w-6 text-red-400" />,
+        content: `Whole, Universal, and Variable Life insurance are what we call "Complexity Traps." These products bundle pure insurance with an investment component, marketed as "permanent protection" that builds cash value. However, in the ${selectedCountry} landscape, these products are often optimized for the insurer's balance sheet and the agent's commission rather than your family's net worth. The high fees and "management costs" inside a policy from ${country.majorInsurers[0]} often consume the growth, making them significantly less efficient than buying Term Life and investing the difference in your own ${country.retirementAccounts[0]}. For most, permanent insurance is a low-velocity capture of capital that creates a multi-decade drag on your financial speed.`
+      },
+      {
+        title: "05. Living Benefits (Protecting the Income Engine)",
+        icon: <HeartPulse className="h-6 w-6 text-pink-400" />,
+        content: `In ${selectedCountry}, your most valuable asset is not your home in ${country.cities[1]}—it is your ability to earn an income. "Living Benefits," including Disability and Critical Illness insurance, are designed to protect this "Income Engine." If you are injured or diagnosed with a major illness, these policies provide a monthly stream of ${country.currencyCode} or a lump-sum payment to ensure your mortgage and lifestyle remain stable while you recover. Under the gaze of the ${country.insuranceRegulator}, these products are the "Maintenance Insurance" for the human machine. Failing to protect your earning power is the single biggest "Point of Failure" in most family financial plans.`
+      },
+      {
+        title: "06. Property, Auto & The Deductible Lever",
         icon: <Scale className="h-6 w-6 text-amber-400" />,
-        content: `Just as banks profit from interest spreads, ${country.majorInsurers[2]} profits from the gap between premiums collected and claims paid. In ${selectedCountry}, this 'Underwriting Profit' is supplemented by 'Investment Float.' Between the time you pay and the time they pay out a claim, they invest your money in the ${country.stockExchanges[0]}. You can fight back by using the 'Deductible Lever'—raising your deductibles to the maximum you can handle, which lowers your premium and keeps more ${country.currencyCode} on your balance sheet for debt reduction.`
-      },
-      {
-        title: "05. Strategic Pitfalls & The Policy Illusion",
-        icon: <ShieldAlert className="h-6 w-6 text-red-400" />,
-        content: `The greatest risk in the ${selectedCountry} insurance landscape is the 'Policy Illusion.' Many homeowners in ${country.cities[2]} believe they are fully covered, only to discover 'exclusions' buried in the fine print during a crisis. Complexity is a feature, not a bug—it allows ${country.majorInsurers[0]} to deny claims based on technicalities. You must perform a 'Stress Test' on your policies to ensure they actually function when the pressure is applied, rather than just providing a false sense of security.`
-      },
-      {
-        title: "06. The Strategic Insurance Audit",
-        icon: <Award className="h-6 w-6 text-yellow-400" />,
-        content: `To optimize your fortress in ${selectedCountry}, you must audit your relationship with ${country.majorInsurers[1]}. Start by questioning why you are paying for low-deductible policies that encourage 'premium leakage.' Your highest ROI comes from increasing your deductibles and redirecting that saved premium into your ${country.retirementAccounts[0]} or debt reduction. This shifts the Actuarial Machine's math in your favor, keeping your wealth within your family's control.`
+        content: `Property and Auto insurance are "Legal Requirements" that also serve as "Wealth Protectors." In hubs like ${country.cities[2]}, many homeowners fall into the trap of "Premium Leakage"—paying extra for low deductibles. You can fight back by using the "Deductible Lever." By raising your deductibles to the maximum you can comfortably handle (e.g., ${country.currencySymbol}2,500 or higher), you instantly lower your annual premium. You then redirect that saved premium into your debt-reduction strategy or your ${country.retirementAccounts[1]}. This shift moves you from being a "passive consumer" of ${country.majorInsurers[1]}'s products to being a strategist who manages their own risk-retention level.`
       }
     ];
 
