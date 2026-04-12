@@ -1,8 +1,11 @@
+
 // === PricingSection.jsx ===
 // Paste inside your comparison/results page and render <PricingSection ... />
 // Assumes React environment (Firebase Studio).
 
 import React, { useEffect, useMemo, useState } from "react";
+import { useUser } from "@/firebase";
+import { Award, CheckCircle, Zap } from "lucide-react";
 
 export default function PricingSection({
   // Pass these from your page's calculator result:
@@ -24,7 +27,10 @@ export default function PricingSection({
   const [copied, setCopied] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(0);
   const [showSharePanel, setShowSharePanel] = useState(false);
+  const { user } = useUser();
   const goal = 5;
+
+  const isPrivileged = user?.email === 'emperorsrujal@gmail.com';
 
   // Create a 72h deadline if one doesn't exist (persist in your DB if you want it sticky).
   useEffect(() => {
@@ -93,6 +99,49 @@ export default function PricingSection({
   const simulateReferral = () => setReferralsCount((c) => Math.min(goal, c + 1));
 
   const fmtMoney = (n) => n.toLocaleString(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+
+  if (isPrivileged) {
+    return (
+      <section className="mca-pricing">
+        <div className="mca-container">
+          <div className="bg-emerald-600 text-white p-12 rounded-[48px] shadow-2xl text-center space-y-8 animate-in zoom-in duration-700">
+            <div className="bg-white/20 w-24 h-24 rounded-full flex items-center justify-center mx-auto backdrop-blur-md">
+              <Award className="h-12 w-12 text-white" />
+            </div>
+            <div className="space-y-4">
+              <h2 className="text-4xl font-black tracking-tight">VIP Access Granted</h2>
+              <p className="text-xl opacity-90 max-w-2xl mx-auto">
+                Administrator access confirmed for <strong>{user?.email}</strong>. 
+                All paywalls have been removed. You have full access to the Chunker Simulator, Bank Screener, and Academy curriculum.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
+              <div className="bg-white/10 p-4 rounded-2xl border border-white/20 flex items-center gap-3">
+                <CheckCircle className="h-5 w-5 text-emerald-300" />
+                <span className="font-bold text-sm">Full Academy Access</span>
+              </div>
+              <div className="bg-white/10 p-4 rounded-2xl border border-white/20 flex items-center gap-3">
+                <CheckCircle className="h-5 w-5 text-emerald-300" />
+                <span className="font-bold text-sm">Unlimited Chunker Pro</span>
+              </div>
+              <div className="bg-white/10 p-4 rounded-2xl border border-white/20 flex items-center gap-3">
+                <CheckCircle className="h-5 w-5 text-emerald-300" />
+                <span className="font-bold text-sm">Priority Screener Tools</span>
+              </div>
+            </div>
+            <div className="pt-4">
+              <button 
+                onClick={() => window.location.href = '/members/chunker'} 
+                className="bg-white text-emerald-700 hover:bg-slate-100 font-black px-10 py-5 rounded-2xl text-xl transition-all shadow-xl active:scale-95"
+              >
+                Launch Simulator
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="mca-pricing">

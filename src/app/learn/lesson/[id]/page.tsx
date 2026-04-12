@@ -40,10 +40,12 @@ import {
   Coins,
   Lock,
   Star,
-  Gem
+  Gem,
+  CheckCircle
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { useUser } from '@/firebase';
 
 function ProgressBar({ current }: { current: number }) {
   return (
@@ -70,15 +72,20 @@ function ProgressBar({ current }: { current: number }) {
 
 function LessonContent({ id }: { id: number }) {
   const { country, completeLesson, language, setLanguage } = useCourse();
+  const { user } = useUser();
   const meta = lessonMeta.find(l => l.id === id);
   const router = useRouter();
 
   if (!meta) return <div>Lesson not found</div>;
 
+  const isPrivileged = user?.email === 'emperorsrujal@gmail.com';
+  const isLocked = id >= 3 && !isPrivileged;
+
   const nextLesson = () => {
-    if (id === 1) {
+    if (id === 1 || isPrivileged || id < 3) {
         completeLesson(id);
-        router.push(`/learn/lesson/${id + 1}`);
+        if (id < 5) router.push(`/learn/lesson/${id + 1}`);
+        else router.push('/');
     } else {
         completeLesson(id);
         if (id < 5) router.push(`/learn/lesson/${id + 1}`);
@@ -377,7 +384,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {id >= 3 && (
+        {(id >= 3 && !isPrivileged) && (
             <div className="space-y-12">
                 <section className="bg-white p-12 rounded-[40px] border-2 border-dashed border-slate-200 text-center space-y-8 shadow-inner">
                     <div className="bg-amber-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto">
@@ -423,6 +430,55 @@ function LessonContent({ id }: { id: number }) {
             </div>
         )}
 
+        {(id >= 3 && isPrivileged) && (
+          <div className="space-y-12 animate-in fade-in duration-700">
+             <header className="p-8 bg-emerald-600 text-white rounded-3xl shadow-xl">
+                <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] opacity-80 mb-2">
+                  <Award className="h-4 w-4" /> VIP Access Granted
+                </div>
+                <h1 className="text-3xl md:text-4xl font-fraunces font-black leading-tight">
+                  <TranslatedText>{meta.title}</TranslatedText>
+                </h1>
+                <p className="mt-4 text-lg opacity-90 leading-relaxed">
+                  <TranslatedText>{`Welcome back, Administrator. You have full access to the ${meta.title} modules. Here is your executive summary of the high-velocity strategies.`}</TranslatedText>
+                </p>
+             </header>
+
+             <section className="space-y-8">
+                <CourseCard title="🚀 Strategy Deep Dive: The 30-Day Float">
+                   <p className="text-lg leading-relaxed">
+                      <TranslatedText>{`The 'Float' is the most advanced cash-flow tactic in our arsenal. By utilizing a high-rewards credit card for every single daily expense and paying it off in full from your ${country.productShort} on the final day of the grace period, you force the bank to effectively provide you with an interest-free loan for 30 days. During those 30 days, your cash remains inside the ${country.productShort} principal, neutralizing interest at your mortgage rate. You aren't just saving interest; you're harvesting rewards while the bank's own money pays your bills.`}</TranslatedText>
+                   </p>
+                </CourseCard>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                   <div className="bg-slate-900 text-white p-6 rounded-3xl space-y-4">
+                      <h4 className="font-black text-blue-400 uppercase text-xs tracking-widest flex items-center gap-2">
+                        <ShieldCheck className="h-4 w-4" /> The Lender Audit
+                      </h4>
+                      <p className="text-sm opacity-80 leading-relaxed">
+                        <TranslatedText>{`We've identified the top 3 lenders in ${country.name} that offer the 'Strategic Valve' features required for this method. Use the Bank Screener tool in your dashboard to track your calls to these specific institutions.`}</TranslatedText>
+                      </p>
+                   </div>
+                   <div className="bg-blue-50 border border-blue-100 p-6 rounded-3xl space-y-4">
+                      <h4 className="font-black text-blue-600 uppercase text-xs tracking-widest flex items-center gap-2">
+                        <Target className="h-4 w-4" /> 8-Week Roadmap
+                      </h4>
+                      <p className="text-sm text-slate-600 leading-relaxed">
+                        <TranslatedText>{`Your implementation window starts with the debt consolidation phase. By moving high-interest balances into the ${country.productShort} first, you instantly increase your monthly net surplus by hundreds of dollars, feeding the principal-killing engine.`}</TranslatedText>
+                      </p>
+                   </div>
+                </div>
+             </section>
+
+             <div className="p-8 bg-slate-50 border-2 border-dashed border-slate-200 rounded-[40px] text-center">
+                <CheckCircle className="h-12 w-12 text-emerald-500 mx-auto mb-4" />
+                <h3 className="text-xl font-bold text-slate-900"><TranslatedText>Full Access Unlocked</TranslatedText></h3>
+                <p className="text-slate-500 mt-2"><TranslatedText>Administrator, you have completed the curriculum structure. Continue to Lesson 5 for the final Action Plan.</TranslatedText></p>
+             </div>
+          </div>
+        )}
+
         <div className="flex items-center justify-between pt-12 border-t border-[#E8ECF2]">
           <button 
             onClick={prevLesson}
@@ -432,7 +488,7 @@ function LessonContent({ id }: { id: number }) {
             <TranslatedText>Previous</TranslatedText>
           </button>
           
-          {id < 3 && (
+          {(id < 5 && (!isLocked || isPrivileged)) && (
             <button 
                 onClick={nextLesson}
                 className="group flex items-center gap-2 bg-[#2563EB] text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-600 transition-all active:scale-95"
