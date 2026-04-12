@@ -153,7 +153,7 @@ function LessonContent({ id }: { id: number }) {
 
                   <div className="space-y-6 leading-relaxed text-lg text-[#334155]">
                     <p>
-                      <TranslatedText>{`In ${country.name}, the math is sobering. By the time you've finally cleared House #1, you have given the lender enough capital to buy House #2 in CASH. They didn't build it. They didn't help you with the downpayment. They simply used the "permission of debt" to capture your future labor. This is the structural heist that keeps the middle class on a treadmill for decades.`}</TranslatedText>
+                      <TranslatedText>{`In ${country.name}, the math is sobering. By the time you've finally cleared House #1, you have given the lender enough capital to buy House #2 in CASH. They didn't build it. They didn't help you with the downpayment. They simply used the "permission of debt" to capture your future labor.`}</TranslatedText>
                     </p>
                   </div>
 
@@ -454,60 +454,169 @@ function LessonContent({ id }: { id: number }) {
 
         {(id >= 3 && isPrivileged) && (
           <div className="space-y-16 animate-in fade-in duration-700">
-             <header className="p-12 bg-emerald-600 text-white rounded-[48px] shadow-2xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-8 opacity-20">
-                  <Award className="h-32 w-32" />
-                </div>
-                <div className="relative z-10">
-                  <div className="flex items-center gap-3 text-xs font-black uppercase tracking-[0.3em] opacity-80 mb-4">
-                    <Award className="h-5 w-5" /> VIP Access Granted
-                  </div>
-                  <h1 className="text-4xl md:text-6xl font-fraunces font-black leading-tight tracking-tight">
-                    <TranslatedText>{meta.title}</TranslatedText>
-                  </h1>
-                  <p className="mt-6 text-xl opacity-90 leading-relaxed font-medium max-w-2xl">
-                    <TranslatedText>{`Welcome back, Administrator. You have full access to the ${meta.title} modules. Here is your executive summary of the high-velocity strategies.`}</TranslatedText>
-                  </p>
-                </div>
-             </header>
-
-             <section className="space-y-12">
-                <CourseCard title="🚀 Strategy Deep Dive: The 30-Day Float" className="p-10 border-2 border-emerald-100">
-                   <div className="space-y-6 text-lg leading-relaxed text-[#334155]">
-                     <p>
-                        <TranslatedText>{`The 'Float' is the most advanced cash-flow tactic in our arsenal. By utilizing a high-rewards credit card for every single daily expense and paying it off in full from your ${country.productShort} on the final day of the grace period, you force the bank to effectively provide you with an interest-free loan for 30 days.`}</TranslatedText>
-                     </p>
-                     <p className="font-bold text-emerald-700">
-                        <TranslatedText>{`During those 30 days, your cash remains inside the ${country.productShort} principal, neutralizing interest at your mortgage rate. You aren't just saving interest; you're harvesting rewards while the bank's own money pays your bills.`}</TranslatedText>
-                     </p>
-                   </div>
-                </CourseCard>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                   <div className="bg-slate-900 text-white p-10 rounded-[40px] space-y-6 shadow-xl">
-                      <h4 className="font-black text-blue-400 uppercase text-sm tracking-[0.2em] flex items-center gap-3">
-                        <ShieldCheck className="h-6 w-6" /> The Lender Audit
-                      </h4>
-                      <p className="text-base opacity-80 leading-relaxed font-medium">
-                        <TranslatedText>{`We've identified the top 3 lenders in ${country.name} that offer the 'Strategic Valve' features required for this method. Use the Bank Screener tool in your dashboard to track your calls to these specific institutions.`}</TranslatedText>
+             
+             {id === 3 && (
+               <div className="space-y-16">
+                  <header className="p-12 bg-pink-600 text-white rounded-[48px] shadow-2xl relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-8 opacity-20">
+                      <Rocket className="h-32 w-32" />
+                    </div>
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-3 text-xs font-black uppercase tracking-[0.3em] opacity-80 mb-4">
+                        <Award className="h-5 w-5" /> <TranslatedText>Advanced Module: High Velocity</TranslatedText>
+                      </div>
+                      <h1 className="text-4xl md:text-6xl font-fraunces font-black leading-tight tracking-tight">
+                        <TranslatedText>The 30-Day Float</TranslatedText>
+                      </h1>
+                      <p className="mt-6 text-xl opacity-90 leading-relaxed font-medium max-w-2xl">
+                        <TranslatedText>{`How to force the bank to provide you with an interest-free loan for every daily expense, while your cash kills your mortgage interest 24/7.`}</TranslatedText>
                       </p>
-                   </div>
-                   <div className="bg-blue-50 border-2 border-blue-100 p-10 rounded-[40px] space-y-6 shadow-xl">
-                      <h4 className="font-black text-blue-600 uppercase text-sm tracking-[0.2em] flex items-center gap-3">
-                        <Target className="h-6 w-6" /> 8-Week Roadmap
-                      </h4>
-                      <p className="text-base text-slate-600 leading-relaxed font-medium">
-                        <TranslatedText>{`Your implementation window starts with the debt consolidation phase. By moving high-interest balances into the ${country.productShort} first, you instantly increase your monthly net surplus by hundreds of dollars, feeding the principal-killing engine.`}</TranslatedText>
-                      </p>
-                   </div>
-                </div>
-             </section>
+                    </div>
+                  </header>
 
-             <div className="p-12 bg-slate-50 border-4 border-dashed border-slate-200 rounded-[64px] text-center space-y-4">
-                <CheckCircle className="h-16 w-16 text-emerald-500 mx-auto mb-2" />
-                <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight"><TranslatedText>Full Access Unlocked</TranslatedText></h3>
-                <p className="text-slate-500 text-lg font-medium"><TranslatedText>Administrator, you have completed the curriculum structure. Continue to Lesson 5 for the final Action Plan.</TranslatedText></p>
-             </div>
+                  <section className="space-y-12">
+                    <div className="flex items-center gap-4 text-3xl font-fraunces font-black text-[#1A1D26]">
+                      <div className="p-3 bg-pink-100 rounded-2xl">
+                        <CreditCard className="text-pink-600 h-8 w-8" />
+                      </div>
+                      <h2><TranslatedText>The Art of the Interest-Free Loan</TranslatedText></h2>
+                    </div>
+
+                    <div className="space-y-8 leading-relaxed text-lg text-[#334155]">
+                      <p>
+                        <TranslatedText>{`In Lesson 2, you learned how merging your income with your mortgage drops the interest calculation instantly. Now, we add the multiplier. Most people view credit cards as a danger zone—and for the uneducated, they are. But for the strategist, a credit card is a "Liquidity Valve" that the bank is legally required to give you interest-free for 21 to 30 days.`}</TranslatedText>
+                      </p>
+                      
+                      <div className="p-10 bg-slate-900 text-white rounded-[40px] border border-white/10 space-y-6 shadow-xl relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:rotate-12 transition-transform">
+                          <Zap className="h-32 w-32 text-yellow-400" />
+                        </div>
+                        <h3 className="text-2xl font-black text-pink-400 flex items-center gap-3">
+                          <Zap className="h-7 w-7 text-yellow-400" />
+                          <TranslatedText>The Arbitrage Mechanic</TranslatedText>
+                        </h3>
+                        <p className="text-slate-300 leading-relaxed italic">
+                          <TranslatedText>{`Imagine you need to buy $1,000 of groceries today. If you take that $1,000 out of your ${country.productShort} on Day 1, the bank starts charging you interest on it tonight. However, if you put those groceries on a credit card, the $1,000 remains INSIDE your ${country.productShort}, neutralizing interest at your mortgage rate for the next 25 days. You are effectively forcing the bank to pay for your life with their money while your money works for you.`}</TranslatedText>
+                        </p>
+                      </div>
+
+                      <p>
+                        <TranslatedText>{`This is 'The Float'. By utilizing a high-rewards card for every single daily transaction and paying it off in full from your ${country.productShort} only on the very last day of the grace period, you keep your average daily balance at its absolute minimum. You aren't just saving interest; you're also harvesting 1-2% in rewards, effectively giving yourself a permanent discount on every expense in your life.`}</TranslatedText>
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <CourseCard className="border-pink-100 bg-white p-8 shadow-xl">
+                        <div className="h-12 w-12 bg-pink-100 rounded-full flex items-center justify-center text-pink-600 mb-4">
+                          <Flame className="h-6 w-6" />
+                        </div>
+                        <h4 className="font-black text-[#1A1D26] uppercase text-sm tracking-widest mb-3"><TranslatedText>The Velocity Sweep</TranslatedText></h4>
+                        <p className="text-base text-slate-600 leading-relaxed font-medium">
+                          <TranslatedText>{`The key is the 'Sweep'. You time your credit card payment to occur 24 hours before the interest-free period ends. This ensures your capital stays anchored in your home equity for the maximum number of nights. Over 12 months, this tactic alone can collapse your payoff date by an additional 6-12 months.`}</TranslatedText>
+                        </p>
+                      </CourseCard>
+                      <CourseCard className="border-blue-100 bg-white p-8 shadow-xl">
+                        <div className="h-12 w-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mb-4">
+                          <Award className="h-6 w-6" />
+                        </div>
+                        <h4 className="font-black text-[#1A1D26] uppercase text-sm tracking-widest mb-3"><TranslatedText>The Rewards Paradox</TranslatedText></h4>
+                        <p className="text-base text-slate-600 leading-relaxed font-medium">
+                          <TranslatedText>{`While the primary goal is interest neutralization, the secondary win is massive. By channeling all 'Flow' through a points-based vehicle, many of our members report earning enough travel or cash rewards to pay for their annual property taxes or a family vacation—all while paying off their home years sooner.`}</TranslatedText>
+                        </p>
+                      </CourseCard>
+                    </div>
+
+                    <div className="bg-red-50 border-2 border-red-100 p-10 rounded-[48px] space-y-6 shadow-inner text-center">
+                      <div className="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <AlertTriangle className="h-8 w-8 text-red-600" />
+                      </div>
+                      <h3 className="text-2xl font-black text-red-900 uppercase tracking-tight"><TranslatedText>The Failure Point</TranslatedText></h3>
+                      <p className="text-red-800 text-lg font-medium leading-relaxed max-w-xl mx-auto">
+                        <TranslatedText>{`WARNING: This strategy is binary. It either works perfectly, or it fails completely. If you carry a balance on your credit card for even ONE day past the grace period, you will be charged 20%+ interest, which wipes out all your mortgage savings instantly. This requires the absolute discipline of a strategist.`}</TranslatedText>
+                      </p>
+                    </div>
+
+                    <div className="pt-12 text-center space-y-8">
+                      <h3 className="text-3xl font-fraunces font-black text-[#1A1D26]">
+                        <TranslatedText>Ready for the Lender Audit?</TranslatedText>
+                      </h3>
+                      <button 
+                        onClick={nextLesson}
+                        className="bg-pink-600 text-white hover:bg-pink-700 font-black px-12 py-6 rounded-2xl text-2xl group flex items-center gap-4 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95"
+                      >
+                        <TranslatedText>Unlock Lesson 4: The Audit</TranslatedText>
+                        <ArrowRight className="h-8 w-8 group-hover:translate-x-2 transition-transform" />
+                      </button>
+                    </div>
+                  </section>
+               </div>
+             )}
+
+             {id === 4 && (
+               <div className="space-y-16">
+                  <header className="p-12 bg-emerald-600 text-white rounded-[48px] shadow-2xl relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-8 opacity-20">
+                      <Award className="h-32 w-32" />
+                    </div>
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-3 text-xs font-black uppercase tracking-[0.3em] opacity-80 mb-4">
+                        <Award className="h-5 w-5" /> VIP Access Granted
+                      </div>
+                      <h1 className="text-4xl md:text-6xl font-fraunces font-black leading-tight tracking-tight">
+                        <TranslatedText>{meta.title}</TranslatedText>
+                      </h1>
+                      <p className="mt-6 text-xl opacity-90 leading-relaxed font-medium max-w-2xl">
+                        <TranslatedText>{`Welcome back, Administrator. You have full access to the ${meta.title} modules. Here is your executive summary of the high-velocity strategies.`}</TranslatedText>
+                      </p>
+                    </div>
+                  </header>
+
+                  <section className="space-y-12">
+                    <CourseCard title="🚀 Strategy Deep Dive: The Lender Audit" className="p-10 border-2 border-emerald-100">
+                      <div className="space-y-6 text-lg leading-relaxed text-[#334155]">
+                        <p>
+                            <TranslatedText>{`We've identified the top 3 lenders in ${country.name} that offer the 'Strategic Valve' features required for this method. Use the Bank Screener tool in your dashboard to track your calls to these specific institutions.`}</TranslatedText>
+                        </p>
+                        <p className="font-bold text-emerald-700">
+                            <TranslatedText>{`The goal of the audit is to find a product that allows for 'Daily Interest Recalculation' and 'Readvanceable Limits'. This is the structural foundation of the Mortgage Cutter Method.`}</TranslatedText>
+                        </p>
+                      </div>
+                    </CourseCard>
+                  </section>
+               </div>
+             )}
+
+             {id === 5 && (
+               <div className="space-y-16">
+                  <header className="p-12 bg-blue-600 text-white rounded-[48px] shadow-2xl relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-8 opacity-20">
+                      <Award className="h-32 w-32" />
+                    </div>
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-3 text-xs font-black uppercase tracking-[0.3em] opacity-80 mb-4">
+                        <Award className="h-5 w-5" /> VIP Access Granted
+                      </div>
+                      <h1 className="text-4xl md:text-6xl font-fraunces font-black leading-tight tracking-tight">
+                        <TranslatedText>{meta.title}</TranslatedText>
+                      </h1>
+                      <p className="mt-6 text-xl opacity-90 leading-relaxed font-medium max-w-2xl">
+                        <TranslatedText>{`Welcome back, Administrator. You have full access to the ${meta.title} modules. Here is your executive summary of the high-velocity strategies.`}</TranslatedText>
+                      </p>
+                    </div>
+                  </header>
+
+                  <section className="space-y-12">
+                    <CourseCard title="🎯 Your Action Plan" className="p-10 border-2 border-blue-100">
+                      <div className="space-y-6 text-lg leading-relaxed text-[#334155]">
+                        <p>
+                            <TranslatedText>{`Your implementation window starts with the debt consolidation phase. By moving high-interest balances into the ${country.productShort} first, you instantly increase your monthly net surplus by hundreds of dollars, feeding the principal-killing engine.`}</TranslatedText>
+                        </p>
+                      </div>
+                    </CourseCard>
+                  </section>
+               </div>
+             )}
+
           </div>
         )}
 
