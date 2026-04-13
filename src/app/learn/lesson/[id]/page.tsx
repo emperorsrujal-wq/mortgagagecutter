@@ -42,7 +42,8 @@ import {
   Star,
   Gem,
   CheckCircle,
-  Award
+  Award,
+  Trophy
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
