@@ -39,6 +39,222 @@ function ConfettiBurst() {
   );
 }
 
+export function BiWeeklyCalc() {
+  const { country } = useCourse();
+  const [balance, setBalance] = useState(350000);
+  const [rate, setRate] = useState(country.avgRate);
+
+  const monthlyRate = rate / 100 / 12;
+  const n = 30 * 12;
+  const monthlyPmt = balance * (monthlyRate * Math.pow(1 + monthlyRate, n)) / (Math.pow(1 + monthlyRate, n) - 1);
+  const biWeeklyPmt = monthlyPmt / 2;
+
+  // Standard path: 360 months
+  const standardTotalInt = (monthlyPmt * 360) - balance;
+
+  // Bi-weekly path: 26 half-payments per year = 13 full payments
+  // This effectively pays an extra monthly payment each year.
+  let currentBal = balance;
+  let months = 0;
+  let totalInt = 0;
+  while(currentBal > 0 && months < 480) {
+    months++;
+    const int = currentBal * monthlyRate;
+    totalInt += int;
+    // Every 12 months, we assume the 'extra' payment impact from 26 bi-weekly periods
+    const extraYearly = monthlyPmt / 12; 
+    currentBal -= (monthlyPmt - int + extraYearly);
+  }
+
+  const yearsSaved = 30 - (months / 12);
+  const intSaved = standardTotalInt - totalInt;
+
+  const fmt = (val: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: country.currency, maximumFractionDigits: 0 }).format(val);
+
+  return (
+    <CourseCard title="🗓️ The Bi-Weekly Multiplier" className="border-l-8 border-l-blue-600">
+      <div className="space-y-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+          <div className="space-y-4">
+            <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">
+              <span>Mortgage Balance</span>
+              <span className="text-slate-900">{fmt(balance)}</span>
+            </div>
+            <input type="range" min="100000" max="1000000" step="10000" value={balance} onChange={e => setBalance(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-blue-600" />
+          </div>
+          <div className="space-y-4">
+            <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">
+              <span>Interest Rate</span>
+              <span className="text-slate-900">{rate}%</span>
+            </div>
+            <input type="range" min="2" max="12" step="0.1" value={rate} onChange={e => setRate(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-blue-600" />
+          </div>
+        </div>
+
+        <div className="bg-slate-900 rounded-[40px] p-10 text-white text-center space-y-6 shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 p-6 opacity-10"><Calendar className="h-32 w-32 text-blue-400" /></div>
+          <div className="space-y-2 relative z-10">
+            <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">Time Reclaimed</p>
+            <h3 className="text-7xl font-black tracking-tighter">{yearsSaved.toFixed(1)} <span className="text-2xl uppercase opacity-50">Years</span></h3>
+            <p className="text-xl font-bold text-emerald-400">Total Saved: {fmt(intSaved)}</p>
+          </div>
+          <div className="pt-6 border-t border-white/10 relative z-10">
+            <p className="text-sm text-slate-400 font-medium">
+              <TranslatedText>{`By switching to Bi-Weekly payments in ${country.name}, you make 26 half-payments annually. This creates a "13th Month" of principal that kills the front-loaded interest without the bank ever knowing.`}</TranslatedText>
+            </p>
+          </div>
+        </div>
+      </div>
+    </CourseCard>
+  );
+}
+
+export function HyperdriveSim() {
+  const { country } = useCourse();
+  const [balance, setBalance] = useState(400000);
+  const [chunk, setChunk] = useState(15000);
+
+  const rate = country.avgRate / 100 / 12;
+  const n = 30 * 12;
+  const monthlyPmt = balance * (rate * Math.pow(1 + rate, n)) / (Math.pow(1 + rate, n) - 1);
+
+  const data = useMemo(() => {
+    const series = [];
+    let balA = balance; // Baseline
+    let balB = balance - chunk; // Hyperdrive (Initial injection)
+    
+    for (let m = 0; m <= 360; m += 12) {
+      series.push({
+        year: m / 12,
+        baseline: Math.max(0, balA),
+        hyperdrive: Math.max(0, balB)
+      });
+      
+      // Rough annual principal reduction for 12 months
+      for(let i=0; i<12; i++) {
+        balA -= (monthlyPmt - (balA * rate));
+        balB -= (monthlyPmt - (balB * rate));
+      }
+    }
+    return series;
+  }, [balance, chunk, monthlyPmt, rate]);
+
+  const yearFinished = data.findIndex(d => d.hyperdrive <= 0) || 30;
+  const pctSaved = Math.round(((30 - yearFinished) / 30) * 100);
+
+  const fmt = (val: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: country.currency, maximumFractionDigits: 0 }).format(val);
+
+  return (
+    <CourseCard title="🚀 The Principal Hyperdrive" className="border-l-8 border-l-emerald-600 shadow-2xl">
+      <div className="space-y-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">
+                <span>Total Debt</span>
+                <span className="text-slate-900">{fmt(balance)}</span>
+              </div>
+              <input type="range" min="100000" max="1000000" step="10000" value={balance} onChange={e => setBalance(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-blue-600" />
+            </div>
+            <div className="space-y-4">
+              <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">
+                <span>Principal Injection</span>
+                <span className="text-emerald-600">{fmt(chunk)}</span>
+              </div>
+              <input type="range" min="0" max="50000" step="1000" value={chunk} onChange={e => setChunk(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-emerald-600" />
+            </div>
+            <div className="p-6 bg-emerald-50 rounded-3xl border border-emerald-100 space-y-2">
+              <h4 className="font-black text-xs uppercase text-emerald-700 tracking-widest flex items-center gap-2">
+                <Zap className="h-4 w-4 fill-emerald-600" /> The Chunk Effect
+              </h4>
+              <p className="text-sm text-emerald-900/70 font-medium leading-relaxed">
+                <TranslatedText>{`In ${country.name}, a single ${fmt(chunk)} injection at the start of your strategy eliminates the future interest on that capital for the next 20+ years. This is the "Velocity Floor."`}</TranslatedText>
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-slate-900 rounded-[48px] p-8 shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4">
+            <div className="absolute top-0 right-0 p-6 opacity-5"><TrendingDown className="h-32 w-32 text-emerald-400" /></div>
+            <div className="space-y-1 relative z-10">
+              <p className="text-[10px] font-black uppercase text-emerald-400 tracking-[0.5em]">Payoff Acceleration</p>
+              <h3 className="text-8xl font-black text-white tracking-tighter">{pctSaved}%</h3>
+              <p className="text-lg font-bold text-slate-400">Faster than Traditional Path</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="h-[300px] w-full bg-white rounded-3xl border border-slate-100 p-6">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={data}>
+              <defs>
+                <linearGradient id="colorHyper" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.2}/>
+                  <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+              <XAxis dataKey="year" stroke="#94a3b8" className="text-[10px] font-bold" />
+              <YAxis hide domain={['dataMin', 'dataMax']} />
+              <Tooltip contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }} />
+              <Area type="monotone" dataKey="baseline" stroke="#e2e8f0" fill="transparent" strokeWidth={2} name="Old Path" />
+              <Area type="monotone" dataKey="hyperdrive" stroke="#10b981" fillOpacity={1} fill="url(#colorHyper)" strokeWidth={4} name="Hyperdrive Path" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </CourseCard>
+  );
+}
+
+export function OffsetVisual() {
+  const data = [
+    { day: 1, checking: 5000, offset: 5000 },
+    { day: 5, checking: 4800, offset: 5000 },
+    { day: 10, checking: 4000, offset: 5000 },
+    { day: 15, checking: 3000, offset: 5000 },
+    { day: 20, checking: 2000, offset: 5000 },
+    { day: 25, checking: 1000, offset: 5000 },
+    { day: 28, checking: 500, offset: 1000 }, // Credit card bill paid at end
+    { day: 30, checking: 200, offset: 800 },
+  ];
+
+  return (
+    <div className="space-y-10 animate-in fade-in duration-1000">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <div className="space-y-6">
+          <h3 className="text-3xl font-fraunces font-black text-slate-900 tracking-tight leading-tight">The "Credit Card Float" Arbitrage</h3>
+          <p className="text-lg text-slate-600 font-medium leading-relaxed">
+            By putting all daily expenses on a credit card and paying it off from the HELOC on the <span className="text-blue-600 font-black">last possible day</span>, you keep your cash working inside the principal for 25+ days longer. This creates a permanent structural interest shield.
+          </p>
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center gap-4 p-4 bg-red-50 rounded-2xl border border-red-100">
+              <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center text-red-600 shadow-sm"><TrendingUp className="h-5 w-5"/></div>
+              <p className="text-sm font-bold text-red-900">Traditional: Balance rises daily as you spend.</p>
+            </div>
+            <div className="flex items-center gap-4 p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
+              <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center text-emerald-600 shadow-sm"><ShieldCheck className="h-5 w-5"/></div>
+              <p className="text-sm font-bold text-emerald-900">Offset: Balance stays low until bill day.</p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-slate-900 rounded-[48px] p-8 shadow-2xl h-[350px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1e293b" />
+              <XAxis dataKey="day" stroke="#475569" className="text-[10px] font-bold" />
+              <YAxis hide />
+              <Tooltip contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '16px', color: '#fff' }} />
+              <Legend verticalAlign="top" align="right" />
+              <Line type="stepAfter" dataKey="checking" stroke="#ef4444" strokeWidth={3} dot={false} name="Traditional Path" />
+              <Line type="stepAfter" dataKey="offset" stroke="#10b981" strokeWidth={4} dot={false} name="Offset Strategy" />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function WealthSimulator() {
   const { country } = useCourse();
   const [equity, setEquity] = useState(100000);
