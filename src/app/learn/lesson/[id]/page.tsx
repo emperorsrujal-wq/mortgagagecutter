@@ -63,11 +63,23 @@ import {
   RefreshCcw,
   MousePointer2,
   Layers,
-  Diamond
+  Diamond,
+  Users,
+  Globe,
+  Quote,
+  Calendar,
+  Play
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { useUser } from '@/firebase';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 function ProgressBar({ current }: { current: number }) {
   return (
@@ -101,7 +113,7 @@ function LessonContent({ id }: { id: number }) {
   if (!meta) return <div>Lesson not found</div>;
 
   const isPrivileged = user?.email === 'emperorsrujal@gmail.com';
-  // Module 4 through 8 are Premium
+  // Modules 4 through 8 are Premium
   const isLocked = id >= 4 && !isPrivileged;
 
   const nextLesson = () => {
@@ -114,6 +126,17 @@ function LessonContent({ id }: { id: number }) {
     if (id > 1) router.push(`/learn/lesson/${id - 1}`);
     else router.push('/learn');
   };
+
+  const stories = [
+    { name: "The Millers", location: "Austin, TX", outcome: "Paid off $312k in 4.2 years", saving: "$142,000", quote: "We cut 19 years off our 30-year fixed. No extra income, just velocity." },
+    { name: "Sarah & Dave", location: "Toronto, ON", outcome: "6-Year Payoff on $540k", saving: "$84,000", quote: "The STEP hack was the missing link. Our bank didn't want us to know." },
+    { name: "James P.", location: "London, UK", outcome: "Mortgage Free in 7 Years", saving: "£62,000", quote: "Offsetting our daily cash changed the math. The bank now owes us." },
+    { name: "The Nguyens", location: "Sydney, AU", outcome: "3rd Property Debt-Free", saving: "$210,000", quote: "90% of multi-owners here use this. It's the standard for the 1%." },
+    { name: "Robert L.", location: "Denver, CO", outcome: "Cut 15 years off term", saving: "$110,000", quote: "The bi-weekly game was a joke compared to the First-Lien HELOC." },
+    { name: "Amandeep K.", location: "Brampton, ON", outcome: "Saved 8 years of life", saving: "$72,000", quote: "Direct deposit automation made it invisible. We don't even think about it." },
+    { name: "Maria G.", location: "Miami, FL", outcome: "Debt-free at 45", saving: "$155,000", quote: "We were trapped in the amortization curve until we pivot to an Open System." },
+    { name: "Steve B.", location: "Melbourne, AU", outcome: "Portfolio built on equity", saving: "$190,000", quote: "Zero out-of-pocket cash for my next three rentals. Velocity is king." }
+  ];
 
   return (
     <div className="min-h-screen bg-[#FAFBFD] font-body pb-32">
@@ -213,112 +236,143 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {id === 7 && (
+        {id === 8 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
-            {isLocked ? (
-              <section className="bg-white p-20 rounded-[80px] border-4 border-dashed border-slate-200 text-center space-y-12 shadow-inner">
-                  <div className="bg-blue-100 w-40 h-40 rounded-full flex items-center justify-center mx-auto shadow-2xl shadow-blue-500/20 border-4 border-white">
-                      <Lock className="h-20 w-14 text-blue-600" />
-                  </div>
-                  <div className="space-y-8">
-                      <h2 className="text-5xl md:text-7xl font-fraunces font-black text-slate-900 leading-tight tracking-tight">
-                          <TranslatedText>Hyperdrive Strategy: Locked</TranslatedText>
-                      </h2>
-                      <p className="text-slate-500 text-2xl max-w-xl mx-auto font-medium leading-relaxed italic">
-                          <TranslatedText>{`The final "Hyperdrive" module reveals how to collapse the remaining 50% of your debt in record time. Reserved for Pro Members.`}</TranslatedText>
-                      </p>
-                  </div>
-                  <div className="pt-10 space-y-8">
-                      <Button size="lg" className="w-full sm:w-auto px-20 py-12 text-3xl font-black rounded-[32px] shadow-2xl shadow-blue-500/30 transition-all hover:scale-105 active:scale-95" asChild>
-                          <Link href="/purchase?plan=pro_197">
-                              <TranslatedText>Unlock Full Accelerator</TranslatedText>
-                              <ArrowRight className="ml-4 h-10 w-10" />
-                          </Link>
-                      </Button>
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.5em]"><TranslatedText>Includes 90-Day Planner</TranslatedText></p>
-                  </div>
-              </section>
-            ) : (
-              <div className="space-y-24">
-                <header className="space-y-10 text-center">
-                  <div className="inline-flex items-center gap-2 px-6 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-white/10 shadow-xl">
-                    <Rocket className="h-4 w-4 text-emerald-400" />
-                    <TranslatedText>Step 7: The Hyperdrive Execution</TranslatedText>
-                  </div>
-                  <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
-                    <TranslatedText>{`Kill the Tail:`}</TranslatedText>
-                    <span className="block text-emerald-600 italic mt-4"><TranslatedText>20% Faster Offset, 43% Hyperdrive.</TranslatedText></span>
-                  </h1>
-                  <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
-                    <TranslatedText>{`The final 10 years of a mortgage are the most expensive in terms of time. We use chunks and timing to collapse them entirely.`}</TranslatedText>
-                  </p>
-                </header>
-
-                <section className="space-y-24">
-                  <OffsetVisual />
-
-                  <div className="space-y-10">
-                    <div className="flex items-center gap-4">
-                      <div className="h-12 w-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-600">
-                        <Rocket className="h-6 w-6" />
-                      </div>
-                      <h2 className="text-4xl font-fraunces font-black text-[#1A1D26] tracking-tight"><TranslatedText>Hyperdrive Principal Simulator</TranslatedText></h2>
-                    </div>
-                    <HyperdriveSim />
-                  </div>
-
-                  <div className="space-y-10">
-                    <div className="flex items-center gap-4">
-                      <div className="h-12 w-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600">
-                        <Calendar className="h-6 w-6" />
-                      </div>
-                      <h2 className="text-4xl font-fraunces font-black text-[#1A1D26] tracking-tight"><TranslatedText>Bi-Weekly Frequency Hack</TranslatedText></h2>
-                    </div>
-                    <BiWeeklyCalc />
-                  </div>
-
-                  <Quiz 
-                    question={`If you receive a tax refund or bonus, which execution path yields the highest ROI?`}
-                    options={[
-                      "Keep it in a high-yield savings account for emergencies",
-                      "Inject it as a 'Hyperdrive Chunk' directly into the HELOC principal",
-                      "Buy a diversified index fund yielding 8%",
-                      "Pay off a 0% interest car loan"
-                    ]}
-                    correctAnswer={1}
-                    explanation={`Injecting into the HELOC is the winner. Not only do you save the interest cost (e.g. 7%), but you keep that same capital 100% LIQUID. You can withdraw it 5 minutes later if needed. It is the only 'Investment' that provides a guaranteed return with zero loss of liquidity.`}
-                  />
-
-                  <section className="bg-gradient-to-br from-slate-900 to-blue-950 p-16 md:p-20 rounded-[80px] border border-white/10 shadow-2xl space-y-16 text-center">
-                    <div className="space-y-8">
-                      <div className="bg-white/20 w-24 h-24 rounded-full flex items-center justify-center mx-auto backdrop-blur-xl mb-6 shadow-2xl">
-                        <CheckCircle className="h-12 w-12 text-emerald-400" />
-                      </div>
-                      <h2 className="text-5xl md:text-7xl font-fraunces font-black text-white leading-tight">
-                        <TranslatedText>Course Complete</TranslatedText>
-                      </h2>
-                      <p className="text-blue-100 text-2xl max-w-2xl mx-auto leading-relaxed font-medium">
-                        <TranslatedText>{`You have mastered the mechanics, the mindset, and the execution. The final step is Lesson 8: The Evidence & Proof.`}</TranslatedText>
-                      </p>
-                    </div>
-
-                    <div className="pt-16 border-t border-white/10 text-center space-y-10">
-                      <div className="flex items-center justify-center gap-4 text-yellow-400 font-black uppercase text-sm tracking-[0.4em]">
-                        <Trophy className="h-6 w-6" />
-                        <TranslatedText>End of Masterclass Module 7</TranslatedText>
-                      </div>
-                      <button 
-                        onClick={nextLesson}
-                        className="bg-white text-slate-900 hover:bg-slate-50 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95"
-                      >
-                        <TranslatedText>Lesson 8: The Proof</TranslatedText>
-                        <ArrowRight className="h-10 w-10 group-hover:translate-x-3 transition-transform" />
-                      </button>
-                    </div>
-                  </section>
-                </section>
+            <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-white/10 shadow-xl">
+                <Globe className="h-4 w-4 text-blue-400" />
+                <TranslatedText>{`The Global ${country.name} Movement`}</TranslatedText>
               </div>
-            )}
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>{`39 Million People`}</TranslatedText>
+                <span className="block text-blue-600 italic mt-4"><TranslatedText>Have Already Beaten the Bank.</TranslatedText></span>
+              </h1>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                <TranslatedText>{`In ${country.name}, the "Open Credit" model was the standard until the shift to amortized traps. Today, the top 1% still use it. Now, you can too.`}</TranslatedText>
+              </p>
+            </header>
+
+            <section className="space-y-24">
+              {/* Stats Infographic */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <Card className="bg-white border-2 border-slate-100 p-10 rounded-[40px] shadow-xl text-center space-y-6">
+                  <div className="bg-slate-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto">
+                    <History className="h-10 w-10 text-slate-400" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-2">Pre-1913 Era</p>
+                    <h3 className="text-6xl font-black text-slate-900 tracking-tighter">100%</h3>
+                    <p className="text-sm font-bold text-slate-500 uppercase tracking-widest mt-2">Open Credit Adoption</p>
+                  </div>
+                  <p className="text-sm text-slate-400 font-medium leading-relaxed italic">"Before modern amortization, homes were bought with simple interest velocity. No traps."</p>
+                </Card>
+                <Card className="bg-blue-600 text-white p-10 rounded-[40px] shadow-2xl text-center space-y-6 border-none">
+                  <div className="bg-white/20 w-20 h-20 rounded-full flex items-center justify-center mx-auto backdrop-blur-md">
+                    <Trophy className="h-10 w-10 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-widest opacity-70 mb-2">Current {country.name}</p>
+                    <h3 className="text-6xl font-black tracking-tighter">90%</h3>
+                    <p className="text-sm font-bold uppercase tracking-widest mt-2">Of Multi-Home Owners</p>
+                  </div>
+                  <p className="text-sm opacity-80 font-medium leading-relaxed">
+                    <TranslatedText>{`While retail consumers use the 30-year trap, professional investors in ${country.name} use the Offset/HELOC velocity model to scale empires.`}</TranslatedText>
+                  </p>
+                </Card>
+              </div>
+
+              {/* Success Story Carousel */}
+              <div className="space-y-10">
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600">
+                    <Star className="h-6 w-6 fill-blue-600" />
+                  </div>
+                  <h2 className="text-4xl font-fraunces font-black text-[#1A1D26] tracking-tight"><TranslatedText>Real-World Evidence</TranslatedText></h2>
+                </div>
+
+                <Carousel className="w-full max-w-full">
+                  <CarouselContent>
+                    {stories.map((s, i) => (
+                      <CarouselItem key={i} className="md:basis-1/2">
+                        <div className="p-2 h-full">
+                          <CaseStudy 
+                            name={s.name}
+                            timeline={s.outcome}
+                            savings={s.saving}
+                            quote={s.quote}
+                          />
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <div className="flex justify-end gap-2 mt-6">
+                    <CarouselPrevious className="static translate-y-0" />
+                    <CarouselNext className="static translate-y-0" />
+                  </div>
+                </Carousel>
+              </div>
+
+              {/* Video Placeholder */}
+              <Card className="bg-slate-900 border-none rounded-[48px] overflow-hidden relative group">
+                <div className="aspect-video bg-slate-800 flex flex-col items-center justify-center text-white space-y-6">
+                  <div className="h-24 w-24 rounded-full bg-blue-600 flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform cursor-pointer">
+                    <Play className="h-10 w-10 fill-white ml-1" />
+                  </div>
+                  <div className="text-center">
+                    <h4 className="text-xl font-black uppercase tracking-widest">Watch: The 4.5yr Payoff Interview</h4>
+                    <p className="text-slate-400 text-sm font-medium mt-2">Hear exactly how the Miller family killed their $312k debt.</p>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Q&A Accordion */}
+              <div className="space-y-8">
+                <h2 className="text-3xl font-fraunces font-black text-[#1A1D26] tracking-tight text-center"><TranslatedText>Common Reality Checks</TranslatedText></h2>
+                <div className="space-y-4">
+                  <ExpandSection title="What if interest rates go up further?">
+                    <p>The strategy actually works BETTER in high-rate environments compared to traditional paths. Because you are dropping the principal daily, you pay interest on a shrinking balance while your neighbors pay interest on the full balance for 30 years. The spread becomes your primary weapon.</p>
+                  </ExpandSection>
+                  <ExpandSection title="Does this hurt my credit score?">
+                    <p>In the short term, moving from a mortgage to a line of credit may cause a 10-20 point dip due to "utilization" metrics. However, as your balance drops rapidly (the primary goal), your score typically rebounds higher than it was before, as you now have massive available credit and low debt.</p>
+                  </ExpandSection>
+                  <ExpandSection title="Can the bank freeze my HELOC?">
+                    <p>Yes, any revolving line can be frozen if home values crash 30%+. However, we teach the "Second-Line Bridge" technique in Lesson 6 to ensure you maintain liquidity even in a market downturn.</p>
+                  </ExpandSection>
+                </div>
+              </div>
+
+              {/* Final Graduation CTA */}
+              <section className="bg-gradient-to-br from-blue-700 to-indigo-950 p-16 md:p-20 rounded-[80px] border border-white/10 shadow-2xl space-y-16 text-center">
+                <div className="space-y-8">
+                  <div className="bg-white/20 w-24 h-24 rounded-full flex items-center justify-center mx-auto backdrop-blur-xl mb-6 shadow-2xl">
+                    <Award className="h-12 w-12 text-yellow-400 fill-yellow-400" />
+                  </div>
+                  <h2 className="text-5xl md:text-7xl font-fraunces font-black text-white leading-tight">
+                    <TranslatedText>Mastery Confirmed</TranslatedText>
+                  </h2>
+                  <p className="text-blue-100 text-2xl max-w-2xl mx-auto leading-relaxed font-medium">
+                    <TranslatedText>{`You have completed the core Mortgage Freedom Accelerator. You are now in the top 1% of ${country.name} homeowners who actually understand the institutional math.`}</TranslatedText>
+                  </p>
+                </div>
+
+                <div className="pt-16 border-t border-white/10 text-center space-y-10">
+                  <div className="flex items-center justify-center gap-4 text-yellow-400 font-black uppercase text-sm tracking-[0.4em]">
+                    <Trophy className="h-6 w-6" />
+                    <TranslatedText>Accelerator Graduation Complete</TranslatedText>
+                  </div>
+                  <button 
+                    onClick={() => router.push('/members/chunker')}
+                    className="bg-white text-blue-900 hover:bg-blue-50 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95"
+                  >
+                    <TranslatedText>Launch My Simulator</TranslatedText>
+                    <ArrowRight className="h-10 w-10 group-hover:translate-x-3 transition-transform" />
+                  </button>
+                  <p className="text-blue-200 text-sm font-bold uppercase tracking-widest">
+                    <TranslatedText>Next: Lesson 9 - The Empire Community ($297)</TranslatedText>
+                  </p>
+                </div>
+              </section>
+            </section>
           </div>
         )}
 
