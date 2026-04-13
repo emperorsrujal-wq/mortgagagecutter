@@ -6,6 +6,7 @@ import { languages } from '@/lib/course/translations';
 import { InterestCalc, AmortViz, PayoffRace } from '@/components/course/Calculators';
 import { CourseCard, InfoBox, ExpandSection, StatBox, ChatBubble, TaskItem, CaseStudy, Quiz } from '@/components/course/UIComponents';
 import { TranslatedText } from '@/components/course/TranslatedText';
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { 
   ChevronLeft, 
