@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useCourse } from './CourseProvider';
 import { CourseCard, StatBox } from './UIComponents';
-import { Play, Pause, RotateCcw, TrendingUp, DollarSign, Clock, Zap } from 'lucide-react';
+import { Play, Pause, RotateCcw, TrendingUp, DollarSign, Clock, Zap, AlertCircle, Calendar, Timer } from 'lucide-react';
 import { TranslatedText } from './TranslatedText';
 import { cn } from '@/lib/utils';
 
@@ -18,58 +18,81 @@ export function InterestCalc() {
   const totalInterest = totalPaid - loan;
   const interestPercent = Math.round((totalInterest / loan) * 100);
 
-  // Per hour cost simulator
+  // Time-based cost simulators
   const hourlyCost = totalInterest / (country.amortYears * 365 * 24);
+  const dailyCost = hourlyCost * 24;
+  const weeklyCost = dailyCost * 7;
 
   const fmt = (val: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: country.currency, maximumFractionDigits: 0 }).format(val);
 
   return (
-    <CourseCard title="🕵️ The 'House #2' Evidence Locker" className="border-l-8 border-l-red-600">
-      <div className="space-y-8">
+    <CourseCard title="🕵️ The 'House #2' Evidence Locker" className="border-l-8 border-l-red-600 shadow-2xl">
+      <div className="space-y-10">
+        <div className="space-y-8 bg-slate-50 p-8 rounded-[32px] border border-slate-100">
+          <div className="space-y-4">
+            <div className="flex justify-between items-end">
+              <label className="text-xs font-black uppercase text-slate-400 tracking-widest flex items-center gap-2">
+                <DollarSign className="h-3 w-3" /> Total Loan Principal
+              </label>
+              <span className="text-2xl font-black text-slate-900">{fmt(loan)}</span>
+            </div>
+            <input type="range" min="100000" max="1500000" step="10000" value={loan} onChange={(e) => setLoan(Number(e.target.value))} className="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600" />
+          </div>
+          <div className="space-y-4">
+            <div className="flex justify-between items-end">
+              <label className="text-xs font-black uppercase text-slate-400 tracking-widest flex items-center gap-2">
+                <TrendingUp className="h-3 w-3" /> Interest Rate (APR)
+              </label>
+              <span className="text-2xl font-black text-red-600">{rate}%</span>
+            </div>
+            <input type="range" min="2" max="12" step="0.1" value={rate} onChange={(e) => setRate(Number(e.target.value))} className="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-red-600" />
+          </div>
+        </div>
+
         <div className="space-y-6">
-          <div className="space-y-2">
-            <div className="flex justify-between items-end">
-              <label className="text-xs font-black uppercase text-slate-400 tracking-widest">Total Loan Principal</label>
-              <span className="text-xl font-black text-slate-900">{fmt(loan)}</span>
-            </div>
-            <input type="range" min="100000" max="1500000" step="10000" value={loan} onChange={(e) => setLoan(Number(e.target.value))} className="w-full h-3 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-blue-600" />
+          <div className="bg-red-600 text-white p-10 rounded-[40px] text-center space-y-2 shadow-xl shadow-red-500/20 relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-6 opacity-10"><AlertCircle className="h-32 w-32" /></div>
+            <p className="text-xs font-black uppercase tracking-[0.4em] opacity-80">Total Interest Siphon</p>
+            <p className="text-6xl md:text-7xl font-black tracking-tighter">{fmt(totalInterest)}</p>
+            <p className="text-lg font-bold opacity-90">That is {interestPercent}% of your home's price paid in pure profit to the bank.</p>
           </div>
-          <div className="space-y-2">
-            <div className="flex justify-between items-end">
-              <label className="text-xs font-black uppercase text-slate-400 tracking-widest">Interest Rate (APR)</label>
-              <span className="text-xl font-black text-slate-900">{rate}%</span>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="bg-slate-900 p-6 rounded-3xl text-center space-y-1 border border-white/5 group hover:bg-slate-800 transition-colors">
+              <p className="text-[10px] font-black uppercase text-blue-400 tracking-widest">Hourly Drain</p>
+              <p className="text-3xl font-black text-white">{fmt(hourlyCost).replace('.00', '')}<span className="text-sm opacity-40 ml-1">/hr</span></p>
+              <p className="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">While you sleep</p>
             </div>
-            <input type="range" min="2" max="12" step="0.1" value={rate} onChange={(e) => setRate(Number(e.target.value))} className="w-full h-3 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-red-600" />
+            <div className="bg-slate-900 p-6 rounded-3xl text-center space-y-1 border border-white/5 group hover:bg-slate-800 transition-colors">
+              <p className="text-[10px] font-black uppercase text-amber-400 tracking-widest">Daily Drain</p>
+              <p className="text-3xl font-black text-white">{fmt(dailyCost).replace('.00', '')}<span className="text-sm opacity-40 ml-1">/day</span></p>
+              <p className="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">Every single day</p>
+            </div>
+            <div className="bg-slate-900 p-6 rounded-3xl text-center space-y-1 border border-white/5 group hover:bg-slate-800 transition-colors">
+              <p className="text-[10px] font-black uppercase text-emerald-400 tracking-widest">Weekly Drain</p>
+              <p className="text-3xl font-black text-white">{fmt(weeklyCost).replace('.00', '')}<span className="text-sm opacity-40 ml-1">/wk</span></p>
+              <p className="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">Reliable Loss</p>
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-red-50 p-6 rounded-3xl border border-red-100 text-center space-y-1">
-            <p className="text-[10px] font-black uppercase text-red-400 tracking-widest">The Bank's Heist</p>
-            <p className="text-4xl font-black text-red-700">{fmt(totalInterest)}</p>
-            <p className="text-xs font-bold text-red-600/60 uppercase">Total Interest Siphon</p>
+        <div className="space-y-4">
+          <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-400 px-2">
+            <span>The Home ({Math.round((loan / totalPaid) * 100)}%)</span>
+            <span>The Heist ({Math.round((totalInterest / totalPaid) * 100)}%)</span>
           </div>
-          <div className="bg-slate-900 p-6 rounded-3xl text-center space-y-1">
-            <p className="text-[10px] font-black uppercase text-blue-400 tracking-widest">The Hourly Drain</p>
-            <p className="text-4xl font-black text-white">{fmt(hourlyCost).replace('.00', '')}<span className="text-lg opacity-50">/hr</span></p>
-            <p className="text-xs font-bold text-slate-500 uppercase">24/7 For {country.amortYears} Years</p>
-          </div>
-        </div>
-
-        <div className="space-y-3">
-          <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-400">
-            <span>You Get ({Math.round((loan / totalPaid) * 100)}%)</span>
-            <span>Lender Takes ({Math.round((totalInterest / totalPaid) * 100)}%)</span>
-          </div>
-          <div className="w-full h-6 bg-slate-100 rounded-full overflow-hidden flex shadow-inner">
+          <div className="w-full h-8 bg-slate-100 rounded-2xl overflow-hidden flex shadow-inner border-2 border-white">
             <div className="h-full bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.4)]" style={{ width: `${(loan / totalPaid) * 100}%` }}></div>
             <div className="h-full bg-red-600 shadow-[0_0_20px_rgba(220,38,38,0.4)]" style={{ width: `${(totalInterest / totalPaid) * 100}%` }}></div>
           </div>
         </div>
 
-        <div className="p-6 bg-red-600 text-white rounded-3xl text-center shadow-xl shadow-red-500/20">
-          <p className="text-lg font-bold leading-relaxed">
-            <TranslatedText>{`🚨 You are paying for YOUR house plus an extra ${interestPercent}% of its value to the bank. That's ${fmt(totalInterest)} of your future labor gone.`}</TranslatedText>
+        <div className="p-8 bg-amber-50 border-4 border-dashed border-amber-200 rounded-[40px] text-center space-y-4">
+          <div className="bg-amber-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto">
+            <Zap className="h-6 w-6 text-amber-600 fill-amber-600" />
+          </div>
+          <p className="text-xl text-amber-900 font-bold leading-relaxed">
+            <TranslatedText>{`🚨 NOTICE: Your weekly interest drain is currently ${fmt(weeklyCost)}. The entire Mortgage Freedom Accelerator course costs less than one week of this loss. Every day you wait is another ${fmt(dailyCost)} handed to the bank for free.`}</TranslatedText>
           </p>
         </div>
       </div>
