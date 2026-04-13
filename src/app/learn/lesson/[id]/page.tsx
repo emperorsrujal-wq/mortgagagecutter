@@ -1,10 +1,35 @@
+
 'use client';
 import React, { use, useState, useEffect } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
 import { lessonMeta } from '@/lib/course/lesson-meta';
 import { languages } from '@/lib/course/translations';
-import { InterestCalc, AmortViz, PayoffRace, TruthCalculator, QualificationCalc, ScriptGenerator, BankRateChart, ContractSimulator, AutomationSimulator, WealthSimulator, LadderVisual, HyperdriveSim, BiWeeklyCalc, OffsetVisual } from '@/components/course/Calculators';
-import { CourseCard, InfoBox, ExpandSection, StatBox, ChatBubble, TaskItem, CaseStudy, Quiz } from '@/components/course/UIComponents';
+import { 
+  InterestCalc, 
+  AmortViz, 
+  PayoffRace, 
+  TruthCalculator, 
+  QualificationCalc, 
+  ScriptGenerator, 
+  BankRateChart, 
+  ContractSimulator, 
+  AutomationSimulator, 
+  WealthSimulator, 
+  LadderVisual, 
+  HyperdriveSim, 
+  BiWeeklyCalc, 
+  OffsetVisual 
+} from '@/components/course/Calculators';
+import { 
+  CourseCard, 
+  InfoBox, 
+  ExpandSection, 
+  StatBox, 
+  ChatBubble, 
+  TaskItem, 
+  CaseStudy, 
+  Quiz 
+} from '@/components/course/UIComponents';
 import { TranslatedText } from '@/components/course/TranslatedText';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
@@ -20,53 +45,31 @@ import {
   ArrowRight, 
   UserCircle2, 
   HomeIcon, 
-  Ghost, 
   Timer, 
-  Droplets, 
-  Waves, 
   Zap, 
   ShieldCheck,
   CreditCard,
   Activity,
   TrendingUp,
-  PiggyBank,
   Flame,
   MessageSquare,
   FileText,
   Search,
-  AlertTriangle,
   Target,
   BarChart,
-  Coins,
   Lock,
   Star,
-  Gem,
-  CheckCircle,
   Award,
   Trophy,
   Download,
   History,
   Scale,
   Sparkles,
-  ArrowUpRight,
   TrendingDown,
-  Hammer,
-  ShieldHalf,
-  Construction,
-  Calculator,
-  ListChecks,
-  FileSearch,
-  ScrollText,
-  Gavel,
-  ShieldX,
+  SearchCode,
   RefreshCcw,
-  MousePointer2,
   Layers,
-  Diamond,
-  Users,
   Globe,
-  Quote,
-  Calendar,
   Play
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -105,7 +108,7 @@ function ProgressBar({ current }: { current: number }) {
 }
 
 function LessonContent({ id }: { id: number }) {
-  const { country, completeLesson, language, setLanguage } = useCourse();
+  const { country, completeLesson } = useCourse();
   const { user } = useUser();
   const meta = lessonMeta.find(l => l.id === id);
   const router = useRouter();
@@ -144,6 +147,7 @@ function LessonContent({ id }: { id: number }) {
       
       <div className="max-w-[800px] mx-auto px-4 py-16 space-y-24">
         
+        {/* LESSON 1: THE INTEREST TRAP */}
         {id === 1 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
@@ -158,11 +162,6 @@ function LessonContent({ id }: { id: number }) {
               <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
                 <TranslatedText>{`Master the "Open Credit" secret that bypasses the ${country.amortYears}-year amortization trap used by the top 1%.`}</TranslatedText>
               </p>
-              <div className="pt-6">
-                <Button size="lg" variant="outline" className="rounded-full border-blue-200 text-blue-600 hover:bg-blue-50 font-bold h-14 px-8">
-                  <Download className="mr-2 h-5 w-5" /> Download "Half Your Mortgage" PDF Blueprint
-                </Button>
-              </div>
             </header>
 
             <section className="space-y-16">
@@ -204,38 +203,237 @@ function LessonContent({ id }: { id: number }) {
                 correctAnswer={1}
                 explanation="Mortgages are 'One-Way' systems where interest is front-loaded on the full balance. An Open System (HELOC/Offset) calculates interest DAILY only on the money you actually owe after your paycheck hits. This is the structural arbitrage that saves thousands."
               />
-
-              <section className="bg-gradient-to-br from-blue-700 to-indigo-950 p-16 md:p-20 rounded-[80px] border border-white/10 shadow-2xl space-y-16">
-                <div className="text-center space-y-8">
-                  <div className="bg-white/20 w-24 h-24 rounded-full flex items-center justify-center mx-auto backdrop-blur-xl mb-6 shadow-2xl">
-                    <Rocket className="h-12 w-12 text-yellow-400 fill-yellow-400" />
-                  </div>
-                  <h2 className="text-5xl md:text-7xl font-fraunces font-black text-white leading-tight">
-                    <TranslatedText>{`Unlock the ${country.name} Strategy`}</TranslatedText>
-                  </h2>
-                  <p className="text-blue-100 text-2xl max-w-2xl mx-auto leading-relaxed font-medium">
-                    <TranslatedText>{`In Lesson 2, we dive into the specific account types at ${country.banks.slice(0, 3).join(', ')} and the step-by-step setup for your region.`}</TranslatedText>
-                  </p>
-                </div>
-
-                <div className="pt-16 border-t border-white/10 text-center space-y-10">
-                  <div className="flex items-center justify-center gap-4 text-yellow-400 font-black uppercase text-sm tracking-[0.4em]">
-                    <ShieldCheck className="h-6 w-6" />
-                    <TranslatedText>End of Masterclass Module 1</TranslatedText>
-                  </div>
-                  <button 
-                    onClick={nextLesson}
-                    className="bg-white text-blue-900 hover:bg-blue-50 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95"
-                  >
-                    <TranslatedText>{`Lesson 2: ${country.productShort} Setup`}</TranslatedText>
-                    <ArrowRight className="h-10 w-10 group-hover:translate-x-3 transition-transform" />
-                  </button>
-                </div>
-              </section>
             </section>
           </div>
         )}
 
+        {/* LESSON 2: QUALIFICATION BLUEPRINT */}
+        {id === 2 && (
+          <div className="space-y-24 animate-in fade-in duration-1000">
+            <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-emerald-200">
+                <ShieldCheck className="h-4 w-4" />
+                <TranslatedText>Step 1: The Lender Audit</TranslatedText>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>{`Pass the ${country.name} Stress Test`}</TranslatedText>
+              </h1>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                <TranslatedText>{`Before you call ${country.banks[0]}, you must audit your numbers. In ${country.name}, lenders use specific "Debt-to-Income" (DTI) math that determines your fate.`}</TranslatedText>
+              </p>
+            </header>
+
+            <section className="space-y-16">
+              <InfoBox title="The Golden Ratios" color="emerald">
+                <p><TranslatedText>{`In ${country.name}, the magic number is ${country.dtiLimit}%. If your total debt obligations (Mortgage + Taxes + Cards + Loans) exceed this percentage of your gross income, the bank sees you as a risk. Our first goal is to 'cleanse' your report to pass this threshold.`}</TranslatedText></p>
+              </InfoBox>
+
+              <QualificationCalc />
+
+              <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
+                <h3 className="text-3xl font-black text-slate-900"><TranslatedText>The Credit Dispute Hack</TranslatedText></h3>
+                <p><TranslatedText>{`Did you know that ${country.name} homeowners can often boost their score by 50 points in 30 days just by auditing their report? We teach our members how to identify 'Zombie Debts' that artificially inflate their DTI, allowing them to qualify for the high-LTV products required for this method.`}</TranslatedText></p>
+              </div>
+            </section>
+          </div>
+        )}
+
+        {/* LESSON 3: LENDER HUNT & SCRIPTS */}
+        {id === 3 && (
+          <div className="space-y-24 animate-in fade-in duration-1000">
+            <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-purple-100 text-purple-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-purple-200">
+                <Search className="h-4 w-4" />
+                <TranslatedText>Step 2: The Search</TranslatedText>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>How to Talk to Lenders</TranslatedText>
+              </h1>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                <TranslatedText>{`99% of loan officers at ${country.banks[0]} will try to sell you a traditional mortgage. You need to speak the 'Private Wealth' language to get what you actually need.`}</TranslatedText>
+              </p>
+            </header>
+
+            <section className="space-y-16">
+              <CourseCard title="The 'Strategic' Must-Haves">
+                <ul className="space-y-4">
+                  <TaskItem id="must_1" label="First-Lien Position (Non-Negotiable)" />
+                  <TaskItem id="must_2" label="Full Transactionality (Debit/Checks)" />
+                  <TaskItem id="must_3" label="Direct Deposit Capability" />
+                  <TaskItem id="must_4" label="No-Fee Principal Paydown" />
+                </ul>
+              </CourseCard>
+
+              <div className="space-y-8">
+                <h3 className="text-3xl font-black text-slate-900 text-center"><TranslatedText>The Script</TranslatedText></h3>
+                <ScriptGenerator />
+              </div>
+
+              <BankRateChart />
+            </section>
+          </div>
+        )}
+
+        {/* LESSON 4: CONTRACT DECODER (PREMIUM) */}
+        {id === 4 && (
+          <div className="space-y-24 animate-in fade-in duration-1000">
+            {isLocked ? (
+              <section className="text-center space-y-10 py-20">
+                <div className="bg-slate-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Lock className="h-12 w-12 text-slate-400" />
+                </div>
+                <h2 className="text-5xl font-fraunces font-black text-slate-900 leading-tight">
+                  <TranslatedText>Premium Access Required</TranslatedText>
+                </h2>
+                <p className="text-xl text-slate-500 max-w-xl mx-auto">
+                  <TranslatedText>The Contract Decoder and advanced automation modules are reserved for Mortgage Cutter Pro members. Unlock the full strategy to continue.</TranslatedText>
+                </p>
+                <Button size="lg" className="h-16 px-12 text-xl font-black rounded-2xl shadow-2xl shadow-blue-500/20" asChild>
+                  <Link href="/purchase?plan=pro_197">Unlock All Lessons ($197)</Link>
+                </Button>
+              </section>
+            ) : (
+              <>
+                <header className="space-y-10 text-center">
+                  <div className="inline-flex items-center gap-2 px-6 py-2 bg-amber-100 text-amber-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-amber-200">
+                    <SearchCode className="h-4 w-4" />
+                    <TranslatedText>Step 3: Audit</TranslatedText>
+                  </div>
+                  <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                    <TranslatedText>The Contract Decoder</TranslatedText>
+                  </h1>
+                  <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                    <TranslatedText>{`Lenders in ${country.name} love to hide 'Prepayment Penalties' and 'Draw Period Freezes' in the fine print. Let's find them.`}</TranslatedText>
+                  </p>
+                </header>
+
+                <section className="space-y-16">
+                  <CourseCard title="Spotting the TIP Scam">
+                    <p className="text-xl"><TranslatedText>{`Check your ${country.regulatedBy} disclosure for the 'Total Interest Percentage' (TIP). If it's over 90%, you are in a front-loaded trap. A strategic line should reflect a True Effective APR that is significantly lower over time.`}</TranslatedText></p>
+                  </CourseCard>
+
+                  <ContractSimulator />
+
+                  <Quiz 
+                    question="Which of these clauses is a 'Kill Switch' for our method?"
+                    options={[
+                      "Adjustable Interest Rate",
+                      "Prepayment Penalty over $500",
+                      "Annual Maintenance Fee under $100",
+                      "Mandatory Title Insurance"
+                    ]}
+                    correctAnswer={1}
+                    explanation="A prepayment penalty is the bank's way of locking you into the interest trap. If you pay off your loan too fast, they lose profit—so they charge you a fee to stop you. Avoid any product with significant penalties."
+                  />
+                </>
+            )}
+          </div>
+        )}
+
+        {/* LESSON 5: BILLING & AUTOMATION (PREMIUM) */}
+        {id === 5 && (
+          <div className="space-y-24 animate-in fade-in duration-1000">
+            <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-100 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-200">
+                <RefreshCcw className="h-4 w-4" />
+                <TranslatedText>Execution Phase</TranslatedText>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>Billing & Automation</TranslatedText>
+              </h1>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                <TranslatedText>{`Strategy is 10% math, 90% automation. In ${country.name}, we want your paycheck hitting the principal on Day 1 without you lifting a finger.`}</TranslatedText>
+              </p>
+            </header>
+
+            <section className="space-y-16">
+              <AutomationSimulator />
+
+              <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
+                <h3 className="text-3xl font-black text-slate-900"><TranslatedText>The 'Bathtub' Principle</TranslatedText></h3>
+                <p><TranslatedText>{`Think of your debt like a leaking bathtub. The bank's interest is the drain. Traditional banking keeps the water level high. Our automation 'dumps the bucket' (income) in immediately, dropping the level and stopping the drain for the majority of the month.`}</TranslatedText></p>
+              </div>
+
+              <CourseCard title="Regional Automation Setup">
+                <ExpandSection title={country.name === 'USA' ? "Setting up your 'Sweep' Account" : "Configuring Direct Deposit Strategy"}>
+                  <p><TranslatedText>{`In ${country.name}, the most efficient setup is linking your ${country.productShort} directly to your primary checking and enabling an 'Automatic Sweep.' This ensures every dollar above your daily 'operating floor' hits the principal instantly.`}</TranslatedText></p>
+                </ExpandSection>
+              </CourseCard>
+            </section>
+          </div>
+        )}
+
+        {/* LESSON 6: 7 HELOC SECRETS (PREMIUM) */}
+        {id === 6 && (
+          <div className="space-y-24 animate-in fade-in duration-1000">
+            <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-amber-100 text-amber-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-amber-200">
+                <Star className="h-4 w-4" />
+                <TranslatedText>Advanced Velocity</TranslatedText>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>7 HELOC Secrets</TranslatedText>
+              </h1>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                <TranslatedText>{`These are the high-leverage tactics used by the top 1% of property owners in ${country.name} to scale their portfolios.`}</TranslatedText>
+              </p>
+            </header>
+
+            <section className="space-y-16">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <CourseCard title="Secret 1: Appraisal Arbitrage">
+                  <p className="text-sm"><TranslatedText>Use AVM (Automated Valuation Models) to spike your equity limits before a physical appraisal is even ordered. This often unlocks an extra $20k-$50k in credit capacity.</TranslatedText></p>
+                </CourseCard>
+                <CourseCard title="Secret 2: Freeze Immunity">
+                  <p className="text-sm"><TranslatedText>Learn the 'Second-Line Bridge' technique. By maintaining a backup line with a local credit union, you ensure liquidity even if a national bank freezes your primary line during a downturn.</TranslatedText></p>
+                </CourseCard>
+              </div>
+
+              <WealthSimulator />
+
+              <LadderVisual />
+            </section>
+          </div>
+        )}
+
+        {/* LESSON 7: HELOC HYPERDRIVE (PREMIUM) */}
+        {id === 7 && (
+          <div className="space-y-24 animate-in fade-in duration-1000">
+            <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-red-100 text-red-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-red-200">
+                <Rocket className="h-4 w-4" />
+                <TranslatedText>Max Speed</TranslatedText>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>HELOC Hyperdrive</TranslatedText>
+              </h1>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                <TranslatedText>{`It's time to collapse the timeline. By combining 'Chunks' with 'Offset' timing, we can achieve a 43% faster payoff than standard velocity.`}</TranslatedText>
+              </p>
+            </header>
+
+            <section className="space-y-16">
+              <OffsetVisual />
+
+              <HyperdriveSim />
+
+              <BiWeeklyCalc />
+
+              <div className="p-12 bg-slate-900 text-white rounded-[64px] border border-white/10 shadow-2xl text-center space-y-6">
+                <Award className="h-16 w-16 text-yellow-400 mx-auto" />
+                <h3 className="text-4xl font-black tracking-tight"><TranslatedText>The 90-Day Execution Plan</TranslatedText></h3>
+                <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                  <TranslatedText>You've mastered the math. Now, download your 90-day planner to execute your first 'Chunk' and start your journey to a debt-free life.</TranslatedText>
+                </p>
+                <Button size="lg" variant="outline" className="h-14 px-8 border-white/20 text-white hover:bg-white/5 font-bold">
+                  <Download className="mr-2 h-5 w-5" /> Download Execution Planner (PDF)
+                </Button>
+              </div>
+            </section>
+          </div>
+        )}
+
+        {/* LESSON 8: THE PROOF */}
         {id === 8 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
@@ -253,7 +451,6 @@ function LessonContent({ id }: { id: number }) {
             </header>
 
             <section className="space-y-24">
-              {/* Stats Infographic */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <Card className="bg-white border-2 border-slate-100 p-10 rounded-[40px] shadow-xl text-center space-y-6">
                   <div className="bg-slate-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto">
@@ -281,7 +478,6 @@ function LessonContent({ id }: { id: number }) {
                 </Card>
               </div>
 
-              {/* Success Story Carousel */}
               <div className="space-y-10">
                 <div className="flex items-center gap-4">
                   <div className="h-12 w-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600">
@@ -312,36 +508,6 @@ function LessonContent({ id }: { id: number }) {
                 </Carousel>
               </div>
 
-              {/* Video Placeholder */}
-              <Card className="bg-slate-900 border-none rounded-[48px] overflow-hidden relative group">
-                <div className="aspect-video bg-slate-800 flex flex-col items-center justify-center text-white space-y-6">
-                  <div className="h-24 w-24 rounded-full bg-blue-600 flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform cursor-pointer">
-                    <Play className="h-10 w-10 fill-white ml-1" />
-                  </div>
-                  <div className="text-center">
-                    <h4 className="text-xl font-black uppercase tracking-widest">Watch: The 4.5yr Payoff Interview</h4>
-                    <p className="text-slate-400 text-sm font-medium mt-2">Hear exactly how the Miller family killed their $312k debt.</p>
-                  </div>
-                </div>
-              </Card>
-
-              {/* Q&A Accordion */}
-              <div className="space-y-8">
-                <h2 className="text-3xl font-fraunces font-black text-[#1A1D26] tracking-tight text-center"><TranslatedText>Common Reality Checks</TranslatedText></h2>
-                <div className="space-y-4">
-                  <ExpandSection title="What if interest rates go up further?">
-                    <p>The strategy actually works BETTER in high-rate environments compared to traditional paths. Because you are dropping the principal daily, you pay interest on a shrinking balance while your neighbors pay interest on the full balance for 30 years. The spread becomes your primary weapon.</p>
-                  </ExpandSection>
-                  <ExpandSection title="Does this hurt my credit score?">
-                    <p>In the short term, moving from a mortgage to a line of credit may cause a 10-20 point dip due to "utilization" metrics. However, as your balance drops rapidly (the primary goal), your score typically rebounds higher than it was before, as you now have massive available credit and low debt.</p>
-                  </ExpandSection>
-                  <ExpandSection title="Can the bank freeze my HELOC?">
-                    <p>Yes, any revolving line can be frozen if home values crash 30%+. However, we teach the "Second-Line Bridge" technique in Lesson 6 to ensure you maintain liquidity even in a market downturn.</p>
-                  </ExpandSection>
-                </div>
-              </div>
-
-              {/* Final Graduation CTA */}
               <section className="bg-gradient-to-br from-blue-700 to-indigo-950 p-16 md:p-20 rounded-[80px] border border-white/10 shadow-2xl space-y-16 text-center">
                 <div className="space-y-8">
                   <div className="bg-white/20 w-24 h-24 rounded-full flex items-center justify-center mx-auto backdrop-blur-xl mb-6 shadow-2xl">
@@ -367,9 +533,6 @@ function LessonContent({ id }: { id: number }) {
                     <TranslatedText>Launch My Simulator</TranslatedText>
                     <ArrowRight className="h-10 w-10 group-hover:translate-x-3 transition-transform" />
                   </button>
-                  <p className="text-blue-200 text-sm font-bold uppercase tracking-widest">
-                    <TranslatedText>Next: Lesson 9 - The Empire Community ($297)</TranslatedText>
-                  </p>
                 </div>
               </section>
             </section>
