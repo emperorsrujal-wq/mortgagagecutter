@@ -1,4 +1,3 @@
-
 'use client';
 import React, { use } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
@@ -760,11 +759,11 @@ function LessonContent({ id }: { id: number }) {
   );
 }
 
-export default function Page({ params }: { params: { id: string } }) {
-  const id = Number(use(params).id);
+export default function Page({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   return (
     <CourseProvider>
-      <LessonContent id={id} />
+      <LessonContent id={Number(id)} />
     </CourseProvider>
   );
 }

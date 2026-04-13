@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -37,6 +36,7 @@ import {
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Legend } from 'recharts';
 import Image from 'next/image';
 import { productPlans } from '@/lib/plans';
+import PricingSection from './PricingSection';
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -259,65 +259,11 @@ function InnerComparison() {
           </Card>
         </div>
 
-        <div className="bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-2xl p-8 lg:p-12 text-center shadow-2xl">
-            <h2 className="text-3xl font-bold mb-4">Unlock the Full Mortgage Cutter Method</h2>
-            <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">Get the interactive tools, bank-calling scripts, and the step-by-step roadmap to implement this blueprint starting tomorrow.</p>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-                <Card className="bg-white/5 border-white/10 text-left text-white">
-                    <CardHeader>
-                        <CardTitle className="text-xl">{productPlans['basic_39_monthly'].name}</CardTitle>
-                        <CardDescription className="text-gray-400">{productPlans['basic_39_monthly'].description}</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="text-4xl font-bold">{productPlans['basic_39_monthly'].priceFormatted}</div>
-                        <ul className="space-y-2 text-sm">
-                            <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-400" /> Interactive Calculator</li>
-                            <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-400" /> Monthly Action Plan</li>
-                        </ul>
-                    </CardContent>
-                    <CardFooter>
-                         <Button asChild variant="secondary" className="w-full"><Link href="/purchase?plan=basic_39_monthly">Start Basic</Link></Button>
-                    </CardFooter>
-                </Card>
-
-                <Card className="bg-white text-gray-900 scale-105 shadow-2xl relative">
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-yellow-400 text-black px-4 py-1 text-xs font-bold rounded-full">MOST POPULAR</div>
-                    <CardHeader>
-                        <CardTitle className="text-2xl pt-2">{productPlans['pro_297'].name}</CardTitle>
-                        <CardDescription>{productPlans['pro_297'].description}</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="text-5xl font-bold">{productPlans['pro_297'].priceFormatted}</div>
-                        <ul className="space-y-2 text-sm">
-                            <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-600" /> Full Toolkit & All Books</li>
-                            <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-600" /> Bank-Agnostic Guides</li>
-                            <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-600" /> Lifetime Access</li>
-                        </ul>
-                    </CardContent>
-                    <CardFooter>
-                        <Button asChild size="lg" className="w-full bg-primary hover:bg-primary/90 text-white"><Link href="/purchase?plan=pro_297">Unlock Everything</Link></Button>
-                    </CardFooter>
-                </Card>
-
-                <Card className="bg-white/5 border-white/10 text-left text-white">
-                    <CardHeader>
-                        <CardTitle className="text-xl">{productPlans['elite_997'].name}</CardTitle>
-                        <CardDescription className="text-gray-400">Personalized expert support.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="text-4xl font-bold">{productPlans['elite_997'].priceFormatted}</div>
-                        <ul className="space-y-2 text-sm">
-                            <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-400" /> 1-on-1 Onboarding Call</li>
-                            <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-400" /> Advanced Investor Tools</li>
-                        </ul>
-                    </CardContent>
-                    <CardFooter>
-                        <Button asChild variant="secondary" className="w-full"><Link href="/purchase?plan=elite_997">Go Elite</Link></Button>
-                    </CardFooter>
-                </Card>
-            </div>
-        </div>
+        <PricingSection results={{ 
+            interestSaved: data.interestSaved, 
+            yearsSooner: yearsSaved, 
+            monthlySaving: (data.interestSaved / (yearsSaved * 12)) || 150 
+        }} />
 
         <div className="flex flex-col items-center gap-4 text-center">
             <h3 className="text-2xl font-bold">Share Your Success</h3>
