@@ -9,11 +9,11 @@ import {
   Target, Award, CheckCircle, Calculator, HeartPulse, Sparkles,
   MessageSquare, UserCircle2, ChevronRight, Download, FileSearch,
   Gavel, ScrollText, SearchCode, ListChecks, ArrowUpRight, Activity,
-  Layers, MousePointer2, RefreshCcw
+  Layers, MousePointer2, RefreshCcw, Landmark, TrendingDown
 } from 'lucide-react';
 import { TranslatedText } from './TranslatedText';
 import { cn } from '@/lib/utils';
-import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line } from 'recharts';
 
 // Simple Confetti burst logic
 function ConfettiBurst() {
@@ -35,6 +35,147 @@ function ConfettiBurst() {
           }} 
         />
       ))}
+    </div>
+  );
+}
+
+export function WealthSimulator() {
+  const { country } = useCourse();
+  const [equity, setEquity] = useState(100000);
+  const [yieldPct, setYieldPct] = useState(7);
+  const [years, setYears] = useState(10);
+
+  const data = useMemo(() => {
+    const series = [];
+    let currentWealth = equity;
+    const rate = yieldPct / 100;
+    
+    for (let i = 0; i <= years; i++) {
+      series.push({
+        year: i,
+        wealth: Math.round(currentWealth),
+        baseline: equity // If just sitting in the wall
+      });
+      currentWealth *= (1 + rate);
+    }
+    return series;
+  }, [equity, yieldPct, years]);
+
+  const fmt = (val: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: country.currency, maximumFractionDigits: 0 }).format(val);
+
+  return (
+    <div className="space-y-12 animate-in fade-in duration-1000">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="lg:col-span-5 space-y-6">
+          <CourseCard title="💰 Leverage Parameters" className="bg-white border-2 border-slate-100 shadow-xl rounded-[40px] p-10">
+            <div className="space-y-10">
+              <div className="space-y-6">
+                <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">
+                  <span>Unlocked Equity</span>
+                  <span className="text-blue-600">{fmt(equity)}</span>
+                </div>
+                <input type="range" min="10000" max="500000" step="5000" value={equity} onChange={e => setEquity(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-blue-600" />
+              </div>
+
+              <div className="space-y-6">
+                <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">
+                  <span>Target Return (%)</span>
+                  <span className="text-emerald-600">{yieldPct}%</span>
+                </div>
+                <input type="range" min="3" max="15" step="0.5" value={yieldPct} onChange={e => setYieldPct(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-emerald-600" />
+              </div>
+
+              <div className="p-6 bg-slate-50 rounded-3xl border border-slate-100 text-xs font-medium text-slate-500 italic leading-relaxed">
+                <TranslatedText>{`In ${country.name}, the current LTV cap is ${country.maxLTV}. This simulator assumes you are deploying capital from within that safe structural buffer.`}</TranslatedText>
+              </div>
+            </div>
+          </CourseCard>
+        </div>
+
+        <div className="lg:col-span-7">
+          <div className="bg-slate-900 text-white rounded-[48px] p-10 shadow-2xl relative overflow-hidden flex flex-col space-y-8">
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="text-xl font-black flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5 text-blue-400" /> The Wealth Multiplier
+                </h3>
+                <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-1">10-Year Opportunity Projection</p>
+              </div>
+              <div className="text-right">
+                <p className="text-blue-400 text-3xl font-black">{fmt(data[data.length-1].wealth)}</p>
+                <p className="text-[10px] font-black uppercase text-slate-500">Projected Value</p>
+              </div>
+            </div>
+
+            <div className="h-[250px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={data}>
+                  <defs>
+                    <linearGradient id="colorWealth" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1e293b" />
+                  <XAxis dataKey="year" stroke="#475569" className="text-[10px] font-bold" />
+                  <YAxis hide domain={['dataMin', 'dataMax + 10000']} />
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '16px', color: '#fff' }}
+                    itemStyle={{ color: '#fff', fontWeight: 'bold' }}
+                    formatter={(val: number) => fmt(val)}
+                  />
+                  <Area type="monotone" dataKey="wealth" stroke="#3b82f6" fillOpacity={1} fill="url(#colorWealth)" strokeWidth={4} />
+                  <Area type="monotone" dataKey="baseline" stroke="#475569" strokeDasharray="5 5" fill="transparent" strokeWidth={2} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="flex justify-between items-center pt-6 border-t border-white/10">
+              <div className="flex items-center gap-2 text-emerald-400 font-black text-sm">
+                <Sparkles className="h-4 w-4" />
+                <span>Net Gain: {fmt(data[data.length-1].wealth - equity)}</span>
+              </div>
+              <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest italic">Capitalized Velocity</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function LadderVisual() {
+  const steps = [
+    { title: "Primary Base", icon: <HomeIcon className="h-6 w-6" />, desc: "Secure a first-lien HELOC on your home. Consolidate income to drop balance daily." },
+    { title: "Equity Bloom", icon: <Zap className="h-6 w-6" />, desc: "As principal drops, your available credit grows. This is your 'Opportunity Fund'." },
+    { title: "Asset Clone", icon: <Layers className="h-6 w-6" />, desc: "Deploy a deposit for Rental #1 using the HELOC. Keep capital liquid." },
+    { title: "Dual Velocity", icon: <RefreshCcw className="h-6 w-6" />, desc: "Rental income hits the HELOC on Day 1. Interest chokes on TWO properties simultaneously." },
+    { title: "Wealth Fortress", icon: <Award className="h-6 w-6" />, desc: "3+ Homes debt-free in ~12 years. The bank now pays YOU for your time." }
+  ];
+
+  return (
+    <div className="space-y-12 animate-in fade-in duration-1000">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        {steps.map((s, i) => (
+          <div key={i} className="relative flex flex-col items-center text-center space-y-4 group">
+            <div className={cn(
+              "h-16 w-16 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-xl",
+              i === 0 ? "bg-slate-900 text-white" : "bg-white border-2 border-slate-100 text-slate-400 group-hover:border-blue-500 group-hover:text-blue-600"
+            )}>
+              {s.icon}
+            </div>
+            {i < steps.length - 1 && (
+              <div className="hidden md:block absolute top-8 left-[calc(50%+32px)] w-[calc(100%-64px)] h-0.5 bg-slate-100 z-0">
+                <ChevronRight className="absolute -top-2 right-0 h-4 w-4 text-slate-200" />
+              </div>
+            )}
+            <div className="space-y-2">
+              <h4 className="font-black text-sm uppercase tracking-tight text-slate-900">{s.title}</h4>
+              <p className="text-[10px] text-slate-500 font-medium leading-relaxed px-4">{s.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -267,9 +408,9 @@ export function ContractSimulator() {
               <h3 className="text-8xl font-black tracking-tighter">{trueApr.toFixed(2)}%</h3>
               <p className={cn(
                 "text-sm font-bold uppercase tracking-widest px-4 py-1 rounded-full",
-                trueApr <= rate + 0.5 ? "bg-emerald-500/20 text-emerald-400" : "bg-amber-500/20 text-amber-400"
+                trueApr <= rate + 0.5 ? "bg-emerald-500/20 text-emerald-400" : trueApr <= rate + 1.5 ? "bg-amber-500/20 text-amber-400" : "bg-red-500/20 text-red-400"
               )}>
-                {trueApr <= rate + 0.5 ? "Efficient Product" : "Fee-Heavy / Audit Fees"}
+                {trueApr <= rate + 0.5 ? "Efficient Product" : trueApr <= rate + 1.5 ? "Marginal / Audit Fees" : "Predatory Structure"}
               </p>
             </div>
             <div className="w-full pt-6 border-t border-white/10 relative z-10">
@@ -457,7 +598,7 @@ export function QualificationCalc() {
                     <span>Loan Balance</span>
                     <span className="text-slate-900">{fmt(balance)}</span>
                   </div>
-                  <input type="range" min="50000" max="2000000" step="10000" value={balance} onChange={e => setBalance(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-blue-600" />
+                  <input type="range" min="50000" max="2000000" step="10000" value={balance} onChange={e => setBalance(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none cursor-pointer accent-blue-600" />
                 </div>
                 <div className="space-y-4">
                   <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">

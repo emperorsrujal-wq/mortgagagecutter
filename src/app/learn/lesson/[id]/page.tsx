@@ -4,7 +4,7 @@ import React, { use, useState, useEffect } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
 import { lessonMeta } from '@/lib/course/lesson-meta';
 import { languages } from '@/lib/course/translations';
-import { InterestCalc, AmortViz, PayoffRace, TruthCalculator, QualificationCalc, ScriptGenerator, BankRateChart, ContractSimulator, AutomationSimulator } from '@/components/course/Calculators';
+import { InterestCalc, AmortViz, PayoffRace, TruthCalculator, QualificationCalc, ScriptGenerator, BankRateChart, ContractSimulator, AutomationSimulator, WealthSimulator, LadderVisual } from '@/components/course/Calculators';
 import { CourseCard, InfoBox, ExpandSection, StatBox, ChatBubble, TaskItem, CaseStudy, Quiz } from '@/components/course/UIComponents';
 import { TranslatedText } from '@/components/course/TranslatedText';
 import { cn } from '@/lib/utils';
@@ -62,7 +62,8 @@ import {
   ShieldX,
   RefreshCcw,
   MousePointer2,
-  Layers
+  Layers,
+  Diamond
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -74,7 +75,7 @@ function ProgressBar({ current }: { current: number }) {
       <div className="h-1 bg-slate-100 w-full">
         <div 
           className="h-full bg-[#2563EB] transition-all duration-500" 
-          style={{ width: `${(current / 5) * 100}%` }}
+          style={{ width: `${(current / 7) * 100}%` }}
         />
       </div>
       <div className="max-w-[720px] mx-auto px-4 h-14 flex items-center justify-between">
@@ -83,7 +84,7 @@ function ProgressBar({ current }: { current: number }) {
           <span className="hidden sm:inline uppercase tracking-widest"><TranslatedText>Course Hub</TranslatedText></span>
         </Link>
         <div className="text-[10px] font-black uppercase text-slate-400 tracking-[0.3em]">
-          <TranslatedText>Lesson</TranslatedText> {current} <TranslatedText>of</TranslatedText> 5
+          <TranslatedText>Lesson</TranslatedText> {current} <TranslatedText>of</TranslatedText> 7
         </div>
         <div className="w-20" />
       </div>
@@ -100,12 +101,12 @@ function LessonContent({ id }: { id: number }) {
   if (!meta) return <div>Lesson not found</div>;
 
   const isPrivileged = user?.email === 'emperorsrujal@gmail.com';
-  // Module 4 & 5 are Premium
+  // Module 4, 5, 6 & 7 are Premium
   const isLocked = id >= 4 && !isPrivileged;
 
   const nextLesson = () => {
     completeLesson(id);
-    if (id < 5) router.push(`/learn/lesson/${id + 1}`);
+    if (id < 7) router.push(`/learn/lesson/${id + 1}`);
     else router.push('/questionnaire');
   };
 
@@ -443,7 +444,7 @@ function LessonContent({ id }: { id: number }) {
                           <TranslatedText>Premium Strategy: Locked</TranslatedText>
                       </h2>
                       <p className="text-slate-500 text-2xl max-w-xl mx-auto font-medium leading-relaxed italic">
-                          <TranslatedText>{`Lesson 4 and 5 contain the high-velocity execution blueprints and contract audit checklists reserved for our Pro Members. Join 39,000+ homeowners reclaiming their freedom.`}</TranslatedText>
+                          <TranslatedText>{`Lessons 4 through 7 contain the high-velocity execution blueprints reserved for our Pro Members. Join 39,000+ homeowners reclaiming their freedom.`}</TranslatedText>
                       </p>
                   </div>
                   <div className="p-12 bg-slate-50 rounded-[48px] text-left space-y-8 max-w-xl mx-auto border-2 border-white shadow-xl">
@@ -459,7 +460,7 @@ function LessonContent({ id }: { id: number }) {
                           </li>
                           <li className="flex items-start gap-5 text-xl font-bold text-slate-700">
                               <Gem className="h-8 w-8 text-yellow-500 shrink-0 mt-0.5" />
-                              <span><TranslatedText>The 90-Day Roadmap: Your step-by-step finish line.</TranslatedText></span>
+                              <span><TranslatedText>Wealth Scaling: 7 Secrets to leverage equity safely.</TranslatedText></span>
                           </li>
                       </ul>
                   </div>
@@ -610,7 +611,7 @@ function LessonContent({ id }: { id: number }) {
                           <TranslatedText>Premium Strategy: Locked</TranslatedText>
                       </h2>
                       <p className="text-slate-500 text-2xl max-w-xl mx-auto font-medium leading-relaxed italic">
-                          <TranslatedText>{`Lessons 4 and 5 contain the high-velocity execution blueprints and contract audit checklists reserved for our Pro Members. Join 39,000+ homeowners reclaiming their freedom.`}</TranslatedText>
+                          <TranslatedText>{`Lessons 4 through 7 contain the high-velocity execution blueprints reserved for our Pro Members. Join 39,000+ homeowners reclaiming their freedom.`}</TranslatedText>
                       </p>
                   </div>
                   <div className="p-12 bg-slate-50 rounded-[48px] text-left space-y-8 max-w-xl mx-auto border-2 border-white shadow-xl">
@@ -626,7 +627,7 @@ function LessonContent({ id }: { id: number }) {
                           </li>
                           <li className="flex items-start gap-5 text-xl font-bold text-slate-700">
                               <Gem className="h-8 w-8 text-yellow-500 shrink-0 mt-0.5" />
-                              <span><TranslatedText>The 90-Day Roadmap: Your step-by-step finish line.</TranslatedText></span>
+                              <span><TranslatedText>Wealth Scaling: 7 Secrets to leverage equity safely.</TranslatedText></span>
                           </li>
                       </ul>
                   </div>
@@ -741,23 +742,138 @@ function LessonContent({ id }: { id: number }) {
                         <Trophy className="h-12 w-12 text-yellow-400" />
                       </div>
                       <h2 className="text-5xl md:text-7xl font-fraunces font-black text-white leading-tight">
-                        <TranslatedText>Graduation: Launch Your Plan</TranslatedText>
+                        <TranslatedText>Phase 6: Scaling Wealth</TranslatedText>
                       </h2>
                       <p className="text-emerald-100 text-2xl max-w-2xl mx-auto leading-relaxed font-medium">
-                        <TranslatedText>{`You have the knowledge. You have the scripts. Now, use the Savings Estimator to build your final 90-day liquidation roadmap.`}</TranslatedText>
+                        <TranslatedText>{`Debt reduction is just the floor. Now we look at the ceiling. Lesson 6 reveals the 7 Secrets to leverage your line for multi-property wealth.`}</TranslatedText>
                       </p>
                     </div>
 
                     <div className="pt-16 border-t border-white/10 text-center space-y-10">
                       <div className="flex items-center justify-center gap-4 text-yellow-400 font-black uppercase text-sm tracking-[0.4em]">
-                        <Award className="h-6 w-6" />
-                        <TranslatedText>Masterclass Complete</TranslatedText>
+                        <CheckCircle className="h-6 w-6" />
+                        <TranslatedText>End of Masterclass Module 5</TranslatedText>
                       </div>
                       <button 
                         onClick={nextLesson}
-                        className="bg-white text-emerald-900 hover:bg-emerald-50 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95"
+                        className="bg-white text-slate-900 hover:bg-slate-50 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95"
                       >
-                        <TranslatedText>Get My Savings Blueprint</TranslatedText>
+                        <TranslatedText>Lesson 6: The 7 Secrets</TranslatedText>
+                        <ArrowRight className="h-10 w-10 group-hover:translate-x-3 transition-transform" />
+                      </button>
+                    </div>
+                  </section>
+                </section>
+              </div>
+            )}
+          </div>
+        )}
+
+        {id === 6 && (
+          <div className="space-y-24 animate-in fade-in duration-1000">
+            {isLocked ? (
+              <section className="bg-white p-20 rounded-[80px] border-4 border-dashed border-slate-200 text-center space-y-12 shadow-inner">
+                  <div className="bg-blue-100 w-40 h-40 rounded-full flex items-center justify-center mx-auto shadow-2xl shadow-blue-500/20 border-4 border-white">
+                      <Lock className="h-20 w-14 text-blue-600" />
+                  </div>
+                  <div className="space-y-8">
+                      <h2 className="text-5xl md:text-7xl font-fraunces font-black text-slate-900 leading-tight tracking-tight">
+                          <TranslatedText>Wealth Module: Locked</TranslatedText>
+                      </h2>
+                      <p className="text-slate-500 text-2xl max-w-xl mx-auto font-medium leading-relaxed italic">
+                          <TranslatedText>{`The "7 Wealth Secrets" module is the highest-leverage section of the course. It is reserved for Pro Members ready to scale beyond their primary residence.`}</TranslatedText>
+                      </p>
+                  </div>
+                  <div className="pt-10 space-y-8">
+                      <Button size="lg" className="w-full sm:w-auto px-20 py-12 text-3xl font-black rounded-[32px] shadow-2xl shadow-blue-500/30 transition-all hover:scale-105 active:scale-95" asChild>
+                          <Link href="/purchase?plan=pro_197">
+                              <TranslatedText>Unlock Wealth Scaling</TranslatedText>
+                              <ArrowRight className="ml-4 h-10 w-10" />
+                          </Link>
+                      </Button>
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.5em]"><TranslatedText>Includes 7-Secret PDF Checklist</TranslatedText></p>
+                  </div>
+              </section>
+            ) : (
+              <div className="space-y-24">
+                <header className="space-y-10 text-center">
+                  <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-100 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-200">
+                    <Diamond className="h-4 w-4" />
+                    <TranslatedText>Module 6: The 7 Strategic Secrets</TranslatedText>
+                  </div>
+                  <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                    <TranslatedText>{`The Sovereignty Blueprint:`}</TranslatedText>
+                    <span className="block text-blue-600 italic mt-4"><TranslatedText>Multiple Homes, Zero Debt.</TranslatedText></span>
+                  </h1>
+                  <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                    <TranslatedText>{`Once you master velocity, your home equity is no longer "dead money." It becomes your own private central bank.`}</TranslatedText>
+                  </p>
+                </header>
+
+                <section className="space-y-24">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {[
+                      { title: "1. Appraisal Arbitrage", icon: <Search className="h-6 w-6" />, desc: "How to use Automated Valuation Models (AVM) to spike your limit without a physical walkthrough." },
+                      { title: "2. Freeze Immunity", icon: <ShieldAlert className="h-6 w-6" />, desc: "The 'Second-Line Bridge' setup that ensures you never lose access to your capital during a bank contraction." },
+                      { title: "3. Leverage Velocity", icon: <TrendingUp className="h-6 w-6" />, desc: "Using the line for investment downpayments while income continues to choke interest on the base." },
+                      { title: "4. The Rule of 72 Offset", icon: <Calculator className="h-6 w-6" />, desc: "Why earning 7% in an investment is mathematically 3x more powerful than paying down 7% debt." },
+                      { title: "5. Forced Appreciation", icon: <Hammer className="h-6 w-6" />, desc: "Using the credit line for strategic value-add renovations that trigger automatic limit increases." },
+                      { title: "6. Rate Immunity", icon: <Activity className="h-6 w-6" />, desc: "Why the stated APR doesn't matter when your Average Daily Balance is consistently dropping." },
+                      { title: "7. The Hybrid Lock", icon: <Lock className="h-6 w-6" />, desc: "Locking a portion of your revolving line into a 'Fixed Bucket' when market volatility spikes." }
+                    ].map((secret, i) => (
+                      <div key={i} className="group p-8 bg-white border border-slate-100 rounded-[40px] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500">
+                        <div className="h-12 w-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                          {secret.icon}
+                        </div>
+                        <h4 className="text-xl font-black text-slate-900 mb-2">{secret.title}</h4>
+                        <p className="text-sm text-slate-500 font-medium leading-relaxed">{secret.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="space-y-10">
+                    <div className="flex items-center gap-4">
+                      <div className="h-12 w-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-600">
+                        <Coins className="h-6 w-6" />
+                      </div>
+                      <h2 className="text-4xl font-fraunces font-black text-[#1A1D26] tracking-tight"><TranslatedText>Strategic Equity Simulator</TranslatedText></h2>
+                    </div>
+                    <WealthSimulator />
+                  </div>
+
+                  <div className="space-y-10">
+                    <div className="flex items-center gap-4">
+                      <div className="h-12 w-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600">
+                        <Layers className="h-6 w-6" />
+                      </div>
+                      <h2 className="text-4xl font-fraunces font-black text-[#1A1D26] tracking-tight"><TranslatedText>The Velocity Ladder</TranslatedText></h2>
+                    </div>
+                    <LadderVisual />
+                  </div>
+
+                  <section className="bg-gradient-to-br from-blue-700 to-slate-950 p-16 md:p-20 rounded-[80px] border border-white/10 shadow-2xl space-y-16">
+                    <div className="text-center space-y-8">
+                      <div className="bg-white/20 w-24 h-24 rounded-full flex items-center justify-center mx-auto backdrop-blur-xl mb-6 shadow-2xl">
+                        <Rocket className="h-12 w-12 text-yellow-400" />
+                      </div>
+                      <h2 className="text-5xl md:text-7xl font-fraunces font-black text-white leading-tight">
+                        <TranslatedText>Final Level: Maximum Speed</TranslatedText>
+                      </h2>
+                      <p className="text-blue-100 text-2xl max-w-2xl mx-auto leading-relaxed font-medium">
+                        <TranslatedText>{`You've mastered the math and the secrets. In Lesson 7, we build your '90-Day Execution Blueprint' to move from student to debt-free owner.`}</TranslatedText>
+                      </p>
+                    </div>
+
+                    <div className="pt-16 border-t border-white/10 text-center space-y-10">
+                      <div className="flex items-center justify-center gap-4 text-yellow-400 font-black uppercase text-sm tracking-[0.4em]">
+                        <CheckCircle className="h-6 w-6" />
+                        <TranslatedText>End of Masterclass Module 6</TranslatedText>
+                      </div>
+                      <button 
+                        onClick={nextLesson}
+                        className="bg-white text-blue-900 hover:bg-blue-50 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95"
+                      >
+                        <TranslatedText>Lesson 7: Max Speed</TranslatedText>
                         <ArrowRight className="h-10 w-10 group-hover:translate-x-3 transition-transform" />
                       </button>
                     </div>
@@ -777,7 +893,7 @@ function LessonContent({ id }: { id: number }) {
             <TranslatedText>Previous</TranslatedText>
           </button>
           
-          {(id < 5 && (!isLocked || isPrivileged)) && (
+          {(id < 7 && (!isLocked || isPrivileged)) && (
             <button 
                 onClick={nextLesson}
                 className="group flex items-center gap-4 bg-[#2563EB] text-white px-12 py-6 rounded-[24px] font-black shadow-2xl shadow-blue-500/30 hover:bg-blue-600 transition-all active:scale-95 text-2xl"
