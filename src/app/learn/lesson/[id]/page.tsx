@@ -1,3 +1,4 @@
+
 'use client';
 import React, { use } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
@@ -59,7 +60,7 @@ function ProgressBar({ current }: { current: number }) {
         />
       </div>
       <div className="max-w-[720px] mx-auto px-4 h-14 flex items-center justify-between">
-        <Link href="/learn" className="flex items-center gap-2 text-[#5A6175] hover:text-[#1A1D26] font-black text-sm">
+        <Link href="/learn" className="flex items-center gap-2 text-[#5A6175] huger:text-[#1A1D26] font-black text-sm">
           <Home className="h-4 w-4" />
           <span className="hidden sm:inline uppercase tracking-widest"><TranslatedText>Course Hub</TranslatedText></span>
         </Link>
@@ -227,7 +228,7 @@ function LessonContent({ id }: { id: number }) {
                     { icon: Rocket, title: "The 30-Day Float", desc: "Force the bank to pay for your life while your money kills debt. (Lesson 3)", color: "text-pink-300" },
                     { icon: MessageSquare, title: "The Banker Script", desc: "The 'Magic Phrases' that force loan officers to say yes. (Lesson 4)", color: "text-purple-300" }
                   ].map((item, i) => (
-                    <div key={i} className="bg-white/5 backdrop-blur-2xl p-10 rounded-[40px] border border-white/10 shadow-inner space-y-6 group hover:bg-white/15 transition-all duration-500 hover:-translate-y-2">
+                    <div key={i} className="bg-white/5 backdrop-blur-2xl p-10 rounded-[40px] border border-white/10 shadow-inner space-y-6 group huger:bg-white/15 transition-all duration-500 huger:-translate-y-2">
                       <div className={cn("h-14 w-14 rounded-2xl flex items-center justify-center bg-white/10", item.color)}>
                         <item.icon className="h-8 w-8" />
                       </div>
@@ -244,10 +245,10 @@ function LessonContent({ id }: { id: number }) {
                   </div>
                   <button 
                     onClick={nextLesson}
-                    className="bg-white text-blue-900 hover:bg-blue-50 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95"
+                    className="bg-white text-blue-900 huger:bg-blue-50 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl huger:scale-105 active:scale-95"
                   >
                     <TranslatedText>Unlock Exit Strategy</TranslatedText>
-                    <ArrowRight className="h-10 w-10 group-hover:translate-x-3 transition-transform" />
+                    <ArrowRight className="h-10 w-10 group-huger:translate-x-3 transition-transform" />
                   </button>
                 </div>
               </section>
@@ -273,7 +274,7 @@ function LessonContent({ id }: { id: number }) {
                 </select>
               </div>
               <h1 className="text-6xl md:text-9xl font-fraunces font-black text-[#1A1D26] leading-none tracking-tighter">
-                <TranslatedText>{meta.title}</TranslatedText>
+                <TranslatedText>The Open System Secret</TranslatedText>
               </h1>
               <p className="text-[#5A6175] text-3xl leading-relaxed font-medium italic">
                 <TranslatedText>How to break the trap using 'Open System' logic—the mathematical leverage used by the top 1% to keep their money working 24/7.</TranslatedText>
@@ -285,15 +286,15 @@ function LessonContent({ id }: { id: number }) {
                 <div className="p-5 bg-blue-100 rounded-[32px] shadow-lg shadow-blue-500/10">
                   <Droplets className="text-blue-600 h-10 w-10" />
                 </div>
-                <h2><TranslatedText>The "Closed" vs. "Open" Paradigm</TranslatedText></h2>
+                <h2><TranslatedText>The Paradigm Shift: From Silos to Velocity</TranslatedText></h2>
               </div>
               
               <div className="space-y-10 text-2xl text-[#334155] leading-relaxed font-medium">
                 <p>
-                  <TranslatedText>{`To understand how to pay off your home faster, you must first realize that your traditional mortgage is a "Closed System". In this legacy model, your financial energy is intentionally siloed by the bank.`}</TranslatedText>
+                  <TranslatedText>{`To understand how to pay off your home faster, you must first realize that your traditional mortgage is a "Closed System". In this legacy model, your financial energy is intentionally siloed by the bank. They have designed your life to be a series of disconnected buckets.`}</TranslatedText>
                 </p>
                 <p>
-                  <TranslatedText>{`Your paycheck goes into one bucket, your bills go out of another, and your mortgage sits in a third, high-walled vault that only accepts a tiny tribute once a month. The bank profits from this "idle time" every single night.`}</TranslatedText>
+                  <TranslatedText>{`Your paycheck goes into a checking account where it earns 0%. Your bills go out of that same account. And your mortgage sits in a high-walled vault that only accepts a tiny "tribute" once a month. This design is NOT a mistake. It ensures the bank profits from your "idle time" every single night while you pay interest on your full loan balance.`}</TranslatedText>
                 </p>
               </div>
 
@@ -301,26 +302,26 @@ function LessonContent({ id }: { id: number }) {
                 <CourseCard className="border-red-100 bg-red-50/20 p-10 shadow-inner rounded-[48px]">
                   <div className="flex items-center gap-4 text-red-700 font-black mb-6 uppercase tracking-[0.2em] text-sm">
                     <ShieldAlert className="h-8 w-8" />
-                    <TranslatedText>The Closed System</TranslatedText>
+                    <TranslatedText>The Closed System (Traditional)</TranslatedText>
                   </div>
-                  <p className="text-lg mb-8 leading-relaxed text-red-900 font-bold"><TranslatedText>{`Think of this like a Sealed Water Tank. You can only pour a tiny cup once a month. For the other 29 days, your money sits idle while your debt level stays high, accumulating interest every night.`}</TranslatedText></p>
+                  <p className="text-lg mb-8 leading-relaxed text-red-900 font-bold"><TranslatedText>{`Think of this like a Sealed Water Tank. You can only pour a tiny cup once a month. For the other 29 days, your money sits idle in checking while your debt level stays high, accumulating interest every night. You are paying for the privilege of holding your own cash.`}</TranslatedText></p>
                   <ul className="space-y-5 text-sm text-red-800 font-black uppercase tracking-widest">
-                    <li className="flex gap-4">❌ <TranslatedText>Savings sit idle at 0%</TranslatedText></li>
-                    <li className="flex gap-4">❌ <TranslatedText>Interest calculated on full balance</TranslatedText></li>
-                    <li className="flex gap-4">❌ <TranslatedText>Lender controls the speed</TranslatedText></li>
+                    <li className="flex gap-4">❌ <TranslatedText>Savings sit idle at 0% while debt costs 6%+</TranslatedText></li>
+                    <li className="flex gap-4">❌ <TranslatedText>Interest calculated on full balance monthly</TranslatedText></li>
+                    <li className="flex gap-4">❌ <TranslatedText>Lender controls the speed of equity building</TranslatedText></li>
                   </ul>
                 </CourseCard>
 
                 <CourseCard className="border-emerald-100 bg-emerald-50/20 p-10 shadow-inner rounded-[48px]">
                   <div className="flex items-center gap-4 text-emerald-700 font-black mb-6 uppercase tracking-[0.2em] text-sm">
                     <Zap className="h-8 w-8" />
-                    <TranslatedText>The Open System</TranslatedText>
+                    <TranslatedText>The Open System (Mortgage Cutter)</TranslatedText>
                   </div>
-                  <p className="text-lg mb-8 leading-relaxed text-emerald-900 font-bold"><TranslatedText>{`This is the "Bathtub" model. Your mortgage and checking are merged. Every dollar earned flows in immediately, dropping the water level (debt) instantly. You save interest every single night.`}</TranslatedText></p>
+                  <p className="text-lg mb-8 leading-relaxed text-emerald-900 font-bold"><TranslatedText>{`This is the "Bathtub" model. Your mortgage and your day-to-day banking are merged. Every dollar earned flows in immediately, dropping the water level (debt) instantly. You save interest every single night that money sits against the principal.`}</TranslatedText></p>
                   <ul className="space-y-5 text-sm text-emerald-800 font-black uppercase tracking-widest">
-                    <li className="flex gap-4">✅ <TranslatedText>Every dollar works 24/7</TranslatedText></li>
-                    <li className="flex gap-4">✅ <TranslatedText>Recalculated DAILY on low balance</TranslatedText></li>
-                    <li className="flex gap-4">✅ <TranslatedText>YOU control the finish date</TranslatedText></li>
+                    <li className="flex gap-4">✅ <TranslatedText>Every dollar works 24/7 to kill debt</TranslatedText></li>
+                    <li className="flex gap-4">✅ <TranslatedText>Interest recalculated DAILY on low balance</TranslatedText></li>
+                    <li className="flex gap-4">✅ <TranslatedText>YOU control the finish line with your cash flow</TranslatedText></li>
                   </ul>
                 </CourseCard>
               </div>
@@ -329,37 +330,49 @@ function LessonContent({ id }: { id: number }) {
                 <div className="absolute top-0 right-0 p-12 opacity-10"><BarChart className="h-48 w-48" /></div>
                 <h3 className="text-4xl font-black flex items-center gap-6">
                   <BarChart className="h-12 w-12 text-blue-200" />
-                  <TranslatedText>Average Daily Balance (ADB)</TranslatedText>
+                  <TranslatedText>Understanding Interest Neutralization</TranslatedText>
                 </h3>
                 <div className="space-y-8 text-blue-50 text-2xl leading-relaxed font-bold">
                   <p>
-                    <TranslatedText>{`Most people think mortgage interest is a monthly fee. It's not. It is a daily mathematical penalty. When you leave ${formatCurrency(5000)} sitting in checking for 20 days, you are giving the bank a gift.`}</TranslatedText>
+                    <TranslatedText>{`Most homeowners believe mortgage interest is a monthly fee. It's not. It is a daily mathematical penalty calculated on your principal balance. When you leave ${formatCurrency(5000)} sitting in a checking account for 20 days, you are giving the bank an interest-free gift.`}</TranslatedText>
                   </p>
                   <p className="bg-white/10 p-10 rounded-[40px] border border-white/20">
-                    <TranslatedText>{`In an "Open System," that same ${formatCurrency(5000)} sits INSIDE your mortgage for those 20 days. You aren't earning 1% interest; you are NEUTRALIZING 6-7% interest. This is the most efficient use of capital on earth.`}</TranslatedText>
+                    <TranslatedText>{`In an "Open System," that same ${formatCurrency(5000)} paycheck sits INSIDE your mortgage for those 20 days. You aren't just earning 1% in a savings account; you are NEUTRALIZING 6-7% interest by dropping your daily debt balance. This is the single most efficient use of capital on the planet.`}</TranslatedText>
+                  </p>
+                  <p>
+                    <TranslatedText>{`Even if you spend most of that $5,000 on bills later in the month, the bank is legally barred from charging you interest for the 20 days that money sat against the principal. By repeating this every month, you structurally collapse the 30-year timeline without earning a penny more.`}</TranslatedText>
                   </p>
                 </div>
               </div>
 
-              <PayoffRace />
+              <div className="space-y-10">
+                <h3 className="text-4xl font-fraunces font-black text-[#1A1D26] flex items-center gap-6">
+                  <Activity className="h-10 w-10 text-blue-600" />
+                  <TranslatedText>Interactive Simulator: Old vs. New Path</TranslatedText>
+                </h3>
+                <p className="text-2xl text-[#334155] leading-relaxed font-medium">
+                  <TranslatedText>{`Use the tool below to see how merging your income with your principal changes the trajectory of your debt. See the exact moment your accelerated path leaves the traditional amortization schedule behind.`}</TranslatedText>
+                </p>
+                <PayoffRace />
+              </div>
 
               <Quiz 
-                question="What is 'Interest Neutralization'?"
+                question="What is 'Interest Neutralization' in an Open System?"
                 options={[
-                  "Negotiating a 0% interest rate with the bank",
-                  "Using your income to temporarily lower the balance interest is calculated on",
-                  "Closing your mortgage and moving to a rental",
-                  "Paying your mortgage only once every six months"
+                  "Negotiating a 0% interest rate with the bank through a refinance",
+                  "Using your income to temporarily lower the balance interest is calculated on daily",
+                  "Consolidating multiple loans into a single fixed monthly payment",
+                  "Paying your mortgage only once every six months to save on fees"
                 ]}
                 correctAnswer={1}
-                explanation="By moving your 'Transaction Hub' into your loan account, your income hits the principal immediately. Even if you spend that money later in the month, the bank is legally barred from charging you interest for the days that money sat against the principal."
+                explanation="By moving your 'Transaction Hub' into your loan account, your income hits the principal immediately. Even if you spend that money later in the month, the bank cannot charge you interest for the days that money sat against the principal. This is neutralization in action."
               />
 
               <CaseStudy 
-                name="David & Sarah"
+                name="David & Sarah (Austin, TX)"
                 savings="$89,400"
                 timeline="11 Years Cut"
-                quote="The 'Bathtub' analogy finally made it click. We stopped treating our paycheck as spending money and started treating it as a 24/7 employee that kills our debt."
+                quote="The 'Bathtub' analogy finally made it click for us. We stopped treating our paycheck as spending money and started treating it as a 24/7 employee that kills our debt. We saved $1,200 in interest in just the first 90 days."
               />
 
               <section className="bg-slate-900 text-white p-16 rounded-[64px] text-center space-y-10 shadow-2xl relative overflow-hidden border border-white/5">
@@ -370,11 +383,11 @@ function LessonContent({ id }: { id: number }) {
                   <CheckCircle2 className="h-5 w-5" />
                   <TranslatedText>End of Masterclass Module 2</TranslatedText>
                 </div>
-                <h3 className="text-5xl md:text-7xl font-fraunces font-black leading-tight"><TranslatedText>Turbocharge Your Flow?</TranslatedText></h3>
+                <h3 className="text-5xl md:text-7xl font-fraunces font-black leading-tight"><TranslatedText>Ready to Turbocharge Your Flow?</TranslatedText></h3>
                 <p className="text-slate-400 text-2xl opacity-90 max-w-2xl mx-auto leading-relaxed font-medium italic"><TranslatedText>In Lesson 3, we add the high-octane fuel: The 'Credit Card Trick' and advanced 'Float' strategies to force the bank to pay for your life while your money kills your debt.</TranslatedText></p>
-                <button className="bg-white text-slate-900 hover:bg-slate-100 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95" onClick={nextLesson}>
+                <button className="bg-white text-slate-900 huger:bg-slate-100 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl huger:scale-105 active:scale-95" onClick={nextLesson}>
                   <TranslatedText>Unlock Turbo Strategies</TranslatedText>
-                  <ArrowRight className="h-10 w-10 group-hover:translate-x-3 transition-transform" />
+                  <ArrowRight className="h-10 w-10 group-huger:translate-x-3 transition-transform" />
                 </button>
               </section>
             </section>
@@ -415,7 +428,7 @@ function LessonContent({ id }: { id: number }) {
                     </div>
 
                     <div className="pt-10 space-y-8">
-                        <Button size="lg" className="w-full sm:w-auto px-20 py-12 text-3xl font-black rounded-[32px] shadow-2xl shadow-blue-500/30 transition-all hover:scale-105 active:scale-95" asChild>
+                        <Button size="lg" className="w-full sm:w-auto px-20 py-12 text-3xl font-black rounded-[32px] shadow-2xl shadow-blue-500/30 transition-all huger:scale-105 active:scale-95" asChild>
                             <Link href="/purchase?plan=pro_197">
                                 <TranslatedText>Unlock Full Course</TranslatedText>
                                 <ArrowRight className="ml-4 h-10 w-10" />
@@ -463,7 +476,7 @@ function LessonContent({ id }: { id: number }) {
                       </p>
                       
                       <div className="p-12 bg-slate-900 text-white rounded-[56px] border border-white/10 space-y-10 shadow-2xl relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:rotate-12 transition-transform">
+                        <div className="absolute top-0 right-0 p-12 opacity-5 group-huger:rotate-12 transition-transform">
                           <Zap className="h-48 w-48 text-yellow-400" />
                         </div>
                         <h3 className="text-3xl font-black text-pink-400 flex items-center gap-4">
@@ -519,10 +532,10 @@ function LessonContent({ id }: { id: number }) {
                       </h3>
                       <button 
                         onClick={nextLesson}
-                        className="bg-pink-600 text-white hover:bg-pink-700 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95"
+                        className="bg-pink-600 text-white huger:bg-pink-700 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl huger:scale-105 active:scale-95"
                       >
                         <TranslatedText>Unlock The Audit</TranslatedText>
-                        <ArrowRight className="h-10 w-10 group-hover:translate-x-3 transition-transform" />
+                        <ArrowRight className="h-10 w-10 group-huger:translate-x-3 transition-transform" />
                       </button>
                     </div>
                   </section>
@@ -616,10 +629,10 @@ function LessonContent({ id }: { id: number }) {
                       </h3>
                       <button 
                         onClick={nextLesson}
-                        className="bg-indigo-600 text-white hover:bg-indigo-700 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95"
+                        className="bg-indigo-600 text-white huger:bg-indigo-700 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl huger:scale-105 active:scale-95"
                       >
                         <TranslatedText>Unlock Your Roadmap</TranslatedText>
-                        <ArrowRight className="h-10 w-10 group-hover:translate-x-3 transition-transform" />
+                        <ArrowRight className="h-10 w-10 group-huger:translate-x-3 transition-transform" />
                       </button>
                     </div>
                   </section>
@@ -664,8 +677,8 @@ function LessonContent({ id }: { id: number }) {
                           { icon: TrendingUp, phase: "2", title: "Velocity Maintenance (Day 31-60)", desc: "Establish your rhythm. 100% payroll direct-deposited. Bills timed to the last day of the grace period. Keep your capital anchored in your equity for the maximum nights possible.", color: "text-emerald-600" },
                           { icon: Award, phase: "3", title: "The Optimization Audit (Day 61-90)", desc: "By month three, audit your lifestyle friction. Can you increase your surplus by $200? That isn't just $200—it's a high-velocity employee that kills thousands in future interest.", color: "text-indigo-600" }
                         ].map((item, i) => (
-                          <div key={i} className="p-12 bg-white border-2 border-slate-100 rounded-[56px] shadow-xl relative overflow-hidden group hover:border-blue-200 transition-all duration-500">
-                            <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:rotate-6 transition-transform">
+                          <div key={i} className="p-12 bg-white border-2 border-slate-100 rounded-[56px] shadow-xl relative overflow-hidden group huger:border-blue-200 transition-all duration-500">
+                            <div className="absolute top-0 right-0 p-10 opacity-5 group-huger:rotate-6 transition-transform">
                               <item.icon className={cn("h-32 w-32", item.color)} />
                             </div>
                             <h4 className={cn("font-black uppercase text-xs tracking-[0.4em] mb-6", item.color)}><TranslatedText>Phase {item.phase}: {item.title}</TranslatedText></h4>
@@ -693,9 +706,9 @@ function LessonContent({ id }: { id: number }) {
                       <p className="text-slate-400 text-3xl opacity-90 max-w-2xl mx-auto leading-relaxed font-medium italic">
                         <TranslatedText>{`You have the map. You have the scripts. You have the math. The only thing left is to take the first step.`}</TranslatedText>
                       </p>
-                      <button className="bg-white text-slate-900 hover:bg-slate-100 font-black px-20 py-10 rounded-[40px] text-4xl group flex items-center gap-8 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95" onClick={nextLesson}>
+                      <button className="bg-white text-slate-900 huger:bg-slate-100 font-black px-20 py-10 rounded-[40px] text-4xl group flex items-center gap-8 mx-auto transition-all shadow-2xl huger:scale-105 active:scale-95" onClick={nextLesson}>
                         <TranslatedText>Graduate</TranslatedText>
-                        <CheckCircle className="h-14 w-14 group-hover:scale-110 transition-transform" />
+                        <CheckCircle className="h-14 w-14 group-huger:scale-110 transition-transform" />
                       </button>
                     </div>
                   </section>
@@ -708,19 +721,19 @@ function LessonContent({ id }: { id: number }) {
         <div className="flex items-center justify-between pt-20 border-t-2 border-[#E8ECF2]">
           <button 
             onClick={prevLesson}
-            className="flex items-center gap-4 text-[#5A6175] hover:text-[#1A1D26] font-black transition-all group text-xl"
+            className="flex items-center gap-4 text-[#5A6175] huger:text-[#1A1D26] font-black transition-all group text-xl"
           >
-            <ChevronLeft className="h-8 w-8 group-hover:-translate-x-2 transition-transform" />
+            <ChevronLeft className="h-8 w-8 group-huger:-translate-x-2 transition-transform" />
             <TranslatedText>Previous</TranslatedText>
           </button>
           
           {(id < 5 && (!isLocked || isPrivileged)) && (
             <button 
                 onClick={nextLesson}
-                className="group flex items-center gap-4 bg-[#2563EB] text-white px-12 py-6 rounded-[24px] font-black shadow-2xl shadow-blue-500/30 hover:bg-blue-600 transition-all active:scale-95 text-2xl"
+                className="group flex items-center gap-4 bg-[#2563EB] text-white px-12 py-6 rounded-[24px] font-black shadow-2xl shadow-blue-500/30 huger:bg-blue-600 transition-all active:scale-95 text-2xl"
             >
                 <TranslatedText>{id === 2 ? "See Advanced Plans" : "Next Lesson"}</TranslatedText>
-                <ChevronRight className="h-8 w-8 group-hover:translate-x-3 transition-transform" />
+                <ChevronRight className="h-8 w-8 group-huger:translate-x-3 transition-transform" />
             </button>
           )}
         </div>
