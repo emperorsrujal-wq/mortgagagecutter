@@ -4,7 +4,7 @@ import React, { use, useState, useEffect } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
 import { lessonMeta } from '@/lib/course/lesson-meta';
 import { languages } from '@/lib/course/translations';
-import { InterestCalc, AmortViz, PayoffRace, TruthCalculator, QualificationCalc, ScriptGenerator, BankRateChart, ContractSimulator } from '@/components/course/Calculators';
+import { InterestCalc, AmortViz, PayoffRace, TruthCalculator, QualificationCalc, ScriptGenerator, BankRateChart, ContractSimulator, AutomationSimulator } from '@/components/course/Calculators';
 import { CourseCard, InfoBox, ExpandSection, StatBox, ChatBubble, TaskItem, CaseStudy, Quiz } from '@/components/course/UIComponents';
 import { TranslatedText } from '@/components/course/TranslatedText';
 import { cn } from '@/lib/utils';
@@ -59,7 +59,10 @@ import {
   FileSearch,
   ScrollText,
   Gavel,
-  ShieldX
+  ShieldX,
+  RefreshCcw,
+  MousePointer2,
+  Layers
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -596,7 +599,7 @@ function LessonContent({ id }: { id: number }) {
         )}
 
         {id === 5 && (
-          <div className="space-y-20 animate-in fade-in duration-700">
+          <div className="space-y-24 animate-in fade-in duration-1000">
             {isLocked ? (
               <section className="bg-white p-20 rounded-[80px] border-4 border-dashed border-slate-200 text-center space-y-12 shadow-inner">
                   <div className="bg-amber-100 w-40 h-40 rounded-full flex items-center justify-center mx-auto shadow-2xl shadow-amber-500/20 border-4 border-white">
@@ -639,26 +642,127 @@ function LessonContent({ id }: { id: number }) {
               </section>
             ) : (
               <div className="space-y-24">
-                <header className="p-16 bg-slate-900 text-white rounded-[64px] shadow-2xl relative overflow-hidden border-4 border-slate-800">
-                  <div className="absolute top-0 right-0 p-12 opacity-20">
-                    <History className="h-48 w-48" />
+                <header className="space-y-10 text-center">
+                  <div className="inline-flex items-center gap-2 px-6 py-2 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-emerald-200 shadow-sm">
+                    <RefreshCcw className="h-4 w-4" />
+                    <TranslatedText>Step 5: Statement Automation</TranslatedText>
                   </div>
-                  <div className="relative z-10 space-y-6">
-                    <div className="flex items-center gap-4 text-xs font-black uppercase tracking-[0.4em] opacity-80 mb-4 text-blue-400">
-                      <Award className="h-6 w-6" /> <TranslatedText>Final Module: Execution</TranslatedText>
-                    </div>
-                    <h1 className="text-6xl md:text-8xl font-fraunces font-black leading-none tracking-tight text-white">
-                      <TranslatedText>The Action Plan</TranslatedText>
-                    </h1>
-                    <p className="mt-8 text-2xl opacity-90 leading-relaxed font-bold max-w-2xl italic text-slate-300">
-                      <TranslatedText>{`How to transition from Defense to Offense. We build the 90-day liquidation engine together.`}</TranslatedText>
-                    </p>
-                  </div>
+                  <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                    <TranslatedText>{`Review Daily:`}</TranslatedText>
+                    <span className="block text-emerald-600 italic mt-4"><TranslatedText>Principal Down, Interest Dead.</TranslatedText></span>
+                  </h1>
+                  <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                    <TranslatedText>{`The final gear in the machine is timing. We automate your income to hit Day 1 and your bills to stay in your pocket until Day 25.`}</TranslatedText>
+                  </p>
                 </header>
-                <div className="text-center p-20 border-4 border-dashed border-slate-200 rounded-[64px]">
-                   <Construction className="h-16 w-16 mx-auto text-slate-300 mb-4" />
-                   <p className="text-slate-400 font-bold uppercase tracking-widest">Finalizing Pro Execution Blueprint...</p>
-                </div>
+
+                <section className="space-y-24">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div className="space-y-8">
+                      <h2 className="text-4xl font-fraunces font-black text-slate-900 tracking-tight"><TranslatedText>The Billing Archetypes</TranslatedText></h2>
+                      <div className="space-y-4">
+                        {[
+                          { title: "Sweep Automation", icon: <MousePointer2 className="h-5 w-5" />, desc: country.name === 'USA' ? "Preferred method. Automatically moves excess cash to principal daily." : "Automatically offsets savings against debt." },
+                          { title: "Manual Check-In", icon: <RefreshCcw className="h-5 w-5" />, desc: "Weekly transfers ensuring no dollar sits idle in a zero-interest checking bucket." },
+                          { title: "Hyperdrive Injection", icon: <Zap className="h-5 w-5" />, desc: "Adding small, consistent surplus principal to collapse the outer years of the loan." }
+                        ].map((item, i) => (
+                          <div key={i} className="flex gap-4 p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-shadow">
+                            <div className="h-10 w-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 mt-1">
+                              {item.icon}
+                            </div>
+                            <div>
+                              <h4 className="font-black text-lg text-slate-900">{item.title}</h4>
+                              <p className="text-slate-500 font-medium">{item.desc}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="bg-slate-900 rounded-[56px] p-10 shadow-2xl relative overflow-hidden text-center">
+                      <div className="absolute top-0 right-0 p-8 opacity-10"><Layers className="h-48 w-48" /></div>
+                      <h3 className="text-white font-black text-xl mb-2 relative z-10"><TranslatedText>The Statement Reality</TranslatedText></h3>
+                      <p className="text-slate-400 text-sm mb-6 relative z-10"><TranslatedText>Watch how interest charges vanish when balance drops on Day 1.</TranslatedText></p>
+                      <div className="p-6 bg-white/5 rounded-3xl border border-white/10 text-left space-y-4 relative z-10">
+                        <div className="flex justify-between text-[10px] font-black uppercase text-blue-400 tracking-widest"><span>Statement Audit</span><span>July 2024</span></div>
+                        <div className="flex justify-between text-white font-mono text-sm"><span>Daily Balance Avg:</span> <span className="text-emerald-400">$242,100</span></div>
+                        <div className="flex justify-between text-white font-mono text-sm"><span>Interest Charged:</span> <span className="text-red-400">$1,311</span></div>
+                        <div className="flex justify-between text-white font-mono text-sm"><span>Principal Gain:</span> <span className="text-emerald-400">+$2,400</span></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-10">
+                    <div className="flex items-center gap-4">
+                      <div className="h-12 w-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-600">
+                        <TrendingUp className="h-6 w-6" />
+                      </div>
+                      <h2 className="text-4xl font-fraunces font-black text-[#1A1D26] tracking-tight"><TranslatedText>Cash-Flow Velocity Simulator</TranslatedText></h2>
+                    </div>
+                    <AutomationSimulator />
+                  </div>
+
+                  <Quiz 
+                    question={`If you get a bonus check, where should it sit while you wait for a bill due next month?`}
+                    options={[
+                      "In your high-yield savings account to earn 4%",
+                      "Inside your First-Lien HELOC/Offset to save 7%",
+                      "In your checking account for easy access",
+                      "In a short-term CD"
+                    ]}
+                    correctAnswer={1}
+                    explanation={`Always inside the HELOC. Saving 7% in interest cost is mathematically identical to EARNING 7% tax-free. No savings account can beat the daily neutralization of your largest debt.`}
+                  />
+
+                  <div className="p-12 md:p-16 bg-emerald-50 border-4 border-emerald-100 rounded-[64px] space-y-10">
+                    <div className="flex items-center gap-4">
+                      <div className="h-14 w-14 rounded-full bg-emerald-600 flex items-center justify-center text-white">
+                        <ShieldCheck className="h-8 w-8" />
+                      </div>
+                      <h2 className="text-4xl font-fraunces font-black text-slate-900 tracking-tight"><TranslatedText>The Offset Secrets</TranslatedText></h2>
+                    </div>
+                    <p className="text-2xl text-slate-600 leading-relaxed font-medium">
+                      <TranslatedText>{`By combining automation with the '30-Day Float' taught in Lesson 3, you create an structural multiplier. Homeowners using full automation typically reach their debt-free date 20% faster than those doing manual transfers.`}</TranslatedText>
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="bg-white p-8 rounded-3xl border border-emerald-200 shadow-sm space-y-4">
+                        <h4 className="font-black text-xs uppercase text-emerald-600 tracking-widest">Automation Rule #1</h4>
+                        <p className="text-sm text-slate-500 font-medium">Direct Deposit all primary income into the line of credit on Day 1 of the cycle.</p>
+                      </div>
+                      <div className="bg-white p-8 rounded-3xl border border-emerald-200 shadow-sm space-y-4">
+                        <h4 className="font-black text-xs uppercase text-emerald-600 tracking-widest">Automation Rule #2</h4>
+                        <p className="text-sm text-slate-500 font-medium">Schedule all fixed bills for the LAST possible day of the grace period.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <section className="bg-gradient-to-br from-slate-900 to-emerald-950 p-16 md:p-20 rounded-[80px] border border-white/10 shadow-2xl space-y-16">
+                    <div className="text-center space-y-8">
+                      <div className="bg-white/20 w-24 h-24 rounded-full flex items-center justify-center mx-auto backdrop-blur-xl mb-6 shadow-2xl">
+                        <Trophy className="h-12 w-12 text-yellow-400" />
+                      </div>
+                      <h2 className="text-5xl md:text-7xl font-fraunces font-black text-white leading-tight">
+                        <TranslatedText>Graduation: Launch Your Plan</TranslatedText>
+                      </h2>
+                      <p className="text-emerald-100 text-2xl max-w-2xl mx-auto leading-relaxed font-medium">
+                        <TranslatedText>{`You have the knowledge. You have the scripts. Now, use the Savings Estimator to build your final 90-day liquidation roadmap.`}</TranslatedText>
+                      </p>
+                    </div>
+
+                    <div className="pt-16 border-t border-white/10 text-center space-y-10">
+                      <div className="flex items-center justify-center gap-4 text-yellow-400 font-black uppercase text-sm tracking-[0.4em]">
+                        <Award className="h-6 w-6" />
+                        <TranslatedText>Masterclass Complete</TranslatedText>
+                      </div>
+                      <button 
+                        onClick={nextLesson}
+                        className="bg-white text-emerald-900 hover:bg-emerald-50 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95"
+                      >
+                        <TranslatedText>Get My Savings Blueprint</TranslatedText>
+                        <ArrowRight className="h-10 w-10 group-hover:translate-x-3 transition-transform" />
+                      </button>
+                    </div>
+                  </section>
+                </section>
               </div>
             )}
           </div>

@@ -8,7 +8,8 @@ import {
   Calendar, Timer, History, ShieldAlert, BarChart, Scale, ShieldCheck, 
   Target, Award, CheckCircle, Calculator, HeartPulse, Sparkles,
   MessageSquare, UserCircle2, ChevronRight, Download, FileSearch,
-  Gavel, ScrollText, SearchCode, ListChecks
+  Gavel, ScrollText, SearchCode, ListChecks, ArrowUpRight, Activity,
+  Layers, MousePointer2, RefreshCcw
 } from 'lucide-react';
 import { TranslatedText } from './TranslatedText';
 import { cn } from '@/lib/utils';
@@ -34,6 +35,166 @@ function ConfettiBurst() {
           }} 
         />
       ))}
+    </div>
+  );
+}
+
+export function AutomationSimulator() {
+  const { country } = useCourse();
+  const [income, setIncome] = useState(6000);
+  const [bills, setBills] = useState(4000);
+  const [hyperdrive, setHyperdrive] = useState(false);
+  const [balance, setBalance] = useState(250000);
+
+  const hyperAmount = hyperdrive ? 500 : 0;
+  const rate = country.avgRate / 100;
+  const dailyRate = rate / 365;
+
+  const data = useMemo(() => {
+    let currentBal = balance;
+    const series = [];
+    const days = 30;
+    
+    // Day 1: Paycheck hits
+    currentBal -= (income + hyperAmount);
+    
+    for (let d = 1; d <= days; d++) {
+      // Mid-month bills
+      if (d === 15) currentBal += bills;
+      
+      const dayInterest = currentBal * dailyRate;
+      series.push({
+        day: d,
+        balance: Math.max(0, currentBal),
+        interest: dayInterest
+      });
+    }
+    return series;
+  }, [income, bills, hyperdrive, balance, dailyRate, hyperAmount]);
+
+  const totalInt = data.reduce((sum, d) => sum + d.interest, 0);
+  const traditionalInt = (balance * (rate / 12));
+  const savings = traditionalInt - totalInt;
+
+  const fmt = (val: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: country.currency, maximumFractionDigits: 0 }).format(val);
+
+  return (
+    <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="lg:col-span-7 space-y-6">
+          <CourseCard title="⚙️ Velocity Parameters" className="bg-white border-2 border-slate-100 shadow-xl rounded-[40px] p-10">
+            <div className="space-y-10">
+              <div className="space-y-6">
+                <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">
+                  <span>Net Monthly Income</span>
+                  <span className="text-emerald-600">{fmt(income)}</span>
+                </div>
+                <input type="range" min="2000" max="15000" step="100" value={income} onChange={e => setIncome(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-emerald-600" />
+              </div>
+
+              <div className="space-y-6">
+                <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">
+                  <span>Monthly Expenses (All)</span>
+                  <span className="text-red-600">{fmt(bills)}</span>
+                </div>
+                <input type="range" min="1000" max="10000" step="100" value={bills} onChange={e => setBills(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-red-600" />
+              </div>
+
+              <div 
+                onClick={() => setHyperdrive(!hyperdrive)}
+                className={cn(
+                  "p-8 rounded-[32px] border-4 transition-all cursor-pointer group flex items-center justify-between",
+                  hyperdrive ? "bg-blue-600 border-blue-400 shadow-2xl shadow-blue-500/40" : "bg-slate-50 border-slate-100 border-dashed hover:border-blue-200"
+                )}
+              >
+                <div className="flex items-center gap-6">
+                  <div className={cn("h-16 w-16 rounded-full flex items-center justify-center transition-all", hyperdrive ? "bg-white text-blue-600 scale-110" : "bg-white text-slate-300")}>
+                    <Zap className={cn("h-8 w-8", hyperdrive && "fill-blue-600")} />
+                  </div>
+                  <div>
+                    <h4 className={cn("text-xl font-black uppercase tracking-tight", hyperdrive ? "text-white" : "text-slate-900")}>Hyperdrive Mode</h4>
+                    <p className={cn("text-sm font-medium", hyperdrive ? "text-blue-100" : "text-slate-500")}>Apply additional {fmt(500)} principal monthly.</p>
+                  </div>
+                </div>
+                <div className={cn("w-14 h-8 rounded-full relative transition-all", hyperdrive ? "bg-blue-400" : "bg-slate-200")}>
+                  <div className={cn("absolute top-1 left-1 w-6 h-6 bg-white rounded-full transition-all shadow-md", hyperdrive ? "translate-x-6" : "translate-x-0")} />
+                </div>
+              </div>
+            </div>
+          </CourseCard>
+
+          <div className="bg-slate-900 rounded-[48px] p-10 shadow-2xl relative overflow-hidden">
+            <div className="flex justify-between items-center mb-8">
+              <div>
+                <h3 className="text-white font-black text-xl flex items-center gap-2">
+                  <Activity className="h-5 w-5 text-blue-400" /> The 30-Day Velocity Cycle
+                </h3>
+                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">Watch the principal bounce</p>
+              </div>
+              <div className="flex gap-4">
+                <div className="flex items-center gap-2 text-[10px] font-black uppercase text-blue-400"><span className="w-2 h-2 rounded-full bg-blue-500" /> Balance</div>
+              </div>
+            </div>
+            <div className="h-[250px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={data}>
+                  <defs>
+                    <linearGradient id="colorBal" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.2}/>
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1e293b" />
+                  <XAxis dataKey="day" hide />
+                  <YAxis hide domain={['dataMin - 1000', 'dataMax + 1000']} />
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '16px', color: '#fff' }}
+                    itemStyle={{ color: '#fff', fontWeight: 'bold' }}
+                    labelFormatter={(val) => `Day ${val}`}
+                  />
+                  <Area type="monotone" dataKey="balance" stroke="#3b82f6" fillOpacity={1} fill="url(#colorBal)" strokeWidth={4} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+
+        <div className="lg:col-span-5 space-y-6">
+          <div className="bg-white border-2 border-slate-100 rounded-[48px] p-10 shadow-2xl text-center space-y-10">
+            <div className="space-y-2">
+              <p className="text-[10px] font-black uppercase text-slate-400 tracking-[0.5em]">Monthly Interest Cost</p>
+              <h3 className="text-7xl font-black text-slate-900 tracking-tighter">{fmt(totalInt)}</h3>
+              <p className="text-sm font-bold text-slate-500 uppercase tracking-widest">Calculated Daily</p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-slate-50 p-6 rounded-[32px] border border-slate-100">
+                <p className="text-[10px] font-black uppercase text-slate-400 mb-1">Old Cost</p>
+                <p className="text-xl font-black text-red-600">{fmt(traditionalInt)}</p>
+              </div>
+              <div className="bg-emerald-50 p-6 rounded-[32px] border border-emerald-100">
+                <p className="text-[10px] font-black uppercase text-emerald-600 mb-1">Monthly Saved</p>
+                <p className="text-xl font-black text-emerald-700">+{fmt(savings)}</p>
+              </div>
+            </div>
+
+            <div className="pt-6 border-t border-slate-100">
+              <p className="text-lg font-bold text-slate-900 leading-tight">
+                <TranslatedText>{`By dropping the balance on Day 1, you effectively "choke" ${((savings/traditionalInt)*100).toFixed(0)}% of the interest before it even occurs.`}</TranslatedText>
+              </p>
+            </div>
+          </div>
+
+          <div className="p-8 bg-blue-50 border-2 border-blue-100 rounded-[32px] space-y-4">
+            <h4 className="flex items-center gap-2 font-black text-xs uppercase tracking-widest text-blue-700">
+              <RefreshCcw className="h-4 w-4" /> The Automation Edge
+            </h4>
+            <p className="text-sm text-blue-900/70 leading-relaxed font-medium">
+              <TranslatedText>{`In ${country.name}, ${country.productShort}s recalculate nightly. This simulator proves that your income isn't just "spent"—it's an employee working 24/7 to cancel the bank's math.`}</TranslatedText>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
