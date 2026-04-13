@@ -1,9 +1,8 @@
-
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useCourse } from './CourseProvider';
 import { CourseCard, StatBox } from './UIComponents';
-import { Play, Pause, RotateCcw, TrendingUp, DollarSign, Clock, Zap, AlertCircle, Calendar, Timer, History, ShieldAlert, BarChart, Scale } from 'lucide-react';
+import { Play, Pause, RotateCcw, TrendingUp, DollarSign, Clock, Zap, AlertCircle, Calendar, Timer, History, ShieldAlert, BarChart, Scale, ShieldCheck } from 'lucide-react';
 import { TranslatedText } from './TranslatedText';
 import { cn } from '@/lib/utils';
 
