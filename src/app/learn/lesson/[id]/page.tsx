@@ -1,4 +1,3 @@
-
 'use client';
 import React, { use, useState, useEffect } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
@@ -53,7 +52,8 @@ import {
   TrendingDown,
   Hammer,
   ShieldHalf,
-  Construction
+  Construction,
+  Calculator
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -410,8 +410,6 @@ function LessonContent({ id }: { id: number }) {
             )}
           </div>
         )}
-
-        {/* ... Rest of LessonContent for 4 and 5... */}
 
         <div className="flex items-center justify-between pt-20 border-t-2 border-[#E8ECF2]">
           <button 
