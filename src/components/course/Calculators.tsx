@@ -7,7 +7,8 @@ import {
   Play, Pause, RotateCcw, TrendingUp, DollarSign, Clock, Zap, AlertCircle, 
   Calendar, Timer, History, ShieldAlert, BarChart, Scale, ShieldCheck, 
   Target, Award, CheckCircle, Calculator, HeartPulse, Sparkles,
-  MessageSquare, UserCircle2, ChevronRight, Download
+  MessageSquare, UserCircle2, ChevronRight, Download, FileSearch,
+  Gavel, ScrollText, SearchCode, ListChecks
 } from 'lucide-react';
 import { TranslatedText } from './TranslatedText';
 import { cn } from '@/lib/utils';
@@ -33,6 +34,91 @@ function ConfettiBurst() {
           }} 
         />
       ))}
+    </div>
+  );
+}
+
+export function ContractSimulator() {
+  const { country } = useCourse();
+  const [rate, setRate] = useState(country.avgRate + 0.5);
+  const [limit, setLimit] = useState(250000);
+  const [closingCosts, setClosingCosts] = useState(1500);
+  const [annualFee, setAnnualFee] = useState(50);
+  const [drawYears, setDrawYears] = useState(10);
+
+  const trueApr = useMemo(() => {
+    const totalFees = closingCosts + (annualFee * drawYears);
+    const avgBal = limit * 0.5; // Assumes half-utilized on average
+    const feeImpact = (totalFees / drawYears) / avgBal * 100;
+    return rate + feeImpact;
+  }, [rate, limit, closingCosts, annualFee, drawYears]);
+
+  const fmt = (val: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: country.currency, maximumFractionDigits: 0 }).format(val);
+
+  return (
+    <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="lg:col-span-7 space-y-6">
+          <CourseCard title="📄 Contract Parameter Audit" className="bg-white border-2 border-slate-100 shadow-xl rounded-[40px] p-10">
+            <div className="space-y-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">
+                    <span>Stated APR</span>
+                    <span className="text-slate-900">{rate}%</span>
+                  </div>
+                  <input type="range" min="2" max="15" step="0.1" value={rate} onChange={e => setRate(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-blue-600" />
+                </div>
+                <div className="space-y-4">
+                  <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">
+                    <span>Credit Limit</span>
+                    <span className="text-slate-900">{fmt(limit)}</span>
+                  </div>
+                  <input type="range" min="10000" max="1000000" step="5000" value={limit} onChange={e => setLimit(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-blue-600" />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">
+                    <span>Closing Costs</span>
+                    <span className="text-red-600">{fmt(closingCosts)}</span>
+                  </div>
+                  <input type="range" min="0" max="5000" step="100" value={closingCosts} onChange={e => setClosingCosts(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-red-600" />
+                </div>
+                <div className="space-y-4">
+                  <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">
+                    <span>Annual Fee</span>
+                    <span className="text-red-600">{fmt(annualFee)}</span>
+                  </div>
+                  <input type="range" min="0" max="500" step="5" value={annualFee} onChange={e => setAnnualFee(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-red-600" />
+                </div>
+              </div>
+            </div>
+          </CourseCard>
+        </div>
+
+        <div className="lg:col-span-5">
+          <div className="bg-slate-900 text-white rounded-[48px] p-10 shadow-2xl relative overflow-hidden flex flex-col items-center justify-center text-center space-y-6 min-h-[400px]">
+            <div className="absolute top-0 right-0 p-8 opacity-5"><SearchCode className="h-48 w-48" /></div>
+            <div className="space-y-2 relative z-10">
+              <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">Real Effective APR</p>
+              <h3 className="text-8xl font-black tracking-tighter">{trueApr.toFixed(2)}%</h3>
+              <p className={cn(
+                "text-sm font-bold uppercase tracking-widest px-4 py-1 rounded-full",
+                trueApr <= rate + 0.5 ? "bg-emerald-500/20 text-emerald-400" : "bg-amber-500/20 text-amber-400"
+              )}>
+                {trueApr <= rate + 0.5 ? "Efficient Product" : "Fee-Heavy / Audit Fees"}
+              </p>
+            </div>
+            <div className="w-full pt-6 border-t border-white/10 relative z-10">
+              <p className="text-xs text-slate-400 font-medium italic">
+                <TranslatedText>{`In ${country.name}, ${country.regulatedBy} requires this 'True Cost' disclosure. Most banks hide it in the TIL or Disclosure Statement.`}</TranslatedText>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

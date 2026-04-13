@@ -4,7 +4,7 @@ import React, { use, useState, useEffect } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
 import { lessonMeta } from '@/lib/course/lesson-meta';
 import { languages } from '@/lib/course/translations';
-import { InterestCalc, AmortViz, PayoffRace, TruthCalculator, QualificationCalc, ScriptGenerator, BankRateChart } from '@/components/course/Calculators';
+import { InterestCalc, AmortViz, PayoffRace, TruthCalculator, QualificationCalc, ScriptGenerator, BankRateChart, ContractSimulator } from '@/components/course/Calculators';
 import { CourseCard, InfoBox, ExpandSection, StatBox, ChatBubble, TaskItem, CaseStudy, Quiz } from '@/components/course/UIComponents';
 import { TranslatedText } from '@/components/course/TranslatedText';
 import { cn } from '@/lib/utils';
@@ -55,7 +55,11 @@ import {
   ShieldHalf,
   Construction,
   Calculator,
-  ListChecks
+  ListChecks,
+  FileSearch,
+  ScrollText,
+  Gavel,
+  ShieldX
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -93,7 +97,7 @@ function LessonContent({ id }: { id: number }) {
   if (!meta) return <div>Lesson not found</div>;
 
   const isPrivileged = user?.email === 'emperorsrujal@gmail.com';
-  // Lock modules 4 and 5
+  // Module 4 & 5 are Premium
   const isLocked = id >= 4 && !isPrivileged;
 
   const nextLesson = () => {
@@ -115,7 +119,6 @@ function LessonContent({ id }: { id: number }) {
         
         {id === 1 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
-            {/* HERO SECTION */}
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-100 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-200">
                 <Landmark className="h-4 w-4" />
@@ -175,7 +178,6 @@ function LessonContent({ id }: { id: number }) {
                 explanation="Mortgages are 'One-Way' systems where interest is front-loaded on the full balance. An Open System (HELOC/Offset) calculates interest DAILY only on the money you actually owe after your paycheck hits. This is the structural arbitrage that saves thousands."
               />
 
-              {/* FINAL CTA */}
               <section className="bg-gradient-to-br from-blue-700 to-indigo-950 p-16 md:p-20 rounded-[80px] border border-white/10 shadow-2xl space-y-16">
                 <div className="text-center space-y-8">
                   <div className="bg-white/20 w-24 h-24 rounded-full flex items-center justify-center mx-auto backdrop-blur-xl mb-6 shadow-2xl">
@@ -209,7 +211,6 @@ function LessonContent({ id }: { id: number }) {
 
         {id === 2 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
-            {/* HERO SECTION */}
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-emerald-200 shadow-sm">
                 <CheckCircle2 className="h-4 w-4" />
@@ -224,53 +225,11 @@ function LessonContent({ id }: { id: number }) {
               <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
                 <TranslatedText>{`Before calling ${country.banks[0]}, you must audit your numbers like a lender. Most rejections are predictable — and fixable.`}</TranslatedText>
               </p>
-              <div className="pt-6">
-                <Button size="lg" className="bg-slate-900 hover:bg-black rounded-full font-black h-14 px-8 text-lg">
-                  <Lock className="mr-2 h-5 w-5 text-yellow-400" /> Unlock {country.name} Bank List
-                </Button>
-              </div>
             </header>
 
-            {/* DTI QUIZ SECTION */}
             <section className="space-y-16">
-              <div className="flex flex-col md:flex-row items-center gap-8">
-                <div className="flex-1 space-y-6">
-                  <div className="flex items-center gap-4">
-                    <div className="h-12 w-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600">
-                      <Calculator className="h-6 w-6" />
-                    </div>
-                    <h2 className="text-4xl font-fraunces font-black text-[#1A1D26]"><TranslatedText>The DTI Health Check</TranslatedText></h2>
-                  </div>
-                  <p className="text-xl text-slate-600 leading-relaxed font-medium">
-                    <TranslatedText>{`Lenders in ${country.name} care about one formula above all others: your Debt-to-Income (DTI) ratio. If this number is too high, your strategy is dead on arrival. Use the tool below to verify your standing.`}</TranslatedText>
-                  </p>
-                </div>
-                <div className="w-full md:w-80 bg-white p-8 rounded-[40px] border-4 border-slate-900 shadow-2xl space-y-6">
-                  <h4 className="text-center font-black uppercase text-[10px] tracking-widest text-slate-400"><TranslatedText>Regional Benchmarks</TranslatedText></h4>
-                  <div className="space-y-4">
-                    <div className="flex justify-between border-b pb-2">
-                      <span className="font-bold text-slate-600">USA PITIA</span>
-                      <span className="font-black text-blue-600">&lt; 43%</span>
-                    </div>
-                    <div className="flex justify-between border-b pb-2">
-                      <span className="font-bold text-slate-600">CAN TDS</span>
-                      <span className="font-black text-blue-600">&lt; 44%</span>
-                    </div>
-                    <div className="flex justify-between border-b pb-2">
-                      <span className="font-bold text-slate-600">UK Mult.</span>
-                      <span className="font-black text-blue-600">4.5x Inc</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-bold text-slate-600">AUS LVR</span>
-                      <span className="font-black text-blue-600">&lt; 90%</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               <QualificationCalc />
 
-              {/* HACKS SECTION */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-12">
                 <div className="space-y-8">
                   <div className="flex items-center gap-4 text-emerald-600">
@@ -315,7 +274,6 @@ function LessonContent({ id }: { id: number }) {
                 explanation={`In ${country.name}, 80% LTV is the 'Golden Rule'. While some credit unions might go higher, 80% ensures you avoid Private Mortgage Insurance (PMI) or LMI and qualifies you for the lowest rates.`}
               />
 
-              {/* FINAL CTA FOR LESSON 2 */}
               <section className="bg-gradient-to-br from-emerald-700 to-slate-950 p-16 md:p-20 rounded-[80px] border border-white/10 shadow-2xl space-y-16">
                 <div className="text-center space-y-8">
                   <div className="bg-white/20 w-24 h-24 rounded-full flex items-center justify-center mx-auto backdrop-blur-xl mb-6 shadow-2xl">
@@ -349,7 +307,6 @@ function LessonContent({ id }: { id: number }) {
 
         {id === 3 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
-            {/* HERO SECTION */}
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-100 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-200">
                 <Search className="h-4 w-4" />
@@ -394,7 +351,6 @@ function LessonContent({ id }: { id: number }) {
                 </div>
               </div>
 
-              {/* BANK GUIDE TEASER */}
               <div className="space-y-10">
                 <div className="flex items-center gap-4">
                   <div className="h-12 w-12 rounded-2xl bg-amber-100 flex items-center justify-center text-amber-600">
@@ -431,7 +387,6 @@ function LessonContent({ id }: { id: number }) {
                 </div>
               </div>
 
-              {/* SCRIPT GENERATOR */}
               <div className="space-y-10">
                 <div className="flex items-center gap-4">
                   <div className="h-12 w-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600">
@@ -439,25 +394,9 @@ function LessonContent({ id }: { id: number }) {
                   </div>
                   <h2 className="text-4xl font-fraunces font-black text-[#1A1D26] tracking-tight"><TranslatedText>The 'Private Wealth' Script</TranslatedText></h2>
                 </div>
-                <p className="text-xl text-slate-600 leading-relaxed font-medium max-w-2xl">
-                  <TranslatedText>{`Don't let a junior loan officer reject you. Use this specific framing to get transferred to the Portfolio Lending department at institutions like ${country.banks[0]}.`}</TranslatedText>
-                </p>
                 <ScriptGenerator />
               </div>
 
-              <Quiz 
-                question={`What is the 'Magic Phrase' to use when a banker tries to sell you a traditional amortized mortgage?`}
-                options={[
-                  "I'm actually looking for a higher interest rate, please",
-                  "I'm specifically seeking a 'Velocity-Compatible' Open Credit system with daily recalculation",
-                  "I want the one with the lowest monthly payment possible",
-                  "Can I speak to your manager about a credit card?"
-                ]}
-                correctAnswer={1}
-                explanation={`Using professional terminology like 'Daily Recalculation' and 'Open Credit System' signals to the bank that you are a high-net-worth strategist, not a retail consumer. This often triggers a transfer to the private wealth or portfolio lending desk.`}
-              />
-
-              {/* FINAL CTA */}
               <section className="bg-gradient-to-br from-blue-700 to-indigo-950 p-16 md:p-20 rounded-[80px] border border-white/10 shadow-2xl space-y-16">
                 <div className="text-center space-y-8">
                   <div className="bg-white/20 w-24 h-24 rounded-full flex items-center justify-center mx-auto backdrop-blur-xl mb-6 shadow-2xl">
@@ -489,7 +428,174 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {id >= 4 && (
+        {id === 4 && (
+          <div className="space-y-24 animate-in fade-in duration-1000">
+            {isLocked ? (
+              <section className="bg-white p-20 rounded-[80px] border-4 border-dashed border-slate-200 text-center space-y-12 shadow-inner">
+                  <div className="bg-amber-100 w-40 h-40 rounded-full flex items-center justify-center mx-auto shadow-2xl shadow-amber-500/20 border-4 border-white">
+                      <Lock className="h-20 w-14 text-amber-600" />
+                  </div>
+                  <div className="space-y-8">
+                      <h2 className="text-5xl md:text-7xl font-fraunces font-black text-slate-900 leading-tight tracking-tight">
+                          <TranslatedText>Premium Strategy: Locked</TranslatedText>
+                      </h2>
+                      <p className="text-slate-500 text-2xl max-w-xl mx-auto font-medium leading-relaxed italic">
+                          <TranslatedText>{`Lesson 4 and 5 contain the high-velocity execution blueprints and contract audit checklists reserved for our Pro Members. Join 39,000+ homeowners reclaiming their freedom.`}</TranslatedText>
+                      </p>
+                  </div>
+                  <div className="p-12 bg-slate-50 rounded-[48px] text-left space-y-8 max-w-xl mx-auto border-2 border-white shadow-xl">
+                      <h4 className="font-black text-xs uppercase tracking-[0.3em] text-slate-400 border-b border-slate-200 pb-4"><TranslatedText>The Pro Curriculum:</TranslatedText></h4>
+                      <ul className="space-y-6">
+                          <li className="flex items-start gap-5 text-xl font-bold text-slate-700">
+                              <Gem className="h-8 w-8 text-yellow-500 shrink-0 mt-0.5" />
+                              <span><TranslatedText>The Contract Autopsy: Spotting 'Reset' traps in bank paperwork.</TranslatedText></span>
+                          </li>
+                          <li className="flex items-start gap-5 text-xl font-bold text-slate-700">
+                              <Gem className="h-8 w-8 text-yellow-500 shrink-0 mt-0.5" />
+                              <span><TranslatedText>The 30-Day Float: Force the bank to pay your bills.</TranslatedText></span>
+                          </li>
+                          <li className="flex items-start gap-5 text-xl font-bold text-slate-700">
+                              <Gem className="h-8 w-8 text-yellow-500 shrink-0 mt-0.5" />
+                              <span><TranslatedText>The 90-Day Roadmap: Your step-by-step finish line.</TranslatedText></span>
+                          </li>
+                      </ul>
+                  </div>
+                  <div className="pt-10 space-y-8">
+                      <Button size="lg" className="w-full sm:w-auto px-20 py-12 text-3xl font-black rounded-[32px] shadow-2xl shadow-blue-500/30 transition-all hover:scale-105 active:scale-95" asChild>
+                          <Link href="/purchase?plan=pro_197">
+                              <TranslatedText>Unlock Pro Masterclass</TranslatedText>
+                              <ArrowRight className="ml-4 h-10 w-10" />
+                          </Link>
+                      </Button>
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.5em]"><TranslatedText>30-Day Money-Back Guarantee</TranslatedText></p>
+                  </div>
+              </section>
+            ) : (
+              <div className="space-y-24">
+                <header className="space-y-10 text-center">
+                  <div className="inline-flex items-center gap-2 px-6 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-white/10 shadow-xl">
+                    <FileSearch className="h-4 w-4 text-blue-400" />
+                    <TranslatedText>Step 4: The Contract Decoder</TranslatedText>
+                  </div>
+                  <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                    <TranslatedText>{`Spot the Traps:`}</TranslatedText>
+                    <span className="block text-blue-600 italic mt-4"><TranslatedText>Prepay Penalties & Rate Lock Clones.</TranslatedText></span>
+                  </h1>
+                  <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                    <TranslatedText>{`Most banks use "Standard Language" designed to freeze your credit line or reset your amortization if you pay off too fast. We audit every clause.`}</TranslatedText>
+                  </p>
+                </header>
+
+                <section className="space-y-24">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div className="space-y-8">
+                      <div className="flex items-center gap-4 text-red-600">
+                        <ShieldX className="h-10 w-10" />
+                        <h3 className="text-3xl font-fraunces font-black text-slate-900 uppercase tracking-tight"><TranslatedText>The TIP Scam (TIP 94%)</TranslatedText></h3>
+                      </div>
+                      <div className="space-y-6 text-lg text-slate-600 leading-relaxed font-medium">
+                        <p>
+                          <TranslatedText>{`In the ${country.name} Disclosure Statement, look for the 'Total Interest Percentage'. On a typical 30-year loan, this is often 94% or higher. This means you pay nearly double for your home.`}</TranslatedText>
+                        </p>
+                        <div className="p-8 bg-slate-900 text-white rounded-[40px] shadow-2xl space-y-4">
+                          <h4 className="font-black text-xs uppercase tracking-widest text-blue-400">Disclosure Audit</h4>
+                          <ul className="space-y-4">
+                            <li className="flex items-start gap-3">
+                              <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0 mt-1" />
+                              <span><TranslatedText>Verify the 'Draw Period' is exactly 120 months (10 years).</TranslatedText></span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                              <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0 mt-1" />
+                              <span><TranslatedText>Confirm 'Interest Only' payments during the draw phase.</TranslatedText></span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                              <AlertCircle className="h-5 w-5 text-amber-500 shrink-0 mt-1" />
+                              <span><TranslatedText>Scan for 'Prepayment Penalties' — usually hidden in the first 36 months.</TranslatedText></span>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-8">
+                      <div className="flex items-center gap-4 text-blue-600">
+                        <ScrollText className="h-10 w-10" />
+                        <h3 className="text-3xl font-fraunces font-black text-slate-900 uppercase tracking-tight"><TranslatedText>Effective Cost Simulation</TranslatedText></h3>
+                      </div>
+                      <ContractSimulator />
+                    </div>
+                  </div>
+
+                  <Quiz 
+                    question={`If a contract states a '3-Year Inactivity Fee' or 'Early Closure Fee', is it safe for our method?`}
+                    options={[
+                      "Yes, as long as I keep using the account daily",
+                      "No, because the speed of our payoff will trigger these penalties",
+                      "Yes, banks always waive these for VIP clients",
+                      "Only if the fee is under $100"
+                    ]}
+                    correctAnswer={1}
+                    explanation={`The Mortgage Cutter Method moves with such high velocity that you may actually clear the line within 3-5 years. Early closure fees act as a 'Exit Tax' that claw back your savings. We avoid any contract with a 'Tail' penalty.`}
+                  />
+
+                  <div className="p-12 md:p-16 bg-blue-50 border-4 border-blue-100 rounded-[64px] space-y-10">
+                    <div className="flex items-center gap-4">
+                      <div className="h-14 w-14 rounded-full bg-blue-600 flex items-center justify-center text-white">
+                        <Gavel className="h-8 w-8" />
+                      </div>
+                      <h2 className="text-4xl font-fraunces font-black text-slate-900 tracking-tight"><TranslatedText>The Title Company Secret</TranslatedText></h2>
+                    </div>
+                    <p className="text-2xl text-slate-600 leading-relaxed font-medium">
+                      <TranslatedText>{`Lenders often force their 'Preferred' title company on you. In ${country.name}, you have the legal right to choose your own. Using an independent company often reveals junk fees the lender added to the closing statement.`}</TranslatedText>
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      {[
+                        { title: "Review Period", desc: "Demand 48 hours to review the Final Closing Disclosure before signing." },
+                        { title: "Appraisal Credit", desc: "If you used an existing appraisal, demand a credit back for the lender's fee." },
+                        { title: "Escrow Waiver", desc: "Ensure you manage your own taxes/ins to keep that capital working inside the line." }
+                      ].map((tip, i) => (
+                        <div key={i} className="bg-white p-6 rounded-3xl border border-blue-200 shadow-sm">
+                          <h4 className="font-black text-sm text-blue-600 mb-2 uppercase tracking-widest">{tip.title}</h4>
+                          <p className="text-sm text-slate-500 font-medium leading-relaxed">{tip.desc}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <section className="bg-gradient-to-br from-slate-900 to-blue-950 p-16 md:p-20 rounded-[80px] border border-white/10 shadow-2xl space-y-16">
+                    <div className="text-center space-y-8">
+                      <div className="bg-white/20 w-24 h-24 rounded-full flex items-center justify-center mx-auto backdrop-blur-xl mb-6 shadow-2xl">
+                        <Sparkles className="h-12 w-12 text-yellow-400" />
+                      </div>
+                      <h2 className="text-5xl md:text-7xl font-fraunces font-black text-white leading-tight">
+                        <TranslatedText>Final Phase: Automation</TranslatedText>
+                      </h2>
+                      <p className="text-blue-100 text-2xl max-w-2xl mx-auto leading-relaxed font-medium">
+                        <TranslatedText>{`You have the loan. Now we build the machine. Lesson 5 reveals the exact timing schedules to force the bank to pay your bills.`}</TranslatedText>
+                      </p>
+                    </div>
+
+                    <div className="pt-16 border-t border-white/10 text-center space-y-10">
+                      <div className="flex items-center justify-center gap-4 text-yellow-400 font-black uppercase text-sm tracking-[0.4em]">
+                        <CheckCircle className="h-6 w-6" />
+                        <TranslatedText>End of Masterclass Module 4</TranslatedText>
+                      </div>
+                      <button 
+                        onClick={nextLesson}
+                        className="bg-white text-slate-900 hover:bg-slate-50 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95"
+                      >
+                        <TranslatedText>Lesson 5: The Action Plan</TranslatedText>
+                        <ArrowRight className="h-10 w-10 group-hover:translate-x-3 transition-transform" />
+                      </button>
+                    </div>
+                  </section>
+                </section>
+              </div>
+            )}
+          </div>
+        )}
+
+        {id === 5 && (
           <div className="space-y-20 animate-in fade-in duration-700">
             {isLocked ? (
               <section className="bg-white p-20 rounded-[80px] border-4 border-dashed border-slate-200 text-center space-y-12 shadow-inner">
@@ -532,28 +638,26 @@ function LessonContent({ id }: { id: number }) {
                   </div>
               </section>
             ) : (
-              <div className="space-y-20">
-                {/* Advanced content for Lesson 4/5 */}
+              <div className="space-y-24">
                 <header className="p-16 bg-slate-900 text-white rounded-[64px] shadow-2xl relative overflow-hidden border-4 border-slate-800">
                   <div className="absolute top-0 right-0 p-12 opacity-20">
-                    <FileText className="h-48 w-48" />
+                    <History className="h-48 w-48" />
                   </div>
                   <div className="relative z-10 space-y-6">
                     <div className="flex items-center gap-4 text-xs font-black uppercase tracking-[0.4em] opacity-80 mb-4 text-blue-400">
-                      <Award className="h-6 w-6" /> <TranslatedText>Pro Module: Contract Audit</TranslatedText>
+                      <Award className="h-6 w-6" /> <TranslatedText>Final Module: Execution</TranslatedText>
                     </div>
                     <h1 className="text-6xl md:text-8xl font-fraunces font-black leading-none tracking-tight text-white">
-                      <TranslatedText>The Contract Autopsy</TranslatedText>
+                      <TranslatedText>The Action Plan</TranslatedText>
                     </h1>
                     <p className="mt-8 text-2xl opacity-90 leading-relaxed font-bold max-w-2xl italic text-slate-300">
-                      <TranslatedText>{`How to spot the 'Small Print' traps that allow banks to freeze your credit line or reset your amortization schedule without warning.`}</TranslatedText>
+                      <TranslatedText>{`How to transition from Defense to Offense. We build the 90-day liquidation engine together.`}</TranslatedText>
                     </p>
                   </div>
                 </header>
-                {/* Placeholder for Lesson 4/5 detailed implementation */}
                 <div className="text-center p-20 border-4 border-dashed border-slate-200 rounded-[64px]">
                    <Construction className="h-16 w-16 mx-auto text-slate-300 mb-4" />
-                   <p className="text-slate-400 font-bold uppercase tracking-widest">Finalizing Pro Content...</p>
+                   <p className="text-slate-400 font-bold uppercase tracking-widest">Finalizing Pro Execution Blueprint...</p>
                 </div>
               </div>
             )}
