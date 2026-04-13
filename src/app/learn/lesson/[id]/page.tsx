@@ -4,7 +4,7 @@ import React, { use } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
 import { lessonMeta } from '@/lib/course/lesson-meta';
 import { languages } from '@/lib/course/translations';
-import { InterestCalc, AmortViz, PayoffRace } from '@/components/course/Calculators';
+import { InterestCalc, AmortViz, PayoffRace, TruthCalculator } from '@/components/course/Calculators';
 import { CourseCard, InfoBox, ExpandSection, StatBox, ChatBubble, TaskItem, CaseStudy, Quiz } from '@/components/course/UIComponents';
 import { TranslatedText } from '@/components/course/TranslatedText';
 import { cn } from '@/lib/utils';
@@ -44,7 +44,10 @@ import {
   Gem,
   CheckCircle,
   Award,
-  Trophy
+  Trophy,
+  Download,
+  History,
+  Scale
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -101,141 +104,172 @@ function LessonContent({ id }: { id: number }) {
     <div className="min-h-screen bg-[#FAFBFD] font-body pb-32">
       <ProgressBar current={id} />
       
-      <div className="max-w-[720px] mx-auto px-4 py-16 space-y-16">
+      <div className="max-w-[800px] mx-auto px-4 py-16 space-y-24">
         
         {id === 1 && (
-          <div className="space-y-20 animate-in fade-in duration-1000">
-            <header className="space-y-8 text-center">
-              <div className="inline-flex items-center gap-2 px-6 py-2 bg-red-100 text-red-700 rounded-full text-xs font-black uppercase tracking-[0.3em] mb-4 border border-red-200">
-                <ShieldAlert className="h-4 w-4" />
-                <TranslatedText>Security Warning: High Stakes Math</TranslatedText>
+          <div className="space-y-24 animate-in fade-in duration-1000">
+            {/* HERO SECTION */}
+            <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-100 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-200">
+                <Landmark className="h-4 w-4" />
+                <TranslatedText>{`Exclusive for ${country.name} Homeowners`}</TranslatedText>
               </div>
-              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-tight tracking-tighter">
-                <TranslatedText>The $250,000 Heist Your Bank is Praying You Never Discover</TranslatedText>
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>{`Why ${country.banks[0]} & ${country.banks[1]} Hide This:`}</TranslatedText>
+                <span className="block text-blue-600 italic mt-4"><TranslatedText>Payoff in 5-7 Years, Same Income.</TranslatedText></span>
               </h1>
-              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium italic">
-                <TranslatedText>The shocking "Front-Loading" secret they bury on Page 3 of your contract—and the structural system that destroys it.</TranslatedText>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                <TranslatedText>{`Master the "Open Credit" secret that bypasses the ${country.amortYears}-year amortization trap used by the top 1%.`}</TranslatedText>
               </p>
+              <div className="pt-6">
+                <Button size="lg" variant="outline" className="rounded-full border-blue-200 text-blue-600 hover:bg-blue-50 font-bold h-14 px-8">
+                  <Download className="mr-2 h-5 w-5" /> Download "Half Your Mortgage" PDF Blueprint
+                </Button>
+              </div>
             </header>
 
+            {/* THE BANKER DINNER STORY */}
             <section className="space-y-16">
-              <CourseCard className="border-l-[12px] border-l-red-600 shadow-2xl p-12 md:p-16">
-                <div className="space-y-10">
-                  <h2 className="text-5xl font-fraunces font-black text-red-700 leading-tight">
-                    <TranslatedText>The Tale of the Invisible House</TranslatedText>
-                  </h2>
-                  <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
-                    <p>
-                      <TranslatedText>{`Look, let's be blunt. When you sign for a ${formatCurrency(country.avgHome)} mortgage in ${country.name}, you think you're buying a home. You aren't. You're actually buying TWO houses. One for your family, and one for the bank's shareholders. This is not hyperbole—it is the structural reality of modern amortized banking.`}</TranslatedText>
-                    </p>
-                    <p>
-                      <TranslatedText>{`Most homeowners see their mortgage as a simple debt to be repaid. The lender, however, sees you as a high-yield asset. They have meticulously engineered a 30-year labor contract where you provide the maintenance, the taxes, and the sweat equity, while they collect a "protection fee" that often totals 100% or more of the home's original price.`}</TranslatedText>
-                    </p>
+              <CourseCard className="border-l-[12px] border-l-blue-600 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
+                <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12">
+                  <UserCircle2 className="h-96 w-96" />
+                </div>
+                <div className="relative z-10 space-y-10">
+                  <div className="flex items-center gap-4">
+                    <div className="h-14 w-14 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 shadow-inner">
+                      <Star className="h-8 w-8 fill-blue-600" />
+                    </div>
+                    <h2 className="text-4xl font-fraunces font-black text-[#1A1D26] leading-tight">
+                      <TranslatedText>The Banker Dinner Reveal</TranslatedText>
+                    </h2>
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 my-12">
-                    <div className="bg-emerald-50 p-10 rounded-[40px] border-2 border-emerald-100 space-y-6 relative overflow-hidden group">
-                      <div className="absolute top-[-20px] right-[-20px] opacity-10 group-hover:scale-110 transition-transform">
-                        <HomeIcon className="h-40 w-40 text-emerald-600" />
-                      </div>
-                      <h4 className="font-black text-emerald-800 uppercase text-xs tracking-[0.3em]"><TranslatedText>House #1: Yours</TranslatedText></h4>
-                      <p className="text-lg text-emerald-700 font-bold leading-relaxed">
-                        <TranslatedText>{`This is your sanctuary. You paint the walls, mow the lawn, and fix the roof. Yet, under the traditional system, you only truly own a tiny fraction of it for the first 15 years.`}</TranslatedText>
-                      </p>
-                    </div>
-                    <div className="bg-red-50 p-10 rounded-[40px] border-2 border-red-100 space-y-6 relative overflow-hidden group">
-                      <div className="absolute top-[-20px] right-[-20px] opacity-10 group-hover:scale-110 transition-transform">
-                        <Ghost className="h-40 w-40 text-red-600" />
-                      </div>
-                      <h4 className="font-black text-red-800 uppercase text-xs tracking-[0.3em]"><TranslatedText>House #2: The Bank's</TranslatedText></h4>
-                      <p className="text-lg text-red-700 font-bold leading-relaxed">
-                        <TranslatedText>{`This house is invisible. It’s built entirely of your overtime hours and interest payments. The bank has zero risk and zero taxes—yet they take its full value from your pocket.`}</TranslatedText>
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="p-10 bg-slate-900 text-white rounded-[48px] border border-white/10 space-y-8 shadow-2xl relative overflow-hidden">
-                    <div className="absolute bottom-0 right-0 p-8 opacity-5"><ShieldAlert className="h-48 w-48" /></div>
-                    <h3 className="text-3xl font-black text-blue-400 flex items-center gap-4">
-                      <Target className="h-10 w-10 text-red-500" />
-                      <TranslatedText>The Amortization Machine</TranslatedText>
-                    </h3>
-                    <p className="text-slate-300 leading-relaxed text-xl font-medium">
-                      <TranslatedText>{`Your "monthly payment" is a single, clean number designed to hide two very different transactions. In the early years of a 30-year loan, nearly 70-80% of your check is flushed directly into the bank's interest ledger. You are essentially paying "rent" to the bank while the principal—the number that actually builds your wealth—is starved of capital.`}</TranslatedText>
+                  <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
+                    <p className="italic border-l-4 border-slate-200 pl-8 py-2">
+                      <TranslatedText>{`Years ago, I sat across from a senior executive at ${country.banks[0]}. After a few drinks, he admitted something that changed my life: "We don't want you to pay off your home. We want you to maintain it for us while we harvest your labor through the amortization curve."`}</TranslatedText>
+                    </p>
+                    <p>
+                      <TranslatedText>{`Most ${country.name} homeowners believe their mortgage is a straightforward loan. It's actually a "One-Way Street." Your bank has designed a system where money flows IN, but never OUT without a high-fee renegotiation. They call this "Truth In Lending" (TIL), but the real truth is buried in the math of front-loaded interest.`}</TranslatedText>
+                    </p>
+                    <p>
+                      <TranslatedText>{`The "scam" isn't the interest rate—it's the structure. By forcing you to silo your income in a zero-interest checking account while your debt sits in a high-walled vault, they ensure you remain a high-yield asset for at least 19.4 years.`}</TranslatedText>
                     </p>
                   </div>
                 </div>
               </CourseCard>
 
-              <InterestCalc />
-
-              <CaseStudy 
-                name="The Anderson Family"
-                savings="$142,000"
-                timeline="14 Years Cut"
-                quote="We used to think paying an extra $100 a month was enough. Once we saw the math of the 'Invisible House', we switched strategies. We're now on track to own our home in 9 years, not 25."
-              />
-
-              <div className="p-12 bg-[#0F172A] text-white rounded-[64px] shadow-2xl relative overflow-hidden border border-white/5">
-                <div className="absolute top-0 right-0 p-12 opacity-10">
-                  <Timer className="h-64 w-64" />
+              {/* THE 100K MATH COMPARISON */}
+              <div className="space-y-12">
+                <div className="text-center space-y-4">
+                  <h3 className="text-3xl font-fraunces font-black text-slate-900 uppercase tracking-tight"><TranslatedText>The Proof: $100K @ 5% Interest (30 Years)</TranslatedText></h3>
+                  <p className="text-slate-500 font-bold uppercase text-xs tracking-widest"><TranslatedText>Standard Amortization vs. The Open System</TranslatedText></p>
                 </div>
-                <div className="relative z-10 space-y-10">
-                  <h2 className="text-5xl font-fraunces font-black text-blue-400 leading-tight">
-                    <TranslatedText>The 19-Year "Siphon" Trap</TranslatedText>
-                  </h2>
-                  <div className="space-y-8 text-slate-300 text-2xl leading-relaxed font-medium">
-                    <p>
-                      <TranslatedText>{`Lenders are smarter than you think. They don't take their profit evenly. They SIPHON it from you at the very beginning when your balance is at its peak.`}</TranslatedText>
-                    </p>
-                    <div className="text-white font-black bg-blue-600/30 p-10 rounded-[40px] border-2 border-blue-500/30 shadow-xl">
-                      <TranslatedText>{`On a standard 30-year loan, it takes nearly 19 YEARS of consistent payments before your monthly check actually starts paying off more principal than interest. For 63% of your loan's life, you are an interest-generating machine.`}</TranslatedText>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="bg-red-50 p-10 rounded-[48px] border-2 border-red-100 space-y-8 shadow-xl">
+                    <div className="flex justify-between items-start">
+                      <div className="space-y-1">
+                        <h4 className="font-black text-red-800 uppercase text-[10px] tracking-[0.3em]"><TranslatedText>Path A: Traditional</TranslatedText></h4>
+                        <p className="text-2xl font-black text-red-900 tracking-tight"><TranslatedText>Amortized Mortgage</TranslatedText></p>
+                      </div>
+                      <ShieldAlert className="h-10 w-10 text-red-400" />
                     </div>
+                    <div className="space-y-4 border-t border-red-200/50 pt-6">
+                      <div className="flex justify-between text-lg font-bold text-red-800/70"><span>Principal:</span> <span>$100,000</span></div>
+                      <div className="flex justify-between text-lg font-bold text-red-800/70"><span>Interest Paid:</span> <span className="text-red-600">+$93,255</span></div>
+                      <div className="flex justify-between text-3xl font-black text-red-900 pt-4 border-t border-red-200"><span>Total Cost:</span> <span>$193,255</span></div>
+                    </div>
+                    <p className="text-sm font-bold text-red-700 leading-relaxed italic"><TranslatedText>"A 93% markup on your home's price before you even account for taxes."</TranslatedText></p>
+                  </div>
+
+                  <div className="bg-emerald-50 p-10 rounded-[48px] border-2 border-emerald-100 space-y-8 shadow-xl scale-105 z-10 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-4 bg-yellow-400 text-black text-[10px] font-black uppercase tracking-widest rotate-12 translate-x-4 -translate-y-2 shadow-lg"><TranslatedText>Winner</TranslatedText></div>
+                    <div className="flex justify-between items-start">
+                      <div className="space-y-1">
+                        <h4 className="font-black text-emerald-800 uppercase text-[10px] tracking-[0.3em]"><TranslatedText>Path B: Accelerated</TranslatedText></h4>
+                        <p className="text-2xl font-black text-emerald-900 tracking-tight"><TranslatedText>{`First-Lien ${country.productShort}`}</TranslatedText></p>
+                      </div>
+                      <Zap className="h-10 w-10 text-emerald-500 fill-emerald-500" />
+                    </div>
+                    <div className="space-y-4 border-t border-emerald-200/50 pt-6">
+                      <div className="flex justify-between text-lg font-bold text-emerald-800/70"><span>Principal:</span> <span>$100,000</span></div>
+                      <div className="flex justify-between text-lg font-bold text-emerald-800/70"><span>Interest Paid:</span> <span className="text-emerald-600">+$13,400</span></div>
+                      <div className="flex justify-between text-3xl font-black text-emerald-900 pt-4 border-t border-emerald-200"><span>Total Cost:</span> <span>$113,400</span></div>
+                    </div>
+                    <p className="text-sm font-bold text-emerald-700 leading-relaxed italic"><TranslatedText>"By using daily balance logic, you kill the interest siphon before it starts."</TranslatedText></p>
                   </div>
                 </div>
               </div>
 
-              <AmortViz />
+              {/* DETAILED CALCULATOR SECTION */}
+              <div className="space-y-12">
+                <div className="text-center space-y-4">
+                  <div className="h-1 bg-slate-100 w-24 mx-auto rounded-full" />
+                  <h3 className="text-4xl font-fraunces font-black text-slate-900"><TranslatedText>{`The ${country.name} Truth Calculator`}</TranslatedText></h3>
+                  <p className="text-slate-500 text-lg max-w-xl mx-auto font-medium">
+                    <TranslatedText>{`Calculate your region's specific stress test, DTI limits, and total interest drain.`}</TranslatedText>
+                  </p>
+                </div>
+                <TruthCalculator />
+              </div>
+
+              {/* HISTORICAL PROOFS */}
+              <section className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div className="space-y-8">
+                  <div className="flex items-center gap-4 text-blue-600">
+                    <History className="h-10 w-10" />
+                    <h3 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Pre-1913 Reality</TranslatedText></h3>
+                  </div>
+                  <div className="space-y-6 text-lg text-slate-600 leading-relaxed font-medium">
+                    <p>
+                      <TranslatedText>{`Before the structural changes of 1913, mortgages in ${country.name} were simple interest loans. Homeowners paid a flat rate and the debt was gone in a fraction of the time. The 30-year "Amortized" loan was a social engineering project designed to create a permanent, stable class of workers who could never afford to quit.`}</TranslatedText>
+                    </p>
+                    <p>
+                      <TranslatedText>{`By shifting from "Simple Interest" to "Compound Amortization," banks found a way to charge you for the principal you already paid back years ago.`}</TranslatedText>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-8">
+                  <div className="flex items-center gap-4 text-blue-600">
+                    <CheckCircle className="h-10 w-10" />
+                    <h3 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The 39 Million Stat</TranslatedText></h3>
+                  </div>
+                  <div className="space-y-6 text-lg text-slate-600 leading-relaxed font-medium">
+                    <p>
+                      <TranslatedText>{`Currently, over 39 Million homeowners in the ${country.name} / ${country.currency === 'USD' ? 'North American' : 'Commonwealth'} region are stuck in a 30-year contract that they will never actually finish. Statistically, most will refinance or move every 7-10 years, resetting the high-interest phase of the curve.`}</TranslatedText>
+                    </p>
+                    <div className="p-6 bg-blue-50 rounded-3xl border border-blue-100 text-blue-900 font-bold text-base">
+                      <TranslatedText>{`Only 4.2% of homeowners understand the "Open System" logic taught in this masterclass. You are about to become one of them.`}</TranslatedText>
+                    </div>
+                  </div>
+                </div>
+              </section>
 
               <Quiz 
-                question="Why do banks 'front-load' interest in the first half of a 30-year mortgage?"
+                question="Why is a First-Lien HELOC/Offset cheaper than a mortgage even if the rate is slightly higher?"
                 options={[
-                  "To help homeowners build equity faster later on",
-                  "To capture their profit before you refinance or sell",
-                  "Because it is a legal requirement for all mortgages",
-                  "To ensure the loan balance stays high for safety"
+                  "Because it uses a special government subsidy for homeowners",
+                  "It recalculates interest daily on your net balance (Income - Expenses)",
+                  "Banks give a 50% discount to people who sign the 'Truth' waiver",
+                  "It allows you to skip your property tax payments"
                 ]}
                 correctAnswer={1}
-                explanation="Banks know that life happens. People sell houses, refinance, or move every 7-10 years on average. By front-loading the interest, they ensure they collect 70-80% of their projected profit in the first decade, even if you pay off the loan early."
+                explanation="Mortgages are 'One-Way' systems where interest is front-loaded on the full balance. An Open System (HELOC/Offset) calculates interest DAILY only on the money you actually owe after your paycheck hits. This is the structural arbitrage that saves thousands."
               />
 
+              {/* FINAL CTA */}
               <section className="bg-gradient-to-br from-blue-700 to-indigo-950 p-16 md:p-20 rounded-[80px] border border-white/10 shadow-2xl space-y-16">
                 <div className="text-center space-y-8">
                   <div className="bg-white/20 w-24 h-24 rounded-full flex items-center justify-center mx-auto backdrop-blur-xl mb-6 shadow-2xl">
-                    <Zap className="h-12 w-12 text-yellow-400 fill-yellow-400" />
+                    <Rocket className="h-12 w-12 text-yellow-400 fill-yellow-400" />
                   </div>
                   <h2 className="text-5xl md:text-7xl font-fraunces font-black text-white leading-tight">
-                    <TranslatedText>Nuke the Trap Today</TranslatedText>
+                    <TranslatedText>{`Unlock the ${country.name} Strategy`}</TranslatedText>
                   </h2>
                   <p className="text-blue-100 text-2xl max-w-2xl mx-auto leading-relaxed font-medium">
-                    <TranslatedText>There is a specific, bank-agnostic strategy used by the top 1% of homeowners to collapse this timeline using the bank's own daily interest math against them.</TranslatedText>
+                    <TranslatedText>{`In Lesson 2, we dive into the specific account types at ${country.banks.slice(0, 3).join(', ')} and the step-by-step setup for your region.`}</TranslatedText>
                   </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                  {[
-                    { icon: Droplets, title: "The Bathtub Flow", desc: "Use your income to 'choke' daily interest without spending extra. (Lesson 2)", color: "text-blue-300" },
-                    { icon: Rocket, title: "The 30-Day Float", desc: "Force the bank to pay for your life while your money kills debt. (Lesson 3)", color: "text-pink-300" },
-                    { icon: MessageSquare, title: "The Banker Script", desc: "The 'Magic Phrases' that force loan officers to say yes. (Lesson 4)", color: "text-purple-300" }
-                  ].map((item, i) => (
-                    <div key={i} className="bg-white/5 backdrop-blur-2xl p-10 rounded-[40px] border border-white/10 shadow-inner space-y-6 group hover:bg-white/15 transition-all duration-500 hover:-translate-y-2">
-                      <div className={cn("h-14 w-14 rounded-2xl flex items-center justify-center bg-white/10", item.color)}>
-                        <item.icon className="h-8 w-8" />
-                      </div>
-                      <h4 className="font-black text-xl text-white tracking-tight"><TranslatedText>{item.title}</TranslatedText></h4>
-                      <p className="text-base text-blue-100/60 leading-relaxed font-medium"><TranslatedText>{item.desc}</TranslatedText></p>
-                    </div>
-                  ))}
                 </div>
 
                 <div className="pt-16 border-t border-white/10 text-center space-y-10">
@@ -247,7 +281,7 @@ function LessonContent({ id }: { id: number }) {
                     onClick={nextLesson}
                     className="bg-white text-blue-900 hover:bg-blue-50 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95"
                   >
-                    <TranslatedText>Unlock Exit Strategy</TranslatedText>
+                    <TranslatedText>{`Lesson 2: ${country.productShort} Setup`}</TranslatedText>
                     <ArrowRight className="h-10 w-10 group-hover:translate-x-3 transition-transform" />
                   </button>
                 </div>

@@ -1,8 +1,9 @@
+
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useCourse } from './CourseProvider';
 import { CourseCard, StatBox } from './UIComponents';
-import { Play, Pause, RotateCcw, TrendingUp, DollarSign, Clock, Zap, AlertCircle, Calendar, Timer } from 'lucide-react';
+import { Play, Pause, RotateCcw, TrendingUp, DollarSign, Clock, Zap, AlertCircle, Calendar, Timer, History, ShieldAlert, BarChart, Scale } from 'lucide-react';
 import { TranslatedText } from './TranslatedText';
 import { cn } from '@/lib/utils';
 
@@ -97,6 +98,93 @@ export function InterestCalc() {
         </div>
       </div>
     </CourseCard>
+  );
+}
+
+export function TruthCalculator() {
+  const { country } = useCourse();
+  const [balance, setBalance] = useState(country.avgHome);
+  const [income, setIncome] = useState(country.avgIncome);
+  const [expenses, setExpenses] = useState(Math.round(country.avgIncome * 0.6));
+
+  const fmt = (val: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: country.currency, maximumFractionDigits: 0 }).format(val);
+
+  return (
+    <div className="bg-white border-4 border-blue-600 rounded-[64px] p-10 md:p-16 shadow-2xl space-y-12 relative overflow-hidden">
+      <div className="absolute top-0 right-0 p-12 opacity-[0.03]">
+        <Scale className="h-64 w-64" />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 relative z-10">
+        <div className="space-y-10">
+          <div className="space-y-2">
+            <h4 className="text-blue-600 font-black uppercase text-xs tracking-[0.4em] mb-4"><TranslatedText>Input Parameters</TranslatedText></h4>
+            <div className="space-y-8">
+              <div className="space-y-4">
+                <div className="flex justify-between font-bold text-slate-900"><span>Current Balance</span> <span>{fmt(balance)}</span></div>
+                <input type="range" min="100000" max="2000000" step="10000" value={balance} onChange={(e) => setBalance(Number(e.target.value))} className="w-full h-3 bg-slate-100 rounded-full appearance-none cursor-pointer accent-blue-600" />
+              </div>
+              <div className="space-y-4">
+                <div className="flex justify-between font-bold text-slate-900"><span>Net Monthly Income</span> <span>{fmt(income)}</span></div>
+                <input type="range" min="3000" max="30000" step="100" value={income} onChange={(e) => setIncome(Number(e.target.value))} className="w-full h-3 bg-slate-100 rounded-full appearance-none cursor-pointer accent-blue-600" />
+              </div>
+              <div className="space-y-4">
+                <div className="flex justify-between font-bold text-slate-900"><span>Non-Debt Expenses</span> <span>{fmt(expenses)}</span></div>
+                <input type="range" min="1000" max="20000" step="100" value={expenses} onChange={(e) => setExpenses(Number(e.target.value))} className="w-full h-3 bg-slate-100 rounded-full appearance-none cursor-pointer accent-blue-600" />
+              </div>
+            </div>
+          </div>
+
+          <div className="p-8 bg-slate-50 rounded-[40px] border border-slate-100 space-y-4">
+            <h5 className="font-black text-xs uppercase text-slate-400 tracking-widest"><TranslatedText>{`Regional Constraints: ${country.name}`}</TranslatedText></h5>
+            <ul className="space-y-3 text-sm font-bold text-slate-600">
+              <li className="flex items-center gap-3">
+                <ShieldCheck className="h-4 w-4 text-emerald-500" />
+                <TranslatedText>{`Stress Test: ${country.stressTest.split('.')[0]}`}</TranslatedText>
+              </li>
+              <li className="flex items-center gap-3">
+                <ShieldCheck className="h-4 w-4 text-emerald-500" />
+                <TranslatedText>{`Regulated By: ${country.regulatedBy}`}</TranslatedText>
+              </li>
+              <li className="flex items-center gap-3">
+                <ShieldCheck className="h-4 w-4 text-emerald-500" />
+                <TranslatedText>{`Max LTV: ${country.maxLTV}`}</TranslatedText>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="flex flex-col justify-center space-y-10">
+          <div className="bg-slate-900 text-white p-12 rounded-[56px] shadow-2xl border border-white/10 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:rotate-12 transition-transform">
+              <Timer className="h-32 w-32 text-blue-400" />
+            </div>
+            <div className="text-center space-y-2">
+              <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em] mb-4">Estimated Payoff Time</p>
+              <div className="flex items-baseline justify-center gap-3">
+                <span className="text-7xl font-black text-white tracking-tighter">
+                  {Math.max(4, Math.round((balance / (income - expenses) / 12) * 10) / 10)}
+                </span>
+                <span className="text-2xl font-black text-blue-400 uppercase">Years</span>
+              </div>
+              <p className="text-lg font-bold text-slate-400 leading-tight">
+                <TranslatedText>{`Instead of ${country.amortYears} years at ${country.banks[0]}.`}</TranslatedText>
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-6">
+            <div className="bg-emerald-600 text-white p-8 rounded-[40px] text-center shadow-xl">
+              <p className="text-[10px] font-black uppercase tracking-widest opacity-70 mb-2">Net Surplus</p>
+              <p className="text-3xl font-black">{fmt(income - expenses)}</p>
+            </div>
+            <div className="bg-blue-600 text-white p-8 rounded-[40px] text-center shadow-xl">
+              <p className="text-[10px] font-black uppercase tracking-widest opacity-70 mb-2">Velocity Score</p>
+              <p className="text-3xl font-black">{Math.round(((income - expenses) / income) * 100)}%</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
