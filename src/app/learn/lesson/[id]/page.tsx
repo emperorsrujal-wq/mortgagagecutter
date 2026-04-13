@@ -1,4 +1,3 @@
-
 'use client';
 import React, { use, useState, useEffect } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
@@ -113,7 +112,7 @@ function LessonContent({ id }: { id: number }) {
   const meta = lessonMeta.find(l => l.id === id);
   const router = useRouter();
 
-  if (!meta) return <div>Lesson not found</div>;
+  if (!meta) return <div className="p-20 text-center">Lesson not found</div>;
 
   const isPrivileged = user?.email === 'emperorsrujal@gmail.com';
   // Modules 4 through 8 are Premium
@@ -224,6 +223,13 @@ function LessonContent({ id }: { id: number }) {
             </header>
 
             <section className="space-y-16">
+              <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
+                <h3 className="text-3xl font-black text-slate-900"><TranslatedText>The Physics of Debt</TranslatedText></h3>
+                <p>
+                  <TranslatedText>{`In the ${country.name} banking machine, you are categorized by your 'Risk Capacity.' Lenders aren't looking at your potential; they are looking at your 'Stress Buffer.' If your income is a river, the bank wants to ensure that even during a flood (rising rates), your dam (income) won't burst.`}</TranslatedText>
+                </p>
+              </div>
+
               <InfoBox title="The Golden Ratios" color="emerald">
                 <p><TranslatedText>{`In ${country.name}, the magic number is ${country.dtiLimit}%. If your total debt obligations (Mortgage + Taxes + Cards + Loans) exceed this percentage of your gross income, the bank sees you as a risk. Our first goal is to 'cleanse' your report to pass this threshold.`}</TranslatedText></p>
               </InfoBox>
@@ -255,6 +261,13 @@ function LessonContent({ id }: { id: number }) {
             </header>
 
             <section className="space-y-16">
+              <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
+                <h3 className="text-3xl font-black text-slate-900"><TranslatedText>Lender Archetypes</TranslatedText></h3>
+                <p>
+                  <TranslatedText>{`Not all banks in ${country.name} are equal. You have 'Retail Giants' like ${country.banks[0]}, who prefer rigid, amortized loans because they are easy to bundle and sell. Then you have 'Regional Specialists' and Credit Unions who are more likely to offer high-LTV First-Lien HELOCs because they keep the debt on their own books.`}</TranslatedText>
+                </p>
+              </div>
+
               <CourseCard title="The 'Strategic' Must-Haves">
                 <ul className="space-y-4">
                   <TaskItem id="must_1" label="First-Lien Position (Non-Negotiable)" />
@@ -308,9 +321,25 @@ function LessonContent({ id }: { id: number }) {
                 </header>
 
                 <section className="space-y-16">
+                  <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
+                    <h3 className="text-3xl font-black text-slate-900"><TranslatedText>The Banker's Secret Language</TranslatedText></h3>
+                    <p>
+                      <TranslatedText>{`Lenders are trained to focus your attention on the monthly payment and the interest rate. However, the true 'engine' of your loan is defined in the sections you usually skip: the 'Payment Application' and 'Default' clauses. In ${country.name}, we need to verify that your capital is never 'locked' or 'penalized' for moving too fast.`}</TranslatedText>
+                    </p>
+                  </div>
+
                   <CourseCard title="Spotting the TIP Scam">
                     <p className="text-xl"><TranslatedText>{`Check your ${country.regulatedBy} disclosure for the 'Total Interest Percentage' (TIP). If it's over 90%, you are in a front-loaded trap. A strategic line should reflect a True Effective APR that is significantly lower over time.`}</TranslatedText></p>
                   </CourseCard>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <InfoBox title="The 'Repayment' Clause" color="amber">
+                      <p><TranslatedText>We want a clause that explicitly allows 'Principal-Only' payments at any time, without a waiting period. Some banks try to enforce a '90-day seasoning' on large payments—this is a red flag for velocity.</TranslatedText></p>
+                    </InfoBox>
+                    <InfoBox title="Draw Period Freezes" color="red">
+                      <p><TranslatedText>Verify if the bank can freeze your draw period if local home values drop. We look for 'Immutable Draw' products or maintain a backup line to ensure liquidity.</TranslatedText></p>
+                    </InfoBox>
+                  </div>
 
                   <ContractSimulator />
 
@@ -325,7 +354,8 @@ function LessonContent({ id }: { id: number }) {
                     correctAnswer={1}
                     explanation="A prepayment penalty is the bank's way of locking you into the interest trap. If you pay off your loan too fast, they lose profit—so they charge you a fee to stop you. Avoid any product with significant penalties."
                   />
-                </>
+                </section>
+              </>
             )}
           </div>
         )}
