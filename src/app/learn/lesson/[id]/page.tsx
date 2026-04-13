@@ -1,9 +1,10 @@
+
 'use client';
 import React, { use, useState, useEffect } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
 import { lessonMeta } from '@/lib/course/lesson-meta';
 import { languages } from '@/lib/course/translations';
-import { InterestCalc, AmortViz, PayoffRace, TruthCalculator, QualificationCalc } from '@/components/course/Calculators';
+import { InterestCalc, AmortViz, PayoffRace, TruthCalculator, QualificationCalc, ScriptGenerator, BankRateChart } from '@/components/course/Calculators';
 import { CourseCard, InfoBox, ExpandSection, StatBox, ChatBubble, TaskItem, CaseStudy, Quiz } from '@/components/course/UIComponents';
 import { TranslatedText } from '@/components/course/TranslatedText';
 import { cn } from '@/lib/utils';
@@ -53,7 +54,8 @@ import {
   Hammer,
   ShieldHalf,
   Construction,
-  Calculator
+  Calculator,
+  ListChecks
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -91,7 +93,8 @@ function LessonContent({ id }: { id: number }) {
   if (!meta) return <div>Lesson not found</div>;
 
   const isPrivileged = user?.email === 'emperorsrujal@gmail.com';
-  const isLocked = id >= 3 && !isPrivileged;
+  // Lock modules 4 and 5
+  const isLocked = id >= 4 && !isPrivileged;
 
   const nextLesson = () => {
     completeLesson(id);
@@ -345,6 +348,148 @@ function LessonContent({ id }: { id: number }) {
         )}
 
         {id === 3 && (
+          <div className="space-y-24 animate-in fade-in duration-1000">
+            {/* HERO SECTION */}
+            <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-100 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-200">
+                <Search className="h-4 w-4" />
+                <TranslatedText>{`Step 3: The ${country.name} Lender Hunt`}</TranslatedText>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>{`The ${country.productShort} Shortlist:`}</TranslatedText>
+                <span className="block text-blue-600 italic mt-4"><TranslatedText>10yr Draw, Interest-Only, Promo Stack.</TranslatedText></span>
+              </h1>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                <TranslatedText>{`Finding the right vendor is 90% of the battle. In ${country.name}, we're looking for 'Open Systems' that treat your income as a direct principal weapon.`}</TranslatedText>
+              </p>
+            </header>
+
+            <section className="space-y-24">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div className="space-y-8">
+                  <h2 className="text-4xl font-fraunces font-black text-slate-900 tracking-tight"><TranslatedText>The Must-Haves Checklist</TranslatedText></h2>
+                  <div className="space-y-4">
+                    {[
+                      { title: "10-Year Draw Period", desc: "Allows you to move money in and out for a decade without reapplying." },
+                      { title: "Automated Sweep/MMA", desc: country.name === 'Canada' ? "Scotiabank STEP or Manulife One style integration." : "Checking integration that kills daily interest automatically." },
+                      { title: "No-Fee Principal Injections", desc: "Ensure there are zero penalties for paying off the line in weeks, not years." }
+                    ].map((item, i) => (
+                      <div key={i} className="flex gap-4 p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-shadow">
+                        <div className="h-8 w-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 mt-1">
+                          <CheckCircle2 className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <h4 className="font-black text-lg text-slate-900">{item.title}</h4>
+                          <p className="text-slate-500 font-medium">{item.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="bg-slate-900 rounded-[56px] p-10 shadow-2xl relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-8 opacity-10"><BarChart className="h-48 w-48" /></div>
+                  <h3 className="text-white font-black text-xl mb-2 relative z-10"><TranslatedText>Rate Volatility vs. Logic</TranslatedText></h3>
+                  <p className="text-slate-400 text-sm mb-6 relative z-10"><TranslatedText>{`Even at ${country.avgRate + 1}%, an Open system beats a 5% Closed mortgage due to ADB (Average Daily Balance) math.`}</TranslatedText></p>
+                  <BankRateChart />
+                </div>
+              </div>
+
+              {/* BANK GUIDE TEASER */}
+              <div className="space-y-10">
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-2xl bg-amber-100 flex items-center justify-center text-amber-600">
+                    <Star className="h-6 w-6 fill-amber-600" />
+                  </div>
+                  <h2 className="text-4xl font-fraunces font-black text-[#1A1D26] tracking-tight"><TranslatedText>{`Top Lenders in ${country.name}`}</TranslatedText></h2>
+                </div>
+                <div className="overflow-hidden border-2 border-slate-100 rounded-[40px] bg-white shadow-xl">
+                  <table className="w-full text-left">
+                    <thead className="bg-slate-50 border-b-2 border-slate-100">
+                      <tr>
+                        <th className="p-6 font-black uppercase text-[10px] tracking-widest text-slate-400">Institution</th>
+                        <th className="p-6 font-black uppercase text-[10px] tracking-widest text-slate-400">Max LTV</th>
+                        <th className="p-6 font-black uppercase text-[10px] tracking-widest text-slate-400">Typical Rate</th>
+                        <th className="p-6 font-black uppercase text-[10px] tracking-widest text-slate-400">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {country.banks.slice(0, 3).map((bank, i) => (
+                        <tr key={i} className="hover:bg-blue-50/30 transition-colors">
+                          <td className="p-6 font-bold text-slate-900">{bank}</td>
+                          <td className="p-6 font-mono text-blue-600 font-black">80%</td>
+                          <td className="p-6 font-mono text-slate-600">Prime + 0.5%</td>
+                          <td className="p-6"><span className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-black uppercase tracking-widest">Verified</span></td>
+                        </tr>
+                      ))}
+                      <tr className="bg-slate-50/50 italic">
+                        <td colSpan={4} className="p-8 text-center text-slate-400 font-medium">
+                          <Lock className="h-4 w-4 inline mr-2 mb-1" /> Unlock the full list of 50+ Regional Banks and Credit Unions in the Pro Masterclass.
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* SCRIPT GENERATOR */}
+              <div className="space-y-10">
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600">
+                    <MessageSquare className="h-6 w-6" />
+                  </div>
+                  <h2 className="text-4xl font-fraunces font-black text-[#1A1D26] tracking-tight"><TranslatedText>The 'Private Wealth' Script</TranslatedText></h2>
+                </div>
+                <p className="text-xl text-slate-600 leading-relaxed font-medium max-w-2xl">
+                  <TranslatedText>{`Don't let a junior loan officer reject you. Use this specific framing to get transferred to the Portfolio Lending department at institutions like ${country.banks[0]}.`}</TranslatedText>
+                </p>
+                <ScriptGenerator />
+              </div>
+
+              <Quiz 
+                question={`What is the 'Magic Phrase' to use when a banker tries to sell you a traditional amortized mortgage?`}
+                options={[
+                  "I'm actually looking for a higher interest rate, please",
+                  "I'm specifically seeking a 'Velocity-Compatible' Open Credit system with daily recalculation",
+                  "I want the one with the lowest monthly payment possible",
+                  "Can I speak to your manager about a credit card?"
+                ]}
+                correctAnswer={1}
+                explanation={`Using professional terminology like 'Daily Recalculation' and 'Open Credit System' signals to the bank that you are a high-net-worth strategist, not a retail consumer. This often triggers a transfer to the private wealth or portfolio lending desk.`}
+              />
+
+              {/* FINAL CTA */}
+              <section className="bg-gradient-to-br from-blue-700 to-indigo-950 p-16 md:p-20 rounded-[80px] border border-white/10 shadow-2xl space-y-16">
+                <div className="text-center space-y-8">
+                  <div className="bg-white/20 w-24 h-24 rounded-full flex items-center justify-center mx-auto backdrop-blur-xl mb-6 shadow-2xl">
+                    <History className="h-12 w-12 text-yellow-400" />
+                  </div>
+                  <h2 className="text-5xl md:text-7xl font-fraunces font-black text-white leading-tight">
+                    <TranslatedText>Verify the Disclosures</TranslatedText>
+                  </h2>
+                  <p className="text-blue-100 text-2xl max-w-2xl mx-auto leading-relaxed font-medium">
+                    <TranslatedText>{`You have the banks and the scripts. In Lesson 4, we perform a 'Contract Autopsy' to find the hidden fees and clauses banks use to reset your clock.`}</TranslatedText>
+                  </p>
+                </div>
+
+                <div className="pt-16 border-t border-white/10 text-center space-y-10">
+                  <div className="flex items-center justify-center gap-4 text-yellow-400 font-black uppercase text-sm tracking-[0.4em]">
+                    <Lock className="h-6 w-6" />
+                    <TranslatedText>End of Masterclass Module 3</TranslatedText>
+                  </div>
+                  <button 
+                    onClick={nextLesson}
+                    className="bg-white text-blue-900 hover:bg-blue-50 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95"
+                  >
+                    <TranslatedText>Lesson 4: Contract Audit</TranslatedText>
+                    <ArrowRight className="h-10 w-10 group-hover:translate-x-3 transition-transform" />
+                  </button>
+                </div>
+              </section>
+            </section>
+          </div>
+        )}
+
+        {id >= 4 && (
           <div className="space-y-20 animate-in fade-in duration-700">
             {isLocked ? (
               <section className="bg-white p-20 rounded-[80px] border-4 border-dashed border-slate-200 text-center space-y-12 shadow-inner">
@@ -356,19 +501,19 @@ function LessonContent({ id }: { id: number }) {
                           <TranslatedText>Premium Strategy: Locked</TranslatedText>
                       </h2>
                       <p className="text-slate-500 text-2xl max-w-xl mx-auto font-medium leading-relaxed italic">
-                          <TranslatedText>{`Lessons 3, 4, and 5 contain the high-velocity execution blueprints reserved for our Premium Members. Join 39,000+ homeowners reclaiming their freedom.`}</TranslatedText>
+                          <TranslatedText>{`Lessons 4 and 5 contain the high-velocity execution blueprints and contract audit checklists reserved for our Pro Members. Join 39,000+ homeowners reclaiming their freedom.`}</TranslatedText>
                       </p>
                   </div>
                   <div className="p-12 bg-slate-50 rounded-[48px] text-left space-y-8 max-w-xl mx-auto border-2 border-white shadow-xl">
-                      <h4 className="font-black text-xs uppercase tracking-[0.3em] text-slate-400 border-b border-slate-200 pb-4"><TranslatedText>The Advanced Curriculum:</TranslatedText></h4>
+                      <h4 className="font-black text-xs uppercase tracking-[0.3em] text-slate-400 border-b border-slate-200 pb-4"><TranslatedText>The Pro Curriculum:</TranslatedText></h4>
                       <ul className="space-y-6">
                           <li className="flex items-start gap-5 text-xl font-bold text-slate-700">
                               <Gem className="h-8 w-8 text-yellow-500 shrink-0 mt-0.5" />
-                              <span><TranslatedText>The 30-Day Float: Force the bank to pay your bills.</TranslatedText></span>
+                              <span><TranslatedText>The Contract Autopsy: Spotting 'Reset' traps in bank paperwork.</TranslatedText></span>
                           </li>
                           <li className="flex items-start gap-5 text-xl font-bold text-slate-700">
                               <Gem className="h-8 w-8 text-yellow-500 shrink-0 mt-0.5" />
-                              <span><TranslatedText>The Lender Audit: The secret scripts for Loan Officers.</TranslatedText></span>
+                              <span><TranslatedText>The 30-Day Float: Force the bank to pay your bills.</TranslatedText></span>
                           </li>
                           <li className="flex items-start gap-5 text-xl font-bold text-slate-700">
                               <Gem className="h-8 w-8 text-yellow-500 shrink-0 mt-0.5" />
@@ -379,7 +524,7 @@ function LessonContent({ id }: { id: number }) {
                   <div className="pt-10 space-y-8">
                       <Button size="lg" className="w-full sm:w-auto px-20 py-12 text-3xl font-black rounded-[32px] shadow-2xl shadow-blue-500/30 transition-all hover:scale-105 active:scale-95" asChild>
                           <Link href="/purchase?plan=pro_197">
-                              <TranslatedText>Unlock Full Course</TranslatedText>
+                              <TranslatedText>Unlock Pro Masterclass</TranslatedText>
                               <ArrowRight className="ml-4 h-10 w-10" />
                           </Link>
                       </Button>
@@ -388,24 +533,28 @@ function LessonContent({ id }: { id: number }) {
               </section>
             ) : (
               <div className="space-y-20">
-                {/* Advanced content for Lesson 3 */}
-                <header className="p-16 bg-pink-600 text-white rounded-[64px] shadow-2xl relative overflow-hidden border-4 border-pink-400/30">
+                {/* Advanced content for Lesson 4/5 */}
+                <header className="p-16 bg-slate-900 text-white rounded-[64px] shadow-2xl relative overflow-hidden border-4 border-slate-800">
                   <div className="absolute top-0 right-0 p-12 opacity-20">
-                    <Rocket className="h-48 w-48" />
+                    <FileText className="h-48 w-48" />
                   </div>
                   <div className="relative z-10 space-y-6">
-                    <div className="flex items-center gap-4 text-xs font-black uppercase tracking-[0.4em] opacity-80 mb-4 text-pink-50">
-                      <Award className="h-6 w-6" /> <TranslatedText>Advanced Module: High Velocity</TranslatedText>
+                    <div className="flex items-center gap-4 text-xs font-black uppercase tracking-[0.4em] opacity-80 mb-4 text-blue-400">
+                      <Award className="h-6 w-6" /> <TranslatedText>Pro Module: Contract Audit</TranslatedText>
                     </div>
                     <h1 className="text-6xl md:text-8xl font-fraunces font-black leading-none tracking-tight text-white">
-                      <TranslatedText>The 30-Day Float</TranslatedText>
+                      <TranslatedText>The Contract Autopsy</TranslatedText>
                     </h1>
-                    <p className="mt-8 text-2xl opacity-90 leading-relaxed font-bold max-w-2xl italic text-pink-50">
-                      <TranslatedText>{`How to force the bank to provide you with an interest-free loan for every daily expense, while your cash kills your mortgage interest 24/7.`}</TranslatedText>
+                    <p className="mt-8 text-2xl opacity-90 leading-relaxed font-bold max-w-2xl italic text-slate-300">
+                      <TranslatedText>{`How to spot the 'Small Print' traps that allow banks to freeze your credit line or reset your amortization schedule without warning.`}</TranslatedText>
                     </p>
                   </div>
                 </header>
-                {/* ...Rest of Lesson 3 implementation... */}
+                {/* Placeholder for Lesson 4/5 detailed implementation */}
+                <div className="text-center p-20 border-4 border-dashed border-slate-200 rounded-[64px]">
+                   <Construction className="h-16 w-16 mx-auto text-slate-300 mb-4" />
+                   <p className="text-slate-400 font-bold uppercase tracking-widest">Finalizing Pro Content...</p>
+                </div>
               </div>
             )}
           </div>
@@ -425,7 +574,7 @@ function LessonContent({ id }: { id: number }) {
                 onClick={nextLesson}
                 className="group flex items-center gap-4 bg-[#2563EB] text-white px-12 py-6 rounded-[24px] font-black shadow-2xl shadow-blue-500/30 hover:bg-blue-600 transition-all active:scale-95 text-2xl"
             >
-                <TranslatedText>{id === 2 ? "See Advanced Plans" : "Next Lesson"}</TranslatedText>
+                <TranslatedText>{id === 3 ? "Unlock Pro Plan" : "Next Lesson"}</TranslatedText>
                 <ChevronRight className="h-8 w-8 group-hover:translate-x-3 transition-transform" />
             </button>
           )}

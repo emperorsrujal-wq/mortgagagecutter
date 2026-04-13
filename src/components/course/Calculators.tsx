@@ -6,10 +6,12 @@ import { CourseCard, StatBox } from './UIComponents';
 import { 
   Play, Pause, RotateCcw, TrendingUp, DollarSign, Clock, Zap, AlertCircle, 
   Calendar, Timer, History, ShieldAlert, BarChart, Scale, ShieldCheck, 
-  Target, Award, CheckCircle, Calculator, HeartPulse, Sparkles 
+  Target, Award, CheckCircle, Calculator, HeartPulse, Sparkles,
+  MessageSquare, UserCircle2, ChevronRight, Download
 } from 'lucide-react';
 import { TranslatedText } from './TranslatedText';
 import { cn } from '@/lib/utils';
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 // Simple Confetti burst logic
 function ConfettiBurst() {
@@ -31,6 +33,116 @@ function ConfettiBurst() {
           }} 
         />
       ))}
+    </div>
+  );
+}
+
+export function ScriptGenerator() {
+  const { country } = useCourse();
+  const [ltv, setLtv] = useState('80');
+  const [sweep, setSweep] = useState('yes');
+  const [promo, setPromo] = useState('no');
+  const [copied, setCopied] = useState(false);
+
+  const script = useMemo(() => {
+    const intro = `Hi, I'm looking to speak with a Senior Loan Officer regarding a first-lien ${country.productShort} refinance for my primary residence.`;
+    const specs = `I'm specifically seeking a product with a ${ltv}% LTV limit and full transactionality. ${sweep === 'yes' ? "Does this account support an automated sweep from a linked checking account?" : "I need to ensure the account supports direct deposit and online bill pay directly against the principal."}`;
+    const closing = `${promo === 'yes' ? "Are there any introductory teaser rates or 'promo stacking' options available for Tier 1 credit?" : "What is your current margin over the Prime rate for this position?"} I have audited my DTI and it is currently well within ${country.name} guidelines.`;
+    
+    return `${intro}\n\n${specs}\n\n${closing}`;
+  }, [country, ltv, sweep, promo]);
+
+  const copyScript = () => {
+    navigator.clipboard.writeText(script);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="space-y-8 animate-in fade-in duration-1000">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="space-y-2">
+          <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Target LTV</label>
+          <select value={ltv} onChange={e => setLtv(e.target.value)} className="w-full p-4 bg-white border-2 border-slate-100 rounded-2xl font-bold focus:border-blue-500 outline-none appearance-none">
+            <option value="80">80% (Standard)</option>
+            <option value="90">90% (Aggressive)</option>
+          </select>
+        </div>
+        <div className="space-y-2">
+          <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Sweep Feature</label>
+          <select value={sweep} onChange={e => setSweep(e.target.value)} className="w-full p-4 bg-white border-2 border-slate-100 rounded-2xl font-bold focus:border-blue-500 outline-none appearance-none">
+            <option value="yes">Yes (Preferred)</option>
+            <option value="no">No (Manual)</option>
+          </select>
+        </div>
+        <div className="space-y-2">
+          <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Ask for Promo?</label>
+          <select value={promo} onChange={e => setPromo(e.target.value)} className="w-full p-4 bg-white border-2 border-slate-100 rounded-2xl font-bold focus:border-blue-500 outline-none appearance-none">
+            <option value="no">No</option>
+            <option value="yes">Yes (Stacking)</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="bg-slate-900 text-white p-8 md:p-12 rounded-[40px] shadow-2xl relative overflow-hidden group">
+        <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:rotate-12 transition-transform">
+          <MessageSquare className="h-32 w-32" />
+        </div>
+        <div className="relative z-10 space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center font-black text-xs">MC</div>
+              <span className="font-black text-xs uppercase tracking-[0.3em] text-blue-400">Generated Script</span>
+            </div>
+            <button onClick={copyScript} className="text-[10px] font-black uppercase tracking-widest bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full transition-colors">
+              {copied ? "Copied!" : "Copy to Clipboard"}
+            </button>
+          </div>
+          <p className="text-xl md:text-2xl font-serif italic leading-relaxed text-slate-300 whitespace-pre-wrap">
+            {script}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function BankRateChart() {
+  const { country } = useCourse();
+  
+  const data = useMemo(() => [
+    { name: 'Month 1', mortgage: country.avgRate, line: country.avgRate + 1 },
+    { name: 'Month 6', mortgage: country.avgRate, line: country.avgRate + 0.8 },
+    { name: 'Month 12', mortgage: country.avgRate, line: country.avgRate + 1.2 },
+    { name: 'Month 18', mortgage: country.avgRate, line: country.avgRate + 0.5 },
+    { name: 'Month 24', mortgage: country.avgRate, line: country.avgRate + 0.2 },
+  ], [country]);
+
+  return (
+    <div className="h-[300px] w-full mt-8">
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart data={data}>
+          <defs>
+            <linearGradient id="colorMort" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#ef4444" stopOpacity={0.1}/>
+              <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+            </linearGradient>
+            <linearGradient id="colorLine" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.1}/>
+              <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+            </linearGradient>
+          </defs>
+          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+          <XAxis dataKey="name" hide />
+          <YAxis hide domain={['dataMin - 1', 'dataMax + 1']} />
+          <Tooltip 
+            contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '16px', color: '#fff' }}
+            itemStyle={{ color: '#fff', fontWeight: 'bold' }}
+          />
+          <Area type="monotone" dataKey="mortgage" stroke="#ef4444" fillOpacity={1} fill="url(#colorMort)" strokeWidth={3} name="Fixed Mortgage" />
+          <Area type="monotone" dataKey="line" stroke="#3b82f6" fillOpacity={1} fill="url(#colorLine)" strokeWidth={3} name={`${country.productShort} Rate`} />
+        </AreaChart>
+      </ResponsiveContainer>
     </div>
   );
 }
