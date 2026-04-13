@@ -11,6 +11,7 @@ export interface CountryConfig {
   avgIncome: number;
   amortYears: number;
   maxLTV: string;
+  ltvValue: number;
   regulatedBy: string;
   howItWorks: string;
   products: { name: string; desc: string }[];
@@ -19,6 +20,8 @@ export interface CountryConfig {
   stressTest: string;
   uniqueInfo: string;
   analogy: string;
+  dtiLimit: number;
+  incomeMultiplier?: number;
 }
 
 export const countries: Record<string, CountryConfig> = {
@@ -33,7 +36,8 @@ export const countries: Record<string, CountryConfig> = {
     avgRate: 5.95,
     avgIncome: 7200,
     amortYears: 25,
-    maxLTV: "65% standalone HELOC, up to 80% combined with readvanceable mortgage",
+    maxLTV: "Up to 80% (65% Revolving)",
+    ltvValue: 0.80,
     regulatedBy: "OSFI and provincial regulators",
     howItWorks: "In Canada, a HELOC lets you borrow against your home equity through a revolving credit line. You can deposit your paycheque directly into it, pay bills from it, and withdraw anytime — like a chequing account secured by your home. Interest is calculated daily on whatever balance you carry. Many Canadian banks offer 'readvanceable mortgages' that combine a mortgage with a HELOC. As you pay down the mortgage portion, the HELOC limit automatically increases, giving you access to more equity without reapplying.",
     products: [
@@ -47,7 +51,8 @@ export const countries: Record<string, CountryConfig> = {
     taxRule: "HELOC interest on your primary residence is NOT tax-deductible in Canada. However, borrowing to invest (Smith Manoeuvre) may make interest deductible.",
     stressTest: "Requires qualifying at the higher of: contract rate plus 2%, or 5.25%. Applies to both mortgages and HELOCs.",
     uniqueInfo: "Canadian mortgages renew every 1-5 years, but amortize over 25-30. HELOCs avoid this recurring renegotiation trap.",
-    analogy: "Think of a mortgage like a phone contract you must renew every 5 years. A HELOC is like a pay-as-you-go plan where YOU control everything."
+    analogy: "Think of a mortgage like a phone contract you must renew every 5 years. A HELOC is like a pay-as-you-go plan where YOU control everything.",
+    dtiLimit: 44
   },
   US: {
     flag: "🇺🇸",
@@ -60,7 +65,8 @@ export const countries: Record<string, CountryConfig> = {
     avgRate: 6.5,
     avgIncome: 6800,
     amortYears: 30,
-    maxLTV: "80-90% typically, some credit unions offer up to 100%",
+    maxLTV: "Up to 90% (80% preferred)",
+    ltvValue: 0.90,
     regulatedBy: "CFPB, Federal Reserve, OCC",
     howItWorks: "In the US, you need a FIRST-LIEN HELOC to replace your mortgage entirely. It is NOT a second loan on top of your existing mortgage. You deposit your paycheck, pay bills, and every dollar reduces the interest-bearing balance daily. WARNING: Most banks will try to sell you a second-lien HELOC; you must specify you want to REFINANCE into a first-position line.",
     products: [
@@ -71,7 +77,8 @@ export const countries: Record<string, CountryConfig> = {
     taxRule: "HELOC interest is deductible ONLY if used to 'buy, build, or substantially improve' the home securing the loan.",
     stressTest: "The US uses Debt-to-Income (DTI) ratio. Most lenders require a DTI under 43% for Qualified Mortgages.",
     uniqueInfo: "The US 30-year fixed mortgage locks you into front-loaded interest for decades. HELOCs break this trap by recalculating daily.",
-    analogy: "A 30-year mortgage is like a gym membership charging the same monthly fee for 30 years, where 80% goes to the owner's profit for the first 19 years."
+    analogy: "A 30-year mortgage is like a gym membership charging the same monthly fee for 30 years, where 80% goes to the owner's profit for the first 19 years.",
+    dtiLimit: 43
   },
   UK: {
     flag: "🇬🇧",
@@ -84,7 +91,8 @@ export const countries: Record<string, CountryConfig> = {
     avgRate: 4.8,
     avgIncome: 4200,
     amortYears: 25,
-    maxLTV: "75-80% typically for offset products",
+    maxLTV: "Up to 80% LTV",
+    ltvValue: 0.80,
     regulatedBy: "FCA (Financial Conduct Authority) under MCOB rules",
     howItWorks: "In the UK, an Offset Mortgage links a separate savings account to your mortgage. The savings balance is SUBTRACTED from your mortgage balance before interest is calculated. You still make normal repayments, but more goes to principal because interest is lower. It's especially powerful for high-rate taxpayers who avoid paying tax on savings interest.",
     products: [
@@ -98,7 +106,9 @@ export const countries: Record<string, CountryConfig> = {
     taxRule: "Offsetting provides a tax-free 'return' equal to your mortgage rate by avoiding income tax on savings interest.",
     stressTest: "Lenders test at their Standard Variable Rate (SVR) plus a buffer, usually 6-8%.",
     uniqueInfo: "UK homeowners remortgage every 2-5 years. An offset mortgage makes the actual rate matter less as savings grow.",
-    analogy: "An offset mortgage is like a loyalty card where points (savings) give you a direct discount on your meal (mortgage interest)."
+    analogy: "An offset mortgage is like a loyalty card where points (savings) give you a direct discount on your meal (mortgage interest).",
+    dtiLimit: 40,
+    incomeMultiplier: 4.5
   },
   AU: {
     flag: "🇦🇺",
@@ -111,7 +121,8 @@ export const countries: Record<string, CountryConfig> = {
     avgRate: 6.2,
     avgIncome: 8500,
     amortYears: 30,
-    maxLTV: "80% without LMI, up to 95% with insurance",
+    maxLTV: "Up to 90% (80% without LMI)",
+    ltvValue: 0.90,
     regulatedBy: "ASIC and APRA",
     howItWorks: "Australia is the global leader in this strategy. An Offset Account is a fully functional everyday transaction account linked to your home loan. The balance sitting in it is subtracted from your loan balance DAILY for interest calculations. Every dollar sitting in the account, even for one day, saves you interest.",
     products: [
@@ -125,6 +136,7 @@ export const countries: Record<string, CountryConfig> = {
     taxRule: "Investment loan interest is deductible ('negative gearing'). Offsets are preferred over redraws for investors to protect deductibility.",
     stressTest: "APRA requires testing at the current rate PLUS a 3 percentage point buffer (e.g., 9.2% test rate).",
     uniqueInfo: "Over $327 billion sits in Australian offset accounts. It's completely mainstream, used by one in four mortgage holders.",
-    analogy: "Your offset account is a water tank dripping onto your home loan fire. The more water, the smaller the flames (interest) burn each day."
+    analogy: "Your offset account is a water tank dripping onto your home loan fire. The more water, the smaller the flames (interest) burn each day.",
+    dtiLimit: 45
   }
 };

@@ -1,10 +1,197 @@
+
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useCourse } from './CourseProvider';
 import { CourseCard, StatBox } from './UIComponents';
-import { Play, Pause, RotateCcw, TrendingUp, DollarSign, Clock, Zap, AlertCircle, Calendar, Timer, History, ShieldAlert, BarChart, Scale, ShieldCheck } from 'lucide-react';
+import { 
+  Play, Pause, RotateCcw, TrendingUp, DollarSign, Clock, Zap, AlertCircle, 
+  Calendar, Timer, History, ShieldAlert, BarChart, Scale, ShieldCheck, 
+  Target, Award, CheckCircle, Calculator, HeartPulse, Sparkles 
+} from 'lucide-react';
 import { TranslatedText } from './TranslatedText';
 import { cn } from '@/lib/utils';
+
+// Simple Confetti burst logic
+function ConfettiBurst() {
+  const dots = Array.from({ length: 40 }, (_, i) => ({
+    id: i,
+    x: (Math.random() * 2 - 1) * 300 + "px",
+    y: (Math.random() * 2 - 1) * 220 + "px",
+    color: ["#22d3ee","#a78bfa","#34d399","#fbbf24","#f472b6"][Math.floor(Math.random()*5)]
+  }));
+  return (
+    <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden">
+      {dots.map(d => (
+        <span 
+          key={d.id} 
+          className="w-2 h-2 rounded-full absolute animate-out fade-out zoom-out duration-1000 fill-mode-forwards" 
+          style={{ 
+            backgroundColor: d.color,
+            transform: `translate(${d.x}, ${d.y})`
+          }} 
+        />
+      ))}
+    </div>
+  );
+}
+
+export function QualificationCalc() {
+  const { country } = useCourse();
+  const [balance, setBalance] = useState(country.avgHome * 0.8);
+  const [value, setValue] = useState(country.avgHome);
+  const [income, setIncome] = useState(country.avgIncome);
+  const [debts, setDebts] = useState(500);
+  const [taxIns, setTaxIns] = useState(400);
+  const [credit, setCredit] = useState(720);
+  const [showConfetti, setShowConfetti] = useState(false);
+
+  // Constants for math
+  const rate = country.avgRate / 100 / 12;
+  const stressRate = (country.avgRate + 2) / 100 / 12;
+  const n = 30 * 12;
+
+  // Monthly PITI estimation
+  const pmt = balance * (rate * Math.pow(1 + rate, n)) / (Math.pow(1 + rate, n) - 1);
+  const stressPmt = balance * (stressRate * Math.pow(1 + stressRate, n)) / (Math.pow(1 + stressRate, n) - 1);
+  
+  const totalMonthly = pmt + debts + taxIns;
+  const dti = (totalMonthly / income) * 100;
+  const ltv = (balance / value) * 100;
+
+  // Approval Odds Scoring (Logic based on PDF guidelines)
+  const score = useMemo(() => {
+    let s = 0;
+    if (dti <= country.dtiLimit) s += 40;
+    else if (dti <= 50) s += 20;
+
+    if (ltv <= 80) s += 30;
+    else if (ltv <= 90) s += 15;
+
+    if (credit >= 740) s += 30;
+    else if (credit >= 680) s += 20;
+    else if (credit >= 620) s += 10;
+
+    return s;
+  }, [dti, ltv, credit, country.dtiLimit]);
+
+  useEffect(() => {
+    if (score >= 80) {
+      setShowConfetti(true);
+      const t = setTimeout(() => setShowConfetti(false), 3000);
+      return () => clearTimeout(t);
+    }
+  }, [score]);
+
+  const fmt = (val: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: country.currency, maximumFractionDigits: 0 }).format(val);
+
+  return (
+    <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        {/* INPUTS */}
+        <div className="lg:col-span-7 space-y-8">
+          <CourseCard title="🎚️ Strategy Inputs" className="bg-white border-2 border-slate-100 shadow-xl rounded-[40px] p-10">
+            <div className="space-y-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">
+                    <span>Loan Balance</span>
+                    <span className="text-slate-900">{fmt(balance)}</span>
+                  </div>
+                  <input type="range" min="50000" max="2000000" step="10000" value={balance} onChange={e => setBalance(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-blue-600" />
+                </div>
+                <div className="space-y-4">
+                  <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">
+                    <span>Home Value</span>
+                    <span className="text-slate-900">{fmt(value)}</span>
+                  </div>
+                  <input type="range" min="50000" max="2500000" step="10000" value={value} onChange={e => setValue(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-blue-600" />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">
+                    <span>Gross Monthly Income</span>
+                    <span className="text-emerald-600">{fmt(income)}</span>
+                  </div>
+                  <input type="range" min="2000" max="50000" step="100" value={income} onChange={e => setIncome(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-emerald-600" />
+                </div>
+                <div className="space-y-4">
+                  <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">
+                    <span>Other Monthly Debts</span>
+                    <span className="text-red-600">{fmt(debts)}</span>
+                  </div>
+                  <input type="range" min="0" max="5000" step="50" value={debts} onChange={e => setDebts(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-red-600" />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">
+                    <span>Tax & Insurance (Monthly)</span>
+                    <span className="text-slate-900">{fmt(taxIns)}</span>
+                  </div>
+                  <input type="range" min="0" max="2000" step="10" value={taxIns} onChange={e => setTaxIns(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-slate-600" />
+                </div>
+                <div className="space-y-4">
+                  <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">
+                    <span>Credit Score</span>
+                    <span className={cn("font-black", credit >= 700 ? "text-emerald-600" : "text-amber-600")}>{credit}</span>
+                  </div>
+                  <input type="range" min="300" max="850" step="1" value={credit} onChange={e => setCredit(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-blue-600" />
+                </div>
+              </div>
+            </div>
+          </CourseCard>
+        </div>
+
+        {/* OUTPUTS / SCORECARD */}
+        <div className="lg:col-span-5 space-y-6">
+          <div className="bg-slate-900 text-white rounded-[48px] p-10 shadow-2xl relative overflow-hidden flex flex-col items-center justify-center text-center space-y-6 min-h-[400px]">
+            {showConfetti && <ConfettiBurst />}
+            <div className="absolute top-0 right-0 p-8 opacity-5"><Target className="h-48 w-48" /></div>
+            
+            <div className="space-y-2 relative z-10">
+              <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">Lender Probability</p>
+              <h3 className="text-8xl font-black tracking-tighter">{score}%</h3>
+              <p className={cn(
+                "text-sm font-bold uppercase tracking-widest px-4 py-1 rounded-full",
+                score >= 80 ? "bg-emerald-500/20 text-emerald-400" : score >= 50 ? "bg-amber-500/20 text-amber-400" : "bg-red-500/20 text-red-400"
+              )}>
+                {score >= 80 ? "Highly Likely" : score >= 50 ? "Marginal / Needs Hacks" : "Low Probability"}
+              </p>
+            </div>
+
+            <div className="w-full space-y-4 pt-6 border-t border-white/10 relative z-10">
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">DTI Ratio</span>
+                <span className={cn("text-lg font-black", dti <= country.dtiLimit ? "text-emerald-400" : "text-red-400")}>{dti.toFixed(1)}%</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">LTV (Loan-to-Value)</span>
+                <span className={cn("text-lg font-black", ltv <= 80 ? "text-emerald-400" : "text-amber-400")}>{ltv.toFixed(1)}%</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Stress PITI</span>
+                <span className="text-lg font-black text-blue-400">{fmt(stressPmt)}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-8 bg-blue-50 border-2 border-blue-100 rounded-[32px] space-y-4">
+            <h4 className="flex items-center gap-2 font-black text-xs uppercase tracking-widest text-blue-700">
+              <ShieldCheck className="h-4 w-4" /> Regional Rules: {country.name}
+            </h4>
+            <p className="text-sm text-blue-900/70 leading-relaxed font-medium">
+              <TranslatedText>{`In ${country.name}, lenders typically cap your debt at ${country.dtiLimit}% of gross income. With your current numbers, your PITI (Principal, Interest, Taxes, Insurance) accounts for ${((pmt + taxIns) / income * 100).toFixed(1)}% of your earnings.`}</TranslatedText>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function InterestCalc() {
   const { country } = useCourse();
@@ -18,7 +205,6 @@ export function InterestCalc() {
   const totalInterest = totalPaid - loan;
   const interestPercent = Math.round((totalInterest / loan) * 100);
 
-  // Time-based cost simulators
   const hourlyCost = totalInterest / (country.amortYears * 365 * 24);
   const dailyCost = hourlyCost * 24;
   const weeklyCost = dailyCost * 7;
@@ -73,17 +259,6 @@ export function InterestCalc() {
               <p className="text-3xl font-black text-white">{fmt(weeklyCost).replace('.00', '')}<span className="text-sm opacity-40 ml-1">/wk</span></p>
               <p className="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">Reliable Loss</p>
             </div>
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-400 px-2">
-            <span>The Home ({Math.round((loan / totalPaid) * 100)}%)</span>
-            <span>The Heist ({Math.round((totalInterest / totalPaid) * 100)}%)</span>
-          </div>
-          <div className="w-full h-8 bg-slate-100 rounded-2xl overflow-hidden flex shadow-inner border-2 border-white">
-            <div className="h-full bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.4)]" style={{ width: `${(loan / totalPaid) * 100}%` }}></div>
-            <div className="h-full bg-red-600 shadow-[0_0_20px_rgba(220,38,38,0.4)]" style={{ width: `${(totalInterest / totalPaid) * 100}%` }}></div>
           </div>
         </div>
 
