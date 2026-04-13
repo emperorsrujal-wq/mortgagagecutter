@@ -453,10 +453,10 @@ function LessonContent({ id }: { id: number }) {
                       <div className="flex items-center gap-4 text-xs font-black uppercase tracking-[0.4em] opacity-80 mb-4">
                         <Award className="h-6 w-6" /> <TranslatedText>Advanced Module: High Velocity</TranslatedText>
                       </div>
-                      <h1 className="text-6xl md:text-8xl font-fraunces font-black leading-none tracking-tight">
+                      <h1 className="text-6xl md:text-8xl font-fraunces font-black leading-none tracking-tight text-white">
                         <TranslatedText>The 30-Day Float</TranslatedText>
                       </h1>
-                      <p className="mt-8 text-2xl opacity-90 leading-relaxed font-bold max-w-2xl italic">
+                      <p className="mt-8 text-2xl opacity-90 leading-relaxed font-bold max-w-2xl italic text-pink-50">
                         <TranslatedText>{`How to force the bank to provide you with an interest-free loan for every daily expense, while your cash kills your mortgage interest 24/7.`}</TranslatedText>
                       </p>
                     </div>
@@ -472,7 +472,7 @@ function LessonContent({ id }: { id: number }) {
 
                     <div className="space-y-10 leading-relaxed text-2xl text-[#334155] font-medium">
                       <p>
-                        <TranslatedText>{`In Lesson 2, you learned how merging your income with your mortgage drops the interest calculation instantly. Now, we add the multiplier.`}</TranslatedText>
+                        <TranslatedText>{`In the previous lesson, you learned that keeping your income inside your mortgage drops the daily interest calculation. But life requires you to spend that income on groceries, gas, and utilities. If you take that money out on Day 1 of the month, you lose the interest-killing benefit for the rest of the month.`}</TranslatedText>
                       </p>
                       
                       <div className="p-12 bg-slate-900 text-white rounded-[56px] border border-white/10 space-y-10 shadow-2xl relative overflow-hidden group">
@@ -484,13 +484,34 @@ function LessonContent({ id }: { id: number }) {
                           <TranslatedText>The Arbitrage Mechanic</TranslatedText>
                         </h3>
                         <p className="text-slate-300 leading-relaxed text-2xl italic font-serif">
-                          <TranslatedText>{`Imagine you need to buy $1,000 of groceries today. If you take that $1,000 out of your ${country.productShort} on Day 1, the bank starts charging interest tonight. However, if you put those groceries on a credit card, the $1,000 remains INSIDE your loan, neutralizing interest for the next 25-30 days.`}</TranslatedText>
+                          <TranslatedText>{`Imagine you spend $3,000 on life each month. By using a credit card for every single transaction, that $3,000 stays INSIDE your home equity for the entire month. You are essentially using the bank's money for free for 30 days while your cash is busy neutralizing your mortgage interest.`}</TranslatedText>
                         </p>
                       </div>
 
                       <p>
-                        <TranslatedText>{`This is 'The Float'. By utilizing a high-rewards card for every single daily transaction and paying it off ONLY on the final day of the grace period, you keep your average daily balance at its absolute minimum.`}</TranslatedText>
+                        <TranslatedText>{`This is 'The Float'. It is a precise mathematical maneuver where you utilize the interest-free grace period of a credit card to create a 30-day "liquidity bridge." You aren't increasing your debt; you are changing the timing of your capital. By delaying the outflow of your cash, you maximize the nights that your capital sits against your mortgage principal.`}</TranslatedText>
                       </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                      <CourseCard className="border-pink-100 bg-white p-10 shadow-2xl rounded-[48px]">
+                        <div className="h-16 w-16 bg-pink-100 rounded-[24px] flex items-center justify-center text-pink-600 mb-6">
+                          <Flame className="h-8 w-8" />
+                        </div>
+                        <h4 className="font-black text-slate-900 uppercase text-xs tracking-[0.3em] mb-4"><TranslatedText>The Velocity Sweep</TranslatedText></h4>
+                        <p className="text-lg text-slate-600 leading-relaxed font-bold">
+                          <TranslatedText>{`Success requires the 'Sweep'. You time your credit card payment to occur exactly 24 hours before the interest-free period ends. Over a year, this structural delay can collapse your payoff date by an additional 12 months without spending an extra penny.`}</TranslatedText>
+                        </p>
+                      </CourseCard>
+                      <CourseCard className="border-blue-100 bg-white p-10 shadow-2xl rounded-[48px]">
+                        <div className="h-16 w-16 bg-blue-100 rounded-[24px] flex items-center justify-center text-blue-600 mb-6">
+                          <Award className="h-8 w-8" />
+                        </div>
+                        <h4 className="font-black text-slate-900 uppercase text-xs tracking-[0.3em] mb-4"><TranslatedText>The Rewards Paradox</TranslatedText></h4>
+                        <p className="text-lg text-slate-600 leading-relaxed font-bold">
+                          <TranslatedText>{`Because you are channeling all 'Flow' through a high-rewards vehicle, members often harvest enough points for entire family vacations. Your daily living costs become a wealth-building bonus while your primary engine kills the mortgage.`}</TranslatedText>
+                        </p>
+                      </CourseCard>
                     </div>
 
                     <Quiz 
@@ -502,34 +523,27 @@ function LessonContent({ id }: { id: number }) {
                         "The government might tax your credit card rewards"
                       ]}
                       correctAnswer={2}
-                      explanation="The float is a game of precision. If you carry a balance past the interest-free period, the 20-25% credit card interest will immediately wipe out the 6-7% mortgage interest you saved. This strategy is only for disciplined strategists who automate their payments."
+                      explanation="The float is a game of extreme precision. If you carry a balance past the interest-free period even by one day, the 20-25% credit card interest will instantly wipe out the 6-7% mortgage interest you saved. This strategy is only for disciplined strategists who automate their payments to the exact day."
                     />
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                      <CourseCard className="border-pink-100 bg-white p-10 shadow-2xl rounded-[48px]">
-                        <div className="h-16 w-16 bg-pink-100 rounded-[24px] flex items-center justify-center text-pink-600 mb-6">
-                          <Flame className="h-8 w-8" />
-                        </div>
-                        <h4 className="font-black text-slate-900 uppercase text-xs tracking-[0.3em] mb-4"><TranslatedText>The Velocity Sweep</TranslatedText></h4>
-                        <p className="text-lg text-slate-600 leading-relaxed font-bold">
-                          <TranslatedText>{`The key is the 'Sweep'. You time your credit card payment to occur 24 hours before the interest-free period ends. Over 12 months, this alone can collapse your payoff date by an additional 6-12 months.`}</TranslatedText>
-                        </p>
-                      </CourseCard>
-                      <CourseCard className="border-blue-100 bg-white p-10 shadow-2xl rounded-[48px]">
-                        <div className="h-16 w-16 bg-blue-100 rounded-[24px] flex items-center justify-center text-blue-600 mb-6">
-                          <Award className="h-8 w-8" />
-                        </div>
-                        <h4 className="font-black text-slate-900 uppercase text-xs tracking-[0.3em] mb-4"><TranslatedText>The Rewards Paradox</TranslatedText></h4>
-                        <p className="text-lg text-slate-600 leading-relaxed font-bold">
-                          <TranslatedText>{`By channeling all 'Flow' through a rewards vehicle, members earn enough points to pay for family vacations—all while paying off their home years sooner. Your lifestyle becomes a wealth-builder.`}</TranslatedText>
-                        </p>
-                      </CourseCard>
-                    </div>
+                    <CaseStudy 
+                      name="The Roberts Family"
+                      savings="$12,400 Extra"
+                      timeline="18 Months Faster"
+                      quote="Once we automated our 'Velocity Sweep', we saw our principal drop significantly faster every month. We were using the bank's money to pay for our groceries while our money was killing our house debt. It felt like we had a second income working for us."
+                    />
 
                     <div className="pt-16 text-center space-y-10">
+                      <div className="inline-flex items-center gap-4 px-8 py-3 bg-pink-50 text-pink-600 rounded-full text-xs font-black uppercase tracking-[0.4em] border border-pink-100 shadow-sm">
+                        <ShieldCheck className="h-5 w-5" />
+                        <TranslatedText>End of Masterclass Module 3</TranslatedText>
+                      </div>
                       <h3 className="text-4xl font-fraunces font-black text-[#1A1D26]">
                         <TranslatedText>Ready for the Lender Audit?</TranslatedText>
                       </h3>
+                      <p className="text-slate-500 text-2xl max-w-xl mx-auto font-medium italic">
+                        <TranslatedText>Knowing the math is one thing. Finding the bank that will let you use it is another. In Lesson 4, we give you the exact script to bypass the sales desk.</TranslatedText>
+                      </p>
                       <button 
                         onClick={nextLesson}
                         className="bg-pink-600 text-white huger:bg-pink-700 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl huger:scale-105 active:scale-95"
@@ -549,13 +563,13 @@ function LessonContent({ id }: { id: number }) {
                       <Search className="h-48 w-48" />
                     </div>
                     <div className="relative z-10 space-y-6">
-                      <div className="flex items-center gap-4 text-xs font-black uppercase tracking-[0.4em] opacity-80 mb-4">
+                      <div className="flex items-center gap-4 text-xs font-black uppercase tracking-[0.4em] opacity-80 mb-4 text-indigo-50">
                         <Award className="h-6 w-6" /> <TranslatedText>Advanced Module: The Audit</TranslatedText>
                       </div>
-                      <h1 className="text-6xl md:text-8xl font-fraunces font-black leading-none tracking-tight">
+                      <h1 className="text-6xl md:text-8xl font-fraunces font-black leading-none tracking-tight text-white">
                         <TranslatedText>The Lender Audit</TranslatedText>
                       </h1>
-                      <p className="mt-8 text-2xl opacity-90 leading-relaxed font-bold max-w-2xl italic">
+                      <p className="mt-8 text-2xl opacity-90 leading-relaxed font-bold max-w-2xl italic text-indigo-50">
                         <TranslatedText>{`Most banks want to sell you a debt trap. Your job is to find the 'Strategic Valve'—the tool that allows you to control velocity.`}</TranslatedText>
                       </p>
                     </div>
@@ -646,13 +660,13 @@ function LessonContent({ id }: { id: number }) {
                       <Award className="h-48 w-48" />
                     </div>
                     <div className="relative z-10 space-y-6">
-                      <div className="flex items-center gap-4 text-xs font-black uppercase tracking-[0.4em] opacity-80 mb-4">
+                      <div className="flex items-center gap-4 text-xs font-black uppercase tracking-[0.4em] opacity-80 mb-4 text-blue-50">
                         <Award className="h-6 w-6" /> VIP Access Granted
                       </div>
-                      <h1 className="text-6xl md:text-8xl font-fraunces font-black leading-none tracking-tight">
+                      <h1 className="text-6xl md:text-8xl font-fraunces font-black leading-none tracking-tight text-white">
                         <TranslatedText>{meta.title}</TranslatedText>
                       </h1>
-                      <p className="mt-8 text-2xl opacity-90 leading-relaxed font-bold max-w-2xl italic">
+                      <p className="mt-8 text-2xl opacity-90 leading-relaxed font-bold max-w-2xl italic text-blue-50">
                         <TranslatedText>{`Welcome back, Administrator. Here is your executive summary of the 90-day implementation cycle.`}</TranslatedText>
                       </p>
                     </div>
@@ -702,7 +716,7 @@ function LessonContent({ id }: { id: number }) {
                       <div className="absolute top-0 left-0 p-16 opacity-10">
                         <Trophy className="h-48 w-48" />
                       </div>
-                      <h3 className="text-6xl md:text-8xl font-fraunces font-black leading-tight tracking-tight"><TranslatedText>Congratulations, Strategist.</TranslatedText></h3>
+                      <h3 className="text-6xl md:text-8xl font-fraunces font-black leading-tight tracking-tight text-white"><TranslatedText>Congratulations, Strategist.</TranslatedText></h3>
                       <p className="text-slate-400 text-3xl opacity-90 max-w-2xl mx-auto leading-relaxed font-medium italic">
                         <TranslatedText>{`You have the map. You have the scripts. You have the math. The only thing left is to take the first step.`}</TranslatedText>
                       </p>
