@@ -3,12 +3,9 @@
 import React, { use, useState, useEffect } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
 import { lessonMeta } from '@/lib/course/lesson-meta';
-import { languages } from '@/lib/course/translations';
 import { 
   InterestCalc, 
   AmortViz, 
-  PayoffRace, 
-  TruthCalculator, 
   QualificationCalc, 
   ScriptGenerator, 
   BankRateChart, 
@@ -22,12 +19,7 @@ import {
 } from '@/components/course/Calculators';
 import { 
   CourseCard, 
-  InfoBox, 
-  ExpandSection, 
-  StatBox, 
-  ChatBubble, 
   TaskItem, 
-  CaseStudy, 
   Quiz 
 } from '@/components/course/UIComponents';
 import { TranslatedText } from '@/components/course/TranslatedText';
@@ -39,12 +31,6 @@ import {
   Home as HomeIcon, 
   CheckCircle2, 
   Rocket, 
-  Landmark, 
-  ShieldAlert, 
-  GraduationCap, 
-  ArrowRight, 
-  UserCircle2, 
-  Timer, 
   Zap, 
   ShieldCheck,
   CreditCard,
@@ -52,15 +38,12 @@ import {
   TrendingUp,
   Flame,
   MessageSquare,
-  FileText,
-  Search,
   Target,
   BarChart,
   Lock,
   Star,
   Award,
   Trophy,
-  Download,
   History,
   Scale,
   Sparkles,
@@ -70,20 +53,19 @@ import {
   Layers,
   Globe,
   Play,
-  Quote,
   ZapOff,
   BookOpen,
   DollarSign,
-  Calculator,
   Clock,
   ArrowUpRight,
   Gavel,
   ScrollText,
-  ListChecks
+  ListChecks,
+  ArrowRight
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { useUser } from '@/firebase';
 
 function ProgressBar({ current }: { current: number }) {
@@ -173,27 +155,17 @@ function LessonContent({ id }: { id: number }) {
               </p>
             </header>
 
-            {/* 1. CONCEPT */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: The Lego Loan (ELI14)</TranslatedText></h2>
               </div>
-              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
-                  <p>
-                    <TranslatedText>Imagine you want to buy a giant $100 Lego set from a friend, but you only have $10. You go to a "Banker Friend" and borrow the other $90.</TranslatedText>
-                  </p>
-                  <p>
-                    <TranslatedText>They say: "Sure! Just pay me $10 a month for 12 months." You think, "Great! After 10 months, I've paid back the $100!"</TranslatedText>
-                  </p>
-                  <p className="text-blue-600 font-black italic">
-                    <TranslatedText>But here is the structural catch that everyone misses...</TranslatedText>
-                  </p>
-                  <p>
-                    <TranslatedText>The Banker Friend says the first $8 of every $10 payment is a "rental fee" for letting you use their money. Only $2 goes toward actually owning the Legos. In the mortgage world, this is called "Amortization," and it ensures the bank gets paid before you do.</TranslatedText>
-                  </p>
+                  <p><TranslatedText>Imagine you want to buy a giant $100 Lego set from a friend, but you only have $10. You go to a "Banker Friend" and borrow the other $90.</TranslatedText></p>
+                  <p><TranslatedText>They say: "Sure! Just pay me $10 a month for 12 months." You think, "Great! After 10 months, I've paid back the $100!"</TranslatedText></p>
+                  <p className="text-blue-600 font-black italic"><TranslatedText>But here is the structural catch that everyone misses...</TranslatedText></p>
+                  <p><TranslatedText>The Banker Friend says the first $8 of every $10 payment is a "rental fee" for letting you use their money. Only $2 goes toward actually owning the Legos. In the mortgage world, this is called "Amortization," and it ensures the bank gets paid before you do.</TranslatedText></p>
                 </div>
                 <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
                   <div className="absolute top-0 right-0 p-6 opacity-10"><Layers className="h-32 w-32 text-blue-400" /></div>
@@ -206,13 +178,11 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* 2. TERMINOLOGY */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Terminology Masterclass</TranslatedText></h2>
               </div>
-              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
                   { term: "Principal (The Stuff)", desc: "This is the actual cost of your house. Every dollar of principal you pay is a dollar of the house you finally 'own'.", icon: <HomeIcon className="h-5 w-5 text-blue-500" /> },
@@ -231,84 +201,39 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* 3. IMPORTANCE */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: The 15-Year Treadmill</TranslatedText></h2>
               </div>
-              
               <CourseCard className="border-l-[12px] border-l-red-600 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
-                <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12">
-                  <Activity className="h-96 w-96" />
-                </div>
+                <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12"><Activity className="h-96 w-96" /></div>
                 <div className="relative z-10 space-y-10">
                   <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
-                    <p>
-                      <TranslatedText>{`Most homeowners in ${country.name} spend the first decade of their lives on a 'Financial Treadmill'. You are working hard, making big monthly payments, but your actual ownership of the house barely moves.`}</TranslatedText>
-                    </p>
-                    <p>
-                      <TranslatedText>{`Because the system is 'Front-Loaded', if you sell your house after 7 years, you might find that you still owe almost exactly what you borrowed. You've essentially been a 'tenant' to the bank for 7 years, paying for repairs and property taxes while the bank kept the 'rent' (interest).`}</TranslatedText>
-                    </p>
+                    <p><TranslatedText>{`Most homeowners in ${country.name} spend the first decade of their lives on a 'Financial Treadmill'. You are working hard, making big monthly payments, but your actual ownership of the house barely moves.`}</TranslatedText></p>
+                    <p><TranslatedText>{`Because the system is 'Front-Loaded', if you sell your house after 7 years, you might find that you still owe almost exactly what you borrowed. You've essentially been a 'tenant' to the bank for 7 years, paying for repairs and property taxes while the bank kept the 'rent' (interest).`}</TranslatedText></p>
                   </div>
                 </div>
               </CourseCard>
-
               <EpiphanyBox>
                 <TranslatedText>{`The "Amortization Table" is not a plan for freedom; it is a mathematical harvesting machine designed to capture the first 15 years of your labor as pure interest profit for the bank.`}</TranslatedText>
               </EpiphanyBox>
             </section>
 
-            {/* 4. REAL WORLD PRODUCTS */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">4</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Real World: Identifying the Cage</TranslatedText></h2>
-              </div>
-              
-              <div className="space-y-6">
-                <p className="text-xl text-slate-600 font-medium">
-                  <TranslatedText>{`In ${country.name}, the most common product is the ${country.amortYears}-Year traditional mortgage. Here is how it relates to your life:`}</TranslatedText>
-                </p>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="p-8 bg-slate-50 rounded-[32px] border border-slate-200 space-y-4">
-                    <h4 className="font-black text-blue-600 uppercase text-xs tracking-widest">Example A: The Safety Trap</h4>
-                    <p className="text-slate-700 font-bold leading-relaxed">
-                      <TranslatedText>{`You choose a "Fixed Rate" for 5 or 30 years because it feels safe. But that safety comes at a cost: the bank uses that fixed schedule to ensure every payment you make for the next 120 months is primarily interest.`}</TranslatedText>
-                    </p>
-                  </div>
-                  <div className="p-8 bg-slate-50 rounded-[32px] border border-slate-200 space-y-4">
-                    <h4 className="font-black text-blue-600 uppercase text-xs tracking-widest">Example B: The One-Way Street</h4>
-                    <p className="text-slate-700 font-bold leading-relaxed">
-                      <TranslatedText>{`You get a bonus at work and send $5,000 to your mortgage. That money is now "dead." You cannot use it for an emergency without paying the bank a fee to "refinance" your own money back to you.`}</TranslatedText>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {/* 5. ACTION */}
-            <section className="space-y-12">
-              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">5</div>
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: The Math Audit</TranslatedText></h2>
               </div>
-              
               <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
                 <TranslatedText>{`Use the 'Evidence Locker' below to see exactly how much 'Invisible Rent' you are currently paying to your lender every single hour of every single day.`}</TranslatedText>
               </p>
-
               <InterestCalc />
-
               <div className="space-y-8">
                 <h3 className="text-3xl font-fraunces font-black text-center text-slate-900"><TranslatedText>The Equity Visualization</TranslatedText></h3>
-                <p className="text-lg text-slate-500 text-center font-medium">
-                  <TranslatedText>Slide the timer to see how slowly your equity grows compared to the bank's interest profit in the early years.</TranslatedText>
-                </p>
+                <p className="text-lg text-slate-500 text-center font-medium"><TranslatedText>Slide the timer to see how slowly your equity grows compared to the bank's interest profit in the early years.</TranslatedText></p>
                 <AmortViz />
               </div>
-
               <Quiz 
                 question="In the first 5 years of a typical mortgage, where does the majority of your payment go?"
                 options={[
@@ -337,7 +262,7 @@ function LessonContent({ id }: { id: number }) {
                 <span className="block text-blue-600 italic mt-4"><TranslatedText>Mastering the Gatekeeper's Math.</TranslatedText></span>
               </h1>
               <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
-                <TranslatedText>{`Lenders in ${country.name} have a secret 'Report Card' they use to decide who gets the best tools. We're going to learn how to ace it.`}</TranslatedText>
+                <TranslatedText>{`Lenders in ${country.name} have a secret 'Report Card' they use to decide who gets the high-performance tools. We're going to learn how to ace it.`}</TranslatedText>
               </p>
             </header>
 
@@ -345,22 +270,22 @@ function LessonContent({ id }: { id: number }) {
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: The Heavy Backpack Test</TranslatedText></h2>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: The Heavy Backpack Test (ELI14)</TranslatedText></h2>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
                   <p>
-                    <TranslatedText>Imagine you want to borrow your friend's really fast racing bike. Your friend says, "I'll let you use it, but first I need to know if you're strong enough to pedal it up a steep hill."</TranslatedText>
+                    <TranslatedText>Imagine you want to borrow your friend's really fast racing bike (The HELOC). Your friend says, "I'll let you use it, but first I need to know if you're strong enough to pedal it up a steep hill without crashing."</TranslatedText>
                   </p>
                   <p>
-                    <TranslatedText>They put a heavy backpack on you and ask you to walk around. If you can walk easily, they know you're strong. If you struggle, they won't give you the bike because they're afraid you'll fall.</TranslatedText>
+                    <TranslatedText>To test you, they put a heavy backpack on you and ask you to run. The weight in the backpack represents your other debts (car loans, credit cards, taxes). If the backpack is too heavy for your body weight (income), your friend won't give you the bike because they're afraid you'll fall.</TranslatedText>
                   </p>
                   <p className="text-blue-600 font-black italic">
                     <TranslatedText>In the bank's world, this is the "Stress Test."</TranslatedText>
                   </p>
                   <p>
-                    <TranslatedText>Lenders don't just want to know if you can pay your bills today. They want to know if you could still pay them if the world changed tomorrow. They measure this using a few secret numbers.</TranslatedText>
+                    <TranslatedText>Lenders don't care how much money you make; they care about your "Net Strength." They use a secret report card to decide if you are a "Low-Risk Strategist" or a "High-Risk Debtor."</TranslatedText>
                   </p>
                 </div>
                 <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
@@ -378,15 +303,15 @@ function LessonContent({ id }: { id: number }) {
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Key Terminology</TranslatedText></h2>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Terminology Masterclass</TranslatedText></h2>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
-                  { term: "DTI (Debt-to-Income)", desc: "Your 'Backpack Weight'. It is the percentage of your monthly income that goes toward paying back debts.", icon: <Scale className="h-5 w-5 text-blue-500" /> },
-                  { term: "LTV (Loan-to-Value)", desc: "How much of the house the bank still owns versus how much you own. Most strategic tools require an LTV below 80%.", icon: <HomeIcon className="h-5 w-5 text-emerald-500" /> },
-                  { term: "Stress Test", desc: `A mandatory calculation where ${country.name} lenders pretend your interest rate is 2% higher to see if you can still survive.`, icon: <Activity className="h-5 w-5 text-red-500" /> },
-                  { term: "Tier 1 Credit", desc: "Your 'Behavior Report Card'. A score (usually above 740) that tells the bank you are a low-risk strategist, not a risky debtor.", icon: <ShieldCheck className="h-5 w-5 text-amber-500" /> },
+                  { term: "DTI (Debt-to-Income)", desc: "Your 'Backpack Weight'. It is the percentage of your monthly income that goes toward paying back debts. Lenders want this under 43%.", icon: <Scale className="h-5 w-5 text-blue-500" /> },
+                  { term: "LTV (Loan-to-Value)", desc: "How much of the house you own. Most high-performance tools require you to own at least 20% of the home (80% LTV).", icon: <HomeIcon className="h-5 w-5 text-emerald-500" /> },
+                  { term: "The Stress Test", desc: `A mandatory check where ${country.name} lenders pretend your interest rate is much higher to see if you can still survive.`, icon: <Activity className="h-5 w-5 text-red-500" /> },
+                  { term: "Tier 1 Credit", desc: "Your 'Trust Rating'. A score (usually above 740) that tells the bank you are an expert at managing other people's money.", icon: <ShieldCheck className="h-5 w-5 text-amber-500" /> },
                 ].map((t, i) => (
                   <div key={i} className="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-3">
                     <div className="flex items-center gap-3">
@@ -403,7 +328,7 @@ function LessonContent({ id }: { id: number }) {
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: The Key to the Vault</TranslatedText></h2>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: Moving from Debtor to Strategist</TranslatedText></h2>
               </div>
               
               <CourseCard className="border-l-[12px] border-l-blue-600 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
@@ -413,17 +338,17 @@ function LessonContent({ id }: { id: number }) {
                 <div className="relative z-10 space-y-10">
                   <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
                     <p>
-                      <TranslatedText>{`Lenders treat people differently based on their scorecard. If you look like a "Traditional Debtor" (high DTI, low credit), they will lock you in the 30-year amortized cage because it's profitable for them.`}</TranslatedText>
+                      <TranslatedText>{`Lenders in ${country.name} give two different types of products. To the "Uninformed Debtor," they give the 30-year fixed cage—because it's the most profitable for the bank.`}</TranslatedText>
                     </p>
                     <p>
-                      <TranslatedText>{`But if you look like a "Strategist" (low DTI, high credit), they will give you the keys to the vault: the first-lien HELOCs, the Offset accounts, and the flexible credit lines we need to execute the Mortgage Cutter Method.`}</TranslatedText>
+                      <TranslatedText>{`But to the "Strategic Owner," they give the flexible, interest-canceling tools like first-lien HELOCs and Offset accounts. Why? Because they trust the Strategist to manage the capital without failing the Stress Test.`}</TranslatedText>
                     </p>
                   </div>
                 </div>
               </CourseCard>
 
               <EpiphanyBox>
-                <TranslatedText>{`Your Credit Score isn't a measure of wealth. It's a measure of how good you are at being a profitable, low-risk partner for major lenders. We're going to optimize your scorecard so you become too "safe" for them to ignore.`}</TranslatedText>
+                <TranslatedText>{`You don't apply for a mortgage; you audition for a partnership. When your Scorecard is optimized, the bank stops being your landlord and starts being your capital supplier.`}</TranslatedText>
               </EpiphanyBox>
             </section>
 
@@ -445,20 +370,20 @@ function LessonContent({ id }: { id: number }) {
                   <Sparkles className="h-6 w-6 text-blue-600 fill-blue-600" />
                 </div>
                 <p className="text-xl text-blue-900 font-bold leading-relaxed">
-                  <TranslatedText>{`💡 STRATEGY HACK: If your DTI is too high, focus on "Choking" small, high-interest debts first. Clearing a $500/mo car payment can drop your DTI significantly, instantly unlocking the 1%ers strategy.`}</TranslatedText>
+                  <TranslatedText>{`💡 DECISION TIP: If your DTI is over ${country.dtiLimit}%, don't call a bank yet. Use the "Debt Triage" strategy—focus every extra dollar on "choking" your smallest monthly payment (like a car or furniture loan). This drops your backpack weight immediately and unlocks the 1%ers strategy.`}</TranslatedText>
                 </p>
               </div>
 
               <Quiz 
-                question="Why does the bank pretend your interest rate is 2% higher during the Stress Test?"
+                question="Why does the bank care about your DTI (Debt-to-Income) ratio?"
                 options={[
-                  "To make more money off you immediately",
-                  "To see if you can still pay your mortgage if the economy changes",
-                  "Because they are legally required to be mean to borrowers",
-                  "It's a secret tax collected by the government"
+                  "They want to know if you are a nice person",
+                  "To see if you have enough 'Strength' to handle more debt weight",
+                  "It's a secret way to charge you more fees",
+                  "Because they are required to report your hobbies to the government"
                 ]}
                 correctAnswer={1}
-                explanation={`In ${country.name}, the Stress Test is a safety buffer. Lenders want to ensure that if interest rates rise, you won't default on your loan. Aceing this test is the first step to securing a high-leverage strategic credit line.`}
+                explanation={`In ${country.name}, DTI is the measure of your financial bandwidth. If your "backpack" of other debts is too heavy, the bank won't trust you with a high-performance revolving credit line.`}
               />
             </section>
           </div>
