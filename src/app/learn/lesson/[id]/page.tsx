@@ -1,4 +1,3 @@
-
 'use client';
 import React, { use, useState, useEffect } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
@@ -549,159 +548,140 @@ function LessonContent({ id }: { id: number }) {
         {/* LESSON 4: THE LEGAL LOOPHOLE */}
         {id === 4 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
-            {isLocked ? (
-              <section className="text-center space-y-10 py-20">
-                <div className="bg-slate-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Lock className="h-12 w-12 text-slate-400" />
+            <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-amber-100 text-amber-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-amber-200">
+                <Gavel className="h-4 w-4" />
+                <TranslatedText>Mastery Level: 04 — Structural Decoding</TranslatedText>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>The Legal Loophole:</TranslatedText>
+                <span className="block text-blue-600 italic mt-4"><TranslatedText>Finding the 'Two-Way' Street.</TranslatedText></span>
+              </h1>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                <TranslatedText>{`Lenders love to hide 'Cage' clauses in the fine print. We're going to find the 'Escape Hatch' in your ${country.name} contracts.`}</TranslatedText>
+              </p>
+            </header>
+
+            {/* 1. CONCEPT */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: The Magic Library Card (ELI14)</TranslatedText></h2>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
+                  <p>
+                    <TranslatedText>Imagine you borrowed a book from a library. A traditional mortgage is like a library that says: "You can keep this book for 30 years, but you must pay us $5 every week. If you want to return it early, we will charge you a $500 fee!"</TranslatedText>
+                  </p>
+                  <p>
+                    <TranslatedText>The "Legal Loophole" is finding the library that gives you a "Magic Library Card." This card says: "Borrow as many books as you want. Pay us back whenever you have time. If you return them early, we won't charge you a dime—in fact, we'll stop charging you interest the second you bring them back!"</TranslatedText>
+                  </p>
+                  <p className="text-blue-600 font-black italic">
+                    <TranslatedText>This is what we call an "Open Credit Structure."</TranslatedText>
+                  </p>
+                  <p>
+                    <TranslatedText>We are looking for the specific legal language that turns your house from a locked cage into a flexible tool that lets your money move in and out like a two-way street.</TranslatedText>
+                  </p>
                 </div>
-                <h2 className="text-5xl font-fraunces font-black text-slate-900 leading-tight">
-                  <TranslatedText>Unlock the Private Vault</TranslatedText>
-                </h2>
-                <p className="text-xl text-slate-500 max-w-xl mx-auto">
-                  <TranslatedText>The Legal Loophole, Automated Heist, and 1% Scaling modules are reserved for Mortgage Cutter Pro members. Stop being a tenant and start being the bank.</TranslatedText>
-                </p>
-                <Button size="lg" className="h-16 px-12 text-xl font-black rounded-2xl shadow-2xl shadow-blue-500/20" asChild>
-                  <Link href="/purchase?plan=pro_197">Unlock The Full Blueprint ($197)</Link>
-                </Button>
-              </section>
-            ) : (
-              <>
-                <header className="space-y-10 text-center">
-                  <div className="inline-flex items-center gap-2 px-6 py-2 bg-amber-100 text-amber-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-amber-200">
-                    <Gavel className="h-4 w-4" />
-                    <TranslatedText>Mastery Level: 04 — Structural Decoding</TranslatedText>
+                <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
+                  <div className="absolute top-0 right-0 p-6 opacity-10"><ScrollText className="h-32 w-32 text-blue-400" /></div>
+                  <div className="space-y-2 relative z-10">
+                    <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Contract Secret</p>
+                    <h3 className="text-6xl font-black text-white tracking-tighter">OPEN</h3>
+                    <p className="text-lg font-bold text-slate-400">End of the One-Way Debt</p>
                   </div>
-                  <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
-                    <TranslatedText>The Legal Loophole:</TranslatedText>
-                    <span className="block text-blue-600 italic mt-4"><TranslatedText>Finding the 'Two-Way' Street.</TranslatedText></span>
-                  </h1>
-                  <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
-                    <TranslatedText>{`Lenders love to hide 'Cage' clauses in the fine print. We're going to find the 'Escape Hatch' in your ${country.name} contracts.`}</TranslatedText>
-                  </p>
-                </header>
+                </div>
+              </div>
+            </section>
 
-                {/* 1. CONCEPT */}
-                <section className="space-y-12">
-                  <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                    <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
-                    <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: The Magic Library Card</TranslatedText></h2>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                    <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
-                      <p>
-                        <TranslatedText>Imagine you borrowed a book from a library. A traditional mortgage is like a library that says: "You can keep this book for 30 years, but you must pay us $5 every week. If you want to return it early, we will charge you a $500 fee!"</TranslatedText>
-                      </p>
-                      <p>
-                        <TranslatedText>The "Legal Loophole" is finding the library that gives you a "Magic Library Card." This card says: "Borrow as many books as you want. Pay us back whenever you have time. If you return them early, we won't charge you a dime—in fact, we'll stop charging you interest the second you bring them back!"</TranslatedText>
-                      </p>
-                      <p className="text-blue-600 font-black italic">
-                        <TranslatedText>This is what we call an "Open Credit Structure."</TranslatedText>
-                      </p>
-                      <p>
-                        <TranslatedText>We are looking for the specific legal language that turns your house from a locked cage into a flexible tool that lets your money move in and out like a two-way street.</TranslatedText>
-                      </p>
+            {/* 2. TERMINOLOGY */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Terminology Masterclass</TranslatedText></h2>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  { term: "TIP (Total Interest %)", desc: `A mandatory disclosure in ${country.name} that shows the total interest you'll pay as a percentage of the loan. Traditional paths often hit 90-110%.`, icon: <SearchCode className="h-5 w-5 text-blue-500" /> },
+                  { term: "Prepayment Penalty", desc: "A 'Cage Clause' that charges you for being smart and paying off your debt early. We require zero penalties.", icon: <ShieldAlert className="h-5 w-5 text-red-500" /> },
+                  { term: "Draw Period", desc: "The 'Golden Window' (usually 10 years) during which you can put money in and take it out freely without applying again.", icon: <History className="h-5 w-5 text-emerald-500" /> },
+                  { term: "Payment Application", desc: "The secret rules in your contract that decide if your money hits the interest or the principal first. We need 'Principal-First' daily benefit.", icon: <ListChecks className="h-5 w-5 text-amber-500" /> },
+                ].map((t, i) => (
+                  <div key={i} className="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-slate-50 rounded-lg">{t.icon}</div>
+                      <h4 className="font-black text-lg text-slate-900"><TranslatedText>{t.term}</TranslatedText></h4>
                     </div>
-                    <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
-                      <div className="absolute top-0 right-0 p-6 opacity-10"><ScrollText className="h-32 w-32 text-blue-400" /></div>
-                      <div className="space-y-2 relative z-10">
-                        <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Contract Secret</p>
-                        <h3 className="text-6xl font-black text-white tracking-tighter">OPEN</h3>
-                        <p className="text-lg font-bold text-slate-400">End of the One-Way Debt</p>
-                      </div>
-                    </div>
+                    <p className="text-slate-500 font-medium leading-relaxed"><TranslatedText>{t.desc}</TranslatedText></p>
                   </div>
-                </section>
+                ))}
+              </div>
+            </section>
 
-                {/* 2. TERMINOLOGY */}
-                <section className="space-y-12">
-                  <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                    <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
-                    <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Terminology Masterclass</TranslatedText></h2>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {[
-                      { term: "TIP (Total Interest %)", desc: `A mandatory disclosure in ${country.name} that shows the total interest you'll pay as a percentage of the loan. Traditional paths often hit 90-110%.`, icon: <SearchCode className="h-5 w-5 text-blue-500" /> },
-                      { term: "Prepayment Penalty", desc: "A 'Cage Clause' that charges you for being smart and paying off your debt early. We require zero penalties.", icon: <ShieldAlert className="h-5 w-5 text-red-500" /> },
-                      { term: "Draw Period", desc: "The 'Golden Window' (usually 10 years) during which you can put money in and take it out freely without applying again.", icon: <History className="h-5 w-5 text-emerald-500" /> },
-                      { term: "Seasoning", desc: "A bank rule that says you must wait (usually 6-12 months) before they will let you use your new home value for more credit.", icon: <Timer className="h-5 w-5 text-amber-500" /> },
-                    ].map((t, i) => (
-                      <div key={i} className="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-3">
-                        <div className="flex items-center gap-3">
-                          <div className="p-2 bg-slate-50 rounded-lg">{t.icon}</div>
-                          <h4 className="font-black text-lg text-slate-900"><TranslatedText>{t.term}</TranslatedText></h4>
-                        </div>
-                        <p className="text-slate-500 font-medium leading-relaxed"><TranslatedText>{t.desc}</TranslatedText></p>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-
-                {/* 3. IMPORTANCE */}
-                <section className="space-y-12">
-                  <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                    <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
-                    <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: The Escape Hatch</TranslatedText></h2>
-                  </div>
-                  
-                  <CourseCard className="border-l-[12px] border-l-amber-600 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
-                    <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12">
-                      <ListChecks className="h-96 w-96" />
-                    </div>
-                    <div className="relative z-10 space-y-10">
-                      <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
-                        <p>
-                          <TranslatedText>{`Most homeowners in ${country.name} sign their contracts without reading the "Payment Application" clause. This clause usually says: "We apply your money to interest first, then escrow, then insurance... and IF there is anything left, we'll let you have some principal."`}</TranslatedText>
-                        </p>
-                        <p>
-                          <TranslatedText>{`By decoding the contract and finding the "Open Loophole," we flip the script. We find the tools where the law REQUIRES the bank to apply your deposit to the principal balance IMMEDIATELY. This one sentence is the difference between a 30-year sentence and a 7-year sprint.`}</TranslatedText>
-                        </p>
-                      </div>
-                    </div>
-                  </CourseCard>
-
-                  <EpiphanyBox>
-                    <TranslatedText>{`The "Loophole" isn't a secret law—it's a structural choice. You are choosing to move your debt from a "Closed Amortized Shell" into an "Open Daily Calculation." The bank can't stop you if you know what to ask for.`}</TranslatedText>
-                  </EpiphanyBox>
-                </section>
-
-                {/* 4. ACTION */}
-                <section className="space-y-12">
-                  <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                    <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">4</div>
-                    <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: The Math Audit</TranslatedText></h2>
-                  </div>
-                  
-                  <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
-                    <TranslatedText>{`Use the "True Cost" simulator below. It reveals the "Total Interest Percentage" (TIP) that your lender is legally required to show you, but often hides in the back of the package.`}</TranslatedText>
-                  </p>
-
-                  <ContractSimulator />
-
-                  <div className="p-8 bg-amber-50 border-4 border-dashed border-amber-200 rounded-[40px] text-center space-y-4">
-                    <div className="bg-amber-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto">
-                      <SearchCode className="h-6 w-6 text-amber-600 fill-amber-600" />
-                    </div>
-                    <p className="text-xl text-amber-900 font-bold leading-relaxed">
-                      <TranslatedText>{`🚨 AUDIT WARNING: If your current TIP is over 90%, you are in a "Max Harvest" contract. Your first priority is to move your debt into a structure with a TIP under 40% using the Mortgage Cutter method.`}</TranslatedText>
+            {/* 3. IMPORTANCE */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: The Escape Hatch</TranslatedText></h2>
+              </div>
+              
+              <CourseCard className="border-l-[12px] border-l-amber-600 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
+                <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12">
+                  <Gavel className="h-96 w-96" />
+                </div>
+                <div className="relative z-10 space-y-10">
+                  <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
+                    <p>
+                      <TranslatedText>{`Most homeowners in ${country.name} sign their contracts without reading the "Payment Application" clause. This clause usually says: "We apply your money to interest first, then escrow, then insurance... and IF there is anything left, we'll let you have some principal."`}</TranslatedText>
+                    </p>
+                    <p>
+                      <TranslatedText>{`By decoding the contract and finding the "Open Loophole," we flip the script. We find the tools where the law REQUIRES the bank to apply your deposit to the principal balance IMMEDIATELY. This one sentence is the difference between a 30-year sentence and a 7-year sprint.`}</TranslatedText>
                     </p>
                   </div>
+                </div>
+              </CourseCard>
 
-                  <Quiz 
-                    question="What is a 'Prepayment Penalty' in a mortgage contract?"
-                    options={[
-                      "A reward for paying your bills on time",
-                      "A fee the bank charges you for paying off your loan too fast",
-                      "The interest rate you pay every month",
-                      "A mandatory tax paid to the local government"
-                    ]}
-                    correctAnswer={1}
-                    explanation={`In ${country.name}, some lenders use prepayment penalties to stop you from escaping the interest trap. We always seek "Zero Penalty" contracts to maintain our speed and freedom.`}
-                  />
-                </section>
-              </>
-            )}
+              <EpiphanyBox>
+                <TranslatedText>{`The "Loophole" isn't a secret law—it's a structural choice. You are choosing to move your debt from a "Closed Amortized Shell" into an "Open Daily Calculation." The bank can't stop you if you know what to ask for.`}</TranslatedText>
+              </EpiphanyBox>
+            </section>
+
+            {/* 4. ACTION */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">4</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: The Contract Audit</TranslatedText></h2>
+              </div>
+              
+              <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
+                <TranslatedText>{`Use the "True Cost" simulator below. It reveals the "Total Interest Percentage" (TIP) that your lender is legally required to show you, but often hides in the back of the package.`}</TranslatedText>
+              </p>
+
+              <ContractSimulator />
+
+              <div className="p-8 bg-amber-50 border-4 border-dashed border-amber-200 rounded-[40px] text-center space-y-4">
+                <div className="bg-amber-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto">
+                  <SearchCode className="h-6 w-6 text-amber-600 fill-amber-600" />
+                </div>
+                <p className="text-xl text-amber-900 font-bold leading-relaxed">
+                  <TranslatedText>{`🚨 AUDIT WARNING: If your current TIP is over 90%, you are in a "Max Harvest" contract. Your first priority is to move your debt into a structure with a TIP under 40% using the Mortgage Cutter method.`}</TranslatedText>
+                </p>
+              </div>
+
+              <Quiz 
+                question="What is a 'Prepayment Penalty' in a mortgage contract?"
+                options={[
+                  "A reward for paying your bills on time",
+                  "A fee the bank charges you for paying off your loan too fast",
+                  "The interest rate you pay every month",
+                  "A mandatory tax paid to the local government"
+                ]}
+                correctAnswer={1}
+                explanation={`In ${country.name}, some lenders use prepayment penalties to stop you from escaping the interest trap. We always seek "Zero Penalty" contracts to maintain our speed and freedom.`}
+              />
+            </section>
           </div>
         )}
 
@@ -848,298 +828,260 @@ function LessonContent({ id }: { id: number }) {
         {/* LESSON 6: THE 1% MULTIPLIER */}
         {id === 6 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
-            {isLocked ? (
-              <section className="text-center space-y-10 py-20">
-                <div className="bg-slate-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Lock className="h-12 w-12 text-slate-400" />
+            <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-amber-100 text-amber-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-amber-200">
+                <Star className="h-4 w-4" />
+                <TranslatedText>Mastery Level: 06 — Portfolio Scaling</TranslatedText>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>The 1% Multiplier:</TranslatedText>
+                <span className="block text-blue-600 italic mt-4"><TranslatedText>Scaling Your Empire.</TranslatedText></span>
+              </h1>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                <TranslatedText>{`Debt reduction was just the beginning. Now we use the bank's own inventory to build your wealth fortress in ${country.name}.`}</TranslatedText>
+              </p>
+            </header>
+
+            {/* 1. CONCEPT */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: Green Houses to Red Hotels (ELI14)</TranslatedText></h2>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
+                  <p>
+                    <TranslatedText>In the game of Monopoly, you win by turning "Green Houses" into "Red Hotels." A traditional mortgage only lets you have one green house, and you must pay for it for 30 years before you can get another one.</TranslatedText>
+                  </p>
+                  <p>
+                    <TranslatedText>The "1% Multiplier" strategy treats your home equity as a "Storage Tank" of capital. As you drop your principal using velocity, the tank fills up with available credit.</TranslatedText>
+                  </p>
+                  <p className="text-blue-600 font-black italic">
+                    <TranslatedText>You then "Recycle" that capital.</TranslatedText>
+                  </p>
+                  <p>
+                    <TranslatedText>Instead of letting your money sit "dead" in a wall, you deploy it to acquire another asset. Now, you have TWO properties, and your income chokes the interest on both simultaneously. This is how empires are built from a single paycheck.</TranslatedText>
+                  </p>
                 </div>
-                <h2 className="text-5xl font-fraunces font-black text-slate-900 leading-tight">
-                  <TranslatedText>Unlock the Private Vault</TranslatedText>
-                </h2>
-                <p className="text-xl text-slate-500 max-w-xl mx-auto">
-                  <TranslatedText>The 1% Multiplier, The Escape Hatch, and The Proof modules are reserved for Mortgage Cutter Pro members. Start building your portfolio empire today.</TranslatedText>
-                </p>
-                <Button size="lg" className="h-16 px-12 text-xl font-black rounded-2xl shadow-2xl shadow-blue-500/20" asChild>
-                  <Link href="/purchase?plan=pro_197">Unlock The Full Blueprint ($197)</Link>
-                </Button>
-              </section>
-            ) : (
-              <>
-                <header className="space-y-10 text-center">
-                  <div className="inline-flex items-center gap-2 px-6 py-2 bg-amber-100 text-amber-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-amber-200">
-                    <Star className="h-4 w-4" />
-                    <TranslatedText>Mastery Level: 06 — Portfolio Scaling</TranslatedText>
+                <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
+                  <div className="absolute top-0 right-0 p-6 opacity-10"><Layers className="h-32 w-32 text-blue-400" /></div>
+                  <div className="space-y-2 relative z-10">
+                    <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Multiplier Effect</p>
+                    <h3 className="text-6xl font-black text-white tracking-tighter">RECYCLE</h3>
+                    <p className="text-lg font-bold text-slate-400">Capital Mobility Mastery</p>
                   </div>
-                  <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
-                    <TranslatedText>The 1% Multiplier:</TranslatedText>
-                    <span className="block text-blue-600 italic mt-4"><TranslatedText>Scaling Your Empire.</TranslatedText></span>
-                  </h1>
-                  <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
-                    <TranslatedText>{`Debt reduction was just the beginning. Now we use the bank's own inventory to build your wealth fortress in ${country.name}.`}</TranslatedText>
-                  </p>
-                </header>
+                </div>
+              </div>
+            </section>
 
-                {/* 1. CONCEPT */}
-                <section className="space-y-12">
-                  <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                    <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
-                    <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: Green Houses to Red Hotels (ELI14)</TranslatedText></h2>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                    <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
-                      <p>
-                        <TranslatedText>In the game of Monopoly, you win by turning "Green Houses" into "Red Hotels." A traditional mortgage only lets you have one green house, and you must pay for it for 30 years before you can get another one.</TranslatedText>
-                      </p>
-                      <p>
-                        <TranslatedText>The "1% Multiplier" strategy treats your home equity as a "Storage Tank" of capital. As you drop your principal using velocity, the tank fills up with available credit.</TranslatedText>
-                      </p>
-                      <p className="text-blue-600 font-black italic">
-                        <TranslatedText>You then "Recycle" that capital.</TranslatedText>
-                      </p>
-                      <p>
-                        <TranslatedText>Instead of letting your money sit "dead" in a wall, you deploy it to acquire another asset. Now, you have TWO properties, and your income chokes the interest on both simultaneously. This is how empires are built from a single paycheck.</TranslatedText>
-                      </p>
+            {/* 2. TERMINOLOGY */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Terminology Masterclass</TranslatedText></h2>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  { term: "LTV Buffer", desc: `The safe "Safety Net" of equity (usually 20%) that we never touch. In ${country.name}, we only deploy capital that exists above this line.`, icon: <ShieldCheck className="h-5 w-5 text-blue-500" /> },
+                  { term: "Yield Spread", desc: "The gap between the interest you pay the bank (e.g., 6%) and the return you earn on your new asset (e.g., 10%). The 1%er lives in this gap.", icon: <TrendingUp className="h-5 w-5 text-emerald-500" /> },
+                  { term: "Asset Velocity", desc: "The speed at which an investment returns your original capital so you can use it again for the next property.", icon: <Zap className="h-5 w-5 text-amber-500" /> },
+                  { term: "Readvanceable Limit", desc: "A feature where every dollar of principal paid on Property A instantly becomes available to borrow for Property B.", icon: <ArrowUpRight className="h-5 w-5 text-purple-500" /> },
+                ].map((t, i) => (
+                  <div key={i} className="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-slate-50 rounded-lg">{t.icon}</div>
+                      <h4 className="font-black text-lg text-slate-900"><TranslatedText>{t.term}</TranslatedText></h4>
                     </div>
-                    <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
-                      <div className="absolute top-0 right-0 p-6 opacity-10"><Layers className="h-32 w-32 text-blue-400" /></div>
-                      <div className="space-y-2 relative z-10">
-                        <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Multiplier Effect</p>
-                        <h3 className="text-6xl font-black text-white tracking-tighter">RECYCLE</h3>
-                        <p className="text-lg font-bold text-slate-400">Capital Mobility Mastery</p>
-                      </div>
-                    </div>
+                    <p className="text-slate-500 font-medium leading-relaxed"><TranslatedText>{t.desc}</TranslatedText></p>
                   </div>
-                </section>
+                ))}
+              </div>
+            </section>
 
-                {/* 2. TERMINOLOGY */}
-                <section className="space-y-12">
-                  <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                    <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
-                    <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Terminology Masterclass</TranslatedText></h2>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {[
-                      { term: "LTV Buffer", desc: `The safe "Safety Net" of equity (usually 20%) that we never touch. In ${country.name}, we only deploy capital that exists above this line.`, icon: <ShieldCheck className="h-5 w-5 text-blue-500" /> },
-                      { term: "Yield Spread", desc: "The gap between the interest you pay the bank (e.g., 6%) and the return you earn on your new asset (e.g., 10%). The 1%er lives in this gap.", icon: <TrendingUp className="h-5 w-5 text-emerald-500" /> },
-                      { term: "Asset Velocity", desc: "The speed at which an investment returns your original capital so you can use it again for the next property.", icon: <Zap className="h-5 w-5 text-amber-500" /> },
-                      { term: "Readvanceable Limit", desc: "A feature where every dollar of principal paid on Property A instantly becomes available to borrow for Property B.", icon: <ArrowUpRight className="h-5 w-5 text-purple-500" /> },
-                    ].map((t, i) => (
-                      <div key={i} className="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-3">
-                        <div className="flex items-center gap-3">
-                          <div className="p-2 bg-slate-50 rounded-lg">{t.icon}</div>
-                          <h4 className="font-black text-lg text-slate-900"><TranslatedText>{t.term}</TranslatedText></h4>
-                        </div>
-                        <p className="text-slate-500 font-medium leading-relaxed"><TranslatedText>{t.desc}</TranslatedText></p>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-
-                {/* 3. IMPORTANCE */}
-                <section className="space-y-12">
-                  <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                    <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
-                    <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: Financial Sovereignty</TranslatedText></h2>
-                  </div>
-                  
-                  <CourseCard className="border-l-[12px] border-l-amber-600 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
-                    <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12">
-                      <Trophy className="h-96 w-96" />
-                    </div>
-                    <div className="relative z-10 space-y-10">
-                      <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
-                        <p>
-                          <TranslatedText>{`Most homeowners in ${country.name} spend their entire lives trying to "Get Out of Debt." The 1% Multiplier shifts the goal to "Building an Empire."`}</TranslatedText>
-                        </p>
-                        <p>
-                          <TranslatedText>{`When you realize that your home equity is just "Frozen Cash" that the bank is charging you to store, you stop being a tenant and start being the manager of your own capital. By keeping your capital liquid and moving it into higher-yielding assets, you achieve financial freedom 20 years sooner than those who just make extra monthly payments.`}</TranslatedText>
-                        </p>
-                      </div>
-                    </div>
-                  </CourseCard>
-
-                  <EpiphanyBox>
-                    <TranslatedText>{`Wealth isn't created by working for money. It's created by having your capital work for you. Once your home equity is liquid, every brick in your house becomes a soldier in your financial army.`}</TranslatedText>
-                  </EpiphanyBox>
-                </section>
-
-                {/* 4. ACTION */}
-                <section className="space-y-12">
-                  <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                    <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">4</div>
-                    <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: Model Your Scaling</TranslatedText></h2>
-                  </div>
-                  
-                  <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
-                    <TranslatedText>{`Use the "Leverage Simulator" below to see how deploying just a portion of your unlocked equity can generate more wealth in 10 years than 30 years of traditional saving.`}</TranslatedText>
-                  </p>
-
-                  <WealthSimulator />
-
-                  <div className="space-y-8 pt-12">
-                    <h3 className="text-3xl font-fraunces font-black text-center text-slate-900"><TranslatedText>The Property Ladder Blueprint</TranslatedText></h3>
-                    <p className="text-lg text-slate-500 text-center font-medium">
-                      <TranslatedText>{`See the exact sequence used to turn one primary residence into a $3M+ portfolio in under 15 years.`}</TranslatedText>
+            {/* 3. IMPORTANCE */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: Financial Sovereignty</TranslatedText></h2>
+              </div>
+              
+              <CourseCard className="border-l-[12px] border-l-amber-600 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
+                <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12">
+                  <Trophy className="h-96 w-96" />
+                </div>
+                <div className="relative z-10 space-y-10">
+                  <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
+                    <p>
+                      <TranslatedText>{`Most homeowners in ${country.name} spend their entire lives trying to "Get Out of Debt." The 1% Multiplier shifts the goal to "Building an Empire."`}</TranslatedText>
                     </p>
-                    <LadderVisual />
+                    <p>
+                      <TranslatedText>{`When you realize that your home equity is just "Frozen Cash" that the bank is charging you to store, you stop being a tenant and start being the manager of your own capital. By keeping your capital liquid and moving it into higher-yielding assets, you achieve financial freedom 20 years sooner than those who just make extra monthly payments.`}</TranslatedText>
+                    </p>
                   </div>
+                </div>
+              </CourseCard>
 
-                  <Quiz 
-                    question="What is the main danger of 'Dead Equity' sitting in your home?"
-                    options={[
-                      "It might get stolen by a neighbor",
-                      "It earns 0% return while your loan costs you 6%+",
-                      "It makes the house too heavy for the foundation",
-                      "It attracts unwanted taxes from the city"
-                    ]}
-                    correctAnswer={1}
-                    explanation={`In ${country.name}, home equity is an illiquid asset. If it sits in your walls while you carry a mortgage, you are paying the bank interest for the privilege of storing your own wealth. The 1% Multiplier unlocks this cash to work for you.`}
-                  />
-                </section>
-              </>
-            )}
+              <EpiphanyBox>
+                <TranslatedText>{`Wealth isn't created by working for money. It's created by having your capital work for you. Once your home equity is liquid, every brick in your house becomes a soldier in your financial army.`}</TranslatedText>
+              </EpiphanyBox>
+            </section>
+
+            {/* 4. ACTION */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">4</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: Model Your Scaling</TranslatedText></h2>
+              </div>
+              
+              <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
+                <TranslatedText>{`Use the "Leverage Simulator" below to see how deploying just a portion of your unlocked equity can generate more wealth in 10 years than 30 years of traditional saving.`}</TranslatedText>
+              </p>
+
+              <WealthSimulator />
+
+              <div className="space-y-8 pt-12">
+                <h3 className="text-3xl font-fraunces font-black text-center text-slate-900"><TranslatedText>The Property Ladder Blueprint</TranslatedText></h3>
+                <p className="text-lg text-slate-500 text-center font-medium">
+                  <TranslatedText>{`See the exact sequence used to turn one primary residence into a $3M+ portfolio in under 15 years.`}</TranslatedText>
+                </p>
+                <LadderVisual />
+              </div>
+
+              <Quiz 
+                question="What is the main danger of 'Dead Equity' sitting in your home?"
+                options={[
+                  "It might get stolen by a neighbor",
+                  "It earns 0% return while your loan costs you 6%+",
+                  "It makes the house too heavy for the foundation",
+                  "It attracts unwanted taxes from the city"
+                ]}
+                correctAnswer={1}
+                explanation={`In ${country.name}, home equity is an illiquid asset. If it sits in your walls while you carry a mortgage, you are paying the bank interest for the privilege of storing your own wealth. The 1% Multiplier unlocks this cash to work for you.`}
+              />
+            </section>
           </div>
         )}
 
         {/* LESSON 7: THE SPEEDRUN */}
         {id === 7 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
-            {isLocked ? (
-              <section className="text-center space-y-10 py-20">
-                <div className="bg-slate-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Lock className="h-12 w-12 text-slate-400" />
-                </div>
-                <h2 className="text-5xl font-fraunces font-black text-slate-900 leading-tight">
-                  <TranslatedText>Unlock the Private Vault</TranslatedText>
-                </h2>
-                <p className="text-xl text-slate-500 max-w-xl mx-auto">
-                  <TranslatedText>The Speedrun and The Proof modules are reserved for Mortgage Cutter Pro members. Learn how to skip decades of debt.</TranslatedText>
-                </p>
-                <Button size="lg" className="h-16 px-12 text-xl font-black rounded-2xl shadow-2xl shadow-blue-500/20" asChild>
-                  <Link href="/purchase?plan=pro_197">Unlock The Full Blueprint ($197)</Link>
-                </Button>
-              </section>
-            ) : (
-              <>
-                <header className="space-y-10 text-center">
-                  <div className="inline-flex items-center gap-2 px-6 py-2 bg-red-100 text-red-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-red-200">
-                    <Rocket className="h-4 w-4" />
-                    <TranslatedText>Mastery Level: 07 — Max Velocity</TranslatedText>
-                  </div>
-                  <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
-                    <TranslatedText>The Speedrun:</TranslatedText>
-                    <span className="block text-blue-600 italic mt-4"><TranslatedText>Collapsing Time Itself.</TranslatedText></span>
-                  </h1>
-                  <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
-                    <TranslatedText>{`It's time to trigger the final 'Hyperdrive'. By combining 'Principal Chunks' with 'Offset Timing', we're going to shave decades off your term.`}</TranslatedText>
+            <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-red-100 text-red-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-red-200">
+                <Rocket className="h-4 w-4" />
+                <TranslatedText>Mastery Level: 07 — Max Velocity</TranslatedText>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>The Speedrun:</TranslatedText>
+                <span className="block text-blue-600 italic mt-4"><TranslatedText>Collapsing Time Itself.</TranslatedText></span>
+              </h1>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                <TranslatedText>{`It's time to trigger the final 'Hyperdrive'. By combining 'Principal Chunks' with 'Offset Timing', we're going to shave decades off your term.`}</TranslatedText>
+              </p>
+            </header>
+
+            {/* 1. CONCEPT */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: The Level Skip (ELI14)</TranslatedText></h2>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
+                  <p>
+                    <TranslatedText>Imagine you're playing a long video game with 30 levels. Most players walk through every room, fighting every enemy (paying every cent of interest) for 30 years.</TranslatedText>
                   </p>
-                </header>
-
-                {/* 1. CONCEPT */}
-                <section className="space-y-12">
-                  <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                    <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
-                    <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: The Level Skip (ELI14)</TranslatedText></h2>
+                  <p>
+                    <TranslatedText>A "Speedrun" is finding a hidden door that skips 10 levels at once. In the Mortgage Cutter Method, this door is the "Principal Chunk."</TranslatedText>
+                  </p>
+                  <p className="text-blue-600 font-black italic">
+                    <TranslatedText>You're not working harder; you're taking a shortcut.</TranslatedText>
+                  </p>
+                  <p>
+                    <TranslatedText>By using a line of credit to dump a large "chunk" of principal at once, you instantly cancel the interest that would have grown on that money for the next two decades. You then use your monthly surplus to "reset" the credit line and do it again.</TranslatedText>
+                  </p>
+                </div>
+                <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
+                  <div className="absolute top-0 right-0 p-6 opacity-10"><Rocket className="h-32 w-32 text-blue-400" /></div>
+                  <div className="space-y-2 relative z-10">
+                    <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Time Collapse</p>
+                    <h3 className="text-6xl font-black text-white tracking-tighter">7 YRS</h3>
+                    <p className="text-lg font-bold text-slate-400">Typical Accelerated Goal</p>
                   </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                    <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
-                      <p>
-                        <TranslatedText>Imagine you're playing a long video game with 30 levels. Most players walk through every room, fighting every enemy (paying every cent of interest) for 30 years.</TranslatedText>
-                      </p>
-                      <p>
-                        <TranslatedText>A "Speedrun" is finding a hidden door that skips 10 levels at once. In the Mortgage Cutter Method, this door is the "Principal Chunk."</TranslatedText>
-                      </p>
-                      <p className="text-blue-600 font-black italic">
-                        <TranslatedText>You're not working harder; you're taking a shortcut.</TranslatedText>
-                      </p>
-                      <p>
-                        <TranslatedText>By using a line of credit to dump a large "chunk" of principal at once, you instantly cancel the interest that would have grown on that money for the next two decades. You then use your monthly surplus to "reset" the credit line and do it again.</TranslatedText>
-                      </p>
+                </div>
+              </div>
+            </section>
+
+            {/* 2. TERMINOLOGY */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Terminology Masterclass</TranslatedText></h2>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  { term: "Principal Chunk", desc: "A one-time large payment applied directly to the mortgage principal, usually borrowed from your strategic credit line.", icon: <Zap className="h-5 w-5 text-blue-500" /> },
+                  { term: "Offset Timing", desc: "The practice of keeping your cash in the loan account for as many days as possible before paying bills.", icon: <Timer className="h-5 w-5 text-emerald-500" /> },
+                  { term: "The Chunker Loop", desc: "The repeatable 6-month cycle of applying a chunk, recovering the line with income, and repeating.", icon: <RefreshCcw className="h-5 w-5 text-purple-500" /> },
+                  { term: "Interest Arbitrage", desc: "The gap between your mortgage interest and your line-of-credit interest that allows for mathematical profit.", icon: <Scale className="h-5 w-5 text-amber-500" /> },
+                ].map((t, i) => (
+                  <div key={i} className="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-slate-50 rounded-lg">{t.icon}</div>
+                      <h4 className="font-black text-lg text-slate-900"><TranslatedText>{t.term}</TranslatedText></h4>
                     </div>
-                    <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
-                      <div className="absolute top-0 right-0 p-6 opacity-10"><Rocket className="h-32 w-32 text-blue-400" /></div>
-                      <div className="space-y-2 relative z-10">
-                        <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Time Collapse</p>
-                        <h3 className="text-6xl font-black text-white tracking-tighter">7 YRS</h3>
-                        <p className="text-lg font-bold text-slate-400">Typical Accelerated Goal</p>
-                      </div>
-                    </div>
+                    <p className="text-slate-500 font-medium leading-relaxed"><TranslatedText>{t.desc}</TranslatedText></p>
                   </div>
-                </section>
+                ))}
+              </div>
+            </section>
 
-                {/* 2. TERMINOLOGY */}
-                <section className="space-y-12">
-                  <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                    <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
-                    <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Terminology Masterclass</TranslatedText></h2>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {[
-                      { term: "Principal Chunk", desc: "A one-time large payment applied directly to the mortgage principal, usually borrowed from your strategic credit line.", icon: <Zap className="h-5 w-5 text-blue-500" /> },
-                      { term: "Offset Timing", desc: "The practice of keeping your cash in the loan account for as many days as possible before paying bills.", icon: <Timer className="h-5 w-5 text-emerald-500" /> },
-                      { term: "The Chunker Loop", desc: "The repeatable 6-month cycle of applying a chunk, recovering the line with income, and repeating.", icon: <RefreshCcw className="h-5 w-5 text-purple-500" /> },
-                      { term: "Interest Arbitrage", desc: "The gap between your mortgage interest and your line-of-credit interest that allows for mathematical profit.", icon: <Scale className="h-5 w-5 text-amber-500" /> },
-                    ].map((t, i) => (
-                      <div key={i} className="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-3">
-                        <div className="flex items-center gap-3">
-                          <div className="p-2 bg-slate-50 rounded-lg">{t.icon}</div>
-                          <h4 className="font-black text-lg text-slate-900"><TranslatedText>{t.term}</TranslatedText></h4>
-                        </div>
-                        <p className="text-slate-500 font-medium leading-relaxed"><TranslatedText>{t.desc}</TranslatedText></p>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-
-                {/* 3. IMPORTANCE */}
-                <section className="space-y-12">
-                  <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                    <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
-                    <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: Collapsing the Amortization</TranslatedText></h2>
-                  </div>
-                  
-                  <CourseCard className="border-l-[12px] border-l-red-600 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
-                    <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12">
-                      <Activity className="h-96 w-96" />
-                    </div>
-                    <div className="relative z-10 space-y-10">
-                      <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
-                        <p>
-                          <TranslatedText>{`Most homeowners in ${country.name} are fighting a war of attrition. They try to "save" their way to freedom. But interest is a monster that grows every day.`}</TranslatedText>
-                        </p>
-                        <p>
-                          <TranslatedText>{`The Speedrun strategy stops the monster from growing. By applying chunks early in the amortization cycle, you eliminate the "Future Compound Interest" before it even starts. You are essentially deleting the hardest years of the loan from your life.`}</TranslatedText>
-                        </p>
-                      </div>
-                    </div>
-                  </CourseCard>
-
-                  <EpiphanyBox>
-                    <TranslatedText>{`Time is more expensive than money. A $10,000 chunk today can save you $30,000 in future labor. Every month you delay implementation is a "Level" you'll have to play twice.`}</TranslatedText>
-                  </EpiphanyBox>
-                </section>
-
-                {/* 4. ACTION */}
-                <section className="space-y-16">
-                  <div className="text-center space-y-4">
-                    <h3 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: The Hyperdrive Execution</TranslatedText></h3>
-                    <p className="text-lg text-slate-500 font-medium max-w-xl mx-auto">
-                      <TranslatedText>{`Use the simulators below to see how combining "Chunks" with "Offset Timing" shatters the 30-year trap in real-time.`}</TranslatedText>
+            {/* 3. IMPORTANCE */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: Collapsing the Amortization</TranslatedText></h2>
+              </div>
+              
+              <CourseCard className="border-l-[12px] border-l-red-600 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
+                <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12">
+                  <Activity className="h-96 w-96" />
+                </div>
+                <div className="relative z-10 space-y-10">
+                  <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
+                    <p>
+                      <TranslatedText>{`Most homeowners in ${country.name} are fighting a war of attrition. They try to "save" their way to freedom. But interest is a monster that grows every day.`}</TranslatedText>
+                    </p>
+                    <p>
+                      <TranslatedText>{`The Speedrun strategy stops the monster from growing. By applying chunks early in the amortization cycle, you eliminate the "Future Compound Interest" before it even starts. You are essentially deleting the hardest years of the loan from your life.`}</TranslatedText>
                     </p>
                   </div>
+                </div>
+              </CourseCard>
 
-                  <OffsetVisual />
+              <EpiphanyBox>
+                <TranslatedText>{`Time is more expensive than money. A $10,000 chunk today can save you $30,000 in future labor. Every month you delay implementation is a "Level" you'll have to play twice.`}</TranslatedText>
+              </EpiphanyBox>
+            </section>
 
-                  <HyperdriveSim />
+            {/* 4. ACTION */}
+            <section className="space-y-16">
+              <div className="text-center space-y-4">
+                <h3 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: The Hyperdrive Execution</TranslatedText></h3>
+                <p className="text-lg text-slate-500 font-medium max-w-xl mx-auto">
+                  <TranslatedText>{`Use the simulators below to see how combining "Chunks" with "Offset Timing" shatters the 30-year trap in real-time.`}</TranslatedText>
+                </p>
+              </div>
 
-                  <BiWeeklyCalc />
-                </section>
-              </>
-            )}
+              <OffsetVisual />
+
+              <HyperdriveSim />
+
+              <BiWeeklyCalc />
+            </section>
           </div>
         )}
 
