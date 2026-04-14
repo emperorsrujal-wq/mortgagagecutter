@@ -1,4 +1,3 @@
-
 'use client';
 import React, { useState, useEffect, useMemo } from 'react';
 import { useCourse } from './CourseProvider';
@@ -9,7 +8,8 @@ import {
   Target, Award, CheckCircle, Calculator, HeartPulse, Sparkles,
   MessageSquare, UserCircle2, ChevronRight, Download, FileSearch,
   Gavel, ScrollText, SearchCode, ListChecks, ArrowUpRight, Activity,
-  Layers, MousePointer2, RefreshCcw, Landmark, TrendingDown
+  Layers, MousePointer2, RefreshCcw, Landmark, TrendingDown,
+  Home as HomeIcon
 } from 'lucide-react';
 import { TranslatedText } from './TranslatedText';
 import { cn } from '@/lib/utils';

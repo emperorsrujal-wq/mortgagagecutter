@@ -1,4 +1,3 @@
-
 'use client';
 import React, { use, useState, useEffect } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
@@ -32,7 +31,7 @@ import {
 } from '@/components/course/UIComponents';
 import { TranslatedText } from '@/components/course/TranslatedText';
 import { cn } from '@/lib/utils';
-import Link from 'next/link';
+import Link from 'next/navigation';
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -44,7 +43,6 @@ import {
   GraduationCap, 
   ArrowRight, 
   UserCircle2, 
-  HomeIcon, 
   Timer, 
   Zap, 
   ShieldCheck,
