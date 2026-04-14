@@ -36,7 +36,7 @@ import Link from 'next/link';
 import { 
   ChevronLeft, 
   ChevronRight, 
-  Home, 
+  Home as HomeIcon, 
   CheckCircle2, 
   Rocket, 
   Landmark, 
@@ -85,13 +85,6 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useUser } from '@/firebase';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 
 function ProgressBar({ current }: { current: number }) {
   return (
@@ -104,7 +97,7 @@ function ProgressBar({ current }: { current: number }) {
       </div>
       <div className="max-w-[720px] mx-auto px-4 h-14 flex items-center justify-between">
         <Link href="/learn" className="flex items-center gap-2 text-[#5A6175] font-black text-sm">
-          <Home className="h-4 w-4" />
+          <HomeIcon className="h-4 w-4" />
           <span className="hidden sm:inline uppercase tracking-widest"><TranslatedText>Course Hub</TranslatedText></span>
         </Link>
         <div className="text-[10px] font-black uppercase text-slate-400 tracking-[0.3em]">
@@ -897,29 +890,158 @@ function LessonContent({ id }: { id: number }) {
         {/* LESSON 6: THE 1% MULTIPLIER (PREMIUM) */}
         {id === 6 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
-            <header className="space-y-10 text-center">
-              <div className="inline-flex items-center gap-2 px-6 py-2 bg-amber-100 text-amber-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-amber-200">
-                <Star className="h-4 w-4" />
-                <TranslatedText>Phase 5: Scaling</TranslatedText>
-              </div>
-              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
-                <TranslatedText>The 1% Multiplier:</TranslatedText>
-                <span className="block text-blue-600 italic mt-4"><TranslatedText>Scaling Your Empire.</TranslatedText></span>
-              </h1>
-              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
-                <TranslatedText>{`Debt reduction was just the beginning. Now we use the bank's own inventory to build your wealth fortress.`}</TranslatedText>
-              </p>
-            </header>
+            {isLocked ? (
+              <section className="text-center space-y-10 py-20">
+                <div className="bg-slate-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Lock className="h-12 w-12 text-slate-400" />
+                </div>
+                <h2 className="text-5xl font-fraunces font-black text-slate-900 leading-tight">
+                  <TranslatedText>Unlock the Private Vault</TranslatedText>
+                </h2>
+                <p className="text-xl text-slate-500 max-w-xl mx-auto">
+                  <TranslatedText>The 1% Multiplier, The Escape Hatch, and The Proof modules are reserved for Mortgage Cutter Pro members. Start building your portfolio empire today.</TranslatedText>
+                </p>
+                <Button size="lg" className="h-16 px-12 text-xl font-black rounded-2xl shadow-2xl shadow-blue-500/20" asChild>
+                  <Link href="/purchase?plan=pro_197">Unlock The Full Blueprint ($197)</Link>
+                </Button>
+              </section>
+            ) : (
+              <>
+                <header className="space-y-10 text-center">
+                  <div className="inline-flex items-center gap-2 px-6 py-2 bg-amber-100 text-amber-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-amber-200">
+                    <Star className="h-4 w-4" />
+                    <TranslatedText>Mastery Level: 06 — Portfolio Scaling</TranslatedText>
+                  </div>
+                  <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                    <TranslatedText>The 1% Multiplier:</TranslatedText>
+                    <span className="block text-blue-600 italic mt-4"><TranslatedText>Scaling Your Empire.</TranslatedText></span>
+                  </h1>
+                  <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                    <TranslatedText>{`Debt reduction was just the beginning. Now we use the bank's own inventory to build your wealth fortress in ${country.name}.`}</TranslatedText>
+                  </p>
+                </header>
 
-            <section className="space-y-16">
-              <WealthSimulator />
+                {/* 1. CONCEPT */}
+                <section className="space-y-12">
+                  <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                    <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
+                    <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: Green Houses to Red Hotels</TranslatedText></h2>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
+                      <p>
+                        <TranslatedText>In the game of Monopoly, you win by turning "Green Houses" into "Red Hotels." A traditional mortgage only lets you have one green house, and you must pay for it for 30 years before you can get another one.</TranslatedText>
+                      </p>
+                      <p>
+                        <TranslatedText>The "1% Multiplier" strategy treats your home equity as a "Storage Tank" of capital. As you drop your principal using velocity, the tank fills up with available credit.</TranslatedText>
+                      </p>
+                      <p className="text-blue-600 font-black italic">
+                        <TranslatedText>You then "Recycle" that capital.</TranslatedText>
+                      </p>
+                      <p>
+                        <TranslatedText>Instead of letting your money sit "dead" in a wall, you deploy it to acquire another asset. Now, you have TWO properties, and your income chokes the interest on both simultaneously. This is how empires are built from a single paycheck.</TranslatedText>
+                      </p>
+                    </div>
+                    <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
+                      <div className="absolute top-0 right-0 p-6 opacity-10"><Layers className="h-32 w-32 text-blue-400" /></div>
+                      <div className="space-y-2 relative z-10">
+                        <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Multiplier Effect</p>
+                        <h3 className="text-6xl font-black text-white tracking-tighter">RECYCLE</h3>
+                        <p className="text-lg font-bold text-slate-400">Capital Mobility Mastery</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
 
-              <EpiphanyBox>
-                <TranslatedText>{`Once your home is a 'Two-Way Street', you have a permanent source of low-cost capital. You can deploy it for investments or property scaling. You aren't just saving money; you're creating a wealth machine.`}</TranslatedText>
-              </EpiphanyBox>
+                {/* 2. TERMINOLOGY */}
+                <section className="space-y-12">
+                  <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                    <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
+                    <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Terminology Masterclass</TranslatedText></h2>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {[
+                      { term: "LTV Buffer", desc: `The safe "Safety Net" of equity (usually 20%) that we never touch. In ${country.name}, we only deploy capital that exists above this line.`, icon: <ShieldCheck className="h-5 w-5 text-blue-500" /> },
+                      { term: "Yield Spread", desc: "The gap between the interest you pay the bank (e.g., 6%) and the return you earn on your new asset (e.g., 10%). The 1%er lives in this gap.", icon: <TrendingUp className="h-5 w-5 text-emerald-500" /> },
+                      { term: "Asset Velocity", desc: "The speed at which an investment returns your original capital so you can use it again for the next property.", icon: <Zap className="h-5 w-5 text-amber-500" /> },
+                      { term: "Readvanceable Limit", desc: "A feature where every dollar of principal paid on Property A instantly becomes available to borrow for Property B.", icon: <ArrowUpRight className="h-5 w-5 text-purple-500" /> },
+                    ].map((t, i) => (
+                      <div key={i} className="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-3">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 bg-slate-50 rounded-lg">{t.icon}</div>
+                          <h4 className="font-black text-lg text-slate-900"><TranslatedText>{t.term}</TranslatedText></h4>
+                        </div>
+                        <p className="text-slate-500 font-medium leading-relaxed"><TranslatedText>{t.desc}</TranslatedText></p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
 
-              <LadderVisual />
-            </section>
+                {/* 3. IMPORTANCE */}
+                <section className="space-y-12">
+                  <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                    <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
+                    <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: Financial Sovereignty</TranslatedText></h2>
+                  </div>
+                  
+                  <CourseCard className="border-l-[12px] border-l-amber-600 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
+                    <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12">
+                      <Trophy className="h-96 w-96" />
+                    </div>
+                    <div className="relative z-10 space-y-10">
+                      <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
+                        <p>
+                          <TranslatedText>{`Most homeowners in ${country.name} spend their entire lives trying to "Get Out of Debt." The 1% Multiplier shifts the goal to "Building an Empire."`}</TranslatedText>
+                        </p>
+                        <p>
+                          <TranslatedText>{`When you realize that your home equity is just "Frozen Cash" that the bank is charging you to store, you stop being a tenant and start being the manager of your own capital. By keeping your capital liquid and moving it into higher-yielding assets, you achieve financial freedom 20 years sooner than those who just make extra monthly payments.`}</TranslatedText>
+                        </p>
+                      </div>
+                    </div>
+                  </CourseCard>
+
+                  <EpiphanyBox>
+                    <TranslatedText>{`Wealth isn't created by working for money. It's created by having your capital work for you. Once your home equity is liquid, every brick in your house becomes a soldier in your financial army.`}</TranslatedText>
+                  </EpiphanyBox>
+                </section>
+
+                {/* 4. ACTION */}
+                <section className="space-y-12">
+                  <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                    <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">4</div>
+                    <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: Model Your Scaling</TranslatedText></h2>
+                  </div>
+                  
+                  <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
+                    <TranslatedText>{`Use the "Leverage Simulator" below to see how deploying just a portion of your unlocked equity can generate more wealth in 10 years than 30 years of traditional saving.`}</TranslatedText>
+                  </p>
+
+                  <WealthSimulator />
+
+                  <div className="space-y-8 pt-12">
+                    <h3 className="text-3xl font-fraunces font-black text-center text-slate-900"><TranslatedText>The Property Ladder Blueprint</TranslatedText></h3>
+                    <p className="text-lg text-slate-500 text-center font-medium">
+                      <TranslatedText>{`See the exact sequence used to turn one primary residence into a $3M+ portfolio in under 15 years.`}</TranslatedText>
+                    </p>
+                    <LadderVisual />
+                  </div>
+
+                  <Quiz 
+                    question="What is the main danger of 'Dead Equity' sitting in your home?"
+                    options={[
+                      "It might get stolen by a neighbor",
+                      "It earns 0% return while your loan costs you 6%+",
+                      "It makes the house too heavy for the foundation",
+                      "It attracts unwanted taxes from the city"
+                    ]}
+                    correctAnswer={1}
+                    explanation={`In ${country.name}, home equity is an illiquid asset. If it sits in your walls while you carry a mortgage, you are paying the bank interest for the privilege of storing your own wealth. The 1% Multiplier unlocks this cash to work for you.`}
+                  />
+                </section>
+              </>
+            )}
           </div>
         )}
 
