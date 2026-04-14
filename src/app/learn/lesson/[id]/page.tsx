@@ -437,50 +437,155 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 3: THE HIDDEN VAULT */}
+        {/* LESSON 3: THE STRATEGIC ARSENAL */}
         {id === 3 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-purple-100 text-purple-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-purple-200">
-                <Search className="h-4 w-4" />
-                <TranslatedText>Phase 2: The Acquisition</TranslatedText>
+                <Zap className="h-4 w-4" />
+                <TranslatedText>Mastery Level: 03 — Tool Acquisition</TranslatedText>
               </div>
               <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
-                <TranslatedText>The Hidden Vault:</TranslatedText>
-                <span className="block text-blue-600 italic mt-4"><TranslatedText>Finding Your Strategic Partner.</TranslatedText></span>
+                <TranslatedText>The Strategic Arsenal:</TranslatedText>
+                <span className="block text-blue-600 italic mt-4"><TranslatedText>Choosing the Right Tool.</TranslatedText></span>
               </h1>
               <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
-                <TranslatedText>{`Retail banks will often try to keep you in their '30-year cage'. To break free, you have to speak the language of Private Wealth and find the right tool.`}</TranslatedText>
+                <TranslatedText>{`Not all banking tools are created equal. In this module, we identify the exact 'Super-Account' you need to execute the Mortgage Cutter strategy in ${country.name}.`}</TranslatedText>
               </p>
             </header>
 
-            <section className="space-y-16">
-              <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
-                <h3 className="text-3xl font-black text-slate-900"><TranslatedText>The Banker Archetypes</TranslatedText></h3>
-                <p>
-                  <TranslatedText>{`There are two types of lenders in ${country.name}. There are 'Retail Giants' who want you in a standard amortization path. And then there are 'Strategic Partners'—often local credit unions or Private Wealth divisions—who offer the tools we need.`}</TranslatedText>
-                </p>
+            {/* 1. CONCEPT */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: The Swiss Army Wallet</TranslatedText></h2>
               </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
+                  <p>
+                    <TranslatedText>Imagine you're going on a long hike. A traditional mortgage is like a heavy bag that locks once you put something in it. If you need your money back for an emergency, you have to find a locksmith, pay a fee, and wait weeks.</TranslatedText>
+                  </p>
+                  <p>
+                    <TranslatedText>A Strategic Arsenal tool (like a first-lien HELOC) is like a high-tech "Swiss Army Wallet." It's a bag that stays open. You put your money in to make it lighter (reducing interest), but you can reach in and take it out whenever you want.</TranslatedText>
+                  </p>
+                  <p className="text-blue-600 font-black italic">
+                    <TranslatedText>This is the difference between "Frozen Equity" and "Liquid Power."</TranslatedText>
+                  </p>
+                  <p>
+                    <TranslatedText>We want a tool that lets our paycheck hit the principal immediately, neutralizing the bank's daily math, while keeping that cash 100% accessible for our lives.</TranslatedText>
+                  </p>
+                </div>
+                <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
+                  <div className="absolute top-0 right-0 p-6 opacity-10"><Zap className="h-32 w-32 text-blue-400" /></div>
+                  <div className="space-y-2 relative z-10">
+                    <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Strategic Shift</p>
+                    <h3 className="text-6xl font-black text-white tracking-tighter">LIQUID</h3>
+                    <p className="text-lg font-bold text-slate-400">Debt Reduction without Sacrifice</p>
+                  </div>
+                </div>
+              </div>
+            </section>
 
-              <CourseCard title="The Strategic Must-Haves">
-                <ul className="space-y-4">
-                  <TaskItem id="must_1" label="First-Lien Position (The Keys to the Kingdom)" />
-                  <TaskItem id="must_2" label="Full Transactionality (Debit/Checks/Bill Pay)" />
-                  <TaskItem id="must_3" label="Direct Deposit Capability (Auto-Liquidation)" />
-                  <TaskItem id="must_4" label="No-Fee Principal Paydown (Zero Resistance)" />
-                </ul>
+            {/* 2. TERMINOLOGY */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Key Terminology</TranslatedText></h2>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  { term: "First-Lien Position", desc: "This means your strategic line is the ONLY loan on the house. It's not a 'second mortgage'; it's the primary engine.", icon: <Award className="h-5 w-5 text-blue-500" /> },
+                  { term: "Revolving Credit", desc: "Unlike a mortgage that only goes down, this balance can go down (as you pay) and back up (as you spend) without a new application.", icon: <RefreshCcw className="h-5 w-5 text-emerald-500" /> },
+                  { term: "Transactionality", desc: "The ability to pay bills, use a debit card, and write checks directly from the loan account.", icon: <CreditCard className="h-5 w-5 text-purple-500" /> },
+                  { term: "Readvanceable", desc: `A standard in ${country.name} where your credit limit grows automatically as you pay down your principal.`, icon: <ArrowUpRight className="h-5 w-5 text-amber-500" /> },
+                ].map((t, i) => (
+                  <div key={i} className="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-slate-50 rounded-lg">{t.icon}</div>
+                      <h4 className="font-black text-lg text-slate-900"><TranslatedText>{t.term}</TranslatedText></h4>
+                    </div>
+                    <p className="text-slate-500 font-medium leading-relaxed"><TranslatedText>{t.desc}</TranslatedText></p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* 3. IMPORTANCE */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: The Two-Way Street</TranslatedText></h2>
+              </div>
+              
+              <CourseCard className="border-l-[12px] border-l-purple-600 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
+                <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12">
+                  <RefreshCcw className="h-96 w-96" />
+                </div>
+                <div className="relative z-10 space-y-10">
+                  <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
+                    <p>
+                      <TranslatedText>{`Traditional banking forces you into a "One-Way Street." Once you send money to the mortgage, it's GONE. If you have an emergency, you're "House Rich and Cash Poor."`}</TranslatedText>
+                    </p>
+                    <p>
+                      <TranslatedText>{`By utilizing a Strategic Arsenal tool, we turn the mortgage into a "Two-Way Street." Every dollar of your income hits the debt on Day 1, which stops the interest calculation. But if you need that dollar back for groceries or a repair, it's there. You've neutralised the bank's profit without losing your safety net.`}</TranslatedText>
+                    </p>
+                  </div>
+                </div>
               </CourseCard>
 
               <EpiphanyBox>
-                <TranslatedText>{`When you call a bank, don't just ask for a mortgage. Ask for a 'Flexible Equity Line with Full Transactionality'. This signals that you aren't a regular consumer—you're a strategist.`}</TranslatedText>
+                <TranslatedText>{`You don't need a lower interest rate to win. You need an "Open Valve" that lets your entire income flow against the principal balance 24 hours a day, 7 days a week.`}</TranslatedText>
               </EpiphanyBox>
+            </section>
+
+            {/* 4. ACTION */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">4</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: Screen Your Lenders</TranslatedText></h2>
+              </div>
+              
+              <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
+                <TranslatedText>{`Lenders in ${country.name} won't always offer these tools upfront. You have to speak their language. Use the Audit and Script below to find your partner.`}</TranslatedText>
+              </p>
+
+              <CourseCard title="The Strategic Must-Haves Checklist">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <TaskItem id="must_1" label="First-Lien Refinance Capability" />
+                  <TaskItem id="must_2" label="Full ATM/Check/Debit Access" />
+                  <TaskItem id="must_3" label="Direct Paycheck Deposit Support" />
+                  <TaskItem id="must_4" label="Simple Daily Interest (Not Tiered)" />
+                  <TaskItem id="must_5" label="Zero Prepayment Penalties" />
+                  <TaskItem id="must_6" label="10-Year (Minimum) Draw Period" />
+                </div>
+              </CourseCard>
 
               <div className="space-y-8">
-                <h3 className="text-3xl font-black text-slate-900 text-center"><TranslatedText>The Negotiation Script</TranslatedText></h3>
+                <h3 className="text-3xl font-fraunces font-black text-center text-slate-900"><TranslatedText>The Negotiation Script</TranslatedText></h3>
                 <ScriptGenerator />
               </div>
 
-              <BankRateChart />
+              <div className="space-y-8 pt-12">
+                <h3 className="text-3xl font-fraunces font-black text-center text-slate-900"><TranslatedText>Arsenal vs. Retail Rates</TranslatedText></h3>
+                <p className="text-lg text-slate-500 text-center font-medium">
+                  <TranslatedText>{`Even if an Arsenal tool has a slightly higher rate, the daily velocity logic saves you more total interest than a standard low-rate mortgage.`}</TranslatedText>
+                </p>
+                <BankRateChart />
+              </div>
+
+              <Quiz 
+                question="What is the most important feature of a Strategic Arsenal tool?"
+                options={[
+                  "Having the lowest possible interest rate",
+                  "A fancy metal debit card",
+                  "First-lien position with full transactionality",
+                  "A branch located within 5 miles of your home"
+                ]}
+                correctAnswer={2}
+                explanation={`To execute the Mortgage Cutter strategy, you MUST be able to deposit your entire income directly into the loan and pay your life's expenses from it. This requires a first-position line with checking features.`}
+              />
             </section>
           </div>
         )}
