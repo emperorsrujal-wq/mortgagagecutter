@@ -83,7 +83,7 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { useUser } from '@/firebase';
 
 function ProgressBar({ current }: { current: number }) {
@@ -96,7 +96,7 @@ function ProgressBar({ current }: { current: number }) {
         />
       </div>
       <div className="max-w-[720px] mx-auto px-4 h-14 flex items-center justify-between">
-        <Link href="/learn" className="flex items-center gap-2 text-[#5A6175] font-black text-sm">
+        <Link href="/learn" className="flex items-center gap-2 text-[#5A6175] font-black text-sm hover:text-blue-600 transition-colors">
           <HomeIcon className="h-4 w-4" />
           <span className="hidden sm:inline uppercase tracking-widest"><TranslatedText>Course Hub</TranslatedText></span>
         </Link>
@@ -166,7 +166,7 @@ function LessonContent({ id }: { id: number }) {
               </div>
               <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
                 <TranslatedText>The Amortized Path:</TranslatedText>
-                <span className="block text-blue-600 italic mt-4"><TranslatedText>Understanding the One-Way Street.</TranslatedText></span>
+                <span className="block text-blue-600 italic mt-4"><TranslatedText>The Invisible Rent Strategy.</TranslatedText></span>
               </h1>
               <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
                 <TranslatedText>{`Before you can beat the bank's math, you must understand the rules of the game they built in ${country.name}.`}</TranslatedText>
@@ -177,7 +177,7 @@ function LessonContent({ id }: { id: number }) {
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: The Lego Loan</TranslatedText></h2>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: The Lego Loan (ELI14)</TranslatedText></h2>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -189,10 +189,10 @@ function LessonContent({ id }: { id: number }) {
                     <TranslatedText>They say: "Sure! Just pay me $10 a month for 12 months." You think, "Great! After 10 months, I've paid back the $100!"</TranslatedText>
                   </p>
                   <p className="text-blue-600 font-black italic">
-                    <TranslatedText>But here is the catch...</TranslatedText>
+                    <TranslatedText>But here is the structural catch that everyone misses...</TranslatedText>
                   </p>
                   <p>
-                    <TranslatedText>The Banker Friend says the first $8 of every $10 payment is a "rental fee" for letting you use their money. Only $2 goes toward actually owning the Legos. This is how a mortgage works in the real world.</TranslatedText>
+                    <TranslatedText>The Banker Friend says the first $8 of every $10 payment is a "rental fee" for letting you use their money. Only $2 goes toward actually owning the Legos. In the mortgage world, this is called "Amortization," and it ensures the bank gets paid before you do.</TranslatedText>
                   </p>
                 </div>
                 <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
@@ -210,15 +210,15 @@ function LessonContent({ id }: { id: number }) {
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Key Terminology</TranslatedText></h2>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Terminology Masterclass</TranslatedText></h2>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
-                  { term: "Principal", desc: "This is the actual cost of your house. It is the 'Stuff' you are trying to own.", icon: <HomeIcon className="h-5 w-5 text-blue-500" /> },
-                  { term: "Interest", desc: "This is the 'Rental Fee'. It is the money you pay the bank for the privilege of using their money.", icon: <DollarSign className="h-5 w-5 text-red-500" /> },
-                  { term: "Amortization", desc: "A fancy word meaning 'killing the debt'. It is the long-term schedule (usually 25-30 years) to pay it all back.", icon: <Clock className="h-5 w-5 text-emerald-500" /> },
-                  { term: "Front-Loading", desc: "The bank's strategy to make you pay almost all your interest in the first 15 years, before you pay for the house.", icon: <TrendingUp className="h-5 w-5 text-amber-500" /> },
+                  { term: "Principal (The Stuff)", desc: "This is the actual cost of your house. Every dollar of principal you pay is a dollar of the house you finally 'own'.", icon: <HomeIcon className="h-5 w-5 text-blue-500" /> },
+                  { term: "Interest (The Rent)", desc: "This is the fee the bank charges you. In Lesson 1, we call this 'Invisible Rent' because it disappears from your net worth forever.", icon: <DollarSign className="h-5 w-5 text-red-500" /> },
+                  { term: "Amortization (The Kill)", desc: `From the Latin 'amortis' (to kill). It's the process of 'killing' your debt over ${country.amortYears} years.`, icon: <Clock className="h-5 w-5 text-emerald-500" /> },
+                  { term: "Front-Loading (The Trap)", desc: "The bank's strategy to make you pay almost all your interest in the first 10-15 years, ensuring their profit is safe even if you move.", icon: <TrendingUp className="h-5 w-5 text-amber-500" /> },
                 ].map((t, i) => (
                   <div key={i} className="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-3">
                     <div className="flex items-center gap-3">
@@ -235,7 +235,7 @@ function LessonContent({ id }: { id: number }) {
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: The Treadmill</TranslatedText></h2>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: The 15-Year Treadmill</TranslatedText></h2>
               </div>
               
               <CourseCard className="border-l-[12px] border-l-red-600 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
@@ -245,24 +245,53 @@ function LessonContent({ id }: { id: number }) {
                 <div className="relative z-10 space-y-10">
                   <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
                     <p>
-                      <TranslatedText>{`Most homeowners in ${country.name} spend the first 10-15 years of their lives on a 'Financial Treadmill'. You are working hard, making big monthly payments, but your actual ownership of the house (Equity) barely moves.`}</TranslatedText>
+                      <TranslatedText>{`Most homeowners in ${country.name} spend the first decade of their lives on a 'Financial Treadmill'. You are working hard, making big monthly payments, but your actual ownership of the house barely moves.`}</TranslatedText>
                     </p>
                     <p>
-                      <TranslatedText>{`Because the system is 'Front-Loaded', the bank captures its profit first. If you sell your house after 7 years, you might find that you still owe almost exactly what you borrowed, despite paying thousands in interest. This is the 'Interest Trap'.`}</TranslatedText>
+                      <TranslatedText>{`Because the system is 'Front-Loaded', if you sell your house after 7 years, you might find that you still owe almost exactly what you borrowed. You've essentially been a 'tenant' to the bank for 7 years, paying for repairs and property taxes while the bank kept the 'rent' (interest).`}</TranslatedText>
                     </p>
                   </div>
                 </div>
               </CourseCard>
 
               <EpiphanyBox>
-                <TranslatedText>{`The "Amortization Table" is likely the most expensive document you will ever sign. It is not a goal; it is a mathematical trap designed to harvest your labor for 30 years.`}</TranslatedText>
+                <TranslatedText>{`The "Amortization Table" is not a plan for freedom; it is a mathematical harvesting machine designed to capture the first 15 years of your labor as pure interest profit for the bank.`}</TranslatedText>
               </EpiphanyBox>
             </section>
 
-            {/* 4. ACTION */}
+            {/* 4. REAL WORLD PRODUCTS */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">4</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Real World: Identifying the Cage</TranslatedText></h2>
+              </div>
+              
+              <div className="space-y-6">
+                <p className="text-xl text-slate-600 font-medium">
+                  <TranslatedText>{`In ${country.name}, the most common product is the ${country.amortYears}-Year traditional mortgage. Here is how it relates to your life:`}</TranslatedText>
+                </p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="p-8 bg-slate-50 rounded-[32px] border border-slate-200 space-y-4">
+                    <h4 className="font-black text-blue-600 uppercase text-xs tracking-widest">Example A: The Safety Trap</h4>
+                    <p className="text-slate-700 font-bold leading-relaxed">
+                      <TranslatedText>{`You choose a "Fixed Rate" for 5 or 30 years because it feels safe. But that safety comes at a cost: the bank uses that fixed schedule to ensure every payment you make for the next 120 months is primarily interest.`}</TranslatedText>
+                    </p>
+                  </div>
+                  <div className="p-8 bg-slate-50 rounded-[32px] border border-slate-200 space-y-4">
+                    <h4 className="font-black text-blue-600 uppercase text-xs tracking-widest">Example B: The One-Way Street</h4>
+                    <p className="text-slate-700 font-bold leading-relaxed">
+                      <TranslatedText>{`You get a bonus at work and send $5,000 to your mortgage. That money is now "dead." You cannot use it for an emergency without paying the bank a fee to "refinance" your own money back to you.`}</TranslatedText>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* 5. ACTION */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">5</div>
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: The Math Audit</TranslatedText></h2>
               </div>
               
@@ -1045,7 +1074,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 7: THE ESCAPE HATCH (PREMIUM) */}
+        {/* LESSON 7: THE SPEEDRUN */}
         {id === 7 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             {isLocked ? (
@@ -1246,7 +1275,7 @@ function LessonContent({ id }: { id: number }) {
                 {[
                   { term: "Sovereignty", desc: "The state of being in full control of your capital flow, without requiring bank permission for your own equity.", icon: <Award className="h-5 w-5 text-blue-500" /> },
                   { term: "Implementation", desc: "The transition from 'learning' to 'doing'. The final step where theory becomes reality.", icon: <CheckCircle2 className="h-5 w-5 text-emerald-500" /> },
-                  { term: "Generational Wealth", desc: "A debt-free fortress that provides stability for your family for decades to come.", icon: <Users className="h-5 w-5 text-purple-500" /> },
+                  { term: "Generational Wealth", desc: "A debt-free fortress that provides stability for your family for decades to come.", icon: <UserCircle2 className="h-5 w-5 text-purple-500" /> },
                   { term: "Financial Fortress", desc: "A lifestyle where your home is an asset that pays you, not a liability that drains you.", icon: <HomeIcon className="h-5 w-5 text-amber-500" /> },
                 ].map((t, i) => (
                   <div key={i} className="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-3">
