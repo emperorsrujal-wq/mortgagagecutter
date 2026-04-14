@@ -222,7 +222,7 @@ function LessonContent({ id }: { id: number }) {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
-                  { term: "Principal", desc: "This is the actual cost of your house. It is the 'Stuff' you are trying to own.", icon: <Home className="h-5 w-5 text-blue-500" /> },
+                  { term: "Principal", desc: "This is the actual cost of your house. It is the 'Stuff' you are trying to own.", icon: <HomeIcon className="h-5 w-5 text-blue-500" /> },
                   { term: "Interest", desc: "This is the 'Rental Fee'. It is the money you pay the bank for the privilege of using their money.", icon: <DollarSign className="h-5 w-5 text-red-500" /> },
                   { term: "Amortization", desc: "A fancy word meaning 'killing the debt'. It is the long-term schedule (usually 25-30 years) to pay it all back.", icon: <Clock className="h-5 w-5 text-emerald-500" /> },
                   { term: "Front-Loading", desc: "The bank's strategy to make you pay almost all your interest in the first 15 years, before you pay for the house.", icon: <TrendingUp className="h-5 w-5 text-amber-500" /> },
@@ -362,7 +362,7 @@ function LessonContent({ id }: { id: number }) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
                   { term: "DTI (Debt-to-Income)", desc: "Your 'Backpack Weight'. It is the percentage of your monthly income that goes toward paying back debts.", icon: <Scale className="h-5 w-5 text-blue-500" /> },
-                  { term: "LTV (Loan-to-Value)", desc: "How much of the house the bank still owns versus how much you own. Most strategic tools require an LTV below 80%.", icon: <Home className="h-5 w-5 text-emerald-500" /> },
+                  { term: "LTV (Loan-to-Value)", desc: "How much of the house the bank still owns versus how much you own. Most strategic tools require an LTV below 80%.", icon: <HomeIcon className="h-5 w-5 text-emerald-500" /> },
                   { term: "Stress Test", desc: `A mandatory calculation where ${country.name} lenders pretend your interest rate is 2% higher to see if you can still survive.`, icon: <Activity className="h-5 w-5 text-red-500" /> },
                   { term: "Tier 1 Credit", desc: "Your 'Behavior Report Card'. A score (usually above 740) that tells the bank you are a low-risk strategist, not a risky debtor.", icon: <ShieldCheck className="h-5 w-5 text-amber-500" /> },
                 ].map((t, i) => (
@@ -754,13 +754,13 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 5: THE AUTOMATED HEIST (PREMIUM) */}
+        {/* LESSON 5: THE AUTOMATED HEIST */}
         {id === 5 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
-              <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-100 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-200">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-50 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-100">
                 <RefreshCcw className="h-4 w-4" />
-                <TranslatedText>Phase 4: Execution</TranslatedText>
+                <TranslatedText>Mastery Level: 05 — Process Automation</TranslatedText>
               </div>
               <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
                 <TranslatedText>The Automated Heist:</TranslatedText>
@@ -771,12 +771,125 @@ function LessonContent({ id }: { id: number }) {
               </p>
             </header>
 
-            <section className="space-y-16">
-              <AutomationSimulator />
+            {/* 1. CONCEPT */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: The Leaking Bathtub</TranslatedText></h2>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
+                  <p>
+                    <TranslatedText>Imagine your debt is like a bathtub with a small hole in the bottom. Every day, some water leaks out—that is the "Interest" you pay to the bank.</TranslatedText>
+                  </p>
+                  <p>
+                    <TranslatedText>If you keep the tub full of water, the pressure is higher and it leaks faster. But if you keep the tub almost empty, it leaks much slower.</TranslatedText>
+                  </p>
+                  <p className="text-blue-600 font-black italic">
+                    <TranslatedText>The "Automated Heist" is your water pump.</TranslatedText>
+                  </p>
+                  <p>
+                    <TranslatedText>It ensures that every time you get a "bucket" of new water (your paycheck), it immediately jumps into the tub to lower the debt balance. This stops the interest leak for as long as possible each month, before you have to pump some back out for bills.</TranslatedText>
+                  </p>
+                </div>
+                <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
+                  <div className="absolute top-0 right-0 p-6 opacity-10"><RefreshCcw className="h-32 w-32 text-blue-400" /></div>
+                  <div className="space-y-2 relative z-10">
+                    <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Velocity Logic</p>
+                    <h3 className="text-6xl font-black text-white tracking-tighter">DAY 1</h3>
+                    <p className="text-lg font-bold text-slate-400">Income Integration Impact</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* 2. TERMINOLOGY */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Terminology Masterclass</TranslatedText></h2>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  { term: "ADB (Average Daily Balance)", desc: "The average amount you owe over 30 days. The bank uses this single number to decide your monthly 'rent' cost.", icon: <BarChart className="h-5 w-5 text-blue-500" /> },
+                  { term: "Automatic Sweep", desc: "A bank feature that 'vacuums' money from your checking account into your loan account every night.", icon: <Zap className="h-5 w-5 text-amber-500" /> },
+                  { term: "Interest Recalculation", desc: "The magic moment at midnight when the bank checks how much you owe and decides your rent for the next 24 hours.", icon: <History className="h-5 w-5 text-emerald-500" /> },
+                  { term: "Velocity", desc: "The speed at which your income hits the principal. Higher velocity means less interest can grow.", icon: <Rocket className="h-5 w-5 text-purple-500" /> },
+                ].map((t, i) => (
+                  <div key={i} className="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-slate-50 rounded-lg">{t.icon}</div>
+                      <h4 className="font-black text-lg text-slate-900"><TranslatedText>{t.term}</TranslatedText></h4>
+                    </div>
+                    <p className="text-slate-500 font-medium leading-relaxed"><TranslatedText>{t.desc}</TranslatedText></p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* 3. IMPORTANCE */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: Speed vs. Rate</TranslatedText></h2>
+              </div>
+              
+              <CourseCard className="border-l-[12px] border-l-blue-600 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
+                <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12">
+                  <RefreshCcw className="h-96 w-96" />
+                </div>
+                <div className="relative z-10 space-y-10">
+                  <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
+                    <p>
+                      <TranslatedText>{`Most homeowners in ${country.name} think the 'Interest Rate' is the most important number. They are wrong. The most important factor is the TIME that the bank is allowed to charge you interest on your money.`}</TranslatedText>
+                    </p>
+                    <p>
+                      <TranslatedText>{`When you automate your income to hit the principal on Day 1, you effectively 'choke' the interest calculation for the rest of the month. Your money isn't just sitting in a checking account doing nothing—it's actively working 24/7 to cancel the bank's profit.`}</TranslatedText>
+                    </p>
+                  </div>
+                </div>
+              </CourseCard>
 
               <EpiphanyBox>
-                <TranslatedText>{`Think of your debt like a leaking bathtub. Traditional banking keeps the water level high. Our automation 'dumps the bucket' (your income) in immediately, stopping the interest 'drain' before it can even start for the month.`}</TranslatedText>
+                <TranslatedText>{`Your income is your most powerful employee. If it sits in a checking account for 20 days before you pay your mortgage, you are essentially giving the bank an interest-free loan of your labor.`}</TranslatedText>
               </EpiphanyBox>
+            </section>
+
+            {/* 4. ACTION */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">4</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: Model Your Velocity</TranslatedText></h2>
+              </div>
+              
+              <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
+                <TranslatedText>{`Use the "Velocity Simulator" below to see the 'V-Shape' cycle of a healthy strategy. Watch how much interest disappears when you toggle 'Hyperdrive Mode'.`}</TranslatedText>
+              </p>
+
+              <AutomationSimulator />
+
+              <div className="p-8 bg-blue-50 border-4 border-dashed border-blue-200 rounded-[40px] text-center space-y-4">
+                <div className="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto">
+                  <RefreshCcw className="h-6 w-6 text-blue-600 animate-spin-slow" />
+                </div>
+                <p className="text-xl text-blue-900 font-bold leading-relaxed">
+                  <TranslatedText>{`💡 STRATEGY HACK: In ${country.name}, set your paycheck direct deposit to hit the loan account directly. Then, set your bills to pay from that same account on the last possible due date. This maximizes the 'Offset Time' your money spends killing interest.`}</TranslatedText>
+                </p>
+              </div>
+
+              <Quiz 
+                question="What is the main goal of the 'Automated Heist' strategy?"
+                options={[
+                  "To hide your money from the local government",
+                  "To minimize the Average Daily Balance (ADB) of your debt",
+                  "To earn a higher interest rate on your savings account",
+                  "To avoid paying your monthly utilities"
+                ]}
+                correctAnswer={1}
+                explanation={`The strategy is built on velocity. By dumping your income into the debt immediately, you lower the Average Daily Balance that the bank uses to calculate your nightly interest charge.`}
+              />
             </section>
           </div>
         )}
