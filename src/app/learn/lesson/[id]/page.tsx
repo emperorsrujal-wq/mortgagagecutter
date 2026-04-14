@@ -31,7 +31,7 @@ import {
 } from '@/components/course/UIComponents';
 import { TranslatedText } from '@/components/course/TranslatedText';
 import { cn } from '@/lib/utils';
-import Link from 'next/navigation';
+import Link from 'next/link';
 import { 
   ChevronLeft, 
   ChevronRight, 
