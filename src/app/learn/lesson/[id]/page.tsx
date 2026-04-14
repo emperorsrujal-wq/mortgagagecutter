@@ -152,13 +152,6 @@ function LessonContent({ id }: { id: number }) {
     else router.push('/learn');
   };
 
-  const stories = [
-    { name: "The Millers", location: "Austin, TX", outcome: "Paid off $312k in 4.2 years", saving: "$142,000", quote: "We cut 19 years off our 30-year fixed. No extra income, just velocity." },
-    { name: "Sarah & Dave", location: "Toronto, ON", outcome: "6-Year Payoff on $540k", saving: "$84,000", quote: "The STEP hack was the missing link. Our bank didn't want us to know." },
-    { name: "James P.", location: "London, UK", outcome: "Mortgage Free in 7 Years", saving: "£62,000", quote: "Offsetting our daily cash changed the math. The bank now owes us." },
-    { name: "The Nguyens", location: "Sydney, AU", outcome: "3rd Property Debt-Free", saving: "$210,000", quote: "90% of multi-owners here use this. It's the standard for the 1%." }
-  ];
-
   return (
     <div className="min-h-screen bg-[#FAFBFD] font-body pb-32">
       <ProgressBar current={id} />
@@ -310,34 +303,136 @@ function LessonContent({ id }: { id: number }) {
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-100 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-200">
                 <Lock className="h-4 w-4" />
-                <TranslatedText>Phase 1: The Internal Audit</TranslatedText>
+                <TranslatedText>Mastery Level: 02 — Qualification & Power</TranslatedText>
               </div>
               <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
                 <TranslatedText>The Secret Scorecard:</TranslatedText>
-                <span className="block text-blue-600 italic mt-4"><TranslatedText>Mastering the Stress Test.</TranslatedText></span>
+                <span className="block text-blue-600 italic mt-4"><TranslatedText>Mastering the Gatekeeper's Math.</TranslatedText></span>
               </h1>
               <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
-                <TranslatedText>{`In ${country.name}, lenders use a specific 'Stress Test' logic. We're going to flip the script and use their own math to force them to give you the keys to the vault.`}</TranslatedText>
+                <TranslatedText>{`Lenders in ${country.name} have a secret 'Report Card' they use to decide who gets the best tools. We're going to learn how to ace it.`}</TranslatedText>
               </p>
             </header>
 
-            <section className="space-y-16">
-              <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
-                <h3 className="text-3xl font-black text-slate-900"><TranslatedText>The Physics of Approval</TranslatedText></h3>
-                <p>
-                  <TranslatedText>{`Lenders in ${country.name} don't just look at your income. They look at your 'Debt Velocity'. They want to see that your income is a stable dam, and your debts are small enough not to burst it.`}</TranslatedText>
-                </p>
+            {/* 1. CONCEPT */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: The Heavy Backpack Test</TranslatedText></h2>
               </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
+                  <p>
+                    <TranslatedText>Imagine you want to borrow your friend's really fast racing bike. Your friend says, "I'll let you use it, but first I need to know if you're strong enough to pedal it up a steep hill."</TranslatedText>
+                  </p>
+                  <p>
+                    <TranslatedText>They put a heavy backpack on you and ask you to walk around. If you can walk easily, they know you're strong. If you struggle, they won't give you the bike because they're afraid you'll fall.</TranslatedText>
+                  </p>
+                  <p className="text-blue-600 font-black italic">
+                    <TranslatedText>In the bank's world, this is the "Stress Test."</TranslatedText>
+                  </p>
+                  <p>
+                    <TranslatedText>Lenders don't just want to know if you can pay your bills today. They want to know if you could still pay them if the world changed tomorrow. They measure this using a few secret numbers.</TranslatedText>
+                  </p>
+                </div>
+                <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
+                  <div className="absolute top-0 right-0 p-6 opacity-10"><Target className="h-32 w-32 text-blue-400" /></div>
+                  <div className="space-y-2 relative z-10">
+                    <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Gatekeeper's Metric</p>
+                    <h3 className="text-6xl font-black text-white tracking-tighter">DTI</h3>
+                    <p className="text-lg font-bold text-slate-400">Debt-to-Income Capacity</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* 2. TERMINOLOGY */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Key Terminology</TranslatedText></h2>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  { term: "DTI (Debt-to-Income)", desc: "Your 'Backpack Weight'. It is the percentage of your monthly income that goes toward paying back debts.", icon: <Scale className="h-5 w-5 text-blue-500" /> },
+                  { term: "LTV (Loan-to-Value)", desc: "How much of the house the bank still owns versus how much you own. Most strategic tools require an LTV below 80%.", icon: <Home className="h-5 w-5 text-emerald-500" /> },
+                  { term: "Stress Test", desc: `A mandatory calculation where ${country.name} lenders pretend your interest rate is 2% higher to see if you can still survive.`, icon: <Activity className="h-5 w-5 text-red-500" /> },
+                  { term: "Tier 1 Credit", desc: "Your 'Behavior Report Card'. A score (usually above 740) that tells the bank you are a low-risk strategist, not a risky debtor.", icon: <ShieldCheck className="h-5 w-5 text-amber-500" /> },
+                ].map((t, i) => (
+                  <div key={i} className="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-slate-50 rounded-lg">{t.icon}</div>
+                      <h4 className="font-black text-lg text-slate-900"><TranslatedText>{t.term}</TranslatedText></h4>
+                    </div>
+                    <p className="text-slate-500 font-medium leading-relaxed"><TranslatedText>{t.desc}</TranslatedText></p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* 3. IMPORTANCE */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: The Key to the Vault</TranslatedText></h2>
+              </div>
+              
+              <CourseCard className="border-l-[12px] border-l-blue-600 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
+                <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12">
+                  <Lock className="h-96 w-96" />
+                </div>
+                <div className="relative z-10 space-y-10">
+                  <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
+                    <p>
+                      <TranslatedText>{`Lenders treat people differently based on their scorecard. If you look like a "Traditional Debtor" (high DTI, low credit), they will lock you in the 30-year amortized cage because it's profitable for them.`}</TranslatedText>
+                    </p>
+                    <p>
+                      <TranslatedText>{`But if you look like a "Strategist" (low DTI, high credit), they will give you the keys to the vault: the first-lien HELOCs, the Offset accounts, and the flexible credit lines we need to execute the Mortgage Cutter Method.`}</TranslatedText>
+                    </p>
+                  </div>
+                </div>
+              </CourseCard>
+
+              <EpiphanyBox>
+                <TranslatedText>{`Your Credit Score isn't a measure of wealth. It's a measure of how good you are at being a profitable, low-risk partner for major lenders. We're going to optimize your scorecard so you become too "safe" for them to ignore.`}</TranslatedText>
+              </EpiphanyBox>
+            </section>
+
+            {/* 4. ACTION */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">4</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: Run Your Scorecard</TranslatedText></h2>
+              </div>
+              
+              <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
+                <TranslatedText>{`Use the "Lender Probability" simulator below. It uses ${country.name}'s specific regulatory limits to show you how a Senior Loan Officer sees your financial profile.`}</TranslatedText>
+              </p>
 
               <QualificationCalc />
 
-              <EpiphanyBox>
-                <TranslatedText>{`Your Credit Score isn't a measure of wealth. It's a measure of how good you are at being a profitable customer for major lenders. We're going to optimize your score so you become too 'safe' for them to ignore.`}</TranslatedText>
-              </EpiphanyBox>
+              <div className="p-8 bg-blue-50 border-4 border-dashed border-blue-200 rounded-[40px] text-center space-y-4">
+                <div className="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto">
+                  <Sparkles className="h-6 w-6 text-blue-600 fill-blue-600" />
+                </div>
+                <p className="text-xl text-blue-900 font-bold leading-relaxed">
+                  <TranslatedText>{`💡 STRATEGY HACK: If your DTI is too high, focus on "Choking" small, high-interest debts first. Clearing a $500/mo car payment can drop your DTI significantly, instantly unlocking the 1%ers strategy.`}</TranslatedText>
+                </p>
+              </div>
 
-              <InfoBox title="The DTI Loophole" color="emerald">
-                <p><TranslatedText>{`Did you know that by moving high-interest credit card debt into a lower-interest vehicle, you can drop your DTI (Debt-to-Income) ratio by up to 15 points in 30 days? This is the first step to qualifying for the 1%ers strategy.`}</TranslatedText></p>
-              </InfoBox>
+              <Quiz 
+                question="Why does the bank pretend your interest rate is 2% higher during the Stress Test?"
+                options={[
+                  "To make more money off you immediately",
+                  "To see if you can still pay your mortgage if the economy changes",
+                  "Because they are legally required to be mean to borrowers",
+                  "It's a secret tax collected by the government"
+                ]}
+                correctAnswer={1}
+                explanation={`In ${country.name}, the Stress Test is a safety buffer. Lenders want to ensure that if interest rates rise, you won't default on your loan. Aceing this test is the first step to securing a high-leverage strategic credit line.`}
+              />
             </section>
           </div>
         )}
