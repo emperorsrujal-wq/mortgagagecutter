@@ -1,4 +1,3 @@
-
 'use client';
 import React, { use, useState, useEffect } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
@@ -72,7 +71,10 @@ import {
   Play,
   Quote,
   ZapOff,
-  BookOpen
+  BookOpen,
+  DollarSign,
+  Calculator,
+  Clock
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -274,7 +276,7 @@ function LessonContent({ id }: { id: number }) {
               </div>
               
               <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
-                <TranslatedText>{`Use the 'Evidence Locker' below to see exactly how much 'Invisible Rent' you are currently paying to ${country.banks[0]} every single hour of every single day.`}</TranslatedText>
+                <TranslatedText>{`Use the 'Evidence Locker' below to see exactly how much 'Invisible Rent' you are currently paying to your lender every single hour of every single day.`}</TranslatedText>
               </p>
 
               <InterestCalc />
