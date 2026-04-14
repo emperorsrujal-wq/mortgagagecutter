@@ -101,7 +101,7 @@ function ProgressBar({ current }: { current: number }) {
           <span className="hidden sm:inline uppercase tracking-widest"><TranslatedText>Course Hub</TranslatedText></span>
         </Link>
         <div className="text-[10px] font-black uppercase text-slate-400 tracking-[0.3em]">
-          <TranslatedText>Secret</TranslatedText> {current} <TranslatedText>of</TranslatedText> 8
+          <TranslatedText>Phase</TranslatedText> {current} <TranslatedText>of</TranslatedText> 8
         </div>
         <div className="w-20" />
       </div>
@@ -118,7 +118,7 @@ function EpiphanyBox({ children }: { children: React.ReactNode }) {
       <div className="relative z-10 space-y-4">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-full bg-white text-blue-600 flex items-center justify-center font-black">!</div>
-          <span className="font-black text-xs uppercase tracking-[0.3em] text-blue-200">The Epiphany</span>
+          <span className="font-black text-xs uppercase tracking-[0.3em] text-blue-200">The Big Idea</span>
         </div>
         <div className="text-xl font-bold leading-relaxed italic">
           {children}
@@ -142,7 +142,7 @@ function LessonContent({ id }: { id: number }) {
   const nextLesson = () => {
     completeLesson(id);
     if (id < 8) router.push(`/learn/lesson/${id + 1}`);
-    else router.push('/questionnaire');
+    else router.push('/members/chunker');
   };
 
   const prevLesson = () => {
@@ -1048,47 +1048,247 @@ function LessonContent({ id }: { id: number }) {
         {/* LESSON 7: THE ESCAPE HATCH (PREMIUM) */}
         {id === 7 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
-            <header className="space-y-10 text-center">
-              <div className="inline-flex items-center gap-2 px-6 py-2 bg-red-100 text-red-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-red-200">
-                <Rocket className="h-4 w-4" />
-                <TranslatedText>Final Phase: Max Velocity</TranslatedText>
-              </div>
-              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
-                <TranslatedText>The Escape Hatch:</TranslatedText>
-                <span className="block text-blue-600 italic mt-4"><TranslatedText>Collapsing Time Itself.</TranslatedText></span>
-              </h1>
-              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
-                <TranslatedText>{`It's time to trigger the final 'Hyperdrive'. By combining 'Principal Chunks' with 'Offset Timing', we're going to shave decades off your term.`}</TranslatedText>
-              </p>
-            </header>
+            {isLocked ? (
+              <section className="text-center space-y-10 py-20">
+                <div className="bg-slate-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Lock className="h-12 w-12 text-slate-400" />
+                </div>
+                <h2 className="text-5xl font-fraunces font-black text-slate-900 leading-tight">
+                  <TranslatedText>Unlock the Private Vault</TranslatedText>
+                </h2>
+                <p className="text-xl text-slate-500 max-w-xl mx-auto">
+                  <TranslatedText>The Speedrun and The Proof modules are reserved for Mortgage Cutter Pro members. Learn how to skip decades of debt.</TranslatedText>
+                </p>
+                <Button size="lg" className="h-16 px-12 text-xl font-black rounded-2xl shadow-2xl shadow-blue-500/20" asChild>
+                  <Link href="/purchase?plan=pro_197">Unlock The Full Blueprint ($197)</Link>
+                </Button>
+              </section>
+            ) : (
+              <>
+                <header className="space-y-10 text-center">
+                  <div className="inline-flex items-center gap-2 px-6 py-2 bg-red-100 text-red-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-red-200">
+                    <Rocket className="h-4 w-4" />
+                    <TranslatedText>Mastery Level: 07 — Max Velocity</TranslatedText>
+                  </div>
+                  <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                    <TranslatedText>The Speedrun:</TranslatedText>
+                    <span className="block text-blue-600 italic mt-4"><TranslatedText>Collapsing Time Itself.</TranslatedText></span>
+                  </h1>
+                  <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                    <TranslatedText>{`It's time to trigger the final 'Hyperdrive'. By combining 'Principal Chunks' with 'Offset Timing', we're going to shave decades off your term.`}</TranslatedText>
+                  </p>
+                </header>
 
-            <section className="space-y-16">
-              <OffsetVisual />
+                {/* 1. CONCEPT */}
+                <section className="space-y-12">
+                  <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                    <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
+                    <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: The Level Skip</TranslatedText></h2>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
+                      <p>
+                        <TranslatedText>Imagine you're playing a long video game with 30 levels. Most players walk through every room, fighting every enemy (paying every cent of interest) for 30 years.</TranslatedText>
+                      </p>
+                      <p>
+                        <TranslatedText>A "Speedrun" is finding a hidden door that skips 10 levels at once. In the Mortgage Cutter Method, this door is the "Principal Chunk."</TranslatedText>
+                      </p>
+                      <p className="text-blue-600 font-black italic">
+                        <TranslatedText>You're not working harder; you're taking a shortcut.</TranslatedText>
+                      </p>
+                      <p>
+                        <TranslatedText>By using a line of credit to dump a large "chunk" of principal at once, you instantly cancel the interest that would have grown on that money for the next two decades. You then use your monthly surplus to "reset" the credit line and do it again.</TranslatedText>
+                      </p>
+                    </div>
+                    <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
+                      <div className="absolute top-0 right-0 p-6 opacity-10"><Rocket className="h-32 w-32 text-blue-400" /></div>
+                      <div className="space-y-2 relative z-10">
+                        <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Time Collapse</p>
+                        <h3 className="text-6xl font-black text-white tracking-tighter">7 YRS</h3>
+                        <p className="text-lg font-bold text-slate-400">Typical Accelerated Goal</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
 
-              <HyperdriveSim />
+                {/* 2. TERMINOLOGY */}
+                <section className="space-y-12">
+                  <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                    <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
+                    <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Terminology Masterclass</TranslatedText></h2>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {[
+                      { term: "Principal Chunk", desc: "A one-time large payment applied directly to the mortgage principal, usually borrowed from your strategic credit line.", icon: <Zap className="h-5 w-5 text-blue-500" /> },
+                      { term: "Offset Timing", desc: "The practice of keeping your cash in the loan account for as many days as possible before paying bills.", icon: <Timer className="h-5 w-5 text-emerald-500" /> },
+                      { term: "The Chunker Loop", desc: "The repeatable 6-month cycle of applying a chunk, recovering the line with income, and repeating.", icon: <RefreshCcw className="h-5 w-5 text-purple-500" /> },
+                      { term: "Interest Arbitrage", desc: "The gap between your mortgage interest and your line-of-credit interest that allows for mathematical profit.", icon: <Scale className="h-5 w-5 text-amber-500" /> },
+                    ].map((t, i) => (
+                      <div key={i} className="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-3">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 bg-slate-50 rounded-lg">{t.icon}</div>
+                          <h4 className="font-black text-lg text-slate-900"><TranslatedText>{t.term}</TranslatedText></h4>
+                        </div>
+                        <p className="text-slate-500 font-medium leading-relaxed"><TranslatedText>{t.desc}</TranslatedText></p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
 
-              <BiWeeklyCalc />
-            </section>
+                {/* 3. IMPORTANCE */}
+                <section className="space-y-12">
+                  <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                    <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
+                    <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: Collapsing the Amortization</TranslatedText></h2>
+                  </div>
+                  
+                  <CourseCard className="border-l-[12px] border-l-red-600 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
+                    <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12">
+                      <Activity className="h-96 w-96" />
+                    </div>
+                    <div className="relative z-10 space-y-10">
+                      <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
+                        <p>
+                          <TranslatedText>{`Most homeowners in ${country.name} are fighting a war of attrition. They try to "save" their way to freedom. But interest is a monster that grows every day.`}</TranslatedText>
+                        </p>
+                        <p>
+                          <TranslatedText>{`The Speedrun strategy stops the monster from growing. By applying chunks early in the amortization cycle, you eliminate the "Future Compound Interest" before it even starts. You are essentially deleting the hardest years of the loan from your life.`}</TranslatedText>
+                        </p>
+                      </div>
+                    </div>
+                  </CourseCard>
+
+                  <EpiphanyBox>
+                    <TranslatedText>{`Time is more expensive than money. A $10,000 chunk today can save you $30,000 in future labor. Every month you delay implementation is a "Level" you'll have to play twice.`}</TranslatedText>
+                  </EpiphanyBox>
+                </section>
+
+                {/* 4. ACTION */}
+                <section className="space-y-16">
+                  <div className="text-center space-y-4">
+                    <h3 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: The Hyperdrive Execution</TranslatedText></h3>
+                    <p className="text-lg text-slate-500 font-medium max-w-xl mx-auto">
+                      <TranslatedText>{`Use the simulators below to see how combining "Chunks" with "Offset Timing" shatters the 30-year trap in real-time.`}</TranslatedText>
+                    </p>
+                  </div>
+
+                  <OffsetVisual />
+
+                  <HyperdriveSim />
+
+                  <BiWeeklyCalc />
+                </section>
+              </>
+            )}
           </div>
         )}
 
-        {/* LESSON 8: THE PROOF */}
+        {/* LESSON 8: THE EXPERT CLUB */}
         {id === 8 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-white/10 shadow-xl">
                 <Globe className="h-4 w-4 text-blue-400" />
-                <TranslatedText>{`The Global Movement`}</TranslatedText>
+                <TranslatedText>{`The Global Standard`}</TranslatedText>
               </div>
               <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
-                <TranslatedText>The Proof:</TranslatedText>
+                <TranslatedText>The Expert Club:</TranslatedText>
                 <span className="block text-blue-600 italic mt-4"><TranslatedText>Joining the 39 Million.</TranslatedText></span>
               </h1>
               <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
-                <TranslatedText>{`In the top 1%, this model is the standard. Today, you are joining the movement of homeowners who actually understand the math.`}</TranslatedText>
+                <TranslatedText>{`In the top 1%, this model isn't a "secret"—it's the standard. Today, you are joining the movement of owners who finally understand the math.`}</TranslatedText>
               </p>
             </header>
 
+            {/* 1. CONCEPT */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: The Gravity of Math</TranslatedText></h2>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
+                  <p>
+                    <TranslatedText>Math is like gravity. It doesn't care what you believe or how you feel. If you drop a ball, it falls. If you apply velocity to a debt, the debt vanishes.</TranslatedText>
+                  </p>
+                  <p>
+                    <TranslatedText>For 100 years, the "Expert Club"—the banks, the wealthy families, and the professional investors—have used these exact rules to stay liquid and grow.</TranslatedText>
+                  </p>
+                  <p className="text-blue-600 font-black italic">
+                    <TranslatedText>You're not guessing anymore.</TranslatedText>
+                  </p>
+                  <p>
+                    <TranslatedText>By graduating from this course, you've moved from being "The Fuel" of the machine to being the "Architect." You now have the same blueprint that 39 million families globally have used to escape the amortized cage.</TranslatedText>
+                  </p>
+                </div>
+                <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
+                  <div className="absolute top-0 right-0 p-6 opacity-10"><Trophy className="h-32 w-32 text-blue-400" /></div>
+                  <div className="space-y-2 relative z-10">
+                    <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Expert Consensus</p>
+                    <h3 className="text-6xl font-black text-white tracking-tighter">100%</h3>
+                    <p className="text-lg font-bold text-slate-400">Mathematical Certainty</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* 2. TERMINOLOGY */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Master's Lexicon</TranslatedText></h2>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  { term: "Sovereignty", desc: "The state of being in full control of your capital flow, without requiring bank permission for your own equity.", icon: <Award className="h-5 w-5 text-blue-500" /> },
+                  { term: "Implementation", desc: "The transition from 'learning' to 'doing'. The final step where theory becomes reality.", icon: <CheckCircle2 className="h-5 w-5 text-emerald-500" /> },
+                  { term: "Generational Wealth", desc: "A debt-free fortress that provides stability for your family for decades to come.", icon: <Users className="h-5 w-5 text-purple-500" /> },
+                  { term: "Financial Fortress", desc: "A lifestyle where your home is an asset that pays you, not a liability that drains you.", icon: <HomeIcon className="h-5 w-5 text-amber-500" /> },
+                ].map((t, i) => (
+                  <div key={i} className="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-slate-50 rounded-lg">{t.icon}</div>
+                      <h4 className="font-black text-lg text-slate-900"><TranslatedText>{t.term}</TranslatedText></h4>
+                    </div>
+                    <p className="text-slate-500 font-medium leading-relaxed"><TranslatedText>{t.desc}</TranslatedText></p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* 3. IMPORTANCE */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: The Graduation</TranslatedText></h2>
+              </div>
+              
+              <CourseCard className="border-l-[12px] border-l-slate-900 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
+                <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12">
+                  <Star className="h-96 w-96" />
+                </div>
+                <div className="relative z-10 space-y-10">
+                  <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
+                    <p>
+                      <TranslatedText>{`Knowledge without action is just a hobby. But knowledge with action is power. You now have the power to change your family's financial trajectory forever in ${country.name}.`}</TranslatedText>
+                    </p>
+                    <p>
+                      <TranslatedText>{`By joining the "Expert Club," you stop guessing about interest rates and start managing mathematical velocity. You've graduated from the school of "Debt" and entered the academy of "Freedom."`}</TranslatedText>
+                    </p>
+                  </div>
+                </div>
+              </CourseCard>
+
+              <EpiphanyBox>
+                <TranslatedText>{`The most important decision you'll ever make isn't which house to buy—it's which financial engine you use to pay for it. You've chosen the high-performance engine. Now, hit the gas.`}</TranslatedText>
+              </EpiphanyBox>
+            </section>
+
+            {/* 4. ACTION */}
             <section className="space-y-24">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <Card className="bg-white border-2 border-slate-100 p-10 rounded-[40px] shadow-xl text-center space-y-6">
@@ -1122,7 +1322,7 @@ function LessonContent({ id }: { id: number }) {
                     <TranslatedText>Mastery Achieved</TranslatedText>
                   </h2>
                   <p className="text-blue-100 text-2xl max-w-2xl mx-auto leading-relaxed font-medium">
-                    <TranslatedText>{`You have completed the core Mortgage Freedom Accelerator. Go build your empire.`}</TranslatedText>
+                    <TranslatedText>{`You have completed the core Mortgage Freedom Accelerator. It's time to build your empire.`}</TranslatedText>
                   </p>
                 </div>
 
@@ -1131,7 +1331,7 @@ function LessonContent({ id }: { id: number }) {
                     onClick={() => router.push('/members/chunker')}
                     className="bg-white text-blue-900 hover:bg-blue-50 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95"
                   >
-                    <TranslatedText>Launch My Wealth Simulator</TranslatedText>
+                    <TranslatedText>Launch My Chunker Simulator</TranslatedText>
                     <ArrowRight className="h-10 w-10 group-hover:translate-x-3 transition-transform" />
                   </button>
                 </div>
@@ -1146,7 +1346,7 @@ function LessonContent({ id }: { id: number }) {
             className="flex items-center gap-4 text-[#5A6175] hover:text-[#1A1D26] font-black transition-all group text-xl"
           >
             <ChevronLeft className="h-8 w-8 group-hover:-translate-x-2 transition-transform" />
-            <TranslatedText>Previous Secret</TranslatedText>
+            <TranslatedText>Previous Phase</TranslatedText>
           </button>
           
           {(id < 8 && (!isLocked || isPrivileged)) && (
@@ -1154,7 +1354,7 @@ function LessonContent({ id }: { id: number }) {
                 onClick={nextLesson}
                 className="group flex items-center gap-4 bg-[#2563EB] text-white px-12 py-6 rounded-[24px] font-black shadow-2xl shadow-blue-500/30 hover:bg-blue-600 transition-all active:scale-95 text-2xl"
             >
-                <TranslatedText>{id === 3 ? "Unlock The Vault" : "Next Secret"}</TranslatedText>
+                <TranslatedText>{id === 3 ? "Unlock The Vault" : "Next Phase"}</TranslatedText>
                 <ChevronRight className="h-8 w-8 group-hover:translate-x-3 transition-transform" />
             </button>
           )}

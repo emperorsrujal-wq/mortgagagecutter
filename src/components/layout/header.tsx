@@ -2,7 +2,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Home, BookOpen, GraduationCap, Calculator, ChevronDown, Landmark, Zap, Trophy } from 'lucide-react';
+import { Home, BookOpen, GraduationCap, Calculator, ChevronDown, Landmark, Zap, Trophy, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { UserProfileButton } from '@/components/auth/user-profile-button';
 import { useUser } from '@/firebase';
@@ -39,17 +39,29 @@ export default function Header() {
                   <GraduationCap className="mr-2 h-4 w-4 text-blue-500" /> Education <ChevronDown className="h-3 w-3 opacity-50" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuContent align="end" className="w-64">
                 <DropdownMenuLabel>Learning Paths</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="/learn" className="cursor-pointer">
-                    <Zap className="mr-2 h-4 w-4 text-yellow-500" /> Payoff Strategies
+                  <Link href="/learn" className="cursor-pointer py-3">
+                    <div className="flex items-start gap-3">
+                      <Zap className="h-5 w-5 text-yellow-500 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-bold">Payoff Blueprint</p>
+                        <p className="text-[10px] text-muted-foreground uppercase font-black">Step-by-Step Strategy</p>
+                      </div>
+                    </div>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/financial-academy" className="cursor-pointer">
-                    <Trophy className="mr-2 h-4 w-4 text-blue-500" /> Financial Academy
+                  <Link href="/financial-academy" className="cursor-pointer py-3">
+                    <div className="flex items-start gap-3">
+                      <Trophy className="h-5 w-5 text-blue-500 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-bold">Financial Academy</p>
+                        <p className="text-[10px] text-muted-foreground uppercase font-black">Regional Banking Secrets</p>
+                      </div>
+                    </div>
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -59,25 +71,25 @@ export default function Header() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="gap-1">
-                    <Zap className="mr-2 h-4 w-4 text-yellow-500" /> Tools <ChevronDown className="h-3 w-3 opacity-50" />
+                    <ShieldCheck className="mr-2 h-4 w-4 text-emerald-500" /> My Tools <ChevronDown className="h-3 w-3 opacity-50" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuLabel>Member Tools</DropdownMenuLabel>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>Member Access</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link href="/questionnaire" className="cursor-pointer">
-                      <Calculator className="mr-2 h-4 w-4" /> Savings Estimator
+                    <Link href="/questionnaire" className="cursor-pointer py-2">
+                      <Calculator className="mr-2 h-4 w-4 text-slate-400" /> Savings Estimator
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/members/chunker" className="cursor-pointer">
-                      <Zap className="mr-2 h-4 w-4" /> Chunker Simulator
+                    <Link href="/members/chunker" className="cursor-pointer py-2">
+                      <Zap className="mr-2 h-4 w-4 text-yellow-500" /> Chunker Simulator
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/members/bank-screener" className="cursor-pointer">
-                      <Landmark className="mr-2 h-4 w-4" /> Bank Screener
+                    <Link href="/members/bank-screener" className="cursor-pointer py-2">
+                      <Landmark className="mr-2 h-4 w-4 text-blue-400" /> Bank Screener
                     </Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -85,7 +97,7 @@ export default function Header() {
             )}
 
             <Button variant="ghost" asChild>
-              <Link href="/book-sales"><BookOpen className="mr-2 h-4 w-4" /> The Book</Link>
+              <Link href="/book-sales"><BookOpen className="mr-2 h-4 w-4 text-orange-500" /> The Book</Link>
             </Button>
             <Button variant="ghost" asChild>
               <Link href="/blog">Blog</Link>
