@@ -1,133 +1,298 @@
-
 {
   "entities": {
-    "FinancialLesson": {
+    "Lead": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "FinancialLesson",
+      "title": "Lead",
       "type": "object",
-      "description": "Represents a single lesson in the Financial Education Academy, including localized content for multiple countries. Content and metadata are stored as JSON strings due to schema output constraints.",
+      "description": "Represents a potential customer who has submitted their initial contact information.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the FinancialLesson entity."
+          "description": "Unique identifier for the Lead entity."
         },
-        "unitNumber": {
-          "type": "number",
-          "description": "The sequential number of the unit this lesson belongs to (e.g., 1 for 'How Banks Really Work')."
-        },
-        "lessonNumber": {
-          "type": "number",
-          "description": "The sequential number of the lesson within its unit (e.g., 1 for 'How Banks Really Work')."
-        },
-        "title": {
+        "name": {
           "type": "string",
-          "description": "The main, non-country-specific title of the financial education lesson."
-        },
-        "slug": {
-          "type": "string",
-          "description": "A URL-friendly string identifier for the lesson (e.g., 'how-banks-work')."
-        },
-        "country": {
-          "type": "array",
-          "description": "An array of country codes (e.g., 'Canada', 'USA', 'UK', 'Australia') for which this lesson's content is available. Each country code refers to a specific sub-object within the 'content' JSON string.",
-          "items": {
-            "type": "string"
-          }
-        },
-        "content": {
-          "type": "string",
-          "description": "A JSON string containing localized content for the lesson, keyed by country code. Example structure: {\"canada\": {\"title\": \"...\", \"hook\": \"...\", \"section1\": \"...\", \"section2\": \"...\", \"section3\": \"...\", \"section4\": \"...\", \"section5\": \"...\", \"section6\": \"...\", \"takeaways\": [\"...\"], \"wordCount\": 2800, \"readingTime\": 15}, \"usa\": {...}, ...}. Each country object includes a country-specific title, hook, multiple content sections (section1-section6), key takeaways (array of strings), wordCount (number), and readingTime (number)."
-        },
-        "metadata": {
-          "type": "string",
-          "description": "A JSON string containing administrative metadata for the lesson. Example structure: {\"published\": true, \"createdDate\": \"2023-01-01T12:00:00Z\", \"lastUpdated\": \"2023-01-01T12:00:00Z\", \"difficulty\": \"beginner\", \"category\": \"banking\"}. Timestamps are in ISO 8601 format."
-        }
-      },
-      "required": [
-        "id",
-        "unitNumber",
-        "lessonNumber",
-        "title",
-        "slug",
-        "country",
-        "content",
-        "metadata"
-      ]
-    },
-    "UserFinancialProgress": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "UserFinancialProgress",
-      "type": "object",
-      "description": "Tracks a user's progress through the Financial Education Academy module.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the UserFinancialProgress entity, typically matching the authenticated user's ID."
-        },
-        "userId": {
-          "type": "string",
-          "description": "Reference to the authenticated user's ID. (Relationship: User 1:1 UserFinancialProgress)"
+          "description": "The full name of the lead."
         },
         "email": {
           "type": "string",
-          "description": "The email address of the user from the authentication system.",
+          "description": "The email address of the lead.",
           "format": "email"
         },
-        "selectedCountry": {
+        "createdAt": {
           "type": "string",
-          "description": "The country preference selected by the user for viewing lesson content (e.g., 'Canada', 'USA', 'UK', 'Australia')."
-        },
-        "completedLessons": {
-          "type": "array",
-          "description": "An array of `lessonNumber`s (integers) that the user has successfully completed.",
-          "items": {
-            "type": "number"
-          }
-        },
-        "currentUnit": {
-          "type": "number",
-          "description": "The unit number the user is currently viewing or last accessed."
-        },
-        "currentLesson": {
-          "type": "number",
-          "description": "The lesson number within `currentUnit` that the user is currently viewing or last accessed."
-        },
-        "totalTimeSpent": {
-          "type": "number",
-          "description": "The total accumulated time in minutes the user has spent actively viewing lessons."
-        },
-        "startedAt": {
-          "type": "string",
-          "description": "The timestamp when the user first started the Financial Education Academy module. In ISO 8601 format.",
+          "description": "Timestamp when the lead record was created.",
           "format": "date-time"
         },
-        "completedAt": {
+        "mortgageProfileId": {
           "type": "string",
-          "description": "The timestamp when the user completed all lessons in the academy. Null if not yet completed. In ISO 8601 format.",
-          "format": "date-time"
+          "description": "Reference to the associated MortgageProfile. (Relationship: Lead 1:1 MortgageProfile)"
         },
-        "lastAccessedAt": {
-          "type": "string",
-          "description": "The timestamp of the user's most recent activity within the Financial Education Academy. In ISO 8601 format.",
-          "format": "date-time"
-        },
-        "certificateEarned": {
+        "hasPurchasedMethod": {
           "type": "boolean",
-          "description": "A flag indicating whether the user has earned the completion certificate for the academy."
+          "description": "A flag indicating whether the lead has purchased the 'Mortgage Cutter Method'."
         }
       },
       "required": [
         "id",
-        "userId",
+        "name",
         "email",
-        "selectedCountry",
-        "completedLessons",
-        "currentUnit",
-        "currentLesson",
-        "totalTimeSpent",
-        "startedAt",
-        "lastAccessedAt",
-        "certificateEarned"
+        "createdAt",
+        "hasPurchasedMethod"
+      ]
+    },
+    "MortgageProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "MortgageProfile",
+      "type": "object",
+      "description": "Stores detailed mortgage information provided by a lead for personalized savings estimates.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the MortgageProfile entity."
+        },
+        "leadId": {
+          "type": "string",
+          "description": "Reference to the Lead associated with this mortgage profile. (Relationship: Lead 1:1 MortgageProfile)"
+        },
+        "currentBalance": {
+          "type": "number",
+          "description": "The current outstanding balance of the mortgage."
+        },
+        "interestRate": {
+          "type": "number",
+          "description": "The current annual interest rate of the mortgage (e.g., 3.5 for 3.5%)."
+        },
+        "originalLoanAmount": {
+          "type": "number",
+          "description": "The original amount of the mortgage loan."
+        },
+        "loanTermYears": {
+          "type": "number",
+          "description": "The original term of the loan in years (e.g., 30 for 30 years)."
+        },
+        "monthlyPayment": {
+          "type": "number",
+          "description": "The principal and interest portion of the monthly mortgage payment."
+        },
+        "yearsInHome": {
+          "type": "number",
+          "description": "The number of years the homeowner has been in their home/paying the mortgage."
+        },
+        "estimatedHomeValue": {
+          "type": "number",
+          "description": "The estimated current market value of the home. (Optional)"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when this mortgage profile was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when this mortgage profile was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "leadId",
+        "currentBalance",
+        "interestRate",
+        "originalLoanAmount",
+        "loanTermYears",
+        "monthlyPayment",
+        "yearsInHome",
+        "createdAt"
+      ]
+    },
+    "SavingsProjection": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "SavingsProjection",
+      "type": "object",
+      "description": "Stores the calculated financial benefits of using the 'Mortgage Cutter Method' compared to traditional payoff.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the SavingsProjection entity."
+        },
+        "mortgageProfileId": {
+          "type": "string",
+          "description": "Reference to the MortgageProfile for which this projection was made. (Relationship: MortgageProfile 1:1 SavingsProjection)"
+        },
+        "traditionalTotalInterestPaid": {
+          "type": "number",
+          "description": "The total estimated interest paid under the traditional mortgage payoff schedule."
+        },
+        "traditionalYearsToPayOff": {
+          "type": "number",
+          "description": "The total estimated years to pay off the mortgage under the traditional schedule."
+        },
+        "cutterTotalInterestPaid": {
+          "type": "number",
+          "description": "The total estimated interest paid using the 'Mortgage Cutter Method'."
+        },
+        "cutterYearsToPayOff": {
+          "type": "number",
+          "description": "The total estimated years to pay off the mortgage using the 'Mortgage Cutter Method'."
+        },
+        "yearsShavedOff": {
+          "type": "number",
+          "description": "The number of years shaved off the mortgage payoff time with the 'Mortgage Cutter Method'."
+        },
+        "moneySaved": {
+          "type": "number",
+          "description": "The total amount of money saved on interest with the 'Mortgage Cutter Method'."
+        },
+        "generatedAt": {
+          "type": "string",
+          "description": "Timestamp when this savings projection was generated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "mortgageProfileId",
+        "traditionalTotalInterestPaid",
+        "traditionalYearsToPayOff",
+        "cutterTotalInterestPaid",
+        "cutterYearsToPayOff",
+        "yearsShavedOff",
+        "moneySaved",
+        "generatedAt"
+      ]
+    },
+    "Product": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Product",
+      "type": "object",
+      "description": "Represents a purchasable item, such as the 'Mortgage Cutter Method'.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Product entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the product (e.g., 'Mortgage Cutter Method')."
+        },
+        "description": {
+          "type": "string",
+          "description": "A brief description of the product."
+        },
+        "price": {
+          "type": "number",
+          "description": "The price of the product."
+        },
+        "currency": {
+          "type": "string",
+          "description": "The currency of the product's price (e.g., 'USD')."
+        },
+        "accessContentUrl": {
+          "type": "string",
+          "description": "The URL where the purchased content (e.g., method guide, tools) can be accessed.",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description",
+        "price",
+        "currency",
+        "accessContentUrl"
+      ]
+    },
+    "Purchase": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Purchase",
+      "type": "object",
+      "description": "Records a successful transaction where a lead purchases a product.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Purchase entity."
+        },
+        "leadId": {
+          "type": "string",
+          "description": "Reference to the Lead who made the purchase. (Relationship: Lead 1:N Purchase)"
+        },
+        "productId": {
+          "type": "string",
+          "description": "Reference to the Product that was purchased. (Relationship: Product 1:N Purchase)"
+        },
+        "amount": {
+          "type": "number",
+          "description": "The actual amount paid for the purchase."
+        },
+        "currency": {
+          "type": "string",
+          "description": "The currency used for the purchase."
+        },
+        "transactionId": {
+          "type": "string",
+          "description": "The unique transaction ID provided by the external payment gateway."
+        },
+        "purchaseDate": {
+          "type": "string",
+          "description": "Timestamp when the purchase was completed.",
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the purchase (e.g., 'completed', 'failed', 'refunded')."
+        }
+      },
+      "required": [
+        "id",
+        "leadId",
+        "productId",
+        "amount",
+        "currency",
+        "transactionId",
+        "purchaseDate",
+        "status"
+      ]
+    },
+    "AccessGrant": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "AccessGrant",
+      "type": "object",
+      "description": "Records that a lead has been granted access to a specific product following a successful purchase.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the AccessGrant entity."
+        },
+        "leadId": {
+          "type": "string",
+          "description": "Reference to the Lead who received access. (Relationship: Lead 1:N AccessGrant)"
+        },
+        "productId": {
+          "type": "string",
+          "description": "Reference to the Product to which access was granted. (Relationship: Product 1:N AccessGrant)"
+        },
+        "purchaseId": {
+          "type": "string",
+          "description": "Reference to the Purchase that led to this access grant. (Relationship: Purchase 1:1 AccessGrant)"
+        },
+        "grantedAt": {
+          "type": "string",
+          "description": "Timestamp when access was granted.",
+          "format": "date-time"
+        },
+        "isRevoked": {
+          "type": "boolean",
+          "description": "A flag indicating if the access has been revoked (e.g., due to a refund)."
+        }
+      },
+      "required": [
+        "id",
+        "leadId",
+        "productId",
+        "purchaseId",
+        "grantedAt",
+        "isRevoked"
       ]
     }
   },
@@ -140,38 +305,110 @@
   "firestore": {
     "structure": [
       {
-        "path": "/financialLessons/{lessonId}",
+        "path": "/leads/{leadId}",
         "definition": {
-          "entityName": "FinancialLesson",
+          "entityName": "Lead",
           "schema": {
-            "$ref": "#/backend/entities/FinancialLesson"
+            "$ref": "#/backend/entities/Lead"
           },
-          "description": "Stores individual financial education lessons, including country-specific content. Documents are publicly readable by authenticated users. Write access is restricted to administrative operations (not directly via client rules). Includes denormalized 'content' field with country-specific lesson details to ensure authorization independence and efficient reads.",
+          "description": "Represents a potential customer. The document ID for each Lead corresponds to the user's Firebase UID (request.auth.uid). Includes denormalized 'hasPurchasedMethod' flag for authorization independence when checking access to paid content.",
           "params": [
             {
-              "name": "lessonId",
-              "description": "The unique identifier for a financial lesson."
+              "name": "leadId",
+              "description": "The unique identifier for the lead, which is also the user's Firebase UID."
             }
           ]
         }
       },
       {
-        "path": "/userFinancialProgress/{userId}",
+        "path": "/leads/{leadId}/mortgageProfile",
         "definition": {
-          "entityName": "UserFinancialProgress",
+          "entityName": "MortgageProfile",
           "schema": {
-            "$ref": "#/backend/entities/UserFinancialProgress"
+            "$ref": "#/backend/entities/MortgageProfile"
           },
-          "description": "Tracks the progress of individual users through the Financial Education Academy. Each document's ID is the authenticated user's ID (`request.auth.uid`). Includes denormalized 'userId' field for explicit ownership and authorization independence, ensuring owner-only read/write access.",
+          "description": "Stores the single, detailed mortgage information for a specific lead. This is a 1:1 relationship with Lead. The document ID is a fixed string 'mortgageProfile'. The document includes 'leadId' (acting as 'ownerId') from the schema for authorization independence.",
           "params": [
             {
-              "name": "userId",
-              "description": "The unique identifier of the authenticated user."
+              "name": "leadId",
+              "description": "The unique identifier for the lead, corresponding to the parent Lead document's ID."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/leads/{leadId}/savingsProjection",
+        "definition": {
+          "entityName": "SavingsProjection",
+          "schema": {
+            "$ref": "#/backend/entities/SavingsProjection"
+          },
+          "description": "Stores the single, calculated financial benefits projection for a specific lead. This is a 1:1 relationship with Lead. The document ID is a fixed string 'savingsProjection'. The document will include 'leadId' as 'ownerId' for authorization independence.",
+          "params": [
+            {
+              "name": "leadId",
+              "description": "The unique identifier for the lead, corresponding to the parent Lead document's ID."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/products/{productId}",
+        "definition": {
+          "entityName": "Product",
+          "schema": {
+            "$ref": "#/backend/entities/Product"
+          },
+          "description": "Publicly accessible catalog of products offered on the site. Contains product details like name, description, and price. The 'accessContentUrl' field in this collection should not be directly used for content access without verifying an AccessGrant.",
+          "params": [
+            {
+              "name": "productId",
+              "description": "The unique identifier for the product."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/leads/{leadId}/purchases/{purchaseId}",
+        "definition": {
+          "entityName": "Purchase",
+          "schema": {
+            "$ref": "#/backend/entities/Purchase"
+          },
+          "description": "Records individual successful transactions made by a lead. The document includes 'leadId' from the schema (acting as 'ownerId') for authorization independence.",
+          "params": [
+            {
+              "name": "leadId",
+              "description": "The unique identifier for the lead who made the purchase, corresponding to the parent Lead document's ID."
+            },
+            {
+              "name": "purchaseId",
+              "description": "The unique identifier for the specific purchase transaction."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/leads/{leadId}/accessGrants/{accessGrantId}",
+        "definition": {
+          "entityName": "AccessGrant",
+          "schema": {
+            "$ref": "#/backend/entities/AccessGrant"
+          },
+          "description": "Records that a specific lead has been granted access to a product. This collection is critical for controlling access to paid content. The document includes 'leadId' from the schema (acting as 'ownerId') for authorization independence.",
+          "params": [
+            {
+              "name": "leadId",
+              "description": "The unique identifier for the lead who received the access grant, corresponding to the parent Lead document's ID."
+            },
+            {
+              "name": "accessGrantId",
+              "description": "The unique identifier for the specific access grant."
             }
           ]
         }
       }
     ],
-    "reasoning": "The Firestore data structure for the 'Financial Education Academy' module is designed to adhere to the core principles of authorization independence, clarity of intent, DBAC, QAPs, and data invariants. It achieves this through a clear segregation of public content and user-specific data into distinct top-level collections.\n\n**Authorization Independence (CRITICAL):**\n1.  **`/financialLessons/{lessonId}`:** This collection stores the static, educational content. Since all authenticated users can read these lessons, there are no complex hierarchical authorization dependencies. The documents themselves are self-contained, meaning access to a lesson does not depend on attributes of a 'parent' document, thereby eliminating the need for `get()` calls in security rules for read operations. Write access is restricted to administrative processes, further simplifying client-side authorization. This structure inherently supports atomic read operations as each document contains all necessary content and metadata, including denormalized country-specific content within the `content` field.\n2.  **`/userFinancialProgress/{userId}`:** This collection stores each user's progress. Authorization independence is achieved by making the `userId` the document ID for each user's progress record. Additionally, the `userId` is explicitly stored as a field within the document (`definition.properties.userId`). This denormalization allows security rules to directly compare `request.auth.uid` with the document ID (which is `{userId}`) or the `userId` field within the document, without needing to `get()` any other document. This supports atomic read/write operations for a user's progress record.\n\n**QAPs (Rules are not Filters):**\n1.  **`/financialLessons/{lessonId}`:** All documents in this collection share the same security posture: readable by any authenticated user. This allows a client application to perform a `list` query (e.g., `db.collection('financialLessons').get()`) and retrieve all relevant documents without requiring further client-side filtering or complex, inefficient security rule filters. The rule `allow read: if request.auth != null;` explicitly enables this QAP.\n2.  **`/userFinancialProgress/{userId}`:** Access to this collection is strictly limited to the document owned by the currently authenticated user. The security rule `allow read, write: if request.auth.uid == userId;` ensures that a user can only interact with their own specific progress document. When a client requests `db.collection('userFinancialProgress').doc(request.auth.uid).get()`, the request naturally targets only the document the user is authorized to access, thus upholding the QAP. Any broader `list` query would automatically fail for documents the user does not own, preventing rules from acting as filters.\n\n**Structural Segregation:**\n*   The decision to create entirely new collections (`financialLessons`, `userFinancialProgress`) and not modify existing 'mortgage payoff strategies' directly implements Structural Segregation. Each new collection has a homogeneous security posture: `financialLessons` for public-read content, and `userFinancialProgress` for private, user-owned data. This greatly simplifies security rules and minimizes the risk of unintended data exposure or access conflicts.\n\n**Access Modeling:**\n*   **Private Data:** `/userFinancialProgress/{userId}` uses a Path-Based ownership model, where the document ID directly corresponds to the `userId`, making ownership explicit and rules straightforward.\n*   **Global Content:** `/financialLessons/{lessonId}` is structured for broad, authenticated read access, making it a "
+    "reasoning": "The Firestore structure is designed to adhere strictly to the core design principles, especially Authorization Independence, by leveraging path-based ownership and strategic denormalization. The primary user-centric entity is the 'Lead', and its document ID is directly tied to the authenticated user's Firebase UID (request.auth.uid). This establishes a strong, clear ownership model.\n\nHere’s how the design achieves Authorization Independence and supports QAPs:\n\n1.  **Lead as the User Root (\"/leads/{leadId}\"):** Each authenticated user (or anonymous user) will have a corresponding 'Lead' document where `leadId` is their `request.auth.uid`. This makes all operations on a user's primary record simple to secure: `allow read, write: if request.auth.uid == leadId;`.\n\n2.  **Denormalization for Subcollections (Mandate A):**\n    *   For subcollections like `mortgageProfile` (the single document representing the MortgageProfile), `savingsProjection` (the single document representing the SavingsProjection), `purchases`, and `accessGrants`, each document will explicitly include an `ownerId` field (which will store the `leadId`). This is critical. Security rules for these subcollections will verify `request.auth.uid == resource.data.ownerId` instead of performing a `get()` call to the parent `/leads/{leadId}` document. This ensures that creating, updating, or deleting these sub-documents can be done atomically without needing to read the parent document for authorization, fulfilling the Authorization Independence mandate.\n\n3.  **Denormalization for Content Access (`hasPurchasedMethod`):**\n    *   The `Lead` document at `/leads/{leadId}` contains a denormalized `hasPurchasedMethod` boolean flag. This flag is updated via a backend function (e.g., Cloud Function) in a batched write or transaction whenever an `AccessGrant` is successfully created or revoked for the 'Mortgage Cutter Method' product. This is a critical invariant. To determine if a user can access the method content, security rules can perform a single `get()` on the user's *own* `Lead` document (`get(/databases/$(database)/documents/leads/$(request.auth.uid)).data.hasPurchasedMethod == true`). This `get()` is acceptable as it's on the *user's own root document* to check a global state for that user, rather than relying on a hierarchical parent dependency to authorize a *child document*'s direct access.\n\n4.  **Structural Segregation (Mandate B) and QAPs (Mandate D):**\n    *   **\"/products/{productId}\":** This collection is designed for homogeneous security (public read-only) to serve as a product catalog. This separation allows clients to query and display product information (e.g., name, price, description) without granting access to sensitive content URLs directly from the product document itself. This supports QAPs because listing products is an unrestricted read.\n    *   All user-specific data (Lead, MortgageProfile, SavingsProjection, Purchases, AccessGrants) is nested under the \"/leads/{leadId}\" path, ensuring that `list` operations on these collections (e.g., `db.collection('leads').doc(uid).collection('purchases').get()`) are implicitly scoped to the authenticated user, satisfying QAP by returning only data the user is authorized to see.\n\n5.  **Access Modeling (Mandate C):**\n    *   **Private Data:** All personal data (`Lead`, `MortgageProfile`, `SavingsProjection`, `Purchase`, `AccessGrant`) is secured using path-based ownership under \"/leads/{leadId}/...\" where `{leadId}` maps to `request.auth.uid`.\n    *   **Hierarchical Paths:** The 1:N relationships (Lead to Purchases, Lead to AccessGrants) and 1:1 relationships (`Lead` to `MortgageProfile`, `Lead` to `SavingsProjection`) are modeled using subcollections for clear ownership and organization.\n\nThis structure ensures clear authorization intent, simplifies security rules, and allows for efficient and secure data access patterns."
   }
 }
