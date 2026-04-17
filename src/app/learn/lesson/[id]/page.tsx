@@ -1,3 +1,4 @@
+
 'use client';
 import React, { use, useState, useEffect } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
@@ -266,7 +267,6 @@ function LessonContent({ id }: { id: number }) {
               </p>
             </header>
 
-            {/* 1. CONCEPT */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
@@ -299,7 +299,6 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* 2. TERMINOLOGY */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
@@ -324,7 +323,6 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* 3. IMPORTANCE */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
@@ -352,7 +350,6 @@ function LessonContent({ id }: { id: number }) {
               </EpiphanyBox>
             </section>
 
-            {/* 4. ACTION */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">4</div>
@@ -364,15 +361,6 @@ function LessonContent({ id }: { id: number }) {
               </p>
 
               <QualificationCalc />
-
-              <div className="p-8 bg-blue-50 border-4 border-dashed border-blue-200 rounded-[40px] text-center space-y-4">
-                <div className="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto">
-                  <Sparkles className="h-6 w-6 text-blue-600 fill-blue-600" />
-                </div>
-                <p className="text-xl text-blue-900 font-bold leading-relaxed">
-                  <TranslatedText>{`💡 DECISION TIP: If your DTI is over ${country.dtiLimit}%, don't call a bank yet. Use the "Debt Triage" strategy—focus every extra dollar on "choking" your smallest monthly payment (like a car or furniture loan). This drops your backpack weight immediately and unlocks the 1%ers strategy.`}</TranslatedText>
-                </p>
-              </div>
 
               <Quiz 
                 question="Why does the bank care about your DTI (Debt-to-Income) ratio?"
@@ -406,7 +394,6 @@ function LessonContent({ id }: { id: number }) {
               </p>
             </header>
 
-            {/* 1. CONCEPT */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
@@ -439,7 +426,6 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* 2. TERMINOLOGY */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
@@ -464,7 +450,6 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* 3. IMPORTANCE */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
@@ -492,7 +477,6 @@ function LessonContent({ id }: { id: number }) {
               </EpiphanyBox>
             </section>
 
-            {/* 4. ACTION */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">4</div>
@@ -503,31 +487,9 @@ function LessonContent({ id }: { id: number }) {
                 <TranslatedText>{`Lenders in ${country.name} won't volunteer these tools. They are too profitable for YOU and not profitable enough for THEM. You must use the script and checklist below to identify the right partner.`}</TranslatedText>
               </p>
 
-              <CourseCard title="The Strategic Must-Haves Checklist">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <TaskItem id="must_1" label="First-Lien / First-Position Refinance" />
-                  <TaskItem id="must_2" label="Full Debit / Check / ATM Access" />
-                  <TaskItem id="must_3" label="Direct Paycheck Deposit Compatibility" />
-                  <TaskItem id="must_4" label="Simple Daily Interest Calculation" />
-                  <TaskItem id="must_5" label="Zero Prepayment / Early Exit Penalties" />
-                  <TaskItem id="must_6" label="10-Year (Minimum) Renewable Draw Period" />
-                </div>
-              </CourseCard>
-
               <div className="space-y-8">
                 <h3 className="text-3xl font-fraunces font-black text-center text-slate-900"><TranslatedText>The Loan Officer Negotiation Script</TranslatedText></h3>
-                <p className="text-lg text-slate-500 text-center font-medium max-w-xl mx-auto">
-                  <TranslatedText>{`Use this specific language to bypass the 'retail' desk and get through to the Senior Loan Officer who understands structural finance.`}</TranslatedText>
-                </p>
                 <ScriptGenerator />
-              </div>
-
-              <div className="space-y-8 pt-12">
-                <h3 className="text-3xl font-fraunces font-black text-center text-slate-900"><TranslatedText>Arsenal vs. Retail Rates</TranslatedText></h3>
-                <p className="text-lg text-slate-500 text-center font-medium max-w-xl mx-auto">
-                  <TranslatedText>{`A slightly higher rate on an Arsenal tool is almost always mathematically superior to a low rate on a traditional cage. This chart shows why.`}</TranslatedText>
-                </p>
-                <BankRateChart />
               </div>
 
               <Quiz 
@@ -562,7 +524,6 @@ function LessonContent({ id }: { id: number }) {
               </p>
             </header>
 
-            {/* 1. CONCEPT */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
@@ -580,9 +541,6 @@ function LessonContent({ id }: { id: number }) {
                   <p className="text-blue-600 font-black italic">
                     <TranslatedText>This is what we call an "Open Credit Structure."</TranslatedText>
                   </p>
-                  <p>
-                    <TranslatedText>We are looking for the specific legal language that turns your house from a locked cage into a flexible tool that lets your money move in and out like a two-way street.</TranslatedText>
-                  </p>
                 </div>
                 <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
                   <div className="absolute top-0 right-0 p-6 opacity-10"><ScrollText className="h-32 w-32 text-blue-400" /></div>
@@ -595,7 +553,6 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* 2. TERMINOLOGY */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
@@ -620,7 +577,6 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* 3. IMPORTANCE */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
@@ -634,9 +590,6 @@ function LessonContent({ id }: { id: number }) {
                 <div className="relative z-10 space-y-10">
                   <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
                     <p>
-                      <TranslatedText>{`Most homeowners in ${country.name} sign their contracts without reading the "Payment Application" clause. This clause usually says: "We apply your money to interest first, then escrow, then insurance... and IF there is anything left, we'll let you have some principal."`}</TranslatedText>
-                    </p>
-                    <p>
                       <TranslatedText>{`By decoding the contract and finding the "Open Loophole," we flip the script. We find the tools where the law REQUIRES the bank to apply your deposit to the principal balance IMMEDIATELY. This one sentence is the difference between a 30-year sentence and a 7-year sprint.`}</TranslatedText>
                     </p>
                   </div>
@@ -644,43 +597,16 @@ function LessonContent({ id }: { id: number }) {
               </CourseCard>
 
               <EpiphanyBox>
-                <TranslatedText>{`The "Loophole" isn't a secret law—it's a structural choice. You are choosing to move your debt from a "Closed Amortized Shell" into an "Open Daily Calculation." The bank can't stop you if you know what to ask for.`}</TranslatedText>
+                <TranslatedText>{`The "Loophole" isn't a secret law—it's a structural choice. You are choosing to move your debt from a "Closed Amortized Shell" into an "Open Daily Calculation."`}</TranslatedText>
               </EpiphanyBox>
             </section>
 
-            {/* 4. ACTION */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">4</div>
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: The Contract Audit</TranslatedText></h2>
               </div>
-              
-              <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
-                <TranslatedText>{`Use the "True Cost" simulator below. It reveals the "Total Interest Percentage" (TIP) that your lender is legally required to show you, but often hides in the back of the package.`}</TranslatedText>
-              </p>
-
               <ContractSimulator />
-
-              <div className="p-8 bg-amber-50 border-4 border-dashed border-amber-200 rounded-[40px] text-center space-y-4">
-                <div className="bg-amber-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto">
-                  <SearchCode className="h-6 w-6 text-amber-600 fill-amber-600" />
-                </div>
-                <p className="text-xl text-amber-900 font-bold leading-relaxed">
-                  <TranslatedText>{`🚨 AUDIT WARNING: If your current TIP is over 90%, you are in a "Max Harvest" contract. Your first priority is to move your debt into a structure with a TIP under 40% using the Mortgage Cutter method.`}</TranslatedText>
-                </p>
-              </div>
-
-              <Quiz 
-                question="What is a 'Prepayment Penalty' in a mortgage contract?"
-                options={[
-                  "A reward for paying your bills on time",
-                  "A fee the bank charges you for paying off your loan too fast",
-                  "The interest rate you pay every month",
-                  "A mandatory tax paid to the local government"
-                ]}
-                correctAnswer={1}
-                explanation={`In ${country.name}, some lenders use prepayment penalties to stop you from escaping the interest trap. We always seek "Zero Penalty" contracts to maintain our speed and freedom.`}
-              />
             </section>
           </div>
         )}
@@ -774,7 +700,7 @@ function LessonContent({ id }: { id: number }) {
                 <div className="relative z-10 space-y-10">
                   <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
                     <p>
-                      <TranslatedText>{`Most homeowners in ${country.name} think the 'Interest Rate' is the most important number. They are wrong. The most important factor is the TIME that the bank is allowed to charge you interest on your money.`}</TranslatedText>
+                      <TranslatedText>{`Most homeowners think the 'Interest Rate' is the most important number. They are wrong. The most important factor is the TIME that the bank is allowed to charge you interest on your money.`}</TranslatedText>
                     </p>
                     <p>
                       <TranslatedText>{`When you automate your income to hit the principal on Day 1, you effectively 'choke' the interest calculation for the rest of the month. Your money isn't just sitting in a checking account doing nothing—it's actively working 24/7 to cancel the bank's profit.`}</TranslatedText>
@@ -842,7 +768,6 @@ function LessonContent({ id }: { id: number }) {
               </p>
             </header>
 
-            {/* 1. CONCEPT */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
@@ -860,9 +785,6 @@ function LessonContent({ id }: { id: number }) {
                   <p className="text-blue-600 font-black italic">
                     <TranslatedText>You then "Recycle" that capital.</TranslatedText>
                   </p>
-                  <p>
-                    <TranslatedText>Instead of letting your money sit "dead" in a wall, you deploy it to acquire another asset. Now, you have TWO properties, and your income chokes the interest on both simultaneously. This is how empires are built from a single paycheck.</TranslatedText>
-                  </p>
                 </div>
                 <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
                   <div className="absolute top-0 right-0 p-6 opacity-10"><Layers className="h-32 w-32 text-blue-400" /></div>
@@ -875,7 +797,6 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* 2. TERMINOLOGY */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
@@ -900,7 +821,6 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* 3. IMPORTANCE */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
@@ -914,10 +834,7 @@ function LessonContent({ id }: { id: number }) {
                 <div className="relative z-10 space-y-10">
                   <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
                     <p>
-                      <TranslatedText>{`Most homeowners in ${country.name} spend their entire lives trying to "Get Out of Debt." The 1% Multiplier shifts the goal to "Building an Empire."`}</TranslatedText>
-                    </p>
-                    <p>
-                      <TranslatedText>{`When you realize that your home equity is just "Frozen Cash" that the bank is charging you to store, you stop being a tenant and start being the manager of your own capital. By keeping your capital liquid and moving it into higher-yielding assets, you achieve financial freedom 20 years sooner than those who just make extra monthly payments.`}</TranslatedText>
+                      <TranslatedText>{`Wealth isn't created by working for money. It's created by having your capital work for you. Once your home equity is liquid, every brick in your house becomes a soldier in your financial army.`}</TranslatedText>
                     </p>
                   </div>
                 </div>
@@ -928,38 +845,16 @@ function LessonContent({ id }: { id: number }) {
               </EpiphanyBox>
             </section>
 
-            {/* 4. ACTION */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">4</div>
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: Model Your Scaling</TranslatedText></h2>
               </div>
-              
-              <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
-                <TranslatedText>{`Use the "Leverage Simulator" below to see how deploying just a portion of your unlocked equity can generate more wealth in 10 years than 30 years of traditional saving.`}</TranslatedText>
-              </p>
-
               <WealthSimulator />
-
               <div className="space-y-8 pt-12">
                 <h3 className="text-3xl font-fraunces font-black text-center text-slate-900"><TranslatedText>The Property Ladder Blueprint</TranslatedText></h3>
-                <p className="text-lg text-slate-500 text-center font-medium">
-                  <TranslatedText>{`See the exact sequence used to turn one primary residence into a $3M+ portfolio in under 15 years.`}</TranslatedText>
-                </p>
                 <LadderVisual />
               </div>
-
-              <Quiz 
-                question="What is the main danger of 'Dead Equity' sitting in your home?"
-                options={[
-                  "It might get stolen by a neighbor",
-                  "It earns 0% return while your loan costs you 6%+",
-                  "It makes the house too heavy for the foundation",
-                  "It attracts unwanted taxes from the city"
-                ]}
-                correctAnswer={1}
-                explanation={`In ${country.name}, home equity is an illiquid asset. If it sits in your walls while you carry a mortgage, you are paying the bank interest for the privilege of storing your own wealth. The 1% Multiplier unlocks this cash to work for you.`}
-              />
             </section>
           </div>
         )}
@@ -981,7 +876,6 @@ function LessonContent({ id }: { id: number }) {
               </p>
             </header>
 
-            {/* 1. CONCEPT */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
@@ -999,9 +893,6 @@ function LessonContent({ id }: { id: number }) {
                   <p className="text-blue-600 font-black italic">
                     <TranslatedText>You're not working harder; you're taking a shortcut.</TranslatedText>
                   </p>
-                  <p>
-                    <TranslatedText>By using a line of credit to dump a large "chunk" of principal at once, you instantly cancel the interest that would have grown on that money for the next two decades. You then use your monthly surplus to "reset" the credit line and do it again.</TranslatedText>
-                  </p>
                 </div>
                 <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
                   <div className="absolute top-0 right-0 p-6 opacity-10"><Rocket className="h-32 w-32 text-blue-400" /></div>
@@ -1014,7 +905,6 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* 2. TERMINOLOGY */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
@@ -1039,47 +929,19 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* 3. IMPORTANCE */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: Collapsing the Amortization</TranslatedText></h2>
               </div>
-              
-              <CourseCard className="border-l-[12px] border-l-red-600 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
-                <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12">
-                  <Activity className="h-96 w-96" />
-                </div>
-                <div className="relative z-10 space-y-10">
-                  <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
-                    <p>
-                      <TranslatedText>{`Most homeowners in ${country.name} are fighting a war of attrition. They try to "save" their way to freedom. But interest is a monster that grows every day.`}</TranslatedText>
-                    </p>
-                    <p>
-                      <TranslatedText>{`The Speedrun strategy stops the monster from growing. By applying chunks early in the amortization cycle, you eliminate the "Future Compound Interest" before it even starts. You are essentially deleting the hardest years of the loan from your life.`}</TranslatedText>
-                    </p>
-                  </div>
-                </div>
-              </CourseCard>
-
               <EpiphanyBox>
                 <TranslatedText>{`Time is more expensive than money. A $10,000 chunk today can save you $30,000 in future labor. Every month you delay implementation is a "Level" you'll have to play twice.`}</TranslatedText>
               </EpiphanyBox>
             </section>
 
-            {/* 4. ACTION */}
             <section className="space-y-16">
-              <div className="text-center space-y-4">
-                <h3 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: The Hyperdrive Execution</TranslatedText></h3>
-                <p className="text-lg text-slate-500 font-medium max-w-xl mx-auto">
-                  <TranslatedText>{`Use the simulators below to see how combining "Chunks" with "Offset Timing" shatters the 30-year trap in real-time.`}</TranslatedText>
-                </p>
-              </div>
-
               <OffsetVisual />
-
               <HyperdriveSim />
-
               <BiWeeklyCalc />
             </section>
           </div>
@@ -1102,7 +964,6 @@ function LessonContent({ id }: { id: number }) {
               </p>
             </header>
 
-            {/* 1. CONCEPT */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
@@ -1113,15 +974,6 @@ function LessonContent({ id }: { id: number }) {
                 <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
                   <p>
                     <TranslatedText>Math is like gravity. It doesn't care what you believe or how you feel. If you drop a ball, it falls. If you apply velocity to a debt, the debt vanishes.</TranslatedText>
-                  </p>
-                  <p>
-                    <TranslatedText>For 100 years, the "Expert Club"—the banks, the wealthy families, and the professional investors—have used these exact rules to stay liquid and grow.</TranslatedText>
-                  </p>
-                  <p className="text-blue-600 font-black italic">
-                    <TranslatedText>You're not guessing anymore.</TranslatedText>
-                  </p>
-                  <p>
-                    <TranslatedText>By graduating from this course, you've moved from being "The Fuel" of the machine to being the "Architect." You now have the same blueprint that 39 million families globally have used to escape the amortized cage.</TranslatedText>
                   </p>
                 </div>
                 <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
@@ -1135,7 +987,6 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* 2. TERMINOLOGY */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
@@ -1160,82 +1011,25 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* 3. IMPORTANCE */}
-            <section className="space-y-12">
-              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: The Graduation</TranslatedText></h2>
-              </div>
-              
-              <CourseCard className="border-l-[12px] border-l-slate-900 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
-                <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12">
-                  <Star className="h-96 w-96" />
+            <section className="bg-gradient-to-br from-blue-700 to-indigo-950 p-16 md:p-20 rounded-[80px] border border-white/10 shadow-2xl space-y-16 text-center">
+              <div className="space-y-8">
+                <div className="bg-white/20 w-24 h-24 rounded-full flex items-center justify-center mx-auto backdrop-blur-xl mb-6 shadow-2xl">
+                  <Award className="h-12 w-12 text-yellow-400 fill-yellow-400" />
                 </div>
-                <div className="relative z-10 space-y-10">
-                  <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
-                    <p>
-                      <TranslatedText>{`Knowledge without action is just a hobby. But knowledge with action is power. You now have the power to change your family's financial trajectory forever in ${country.name}.`}</TranslatedText>
-                    </p>
-                    <p>
-                      <TranslatedText>{`By joining the "Expert Club," you stop guessing about interest rates and start managing mathematical velocity. You've graduated from the school of "Debt" and entered the academy of "Freedom."`}</TranslatedText>
-                    </p>
-                  </div>
-                </div>
-              </CourseCard>
-
-              <EpiphanyBox>
-                <TranslatedText>{`The most important decision you'll ever make isn't which house to buy—it's which financial engine you use to pay for it. You've chosen the high-performance engine. Now, hit the gas.`}</TranslatedText>
-              </EpiphanyBox>
-            </section>
-
-            {/* 4. ACTION */}
-            <section className="space-y-24">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <Card className="bg-white border-2 border-slate-100 p-10 rounded-[40px] shadow-xl text-center space-y-6">
-                  <div className="bg-slate-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto">
-                    <History className="h-10 w-10 text-slate-400" />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-2">Historical Standard</p>
-                    <h3 className="text-6xl font-black text-slate-900 tracking-tighter">100%</h3>
-                    <p className="text-sm font-bold text-slate-500 uppercase tracking-widest mt-2">Open Credit Adoption Pre-1913</p>
-                  </div>
-                </Card>
-                <Card className="bg-blue-600 text-white p-10 rounded-[40px] shadow-2xl text-center space-y-6 border-none">
-                  <div className="bg-white/20 w-20 h-20 rounded-full flex items-center justify-center mx-auto backdrop-blur-md">
-                    <Trophy className="h-10 w-10 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-black uppercase tracking-widest opacity-70 mb-2">Modern Day</p>
-                    <h3 className="text-6xl font-black tracking-tighter">90%</h3>
-                    <p className="text-sm font-bold uppercase tracking-widest mt-2">Of Professional Investors</p>
-                  </div>
-                </Card>
+                <h2 className="text-5xl md:text-7xl font-fraunces font-black text-white leading-tight">
+                  <TranslatedText>Mastery Achieved</TranslatedText>
+                </h2>
               </div>
 
-              <section className="bg-gradient-to-br from-blue-700 to-indigo-950 p-16 md:p-20 rounded-[80px] border border-white/10 shadow-2xl space-y-16 text-center">
-                <div className="space-y-8">
-                  <div className="bg-white/20 w-24 h-24 rounded-full flex items-center justify-center mx-auto backdrop-blur-xl mb-6 shadow-2xl">
-                    <Award className="h-12 w-12 text-yellow-400 fill-yellow-400" />
-                  </div>
-                  <h2 className="text-5xl md:text-7xl font-fraunces font-black text-white leading-tight">
-                    <TranslatedText>Mastery Achieved</TranslatedText>
-                  </h2>
-                  <p className="text-blue-100 text-2xl max-w-2xl mx-auto leading-relaxed font-medium">
-                    <TranslatedText>{`You have completed the core Mortgage Freedom Accelerator. It's time to build your empire.`}</TranslatedText>
-                  </p>
-                </div>
-
-                <div className="pt-16 border-t border-white/10 text-center space-y-10">
-                  <button 
-                    onClick={() => router.push('/members/chunker')}
-                    className="bg-white text-blue-900 hover:bg-blue-50 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95"
-                  >
-                    <TranslatedText>Launch My Chunker Simulator</TranslatedText>
-                    <ArrowRight className="h-10 w-10 group-hover:translate-x-3 transition-transform" />
-                  </button>
-                </div>
-              </section>
+              <div className="pt-16 border-t border-white/10 text-center space-y-10">
+                <button 
+                  onClick={() => router.push('/members/chunker')}
+                  className="bg-white text-blue-900 hover:bg-blue-50 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95"
+                >
+                  <TranslatedText>Launch My Chunker Simulator</TranslatedText>
+                  <ArrowRight className="h-10 w-10 group-hover:translate-x-3 transition-transform" />
+                </button>
+              </div>
             </section>
           </div>
         )}
