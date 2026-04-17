@@ -24,7 +24,8 @@ import {
   Quiz,
   CaseStudy,
   StatBox,
-  InfoBox
+  InfoBox,
+  ExpandSection
 } from '@/components/course/UIComponents';
 import { TranslatedText } from '@/components/course/TranslatedText';
 import { cn } from '@/lib/utils';
@@ -72,7 +73,8 @@ import {
   FileText,
   AlertTriangle,
   Landmark,
-  Calculator
+  Calculator,
+  ShieldAlert
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -81,7 +83,7 @@ import { useUser } from '@/firebase';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 function ProgressBar({ current }: { current: number }) {
-  const total = 9;
+  const total = 10;
   return (
     <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-[#E8ECF2]">
       <div className="h-1 bg-slate-100 w-full">
@@ -132,11 +134,11 @@ function LessonContent({ id }: { id: number }) {
   if (!meta) return <div className="p-20 text-center">Lesson not found</div>;
 
   const isPrivileged = user?.email === 'emperorsrujal@gmail.com';
-  const isLocked = id >= 4 && !isPrivileged;
+  const isLocked = id >= 5 && !isPrivileged;
 
   const nextLesson = () => {
     completeLesson(id);
-    if (id < 9) router.push(`/learn/lesson/${id + 1}`);
+    if (id < 10) router.push(`/learn/lesson/${id + 1}`);
     else router.push('/members/chunker');
   };
 
@@ -593,13 +595,142 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 3: THE SECRET SCORECARD */}
+        {/* LESSON 3: THE SEVEN MORTGAGE SCAMS */}
         {id === 3 && (
+          <div className="space-y-24 animate-in fade-in duration-1000">
+            <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-orange-100 text-orange-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-orange-200">
+                <ShieldAlert className="h-4 w-4" />
+                <TranslatedText>Mastery Level: 03 — Cost Awareness</TranslatedText>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>The Seven Scams:</TranslatedText>
+                <span className="block text-orange-600 italic mt-4"><TranslatedText>The Fine Print Exposed.</TranslatedText></span>
+              </h1>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                <TranslatedText>{`Beyond the amortization trap, lenders layer seven additional profit mechanisms into every transaction. Today, we price the silence.`}</TranslatedText>
+              </p>
+            </header>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-orange-600 text-white flex items-center justify-center font-black">1</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Architecture of Obscurity</TranslatedText></h2>
+              </div>
+              
+              <div className="space-y-8">
+                <ExpandSection title="Scam #1: The Truth-in-Lending Illusion">
+                  <p><TranslatedText>The APR is a distraction. In the US (TILA), Canada, and UK, regulations require rate disclosure. But rates are abstract. Lenders hide the total dollar cost because seeing "$448,440 in interest" would make you run. They want you to focus on the small, manageable monthly payment.</TranslatedText></p>
+                  <p className="mt-4 font-bold text-orange-600"><TranslatedText>Cost: The entire interest bill — hidden until it's too late.</TranslatedText></p>
+                </ExpandSection>
+
+                <ExpandSection title="Scam #2: The One-Way Mortgage Pipe">
+                  <p><TranslatedText>Traditional mortgages are "closed." Your money goes in and you can never touch it again without begging for a new loan. A HELOC is an open reservoir. The bank chooses the closed structure to maximize interest, not because it's a technical requirement.</TranslatedText></p>
+                  <p className="mt-4 font-bold text-orange-600"><TranslatedText>Potential Loss: $150,000+ in preventable interest over loan life.</TranslatedText></p>
+                </ExpandSection>
+
+                <ExpandSection title="Scam #3: Closing Cost Compounding">
+                  <p><TranslatedText>In the US, $15k in closing costs rolled into a 30-year mortgage at 6.75% actually costs you $37k. You are paying $22k in interest on fees you never even received as cash.</TranslatedText></p>
+                  <p className="mt-4 font-bold text-orange-600"><TranslatedText>Real Cost: ~2.5x the original fee amount.</TranslatedText></p>
+                </ExpandSection>
+
+                <ExpandSection title="Scam #4: Bank-Only Insurance (PMI/CMHC/LMI)">
+                  <p><TranslatedText>You pay the premium, but the bank gets the payout. This insurance protects the lender if you fail. If you're foreclosed on, you lose your house, your credit is destroyed, and the bank gets a check from the insurer. You paid to protect them from yourself.</TranslatedText></p>
+                  <p className="mt-4 font-bold text-orange-600"><TranslatedText>Direct Loss: $20,000 - $50,000 in pure premiums.</TranslatedText></p>
+                </ExpandSection>
+
+                <ExpandSection title="Scam #5: The Rate Lock Ransom">
+                  <p><TranslatedText>You pay to reserve a rate that should already be yours. If rates rise, the lock protects you. If rates fall, the bank keeps the difference unless you pay even more for a "float-down." It's a one-way insurance policy where you pay all the premiums.</TranslatedText></p>
+                </ExpandSection>
+
+                <ExpandSection title="Scam #6: The Discount Point Mirage">
+                  <p><TranslatedText>Lenders let you "buy down" your rate. But the break-even is usually 5+ years. Since most homeowners refi or move in 7-9 years, the bank keeps the upfront cash and you never see the full savings.</TranslatedText></p>
+                </ExpandSection>
+
+                <ExpandSection title="Scam #7: Prepayment Penalties (The Cage)">
+                  <p><TranslatedText>In Canada and the UK, being "too smart" and paying back your debt early can cost you $15k - $40k in Interest Rate Differential (IRD) penalties. The bank literally charges you for wanting to stop giving them money.</TranslatedText></p>
+                </ExpandSection>
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-orange-600 text-white flex items-center justify-center font-black">2</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Cumulative Damage</TranslatedText></h2>
+              </div>
+              
+              <div className="bg-slate-900 rounded-[48px] p-10 text-white space-y-10 shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-8 opacity-5"><ShieldAlert className="h-64 w-64 text-orange-400" /></div>
+                <div className="text-center space-y-2 relative z-10">
+                  <h3 className="text-2xl font-black uppercase tracking-[0.2em] text-orange-400"><TranslatedText>The Price of the Seven Scams</TranslatedText></h3>
+                  <p className="text-slate-400 font-bold"><TranslatedText>Above and beyond the core interest cost</TranslatedText></p>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+                  <div className="p-8 rounded-3xl bg-white/5 border border-white/10 text-center">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400"><TranslatedText>Conservative Total</TranslatedText></p>
+                    <p className="text-5xl font-black text-white">$50,000</p>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase mt-2"><TranslatedText>Direct Leakage</TranslatedText></p>
+                  </div>
+                  <div className="p-8 rounded-3xl bg-orange-600 text-center shadow-xl">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-orange-200"><TranslatedText>Aggressive / Canadian Peak</TranslatedText></p>
+                    <p className="text-5xl font-black text-white">$140,000</p>
+                    <p className="text-[10px] font-bold text-orange-200 uppercase mt-2"><TranslatedText>Maximum Extracted</TranslatedText></p>
+                  </div>
+                </div>
+              </div>
+
+              <EpiphanyBox>
+                <TranslatedText>{`Every one of these costs is legal. Every one is technically disclosed. None of them is your friend. This is why we move from "Debtor" to "Expert Architect" — to avoid these tolls entirely.`}</TranslatedText>
+              </EpiphanyBox>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-orange-600 text-white flex items-center justify-center font-black">3</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: The Five Defense Questions</TranslatedText></h2>
+              </div>
+              <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
+                <TranslatedText>{`Ask these five questions before signing anything. A lender who cannot or will not answer them quickly is providing you with vital information about their product.`}</TranslatedText>
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {[
+                  { q: "Total Payout", text: "What is the total of all payments in dollars over the full term? (Not the APR)." },
+                  { q: "Prepayment Caps", text: "What are the exact prepayment limits and the formula for exceeding them?" },
+                  { q: "Insurance Cost", text: "Is PMI/CMHC required, and what is its total dollar cost over the policy life?" },
+                  { q: "Fee Audit", text: "Which closing costs are fixed vs. negotiable? (Ask for a line-item waiver)." },
+                  { q: "Strategic Offer", text: "Do you offer an offset account or a first-lien HELOC as an alternative?" },
+                ].map((item, i) => (
+                  <div key={i} className="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm space-y-2">
+                    <h4 className="font-black text-orange-600 uppercase text-xs tracking-widest">{item.q}</h4>
+                    <p className="text-slate-600 font-bold leading-relaxed"><TranslatedText>{item.text}</TranslatedText></p>
+                  </div>
+                ))}
+              </div>
+
+              <Quiz 
+                question="Why is roll-in financing for closing costs dangerous?"
+                options={[
+                  "Because it increases your credit score too fast",
+                  "Because you end up paying interest on the fees for 30 years, doubling their cost",
+                  "Because it is illegal in 12 states",
+                  "Because the bank doesn't get to keep the money"
+                ]}
+                correctAnswer={1}
+                explanation="Fees rolled into a 30-year mortgage compound just like principal. A $15k fee can easily cost you $37k in total repayment by the time the loan is closed."
+              />
+            </section>
+          </div>
+        )}
+
+        {/* LESSON 4: THE SECRET SCORECARD */}
+        {id === 4 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-100 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-200">
                 <Lock className="h-4 w-4" />
-                <TranslatedText>Mastery Level: 03 — Qualification & Power</TranslatedText>
+                <TranslatedText>Mastery Level: 04 — Qualification & Power</TranslatedText>
               </div>
               <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
                 <TranslatedText>The Secret Scorecard:</TranslatedText>
@@ -720,8 +851,8 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 4: THE STRATEGIC ARSENAL */}
-        {id === 4 && (
+        {/* LESSON 5: THE STRATEGIC ARSENAL */}
+        {id === 5 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-purple-100 text-purple-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-purple-200">
@@ -850,8 +981,8 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 5: THE LEGAL LOOPHOLE */}
-        {id === 5 && (
+        {/* LESSON 6: THE LEGAL LOOPHOLE */}
+        {id === 6 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-amber-100 text-amber-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-amber-200">
@@ -954,8 +1085,8 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 6: THE AUTOMATED HEIST */}
-        {id === 6 && (
+        {/* LESSON 7: THE AUTOMATED HEIST */}
+        {id === 7 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-50 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-100">
@@ -1090,8 +1221,8 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 7: THE 1% MULTIPLIER */}
-        {id === 7 && (
+        {/* LESSON 8: THE 1% MULTIPLIER */}
+        {id === 8 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-50 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-100">
@@ -1230,8 +1361,8 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 8: THE SPEEDRUN */}
-        {id === 8 && (
+        {/* LESSON 9: THE SPEEDRUN */}
+        {id === 9 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-red-100 text-red-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-red-200">
@@ -1354,8 +1485,8 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 9: THE EXPERT CLUB */}
-        {id === 9 && (
+        {/* LESSON 10: THE EXPERT CLUB */}
+        {id === 10 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-white/10 shadow-xl">
@@ -1503,7 +1634,7 @@ function LessonContent({ id }: { id: number }) {
             <TranslatedText>Previous Phase</TranslatedText>
           </button>
           
-          {(id < 9 && (!isLocked || isPrivileged)) && (
+          {(id < 10 && (!isLocked || isPrivileged)) && (
             <button 
                 onClick={nextLesson}
                 className="group flex items-center gap-4 bg-[#2563EB] text-white px-12 py-6 rounded-[24px] font-black shadow-2xl shadow-blue-500/30 hover:bg-blue-600 transition-all active:scale-95 text-2xl"
