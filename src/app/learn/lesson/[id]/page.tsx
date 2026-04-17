@@ -52,7 +52,7 @@ import {
   Scale,
   Sparkles,
   TrendingDown,
-  SearchCode,
+  FileSearch,
   RefreshCcw,
   Layers,
   Globe,
@@ -282,41 +282,41 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 1: THE NATURE OF THE AMORTIZED LOAN */}
+        {/* LESSON 1: THE DIRTY HISTORY OF BANKING */}
         {id === 1 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
-              <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-50 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-100">
-                <BookOpen className="h-4 w-4" />
-                <TranslatedText>Mastery Level: 01 — Structural Awareness</TranslatedText>
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-red-50 text-red-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-red-100">
+                <History className="h-4 w-4" />
+                <TranslatedText>Mastery Level: 01 — Forensic History</TranslatedText>
               </div>
               <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
-                <TranslatedText>The Amortized Path:</TranslatedText>
-                <span className="block text-blue-600 italic mt-4"><TranslatedText>The Invisible Rent Strategy.</TranslatedText></span>
+                <TranslatedText>The Dirty History:</TranslatedText>
+                <span className="block text-red-600 italic mt-4"><TranslatedText>How Money Became a Trap.</TranslatedText></span>
               </h1>
               <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
-                <TranslatedText>{`Before you can beat the bank's math, you must understand the rules of the game they built in ${country.name}.`}</TranslatedText>
+                <TranslatedText>{`Lending wasn't invented to help you own a home. It was engineered to capture your labor. Today, we decode the 300-year forensic trail.`}</TranslatedText>
               </p>
             </header>
 
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: The Lego Loan (ELI14)</TranslatedText></h2>
+                <div className="h-10 w-10 rounded-xl bg-red-600 text-white flex items-center justify-center font-black">1</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: The Goldsmith's Secret (ELI14)</TranslatedText></h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
-                  <p><TranslatedText>Imagine you want to buy a giant $100 Lego set from a friend, but you only have $10. You go to a "Banker Friend" and borrow the other $90.</TranslatedText></p>
-                  <p><TranslatedText>They say: "Sure! Just pay me $10 a month for 12 months." You think, "Great! After 10 months, I've paid back the $100!"</TranslatedText></p>
-                  <p className="text-blue-600 font-black italic"><TranslatedText>But here is the structural catch that everyone misses...</TranslatedText></p>
-                  <p><TranslatedText>The Banker Friend says the first $8 of every $10 payment is a "rental fee" for letting you use their money. Only $2 goes toward actually owning the Legos. In the mortgage world, this is called "Amortization," and it ensures the bank gets paid before you do.</TranslatedText></p>
+                  <p><TranslatedText>In the 1600s, people gave their gold to "Goldsmiths" for safekeeping. The Goldsmiths gave them paper receipts. Soon, people just traded the paper instead of the gold.</TranslatedText></p>
+                  <p><TranslatedText>The Goldsmiths noticed something: only 10% of people ever came back for their gold at once. So, they started printing "fake" receipts and lending them at interest.</TranslatedText></p>
+                  <p className="text-red-600 font-black italic"><TranslatedText>This was the birth of "Fractional Reserve Banking."</TranslatedText></p>
+                  <p><TranslatedText>Today, your bank uses this same trick. They take $1 of your deposit and "lend" $10 of credit based on it. You are paying real interest on money the bank manufactured out of thin air. This is the structural foundation of your mortgage trap.</TranslatedText></p>
                 </div>
-                <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
-                  <div className="absolute top-0 right-0 p-6 opacity-10"><Layers className="h-32 w-32 text-blue-400" /></div>
+                <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[400px]">
+                  <div className="absolute top-0 right-0 p-6 opacity-10"><Landmark className="h-48 w-48 text-red-400" /></div>
                   <div className="space-y-2 relative z-10">
-                    <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Math Reality</p>
-                    <h3 className="text-6xl font-black text-white tracking-tighter">80 / 20</h3>
-                    <p className="text-lg font-bold text-slate-400">Interest vs. Principal Ratio</p>
+                    <p className="text-[10px] font-black uppercase text-red-400 tracking-[0.5em]">The Lending Ratio</p>
+                    <h3 className="text-8xl font-black text-white tracking-tighter">10 : 1</h3>
+                    <p className="text-lg font-bold text-slate-400">Manufactured Credit vs. Real Reserves</p>
                   </div>
                 </div>
               </div>
@@ -324,22 +324,26 @@ function LessonContent({ id }: { id: number }) {
 
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Terminology Masterclass</TranslatedText></h2>
+                <div className="h-10 w-10 rounded-xl bg-red-600 text-white flex items-center justify-center font-black">2</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Global Forensic Timeline</TranslatedText></h2>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-8">
                 {[
-                  { term: "Principal (The Stuff)", desc: "This is the actual cost of your house. Every dollar of principal you pay is a dollar of the house you finally 'own'.", icon: <HomeIcon className="h-5 w-5 text-blue-500" /> },
-                  { term: "Interest (The Rent)", desc: "This is the fee the bank charges you. In Lesson 1, we call this 'Invisible Rent' because it disappears from your net worth forever.", icon: <DollarSign className="h-5 w-5 text-red-500" /> },
-                  { term: "Amortization (The Kill)", desc: `From the Latin 'amortis' (to kill). It's the process of 'killing' your debt over ${country.amortYears} years.`, icon: <Clock className="h-5 w-5 text-emerald-500" /> },
-                  { term: "Front-Loading (The Trap)", desc: "The bank's strategy to make you pay almost all your interest in the first 10-15 years, ensuring their profit is safe even if you move.", icon: <TrendingUp className="h-5 w-5 text-amber-500" /> },
+                  { date: "1694", event: "The Bank of England", desc: "The world's first central bank is signed into law. It perfects the idea that debt can be used to generate wealth from nothing but interest.", icon: <Globe className="h-5 w-5 text-blue-500" /> },
+                  { date: "1913", event: "The Federal Reserve (USA)", desc: "A private central bank is created in near-total secrecy at Jekyll Island. It gains the power to print money and set the 'Price of Debt' for the next century.", icon: <Landmark className="h-5 w-5 text-red-500" /> },
+                  { date: "1933", event: "The 30-Year Lie", desc: "The US government invents the long-term amortizing mortgage. It makes monthly payments 'affordable' while locking in 300% total interest costs.", icon: <Clock className="h-5 w-5 text-amber-500" /> },
+                  { date: "1970s", event: "The MBS Revolution", desc: "Mortgage-Backed Securities allow banks to sell your debt to Wall Street immediately. They no longer care if you pay it off; they only care about volume.", icon: <Layers className="h-5 w-5 text-purple-500" /> },
                 ].map((t, i) => (
-                  <div key={i} className="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-slate-50 rounded-lg">{t.icon}</div>
-                      <h4 className="font-black text-lg text-slate-900"><TranslatedText>{t.term}</TranslatedText></h4>
+                  <div key={i} className="flex gap-8 group">
+                    <div className="flex flex-col items-center">
+                      <div className="h-14 w-14 rounded-2xl bg-white border-2 border-slate-100 shadow-sm flex items-center justify-center group-hover:border-red-500 transition-all">{t.icon}</div>
+                      {i < 3 && <div className="w-0.5 flex-1 bg-slate-100 mt-2" />}
                     </div>
-                    <p className="text-slate-500 font-medium leading-relaxed"><TranslatedText>{t.desc}</TranslatedText></p>
+                    <div className="pb-12 space-y-2">
+                      <p className="text-sm font-black text-red-600 uppercase tracking-widest">{t.date}</p>
+                      <h4 className="text-2xl font-black text-slate-900 tracking-tight"><TranslatedText>{t.event}</TranslatedText></h4>
+                      <p className="text-lg text-slate-500 font-medium leading-relaxed max-w-xl"><TranslatedText>{t.desc}</TranslatedText></p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -347,47 +351,60 @@ function LessonContent({ id }: { id: number }) {
 
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: The 15-Year Treadmill</TranslatedText></h2>
+                <div className="h-10 w-10 rounded-xl bg-red-600 text-white flex items-center justify-center font-black">3</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Regional Traps: USA, Canada, UK & AU</TranslatedText></h2>
               </div>
-              <CourseCard className="border-l-[12px] border-l-red-600 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
-                <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12"><Activity className="h-96 w-96" /></div>
-                <div className="relative z-10 space-y-10">
-                  <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
-                    <p><TranslatedText>{`Most homeowners in ${country.name} spend the first decade of their lives on a 'Financial Treadmill'. You are working hard, making big monthly payments, but your actual ownership of the house barely moves.`}</TranslatedText></p>
-                    <p><TranslatedText>{`Because the system is 'Front-Loaded', if you sell your house after 7 years, you might find that you still owe almost exactly what you borrowed. You've essentially been a 'tenant' to the bank for 7 years, paying for repairs and property taxes while the bank kept the 'rent' (interest).`}</TranslatedText></p>
-                  </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="p-8 bg-blue-50 border-l-[12px] border-l-blue-600 rounded-r-3xl space-y-4">
+                    <h4 className="font-black text-xl text-blue-900 uppercase tracking-tight">The USA 30-Year Fixed</h4>
+                    <p className="text-blue-900/70 font-medium leading-relaxed italic">
+                        <TranslatedText>{`Marketed as "Safety." In reality, it locks you into a front-loaded amortization schedule where you pay 80% interest for the first 15 years. It is a "Security Cage" for your wealth.`}</TranslatedText>
+                    </p>
                 </div>
-              </CourseCard>
+                <div className="p-8 bg-red-50 border-l-[12px] border-l-red-600 rounded-r-3xl space-y-4">
+                    <h4 className="font-black text-xl text-red-900 uppercase tracking-tight">The Canada 5-Year Renewal</h4>
+                    <p className="text-red-900/70 font-medium leading-relaxed italic">
+                        <TranslatedText>{`Homeowners hit a "Renewal Wall" every 5 years. Banks use this to reset the interest trap in higher-rate environments, ensuring you never truly "escape" the principal balance.`}</TranslatedText>
+                    </p>
+                </div>
+                <div className="p-8 bg-emerald-50 border-l-[12px] border-l-emerald-600 rounded-r-3xl space-y-4">
+                    <h4 className="font-black text-xl text-emerald-900 uppercase tracking-tight">Australia: The Offset King</h4>
+                    <p className="text-emerald-900/70 font-medium leading-relaxed italic">
+                        <TranslatedText>{`1 in 4 Australians already use the logic we teach. "Offset Accounts" prove the Mortgage Cutter strategy is global standard. We are just bringing the "Aussie Logic" to your local trap.`}</TranslatedText>
+                    </p>
+                </div>
+                <div className="p-8 bg-amber-50 border-l-[12px] border-l-amber-600 rounded-r-3xl space-y-4">
+                    <h4 className="font-black text-xl text-amber-900 uppercase tracking-tight">The UK MCOB Cage</h4>
+                    <p className="text-amber-900/70 font-medium leading-relaxed italic">
+                        <TranslatedText>{`Strict FCA rules (MCOB) protect the "Structure of Interest." UK borrowers face heavy prepayment penalties designed to stop them from executing the Speedrun logic.`}</TranslatedText>
+                    </p>
+                </div>
+              </div>
+
               <EpiphanyBox>
-                <TranslatedText>{`The "Amortization Table" is not a plan for freedom; it is a mathematical harvesting machine designed to capture the first 15 years of your labor as pure interest profit for the bank.`}</TranslatedText>
+                <TranslatedText>{`The 30-year mortgage wasn't built to help you own a home. It was built to help the bank own your labor for 30 years. When you sign that contract, you aren't a buyer; you are a primary source of institutional revenue.`}</TranslatedText>
               </EpiphanyBox>
             </section>
 
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">4</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: The Math Audit</TranslatedText></h2>
+                <div className="h-10 w-10 rounded-xl bg-red-600 text-white flex items-center justify-center font-black">4</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Audit Your Origin</TranslatedText></h2>
               </div>
               <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
-                <TranslatedText>{`Use the 'Evidence Locker' below to see exactly how much 'Invisible Rent' you are currently paying to your lender every single hour of every single day.`}</TranslatedText>
+                <TranslatedText>{`Look at the chart below. This is how the "Price of Debt" has moved in your region. Watch how your specific loan date determined your lifetime interest sentence.`}</TranslatedText>
               </p>
-              <InterestCalc />
-              <div className="space-y-8">
-                <h3 className="text-3xl font-fraunces font-black text-center text-slate-900"><TranslatedText>The Equity Visualization</TranslatedText></h3>
-                <p className="text-lg text-slate-500 text-center font-medium"><TranslatedText>Slide the timer to see how slowly your equity grows compared to the bank's interest profit in the early years.</TranslatedText></p>
-                <AmortViz />
-              </div>
+              <BankRateChart />
               <Quiz 
-                question="In the first 5 years of a typical mortgage, where does the majority of your payment go?"
+                question="Why did banks invent the 30-year amortizing mortgage?"
                 options={[
-                  "Toward owning your house (Principal)",
-                  "Toward the 'Rental Fee' (Interest)",
-                  "Toward your local property taxes",
-                  "Toward a secret savings account the bank keeps for you"
+                  "To help families retire earlier",
+                  "To make payments look 'affordable' while maximizing front-loaded interest",
+                  "To ensure every citizen owns land",
+                  "To lower the total amount paid for a home"
                 ]}
                 correctAnswer={1}
-                explanation="Lenders use a 'Front-Loaded' schedule. During the first decade, up to 80% of your monthly payment is captured as interest profit, leaving very little to reduce the actual cost of the home."
+                explanation="The 30-year structure is a psychological trick. It lowers the monthly barrier to entry while ensuring the bank captures the vast majority of your labor in the first two decades."
               />
             </section>
           </div>
@@ -704,7 +721,7 @@ function LessonContent({ id }: { id: number }) {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
-                  { term: "TIP (Total Interest %)", desc: `A mandatory disclosure in ${country.name} that shows the total interest you'll pay as a percentage of the loan. Traditional paths often hit 90-110%.`, icon: <SearchCode className="h-5 w-5 text-blue-500" /> },
+                  { term: "TIP (Total Interest %)", desc: `A mandatory disclosure in ${country.name} that shows the total interest you'll pay as a percentage of the loan. Traditional paths often hit 90-110%.`, icon: <FileSearch className="h-5 w-5 text-blue-500" /> },
                   { term: "Prepayment Penalty", desc: "A 'Cage Clause' that charges you for being smart and paying off your debt early. We require zero penalties.", icon: <ShieldAlert className="h-5 w-5 text-red-500" /> },
                   { term: "Draw Period", desc: "The 'Golden Window' (usually 10 years) during which you can put money in and take it out freely without applying again.", icon: <History className="h-5 w-5 text-emerald-500" /> },
                   { term: "Payment Application", desc: "The secret rules in your contract that decide if your money hits the interest or the principal first. We need 'Principal-First' daily benefit.", icon: <ListChecks className="h-5 w-5 text-amber-500" /> },
