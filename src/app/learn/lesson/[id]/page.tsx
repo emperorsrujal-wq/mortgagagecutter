@@ -15,12 +15,16 @@ import {
   LadderVisual, 
   HyperdriveSim, 
   BiWeeklyCalc, 
-  OffsetVisual 
+  OffsetVisual,
+  TruthCalculator
 } from '@/components/course/Calculators';
 import { 
   CourseCard, 
   TaskItem, 
-  Quiz 
+  Quiz,
+  CaseStudy,
+  StatBox,
+  InfoBox
 } from '@/components/course/UIComponents';
 import { TranslatedText } from '@/components/course/TranslatedText';
 import { cn } from '@/lib/utils';
@@ -64,7 +68,9 @@ import {
   ArrowRight,
   Timer,
   AlertCircle,
-  UserCircle2
+  UserCircle2,
+  FileText,
+  AlertTriangle
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -72,12 +78,13 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { useUser } from '@/firebase';
 
 function ProgressBar({ current }: { current: number }) {
+  const total = 8;
   return (
     <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-[#E8ECF2]">
       <div className="h-1 bg-slate-100 w-full">
         <div 
           className="h-full bg-[#2563EB] transition-all duration-500" 
-          style={{ width: `${(current / 8) * 100}%` }}
+          style={{ width: `${(current / total) * 100}%` }}
         />
       </div>
       <div className="max-w-[720px] mx-auto px-4 h-14 flex items-center justify-between">
@@ -86,7 +93,7 @@ function ProgressBar({ current }: { current: number }) {
           <span className="hidden sm:inline uppercase tracking-widest"><TranslatedText>Course Hub</TranslatedText></span>
         </Link>
         <div className="text-[10px] font-black uppercase text-slate-400 tracking-[0.3em]">
-          <TranslatedText>Phase</TranslatedText> {current} <TranslatedText>of</TranslatedText> 8
+          {current === 0 ? <TranslatedText>Phase 0: Awakening</TranslatedText> : <><TranslatedText>Phase</TranslatedText> {current} <TranslatedText>of</TranslatedText> {total}</>}
         </div>
         <div className="w-20" />
       </div>
@@ -131,7 +138,7 @@ function LessonContent({ id }: { id: number }) {
   };
 
   const prevLesson = () => {
-    if (id > 1) router.push(`/learn/lesson/${id - 1}`);
+    if (id > 0) router.push(`/learn/lesson/${id - 1}`);
     else router.push('/learn');
   };
 
@@ -141,6 +148,139 @@ function LessonContent({ id }: { id: number }) {
       
       <div className="max-w-[800px] mx-auto px-4 py-16 space-y-24">
         
+        {/* PHASE 0: THE AWAKENING */}
+        {id === 0 && (
+          <div className="space-y-24 animate-in fade-in duration-1000">
+             <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-white/10">
+                <Flame className="h-4 w-4 text-orange-500" />
+                <TranslatedText>Level 00 — The Financial Awakening</TranslatedText>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>The 2x Cost Trap:</TranslatedText>
+                <span className="block text-blue-600 italic mt-4"><TranslatedText>You Are Paying Twice.</TranslatedText></span>
+              </h1>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium italic">
+                <TranslatedText>"The banker never highlighted the one number that should have stopped you cold: The Total Amount You Will Actually Pay."</TranslatedText>
+              </p>
+            </header>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black">1</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Invisible Contract</TranslatedText></h2>
+              </div>
+              <div className="space-y-8 text-xl text-slate-600 leading-relaxed font-medium">
+                <p>
+                  <TranslatedText>{`Somewhere in your home is a piece of paper that represents your proudest financial moment. But inside that fine print, the math is working against you. On a typical $400,000 home purchase in ${country.name}, by the time you make your final payment, you will have handed the bank approximately $909,000.`}</TranslatedText>
+                </p>
+                <p className="text-blue-600 font-black">
+                  <TranslatedText>The extra $509,000? Not equity. Not your future. Pure bank profit.</TranslatedText>
+                </p>
+              </div>
+
+              <div className="bg-slate-900 rounded-[48px] p-10 text-white space-y-10 shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-8 opacity-5"><Landmark className="h-64 w-64 text-blue-400" /></div>
+                <div className="text-center space-y-2 relative z-10">
+                  <h3 className="text-2xl font-black uppercase tracking-[0.2em] text-blue-400"><TranslatedText>The Price of Silence</TranslatedText></h3>
+                  <p className="text-slate-400 font-bold"><TranslatedText>Assumes a 30-year term at 6.5% interest</TranslatedText></p>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                  {[
+                    { label: "Purchase Price", val: "$400,000", sub: "The Sticker Price" },
+                    { label: "Total Paid", val: "$909,000", sub: "The Real Price", highlight: true },
+                    { label: "Bank Profit", val: "$509,000", sub: "Interest Captured", danger: true }
+                  ].map((s, i) => (
+                    <div key={i} className={cn("p-8 rounded-3xl text-center space-y-2 border border-white/10", s.highlight ? "bg-blue-600 border-none shadow-xl" : "bg-white/5")}>
+                       <p className="text-[10px] font-black uppercase tracking-widest opacity-60"><TranslatedText>{s.label}</TranslatedText></p>
+                       <p className={cn("text-3xl font-black", s.danger ? "text-red-400" : "text-white")}>{s.val}</p>
+                       <p className="text-[10px] font-bold text-slate-400 uppercase"><TranslatedText>{s.sub}</TranslatedText></p>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-center text-slate-400 text-sm italic font-medium">
+                  <TranslatedText>In every single case, the interest you pay is equal to or greater than the original cost of the home.</TranslatedText>
+                </p>
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black">2</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Three Destinies</TranslatedText></h2>
+              </div>
+              <p className="text-xl text-slate-600 font-medium">
+                <TranslatedText>Abstract numbers lose impact. Let's look at three families making choices right now that will define their next 30 years.</TranslatedText>
+              </p>
+
+              <div className="space-y-8">
+                <CaseStudy 
+                  name="The Patels (Suburban Homeowners)"
+                  savings="$190,000 Saved"
+                  timeline="Mortgage-Free at 51"
+                  quote="We were on track to finish at 63. Using the Chunker logic, we reclaim 12 years of our life and keep $190k in interest."
+                />
+                <CaseStudy 
+                  name="The Tremblays (Montreal Condo)"
+                  savings="$220,000 Saved"
+                  timeline="Mortgage-Free at 52"
+                  quote="Our condo will cost us $1M under standard terms. By age 52, we will own it outright and be ready for full-scale investing."
+                />
+                <CaseStudy 
+                  name="The Garcias (LA Property)"
+                  savings="$500,000+ Saved"
+                  timeline="Cut 14 Years Off"
+                  quote="A $780k home was going to cost us $1.5M. We aren't just saving money; we are saving our children's future."
+                />
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black">3</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Renting Myth</TranslatedText></h2>
+              </div>
+              <CourseCard className="border-l-[12px] border-l-amber-500 shadow-2xl p-12 md:p-16 bg-white">
+                 <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
+                    <p>
+                      <TranslatedText>{`You've heard it a hundred times: "Renting is throwing money away." But the framing obscures a bigger lie. Traditional homeowners "throw away" an average of 128% of their home's price in interest payments.`}</TranslatedText>
+                    </p>
+                    <p>
+                      <TranslatedText>{`This course is not arguing against homeownership. It is arguing for the REAL cost of it—and then teaching you how to cut that cost in half while still building equity.`}</TranslatedText>
+                    </p>
+                  </div>
+              </CourseCard>
+
+              <EpiphanyBox>
+                <TranslatedText>{`You buy your home twice. Once for you (Principal), and once for the bank (Interest). The Mortgage Cutter method is about legally opting out of the second purchase.`}</TranslatedText>
+              </EpiphanyBox>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black">4</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Face Your Truth</TranslatedText></h2>
+              </div>
+              <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
+                <TranslatedText>{`Use the 'Truth Calculator' below to see your current "Freedom Date" and the monthly interest bite you are currently suffering in ${country.name}.`}</TranslatedText>
+              </p>
+              <TruthCalculator />
+              <Quiz 
+                question="Why is the 'Sticker Price' of your home a distraction?"
+                options={[
+                  "Because property taxes are even more expensive",
+                  "Because the bank collects nearly double that amount in interest profit",
+                  "Because houses lose value every single year",
+                  "Because you never actually own the land"
+                ]}
+                correctAnswer={1}
+                explanation="Lenders market 'affordable monthly payments' because they don't want you to see the Total Amount Paid, which often exceeds 200% of the home's value."
+              />
+            </section>
+          </div>
+        )}
+
         {/* LESSON 1: THE NATURE OF THE AMORTIZED LOAN */}
         {id === 1 && (
           <div className="space-y-24 animate-in fade-in duration-1000">

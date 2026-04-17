@@ -1,3 +1,4 @@
+
 'use client';
 import React from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
@@ -69,7 +70,8 @@ function LearnHub() {
           <div className="space-y-3">
             {lessonMeta.map((lesson, idx) => {
               const isCompleted = progress.includes(lesson.id);
-              // Admins see all lessons as available immediately
+              // Lesson 0 is the start. idx 0 (Lesson 0) is always available.
+              // idx 1 (Lesson 1) is available if idx 0 is completed.
               const isAvailable = idx === 0 || progress.includes(lessonMeta[idx-1].id) || isPrivileged;
 
               return (
@@ -83,7 +85,7 @@ function LearnHub() {
                   </div>
                   <div className="flex-1">
                     <h4 className="font-bold text-[#1A1D26] group-hover:text-[#2563EB] transition-colors"><TranslatedText>{lesson.title}</TranslatedText></h4>
-                    <p className="text-xs text-[#9DA3B0] font-bold uppercase"><TranslatedText>{`Lesson ${lesson.id}`}</TranslatedText></p>
+                    <p className="text-xs text-[#9DA3B0] font-bold uppercase"><TranslatedText>{idx === 0 ? "Foundation" : `Lesson ${idx}`}</TranslatedText></p>
                   </div>
                   {isAvailable && <ChevronRight className="h-5 w-5 text-[#9DA3B0] group-hover:text-[#2563EB]" />}
                 </Link>
