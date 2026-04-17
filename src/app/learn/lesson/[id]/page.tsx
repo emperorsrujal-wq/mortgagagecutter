@@ -63,7 +63,8 @@ import {
   ListChecks,
   ArrowRight,
   Timer,
-  AlertCircle
+  AlertCircle,
+  UserCircle2
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -1018,14 +1019,14 @@ function LessonContent({ id }: { id: number }) {
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-white/10 shadow-xl">
                 <Globe className="h-4 w-4 text-blue-400" />
-                <TranslatedText>{`The Global Standard`}</TranslatedText>
+                <TranslatedText>{`Global Standard: Mathematical Physics`}</TranslatedText>
               </div>
               <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
-                <TranslatedText>The Expert Club:</TranslatedText>
-                <span className="block text-blue-600 italic mt-4"><TranslatedText>Joining the 39 Million.</TranslatedText></span>
+                <TranslatedText>The Proof:</TranslatedText>
+                <span className="block text-blue-600 italic mt-4"><TranslatedText>Joining the Private Wealth Club.</TranslatedText></span>
               </h1>
               <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
-                <TranslatedText>{`In the top 1%, this model isn't a "secret"—it's the standard. Today, you are joining the movement of owners who finally understand the math.`}</TranslatedText>
+                <TranslatedText>{`In the top 1%, these tools aren't "secrets"—they are the standard. Today, you graduate from "Debtor" to "Expert Architect."`}</TranslatedText>
               </p>
             </header>
 
@@ -1038,7 +1039,16 @@ function LessonContent({ id }: { id: number }) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
                   <p>
-                    <TranslatedText>Math is like gravity. It doesn't care what you believe or how you feel. If you drop a ball, it falls. If you apply velocity to a debt, the debt vanishes.</TranslatedText>
+                    <TranslatedText>Imagine you're standing on top of a building with a ball. If you let go, the ball falls. It doesn't matter if you believe in gravity, if you're a nice person, or if your bank likes you. The ball must fall.</TranslatedText>
+                  </p>
+                  <p>
+                    <TranslatedText>Math is financial gravity. If you move your income from a low-yield savings account (where it does nothing) into an open-credit principal line (where it chokes daily interest), the debt MUST die. It is a mathematical certainty.</TranslatedText>
+                  </p>
+                  <p className="text-blue-600 font-black italic">
+                    <TranslatedText>You aren't "trying" to pay off your house; you are applying the physics of wealth to a math problem.</TranslatedText>
+                  </p>
+                  <p>
+                    <TranslatedText>{`In ${country.name}, millions of people use standard mortgages because they don't know the ball can fall faster. You now know how to change the gravity.`}</TranslatedText>
                   </p>
                 </div>
                 <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
@@ -1061,9 +1071,9 @@ function LessonContent({ id }: { id: number }) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
                   { term: "Sovereignty", desc: "The state of being in full control of your capital flow, without requiring bank permission for your own equity.", icon: <Award className="h-5 w-5 text-blue-500" /> },
-                  { term: "Implementation", desc: "The transition from 'learning' to 'doing'. The final step where theory becomes reality.", icon: <CheckCircle2 className="h-5 w-5 text-emerald-500" /> },
-                  { term: "Generational Wealth", desc: "A debt-free fortress that provides stability for your family for decades to come.", icon: <UserCircle2 className="h-5 w-5 text-purple-500" /> },
-                  { term: "Financial Fortress", desc: "A lifestyle where your home is an asset that pays you, not a liability that drains you.", icon: <HomeIcon className="h-5 w-5 text-amber-500" /> },
+                  { term: "Implementation", desc: "The transition from 'learning' to 'doing'. The final step where theory becomes visceral reality.", icon: <CheckCircle2 className="h-5 w-5 text-emerald-500" /> },
+                  { term: "Generational Wealth", desc: "A debt-free fortress that provides stability and opportunity for your family for decades to come.", icon: <UserCircle2 className="h-5 w-5 text-purple-500" /> },
+                  { term: "The Velocity Floor", desc: "The point at which your monthly surplus is so large compared to your debt that interest becomes statistically irrelevant.", icon: <ArrowUpRight className="h-5 w-5 text-amber-500" /> },
                 ].map((t, i) => (
                   <div key={i} className="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-3">
                     <div className="flex items-center gap-3">
@@ -1076,17 +1086,56 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            <section className="bg-gradient-to-br from-blue-700 to-indigo-950 p-16 md:p-20 rounded-[80px] border border-white/10 shadow-2xl space-y-16 text-center">
-              <div className="space-y-8">
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: The Biological Dividend</TranslatedText></h2>
+              </div>
+              
+              <CourseCard className="border-l-[12px] border-l-blue-600 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
+                <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12">
+                  <UserCircle2 className="h-96 w-96" />
+                </div>
+                <div className="relative z-10 space-y-10">
+                  <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
+                    <p>
+                      <TranslatedText>{`Most financial courses focus on the numbers. We focus on the HOURS. If you shave 15 years off your mortgage, you aren't just saving $150,000; you are reclaiming 131,400 hours of your life that you no longer have to trade for bank profit.`}</TranslatedText>
+                    </p>
+                    <p>
+                      <TranslatedText>{`That is time with your children, time for your passions, and the freedom to retire while you still have your health. The Mortgage Cutter Method isn't a "money trick"—it is a biological time-machine.`}</TranslatedText>
+                    </p>
+                  </div>
+                </div>
+              </CourseCard>
+
+              <div className="p-8 bg-emerald-50 border-4 border-emerald-200 rounded-[40px] text-center space-y-4">
+                <div className="bg-emerald-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto shadow-sm">
+                  <ShieldCheck className="h-6 w-6 text-emerald-600" />
+                </div>
+                <p className="text-2xl text-emerald-900 font-black leading-tight">
+                  <TranslatedText>{`Graduation Notice: Your mathematical understanding now exceeds 99% of homeowners in ${country.name}. You are now ready to implement.`}</TranslatedText>
+                </p>
+              </div>
+            </section>
+
+            <section className="bg-gradient-to-br from-blue-700 to-indigo-950 p-16 md:p-20 rounded-[80px] border border-white/10 shadow-2xl space-y-16 text-center overflow-hidden relative">
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
+              </div>
+              
+              <div className="space-y-8 relative z-10">
                 <div className="bg-white/20 w-24 h-24 rounded-full flex items-center justify-center mx-auto backdrop-blur-xl mb-6 shadow-2xl">
                   <Award className="h-12 w-12 text-yellow-400 fill-yellow-400" />
                 </div>
                 <h2 className="text-5xl md:text-7xl font-fraunces font-black text-white leading-tight">
                   <TranslatedText>Mastery Achieved</TranslatedText>
                 </h2>
+                <p className="text-xl md:text-2xl text-blue-100 max-w-2xl mx-auto font-medium">
+                  <TranslatedText>{`You have the logic. You have the tools. You have the physics. It's time to build your debt-free fortress.`}</TranslatedText>
+                </p>
               </div>
 
-              <div className="pt-16 border-t border-white/10 text-center space-y-10">
+              <div className="pt-16 border-t border-white/10 text-center space-y-10 relative z-10">
                 <button 
                   onClick={() => router.push('/members/chunker')}
                   className="bg-white text-blue-900 hover:bg-blue-50 font-black px-16 py-8 rounded-[32px] text-3xl group flex items-center gap-6 mx-auto transition-all shadow-2xl hover:scale-105 active:scale-95"
@@ -1094,6 +1143,11 @@ function LessonContent({ id }: { id: number }) {
                   <TranslatedText>Launch My Chunker Simulator</TranslatedText>
                   <ArrowRight className="h-10 w-10 group-hover:translate-x-3 transition-transform" />
                 </button>
+                <div className="flex justify-center gap-8 text-[10px] font-black uppercase text-blue-300 tracking-widest">
+                  <span className="flex items-center gap-2"><CheckCircle2 className="h-3 w-3" /> Calculator Unlocked</span>
+                  <span className="flex items-center gap-2"><CheckCircle2 className="h-3 w-3" /> Screener Unlocked</span>
+                  <span className="flex items-center gap-2"><CheckCircle2 className="h-3 w-3" /> Strategy Archive Unlocked</span>
+                </div>
               </div>
             </section>
           </div>
