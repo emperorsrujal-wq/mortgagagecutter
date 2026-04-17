@@ -1,4 +1,3 @@
-
 'use client';
 import React, { use, useState, useEffect } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
@@ -62,7 +61,8 @@ import {
   ScrollText,
   ListChecks,
   ArrowRight,
-  Timer
+  Timer,
+  AlertCircle
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -628,7 +628,6 @@ function LessonContent({ id }: { id: number }) {
               </p>
             </header>
 
-            {/* 1. CONCEPT */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
@@ -661,7 +660,6 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* 2. TERMINOLOGY */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
@@ -686,7 +684,6 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* 3. IMPORTANCE */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
@@ -714,7 +711,6 @@ function LessonContent({ id }: { id: number }) {
               </EpiphanyBox>
             </section>
 
-            {/* 4. ACTION */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">4</div>
@@ -755,43 +751,46 @@ function LessonContent({ id }: { id: number }) {
         {id === 6 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
-              <div className="inline-flex items-center gap-2 px-6 py-2 bg-amber-100 text-amber-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-amber-200">
-                <Star className="h-4 w-4" />
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-50 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-100">
+                <Trophy className="h-4 w-4" />
                 <TranslatedText>Mastery Level: 06 — Portfolio Scaling</TranslatedText>
               </div>
               <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
                 <TranslatedText>The 1% Multiplier:</TranslatedText>
-                <span className="block text-blue-600 italic mt-4"><TranslatedText>Scaling Your Empire.</TranslatedText></span>
+                <span className="block text-blue-600 italic mt-4"><TranslatedText>Turning Walls into Engines.</TranslatedText></span>
               </h1>
               <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
-                <TranslatedText>{`Debt reduction was just the beginning. Now we use the bank's own inventory to build your wealth fortress in ${country.name}.`}</TranslatedText>
+                <TranslatedText>{`Debt reduction was just the beginning. Now we use your home's equity as "Live Capital" to build a multi-property empire in ${country.name}.`}</TranslatedText>
               </p>
             </header>
 
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: Green Houses to Red Hotels (ELI14)</TranslatedText></h2>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: The Monopoly Secret (ELI14)</TranslatedText></h2>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
                   <p>
-                    <TranslatedText>In the game of Monopoly, you win by turning "Green Houses" into "Red Hotels." A traditional mortgage only lets you have one green house, and you must pay for it for 30 years before you can get another one.</TranslatedText>
+                    <TranslatedText>Imagine you're playing Monopoly. Most players save their money and wait 30 turns before they buy their first "Green House." They think the goal is just to "not owe any money."</TranslatedText>
                   </p>
                   <p>
-                    <TranslatedText>The "1% Multiplier" strategy treats your home equity as a "Storage Tank" of capital. As you drop your principal using velocity, the tank fills up with available credit.</TranslatedText>
+                    <TranslatedText>The winners (The 1%) realize that once you own a Green House, you can use its value to borrow enough to buy a "Red Hotel." You aren't "spending" your house; you are "recycling" the energy trapped inside its walls.</TranslatedText>
                   </p>
                   <p className="text-blue-600 font-black italic">
-                    <TranslatedText>You then "Recycle" that capital.</TranslatedText>
+                    <TranslatedText>This is "Equity Harvesting."</TranslatedText>
+                  </p>
+                  <p>
+                    <TranslatedText>A traditional mortgage keeps your equity "Frozen." A Strategic Arsenal tool keeps it "Liquid." As your balance drops using our velocity method, your credit limit expands, giving you the "Dry Powder" to buy your next property without ever opening a savings account.</TranslatedText>
                   </p>
                 </div>
                 <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
                   <div className="absolute top-0 right-0 p-6 opacity-10"><Layers className="h-32 w-32 text-blue-400" /></div>
                   <div className="space-y-2 relative z-10">
-                    <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Multiplier Effect</p>
-                    <h3 className="text-6xl font-black text-white tracking-tighter">RECYCLE</h3>
-                    <p className="text-lg font-bold text-slate-400">Capital Mobility Mastery</p>
+                    <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Recycled Dollar</p>
+                    <h3 className="text-6xl font-black text-white tracking-tighter">1 = 3</h3>
+                    <p className="text-lg font-bold text-slate-400">Homes Owned via One Strategy</p>
                   </div>
                 </div>
               </div>
@@ -805,10 +804,10 @@ function LessonContent({ id }: { id: number }) {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
-                  { term: "LTV Buffer", desc: `The safe "Safety Net" of equity (usually 20%) that we never touch. In ${country.name}, we only deploy capital that exists above this line.`, icon: <ShieldCheck className="h-5 w-5 text-blue-500" /> },
-                  { term: "Yield Spread", desc: "The gap between the interest you pay the bank (e.g., 6%) and the return you earn on your new asset (e.g., 10%). The 1%er lives in this gap.", icon: <TrendingUp className="h-5 w-5 text-emerald-500" /> },
-                  { term: "Asset Velocity", desc: "The speed at which an investment returns your original capital so you can use it again for the next property.", icon: <Zap className="h-5 w-5 text-amber-500" /> },
-                  { term: "Readvanceable Limit", desc: "A feature where every dollar of principal paid on Property A instantly becomes available to borrow for Property B.", icon: <ArrowUpRight className="h-5 w-5 text-purple-500" /> },
+                  { term: "Equity Harvesting", desc: "The legal process of moving your home's 'Dead Equity' into 'Live Capital' without selling the property or paying taxes.", icon: <Zap className="h-5 w-5 text-amber-500" /> },
+                  { term: "Yield Spread", desc: "The gap between the cost of your HELOC (e.g., 6%) and the return on your new asset (e.g., 10%). This gap is where your wealth is built.", icon: <TrendingUp className="h-5 w-5 text-emerald-500" /> },
+                  { term: "Readvanceable Expansion", desc: `In ${country.name}, as you pay down $1,000 of principal, your credit limit increases by $1,000 automatically. This is your 'Down Payment Engine'.`, icon: <ArrowUpRight className="h-5 w-5 text-blue-500" /> },
+                  { term: "LTV Buffer", desc: "The 20% 'Safety Net' of equity we never touch. We only harvest capital that exists above this conservative line.", icon: <ShieldCheck className="h-5 w-5 text-purple-500" /> },
                 ].map((t, i) => (
                   <div key={i} className="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-3">
                     <div className="flex items-center gap-3">
@@ -824,24 +823,26 @@ function LessonContent({ id }: { id: number }) {
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: Financial Sovereignty</TranslatedText></h2>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: The Two Financial Destinies</TranslatedText></h2>
               </div>
               
-              <CourseCard className="border-l-[12px] border-l-amber-600 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
-                <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12">
-                  <Trophy className="h-96 w-96" />
-                </div>
-                <div className="relative z-10 space-y-10">
-                  <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
-                    <p>
-                      <TranslatedText>{`Wealth isn't created by working for money. It's created by having your capital work for you. Once your home equity is liquid, every brick in your house becomes a soldier in your financial army.`}</TranslatedText>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="p-8 bg-red-50 border-l-[12px] border-red-600 rounded-r-3xl space-y-4">
+                    <h4 className="font-black text-xl text-red-900 uppercase tracking-tight">The Traditional Saver</h4>
+                    <p className="text-red-900/70 font-medium leading-relaxed">
+                        <TranslatedText>{`Works for 30 years to pay off ONE home. At age 65, they have zero debt but zero secondary income. They are "House Rich and Cash Poor," forced to live on a fixed government pension.`}</TranslatedText>
                     </p>
-                  </div>
                 </div>
-              </CourseCard>
+                <div className="p-8 bg-emerald-50 border-l-[12px] border-emerald-600 rounded-r-3xl space-y-4">
+                    <h4 className="font-black text-xl text-emerald-900 uppercase tracking-tight">The Strategic Stacker</h4>
+                    <p className="text-emerald-900/70 font-medium leading-relaxed">
+                        <TranslatedText>{`Uses the 1% Multiplier. By year 12, they own THREE homes free and clear. The rental income from Properties 2 and 3 pays for their lifestyle, leaving their primary income for pure legacy building.`}</TranslatedText>
+                    </p>
+                </div>
+              </div>
 
               <EpiphanyBox>
-                <TranslatedText>{`Wealth isn't created by working for money. It's created by having your capital work for you. Once your home equity is liquid, every brick in your house becomes a soldier in your financial army.`}</TranslatedText>
+                <TranslatedText>{`The bank doesn't want you to pay off your house; they want you to RENT your house from them for 30 years. When you harvest your equity, you stop being the bank's tenant and start being the bank's competitor.`}</TranslatedText>
               </EpiphanyBox>
             </section>
 
@@ -850,11 +851,38 @@ function LessonContent({ id }: { id: number }) {
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">4</div>
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: Model Your Scaling</TranslatedText></h2>
               </div>
+              
+              <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
+                <TranslatedText>{`Use the "Wealth Multiplier" simulator below to see how a single ${country.symbol}100k harvest, deployed into a ${country.name} income property, generates millions in long-term net worth through the power of leveraged velocity.`}</TranslatedText>
+              </p>
+
               <WealthSimulator />
+
               <div className="space-y-8 pt-12">
                 <h3 className="text-3xl font-fraunces font-black text-center text-slate-900"><TranslatedText>The Property Ladder Blueprint</TranslatedText></h3>
                 <LadderVisual />
               </div>
+
+              <div className="p-8 bg-blue-50 border-4 border-dashed border-blue-200 rounded-[40px] text-center space-y-4">
+                <div className="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto">
+                    <AlertCircle className="h-6 w-6 text-blue-600" />
+                </div>
+                <p className="text-xl text-blue-900 font-bold leading-relaxed">
+                    <TranslatedText>{`⚖️ RISK MANAGEMENT: Never harvest more than 80% of your total value. In ${country.name}, market shifts can happen. Maintaining a 20% LTV Buffer ensures you are never 'underwater' and your portfolio remains a fortress, not a house of cards.`}</TranslatedText>
+                </p>
+              </div>
+
+              <Quiz 
+                question="What is the primary advantage of 'Equity Harvesting' with a Strategic Arsenal tool?"
+                options={[
+                  "It allows you to buy a new car every two years",
+                  "It turns 'Frozen' home equity into 'Liquid' capital for more assets",
+                  "It makes the bank feel sorry for you and lower your rate",
+                  "It is a secret way to avoid paying property taxes"
+                ]}
+                correctAnswer={1}
+                explanation={`In the Mortgage Cutter Method, we don't just want to 'own' our home. We want our home's equity to be a mobile engine that can fund the acquisition of new income-producing assets while still working to cancel primary mortgage interest.`}
+              />
             </section>
           </div>
         )}
