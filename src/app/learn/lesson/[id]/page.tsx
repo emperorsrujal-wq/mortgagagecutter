@@ -71,15 +71,17 @@ import {
   UserCircle2,
   FileText,
   AlertTriangle,
-  Landmark
+  Landmark,
+  Calculator
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { useUser } from '@/firebase';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 function ProgressBar({ current }: { current: number }) {
-  const total = 8;
+  const total = 9;
   return (
     <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-[#E8ECF2]">
       <div className="h-1 bg-slate-100 w-full">
@@ -134,7 +136,7 @@ function LessonContent({ id }: { id: number }) {
 
   const nextLesson = () => {
     completeLesson(id);
-    if (id < 8) router.push(`/learn/lesson/${id + 1}`);
+    if (id < 9) router.push(`/learn/lesson/${id + 1}`);
     else router.push('/members/chunker');
   };
 
@@ -410,13 +412,194 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 2: THE SECRET SCORECARD */}
+        {/* LESSON 2: THE MATHEMATICAL PROOF (THE SCAM) */}
         {id === 2 && (
+          <div className="space-y-24 animate-in fade-in duration-1000">
+            <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-emerald-200">
+                <Scale className="h-4 w-4" />
+                <TranslatedText>Mastery Level: 02 — Conviction & Math</TranslatedText>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>The Scam Exposed:</TranslatedText>
+                <span className="block text-emerald-600 italic mt-4"><TranslatedText>The Proof Across 4 Countries.</TranslatedText></span>
+              </h1>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                <TranslatedText>{`We're moving from history to cold, hard mathematics. Whether you are in the US, Canada, UK, or Australia, the scam is exactly the same.`}</TranslatedText>
+              </p>
+            </header>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black">1</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Proof in One Sentence</TranslatedText></h2>
+              </div>
+              <EpiphanyBox>
+                <TranslatedText>{`On a standard mortgage, you will pay between 1.5x and 2.5x the purchase price of your home in total. This extra cost goes entirely to the bank, produces ZERO value for you, and is deliberately hidden behind the 'monthly payment' distraction.`}</TranslatedText>
+              </EpiphanyBox>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black">2</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Global Audit (Select Your Region)</TranslatedText></h2>
+              </div>
+              
+              <Tabs defaultValue="USA" className="w-full">
+                <TabsList className="grid grid-cols-4 h-14 bg-slate-100 rounded-2xl p-1">
+                  {['USA', 'Canada', 'UK', 'Australia'].map(c => (
+                    <TabsTrigger key={c} value={c} className="rounded-xl font-black text-xs tracking-widest">{c}</TabsTrigger>
+                  ))}
+                </TabsList>
+                
+                <TabsContent value="USA" className="mt-8 space-y-8 animate-in fade-in">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-6">
+                      <h4 className="text-2xl font-black text-slate-900">USA — $420,000 Home</h4>
+                      <ul className="space-y-4 text-lg text-slate-600 font-medium">
+                        <li className="flex justify-between border-b pb-2"><span>Financed Amount (80%)</span> <span className="font-black text-slate-900">$336,000</span></li>
+                        <li className="flex justify-between border-b pb-2"><span>Interest Paid (30 yrs @ 6.75%)</span> <span className="font-black text-red-600">$448,440</span></li>
+                        <li className="flex justify-between border-b pb-2 font-black text-xl text-slate-900"><span>Total Cost of Home</span> <span>$868,440</span></li>
+                      </ul>
+                      <div className="p-6 bg-blue-50 rounded-3xl border border-blue-100">
+                        <p className="text-sm font-bold text-blue-900 italic">"The American 30-year fixed is a front-loading machine. You pay 87% interest in Month 1. You don't own half your home until Year 19."</p>
+                      </div>
+                    </div>
+                    <div className="bg-slate-900 rounded-[48px] p-8 text-center flex flex-col justify-center space-y-2">
+                       <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The US Multiple</p>
+                       <h3 className="text-8xl font-black text-white tracking-tighter">2.07x</h3>
+                       <p className="text-lg font-bold text-slate-400">Total Payout vs. Purchase Price</p>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="Canada" className="mt-8 space-y-8 animate-in fade-in">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-6">
+                      <h4 className="text-2xl font-black text-slate-900">Canada — $685,000 Home</h4>
+                      <ul className="space-y-4 text-lg text-slate-600 font-medium">
+                        <li className="flex justify-between border-b pb-2"><span>Financed Amount (80%)</span> <span className="font-black text-slate-900">$548,000</span></li>
+                        <li className="flex justify-between border-b pb-2"><span>Interest Paid (25 yrs @ 5.54%)</span> <span className="font-black text-red-600">$455,200</span></li>
+                        <li className="flex justify-between border-b pb-2 font-black text-xl text-slate-900"><span>Total Cost of Home</span> <span>$1,140,200</span></li>
+                      </ul>
+                      <div className="p-6 bg-red-50 rounded-3xl border border-red-100">
+                        <p className="text-sm font-bold text-red-900 italic">"Canada's 5-year renewal cycle resets the trap every half-decade. If rates rise, your interest payout explodes even further."</p>
+                      </div>
+                    </div>
+                    <div className="bg-slate-900 rounded-[48px] p-8 text-center flex flex-col justify-center space-y-2">
+                       <p className="text-[10px] font-black uppercase text-red-400 tracking-[0.5em]">The Canada Multiple</p>
+                       <h3 className="text-8xl font-black text-white tracking-tighter">1.66x</h3>
+                       <p className="text-lg font-bold text-slate-400">Excluding CMHC & Renewal Shocks</p>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="UK" className="mt-8 space-y-8 animate-in fade-in">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-6">
+                      <h4 className="text-2xl font-black text-slate-900">UK — £290,000 Home</h4>
+                      <ul className="space-y-4 text-lg text-slate-600 font-medium">
+                        <li className="flex justify-between border-b pb-2"><span>Financed Amount (80%)</span> <span className="font-black text-slate-900">£232,000</span></li>
+                        <li className="flex justify-between border-b pb-2"><span>Interest Paid (25 yrs @ 4.9%)</span> <span className="font-black text-red-600">£192,000</span></li>
+                        <li className="flex justify-between border-b pb-2 font-black text-xl text-slate-900"><span>Total Cost of Home</span> <span>£482,000</span></li>
+                      </ul>
+                      <div className="p-6 bg-amber-50 rounded-3xl border border-amber-100">
+                        <p className="text-sm font-bold text-amber-900 italic">"UK Stamp Duty and £2,000 arrangement fees every 2 years add £15,000+ to the debt load that never builds equity."</p>
+                      </div>
+                    </div>
+                    <div className="bg-slate-900 rounded-[48px] p-8 text-center flex flex-col justify-center space-y-2">
+                       <p className="text-[10px] font-black uppercase text-amber-400 tracking-[0.5em]">The UK Multiple</p>
+                       <h3 className="text-8xl font-black text-white tracking-tighter">1.66x</h3>
+                       <p className="text-lg font-bold text-slate-400">Total Interest vs. Purchase Price</p>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="Australia" className="mt-8 space-y-8 animate-in fade-in">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-6">
+                      <h4 className="text-2xl font-black text-slate-900">Australia — $780,000 Home</h4>
+                      <ul className="space-y-4 text-lg text-slate-600 font-medium">
+                        <li className="flex justify-between border-b pb-2"><span>Financed Amount (80%)</span> <span className="font-black text-slate-900">$624,000</span></li>
+                        <li className="flex justify-between border-b pb-2"><span>Interest Paid (30 yrs @ 6.3%)</span> <span className="font-black text-red-600">$768,480</span></li>
+                        <li className="flex justify-between border-b pb-2 font-black text-xl text-slate-900"><span>Total Cost of Home</span> <span>$1,548,480</span></li>
+                      </ul>
+                      <div className="p-6 bg-emerald-50 rounded-3xl border border-emerald-100">
+                        <p className="text-sm font-bold text-emerald-900 italic">"Australia has one of the world's highest variable rate exposures. 13 rate rises in 18 months directly siphons your cash flow."</p>
+                      </div>
+                    </div>
+                    <div className="bg-slate-900 rounded-[48px] p-8 text-center flex flex-col justify-center space-y-2">
+                       <p className="text-[10px] font-black uppercase text-emerald-400 tracking-[0.5em]">The Aussie Multiple</p>
+                       <h3 className="text-8xl font-black text-white tracking-tighter">1.99x</h3>
+                       <p className="text-lg font-bold text-slate-400">Pay 2 Houses to Own 1</p>
+                    </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black">3</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Appreciation Defense (ELI14)</TranslatedText></h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                 <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
+                    <p><TranslatedText>Banks love to say: "Don't worry about the interest, your home will double in value!"</TranslatedText></p>
+                    <p><TranslatedText>But here is the trick: If your $420k home doubles to $840k, the $500k home you want to move into also doubled to $1 Million. You aren't richer in housing power; you've just inflated the environment.</TranslatedText></p>
+                    <p className="text-red-600 font-black italic"><TranslatedText>Real appreciation (after inflation) is usually only 1-2% per year. Your interest cost is 6-7%.</TranslatedText></p>
+                    <p><TranslatedText>Appreciation is a paper gain. Interest is a visceral, monthly cash loss of your life force.</TranslatedText></p>
+                 </div>
+                 <div className="bg-white border-2 border-slate-100 rounded-[48px] p-10 shadow-xl space-y-8">
+                    <div className="text-center space-y-2">
+                        <p className="text-[10px] font-black uppercase text-slate-400">Annual Return Comparison</p>
+                        <div className="flex justify-center gap-12">
+                            <div className="text-center">
+                                <p className="text-4xl font-black text-red-600">6.5%</p>
+                                <p className="text-[10px] font-bold uppercase text-slate-400">Interest Cost</p>
+                            </div>
+                            <div className="text-center">
+                                <p className="text-4xl font-black text-emerald-600">1.1%</p>
+                                <p className="text-[10px] font-bold uppercase text-slate-400">Real Growth</p>
+                            </div>
+                        </div>
+                    </div>
+                    <p className="text-sm text-slate-500 text-center font-medium leading-relaxed italic">"The gap between what you pay (Interest) and what you gain (Real Growth) is the fundamental measure of the scam."</p>
+                 </div>
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black">4</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Audit Your Amortization</TranslatedText></h2>
+              </div>
+              <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
+                <TranslatedText>{`Watch the split between Interest (Red) and Principal (Green) below. Most people sell their home before the 'Crossover Point' (Year 19), meaning they spend their entire life only paying the bank's profit.`}</TranslatedText>
+              </p>
+              <AmortViz />
+              <Quiz 
+                question="Why is property appreciation a false defense against mortgage interest?"
+                options={[
+                  "Because it only happens in large cities",
+                  "Because it inflates the price of every other home you'd want to buy, nullifying your gain",
+                  "Because interest rates always fall when home prices rise",
+                  "Because you have to pay a 50% tax on all appreciation"
+                ]}
+                correctAnswer={1}
+                explanation="Appreciation is largely a paper gain. Unless you sell and exit the market entirely, a more expensive home means your next home is also more expensive. Interest, however, is real cash that leaves your net worth forever."
+              />
+            </section>
+          </div>
+        )}
+
+        {/* LESSON 3: THE SECRET SCORECARD */}
+        {id === 3 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-100 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-200">
                 <Lock className="h-4 w-4" />
-                <TranslatedText>Mastery Level: 02 — Qualification & Power</TranslatedText>
+                <TranslatedText>Mastery Level: 03 — Qualification & Power</TranslatedText>
               </div>
               <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
                 <TranslatedText>The Secret Scorecard:</TranslatedText>
@@ -537,13 +720,13 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 3: THE STRATEGIC ARSENAL */}
-        {id === 3 && (
+        {/* LESSON 4: THE STRATEGIC ARSENAL */}
+        {id === 4 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-purple-100 text-purple-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-purple-200">
                 <Zap className="h-4 w-4" />
-                <TranslatedText>Mastery Level: 03 — Tool Acquisition</TranslatedText>
+                <TranslatedText>Mastery Level: 04 — Tool Acquisition</TranslatedText>
               </div>
               <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
                 <TranslatedText>The Strategic Arsenal:</TranslatedText>
@@ -667,13 +850,13 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 4: THE LEGAL LOOPHOLE */}
-        {id === 4 && (
+        {/* LESSON 5: THE LEGAL LOOPHOLE */}
+        {id === 5 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-amber-100 text-amber-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-amber-200">
                 <Gavel className="h-4 w-4" />
-                <TranslatedText>Mastery Level: 04 — Structural Decoding</TranslatedText>
+                <TranslatedText>Mastery Level: 05 — Structural Decoding</TranslatedText>
               </div>
               <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
                 <TranslatedText>The Legal Loophole:</TranslatedText>
@@ -771,13 +954,13 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 5: THE AUTOMATED HEIST */}
-        {id === 5 && (
+        {/* LESSON 6: THE AUTOMATED HEIST */}
+        {id === 6 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-50 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-100">
                 <RefreshCcw className="h-4 w-4" />
-                <TranslatedText>Mastery Level: 05 — Process Automation</TranslatedText>
+                <TranslatedText>Mastery Level: 06 — Process Automation</TranslatedText>
               </div>
               <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
                 <TranslatedText>The Automated Heist:</TranslatedText>
@@ -907,13 +1090,13 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 6: THE 1% MULTIPLIER */}
-        {id === 6 && (
+        {/* LESSON 7: THE 1% MULTIPLIER */}
+        {id === 7 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-50 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-100">
                 <Trophy className="h-4 w-4" />
-                <TranslatedText>Mastery Level: 06 — Portfolio Scaling</TranslatedText>
+                <TranslatedText>Mastery Level: 07 — Portfolio Scaling</TranslatedText>
               </div>
               <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
                 <TranslatedText>The 1% Multiplier:</TranslatedText>
@@ -1047,13 +1230,13 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 7: THE SPEEDRUN */}
-        {id === 7 && (
+        {/* LESSON 8: THE SPEEDRUN */}
+        {id === 8 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-red-100 text-red-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-red-200">
                 <Rocket className="h-4 w-4" />
-                <TranslatedText>Mastery Level: 07 — Max Velocity</TranslatedText>
+                <TranslatedText>Mastery Level: 08 — Max Velocity</TranslatedText>
               </div>
               <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
                 <TranslatedText>The Speedrun:</TranslatedText>
@@ -1171,8 +1354,8 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 8: THE EXPERT CLUB */}
-        {id === 8 && (
+        {/* LESSON 9: THE EXPERT CLUB */}
+        {id === 9 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-white/10 shadow-xl">
@@ -1320,12 +1503,12 @@ function LessonContent({ id }: { id: number }) {
             <TranslatedText>Previous Phase</TranslatedText>
           </button>
           
-          {(id < 8 && (!isLocked || isPrivileged)) && (
+          {(id < 9 && (!isLocked || isPrivileged)) && (
             <button 
                 onClick={nextLesson}
                 className="group flex items-center gap-4 bg-[#2563EB] text-white px-12 py-6 rounded-[24px] font-black shadow-2xl shadow-blue-500/30 hover:bg-blue-600 transition-all active:scale-95 text-2xl"
             >
-                <TranslatedText>{id === 3 ? "Unlock The Vault" : "Next Phase"}</TranslatedText>
+                <TranslatedText>{id === 4 ? "Unlock The Vault" : "Next Phase"}</TranslatedText>
                 <ChevronRight className="h-8 w-8 group-hover:translate-x-3 transition-transform" />
             </button>
           )}
