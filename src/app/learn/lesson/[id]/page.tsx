@@ -1,3 +1,4 @@
+
 'use client';
 import React, { use, useState, useEffect } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
@@ -916,10 +917,13 @@ function LessonContent({ id }: { id: number }) {
                     <TranslatedText>Imagine you're playing a long video game with 30 levels. Most players walk through every room, fighting every enemy (paying every cent of interest) for 30 years.</TranslatedText>
                   </p>
                   <p>
-                    <TranslatedText>A "Speedrun" is finding a hidden door that skips 10 levels at once. In the Mortgage Cutter Method, this door is the "Principal Chunk."</TranslatedText>
+                    <TranslatedText>A "Speedrun" is finding a "Hidden Glitch" in the bank's math called the "Principal Chunk." This is a hidden door that lets you skip level 5 to level 15 instantly. You aren't playing the game "better"—you are finding a shortcut the developers (banks) didn't want you to use.</TranslatedText>
                   </p>
                   <p className="text-blue-600 font-black italic">
-                    <TranslatedText>You're not working harder; you're taking a shortcut.</TranslatedText>
+                    <TranslatedText>This is not working harder; it's taking a mathematical shortcut.</TranslatedText>
+                  </p>
+                  <p>
+                    <TranslatedText>We use a specialized credit line to apply a large "Chunk" of money to the mortgage principal. This immediately stops the interest from growing on that money for the rest of the 30-year term. Then, we use your monthly income to pay back the credit line over 6 months and repeat.</TranslatedText>
                   </p>
                 </div>
                 <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
@@ -941,10 +945,10 @@ function LessonContent({ id }: { id: number }) {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
-                  { term: "Principal Chunk", desc: "A one-time large payment applied directly to the mortgage principal, usually borrowed from your strategic credit line.", icon: <Zap className="h-5 w-5 text-blue-500" /> },
-                  { term: "Offset Timing", desc: "The practice of keeping your cash in the loan account for as many days as possible before paying bills.", icon: <Timer className="h-5 w-5 text-emerald-500" /> },
-                  { term: "The Chunker Loop", desc: "The repeatable 6-month cycle of applying a chunk, recovering the line with income, and repeating.", icon: <RefreshCcw className="h-5 w-5 text-purple-500" /> },
-                  { term: "Interest Arbitrage", desc: "The gap between your mortgage interest and your line-of-credit interest that allows for mathematical profit.", icon: <Scale className="h-5 w-5 text-amber-500" /> },
+                  { term: "Principal Chunk", desc: "A one-time large payment (usually $10k - $20k) applied directly to the mortgage principal using borrowed revolving credit.", icon: <Zap className="h-5 w-5 text-blue-500" /> },
+                  { term: "Offset Timing (The Float)", desc: "The strategic practice of using a credit card for all daily spending to keep your income inside the loan for 25+ days longer.", icon: <Timer className="h-5 w-5 text-emerald-500" /> },
+                  { term: "The Chunker Loop", desc: "The repeatable 6-month cycle of: 1. Inject Chunk, 2. Apply Income to Line, 3. Neutralize Interest, 4. Repeat.", icon: <RefreshCcw className="h-5 w-5 text-purple-500" /> },
+                  { term: "Interest Arbitrage", desc: `The mathematical gap between your mortgage rate and your HELOC rate. In ${country.name}, we look for products where the velocity of paydown beats the interest cost.`, icon: <Scale className="h-5 w-5 text-amber-500" /> },
                 ].map((t, i) => (
                   <div key={i} className="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-3">
                     <div className="flex items-center gap-3">
@@ -962,15 +966,48 @@ function LessonContent({ id }: { id: number }) {
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Why This Matters: Collapsing the Amortization</TranslatedText></h2>
               </div>
+              
+              <CourseCard className="border-l-[12px] border-l-red-600 shadow-2xl p-12 md:p-16 bg-white overflow-hidden relative">
+                <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12">
+                  <Clock className="h-96 w-96" />
+                </div>
+                <div className="relative z-10 space-y-10">
+                  <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
+                    <p>
+                      <TranslatedText>{`Time is the most expensive commodity in ${country.name}. Every month you delay implementation of "The Loop" is a month of future labor you are handing to the bank for free.`}</TranslatedText>
+                    </p>
+                    <p>
+                      <TranslatedText>{`By using "Principal Chunks," you are effectively buying back your life. A single $15,000 chunk today can shave 18 months off a 30-year term. That isn't just money; it's 18 months of freedom you no longer have to work for.`}</TranslatedText>
+                    </p>
+                  </div>
+                </div>
+              </CourseCard>
+
               <EpiphanyBox>
-                <TranslatedText>{`Time is more expensive than money. A $10,000 chunk today can save you $30,000 in future labor. Every month you delay implementation is a "Level" you'll have to play twice.`}</TranslatedText>
+                <TranslatedText>{`Every $10,000 "Chunk" applied to the principal today cancels up to $30,000 in future interest over the life of the loan. You are essentially trading a temporary credit balance for permanent financial sovereignty.`}</TranslatedText>
               </EpiphanyBox>
             </section>
 
             <section className="space-y-16">
+              <div className="text-center space-y-4">
+                <h3 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Speedrun Blueprint</TranslatedText></h3>
+                <p className="text-lg text-slate-500 font-medium max-w-2xl mx-auto"><TranslatedText>Use the tools below to calculate your exact "Freedom Date" using current regional rates and your personal cash flow surplus.</TranslatedText></p>
+              </div>
               <OffsetVisual />
               <HyperdriveSim />
               <BiWeeklyCalc />
+              
+              <Quiz 
+                question="What is a 'Principal Chunk' in the context of the Mortgage Cutter method?"
+                options={[
+                  "A large savings deposit into a low-yield bank account",
+                  "A strategic prepayment to the mortgage using a revolving credit line",
+                  "A special gift the bank gives you for being a good customer",
+                  "A hidden fee mentioned in the fine print of your contract"
+                ]}
+                correctAnswer={1}
+                explanation={`A Principal Chunk is the "Hyperdrive" engine. By borrowing from a revolving line to pay down the mortgage principal, you collapse the amortization schedule and stop the future interest from ever growing on that capital.`}
+              />
             </section>
           </div>
         )}
