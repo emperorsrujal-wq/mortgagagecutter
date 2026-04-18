@@ -9,7 +9,8 @@ export const lessonMeta = [
   { id: 6, title: "The Strategic Arsenal", icon: "🚀", accent: "#DB2777" },
   { id: 7, title: "The Legal Loophole", icon: "📋", accent: "#7C3AED" },
   { id: 8, title: "The Automated Heist", icon: "🎯", accent: "#059669" },
-  { id: 9, title: "The 1% Multiplier", icon: "💎", accent: "#3B82F6" },
-  { id: 10, title: "The Detailed Math", icon: "🏁", accent: "#1E293B" },
-  { id: 11, title: "The Physics of Freedom", icon: "📜", accent: "#0F172A" },
+  { id: 9, title: "The Detailed Math", icon: "🏁", accent: "#1E293B" },
+  { id: 10, title: "HELOC Equity Secrets", icon: "💎", accent: "#3B82F6" },
+  { id: 11, title: "The 1% Multiplier", icon: "📈", accent: "#10B981" },
+  { id: 12, title: "The Physics of Freedom", icon: "📜", accent: "#0F172A" },
 ];

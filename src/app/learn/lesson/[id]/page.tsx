@@ -4,7 +4,6 @@ import React, { use, useState, useEffect } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
 import { lessonMeta } from '@/lib/course/lesson-meta';
 import { 
-  InterestCalc, 
   AmortViz, 
   QualificationCalc, 
   ScriptGenerator, 
@@ -20,11 +19,9 @@ import {
 } from '@/components/course/Calculators';
 import { 
   CourseCard, 
-  TaskItem, 
   Quiz,
   CaseStudy,
   StatBox,
-  InfoBox,
   ExpandSection
 } from '@/components/course/UIComponents';
 import { TranslatedText } from '@/components/course/TranslatedText';
@@ -38,7 +35,6 @@ import {
   Rocket, 
   Zap, 
   ShieldCheck,
-  CreditCard,
   Activity,
   TrendingUp,
   Flame,
@@ -46,7 +42,6 @@ import {
   Target,
   BarChart,
   Lock,
-  Star,
   Award,
   Trophy,
   History,
@@ -57,34 +52,31 @@ import {
   RefreshCcw,
   Layers,
   Globe,
-  Play,
-  ZapOff,
   BookOpen,
   DollarSign,
   Clock,
-  ArrowUpRight,
   Gavel,
   ScrollText,
-  ListChecks,
+  SearchCode,
   ArrowRight,
   Timer,
   AlertCircle,
   UserCircle2,
-  FileText,
-  AlertTriangle,
   Landmark,
-  Calculator,
   ShieldAlert,
-  Ghost
+  Ghost,
+  Camera,
+  Hammer,
+  Coins,
+  Warehouse
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { useUser } from '@/firebase';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 function ProgressBar({ current }: { current: number }) {
-  const total = 11;
+  const total = 12;
   return (
     <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-[#E8ECF2]">
       <div className="h-1 bg-slate-100 w-full">
@@ -128,7 +120,7 @@ function EpiphanyBox({ children }: { children: React.ReactNode }) {
 
 function LessonContent({ id }: { id: number }) {
   const { country, completeLesson } = useCourse();
-  const { user } = useUser();
+  const { user } = useAuth();
   const meta = lessonMeta.find(l => l.id === id);
   const router = useRouter();
 
@@ -139,7 +131,7 @@ function LessonContent({ id }: { id: number }) {
 
   const nextLesson = () => {
     completeLesson(id);
-    if (id < 11) router.push(`/learn/lesson/${id + 1}`);
+    if (id < 12) router.push(`/learn/lesson/${id + 1}`);
     else router.push('/members/chunker');
   };
 
@@ -702,22 +694,6 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* MYTH 2: 15-YEAR SPRINT */}
-            <section className="space-y-12">
-              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">2</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Myth: "Short Term is Always Smarter"</TranslatedText></h2>
-              </div>
-              <div className="space-y-8 text-xl text-slate-600 font-medium">
-                <p>
-                  <TranslatedText>{`A 15-year mortgage saves interest but destroys flexibility. It locks you into a high "Heavy Backpack" payment ($2,927 vs $2,023). If you have a job loss, the 15-year payment triggers default 45% faster than the 30-year.`}</TranslatedText>
-                </p>
-                <EpiphanyBox>
-                  <TranslatedText>{`The Mortgage Cutter strategy gives you the speed of a 15-year with the safety of a 30-year. You keep your commitment low, and apply velocity voluntarily.`}</TranslatedText>
-                </EpiphanyBox>
-              </div>
-            </section>
-
             {/* MYTH 3: RETIREMENT DATE GOAL */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
@@ -792,9 +768,6 @@ function LessonContent({ id }: { id: number }) {
                   </p>
                   <p>
                     <TranslatedText>To test you, they put a heavy backpack on you and ask you to run. The weight in the backpack represents your other debts (car loans, credit cards, taxes). If the backpack is too heavy for your body weight (income), your friend won't give you the bike because they're afraid you'll fall.</TranslatedText>
-                  </p>
-                  <p className="text-blue-600 font-black italic">
-                    <TranslatedText>In the bank's world, this is the "Stress Test."</TranslatedText>
                   </p>
                 </div>
                 <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
@@ -978,13 +951,218 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 9: THE 1% MULTIPLIER */}
+        {/* LESSON 9: THE DETAILED MATH */}
         {id === 9 && (
+          <div className="space-y-24 animate-in fade-in duration-1000">
+             <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-red-100 text-red-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-red-200 shadow-xl">
+                <Rocket className="h-4 w-4" />
+                <TranslatedText>Mastery Level: 08 — Strategy Verification</TranslatedText>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>The Detailed Math:</TranslatedText>
+                <span className="block text-red-600 italic mt-4"><TranslatedText>Proof on a $100K Benchmark.</TranslatedText></span>
+              </h1>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                <TranslatedText>{`A lower balance compounding for fewer years always defeats a lower rate compounding for more years. Today, we run the side-by-side audit.`}</TranslatedText>
+              </p>
+            </header>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-red-600 text-white flex items-center justify-center font-black">1</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Side-by-Side Audit</TranslatedText></h2>
+              </div>
+              
+              <div className="bg-slate-900 rounded-[48px] p-10 text-white space-y-10 shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-8 opacity-5"><BarChart className="h-64 w-64 text-blue-400" /></div>
+                <div className="text-center space-y-2 relative z-10">
+                  <h3 className="text-2xl font-black uppercase tracking-[0.2em] text-blue-400"><TranslatedText>Benchmark Comparison</TranslatedText></h3>
+                  <p className="text-slate-400 font-bold"><TranslatedText>Standard Mortgage vs. HELOC Strategy</TranslatedText></p>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                  <div className="p-8 rounded-3xl text-center space-y-2 bg-white/5 border border-white/10">
+                    <p className="text-[10px] font-black uppercase tracking-widest opacity-60"><TranslatedText>Total Interest (Mortgage)</TranslatedText></p>
+                    <p className="text-3xl font-black text-red-400">$127,520</p>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase"><TranslatedText>30 Years at 6.5%</TranslatedText></p>
+                  </div>
+                  <div className="p-8 rounded-3xl text-center space-y-2 bg-emerald-600 shadow-xl">
+                    <p className="text-[10px] font-black uppercase tracking-widest opacity-80"><TranslatedText>Total Interest (HELOC)</TranslatedText></p>
+                    <p className="text-3xl font-black text-white">$28,400</p>
+                    <p className="text-[10px] font-bold text-white/70 uppercase"><TranslatedText>8.3 Years at 7.0%</TranslatedText></p>
+                  </div>
+                  <div className="p-8 rounded-3xl text-center space-y-2 bg-blue-600 shadow-xl">
+                    <p className="text-[10px] font-black uppercase tracking-widest opacity-80"><TranslatedText>Net Cash Saved</TranslatedText></p>
+                    <p className="text-3xl font-black text-white">$99,120</p>
+                    <p className="text-[10px] font-bold text-white/70 uppercase"><TranslatedText>78% Cost Reduction</TranslatedText></p>
+                  </div>
+                </div>
+                <p className="text-center text-slate-400 text-sm italic font-medium">
+                  <TranslatedText>Even with a 0.5% higher rate, the HELOC saves $99k through velocity alone. Speed always beats rate over a long enough horizon.</TranslatedText>
+                </p>
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-red-600 text-white flex items-center justify-center font-black">2</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Four-Stage Cycle</TranslatedText></h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {[
+                  { step: "01. Payday Injection", desc: "100% of income hits the loan on Day 1. Interest recalculates on a lower number immediately." },
+                  { step: "02. The Spend Float", desc: "Draw living expenses throughout the month. Each day the cash sits, it chokes interest." },
+                  { step: "03. Surplus Capture", desc: "The 'Gap' between income and expenses remains as a permanent principal reduction." },
+                  { step: "04. Next Month Reset", desc: "Start the next cycle at a lower floor. Interest is lower. Velocity increases." }
+                ].map((s, i) => (
+                  <div key={i} className="p-8 bg-white border-2 border-slate-100 rounded-[40px] space-y-4">
+                    <p className="text-xs font-black text-blue-600 uppercase tracking-widest">{s.step}</p>
+                    <p className="text-lg font-bold text-slate-900 leading-tight">{s.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </div>
+        )}
+
+        {/* LESSON 10: HELOC EQUITY SECRETS */}
+        {id === 10 && (
+          <div className="space-y-24 animate-in fade-in duration-1000">
+             <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-100 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-200 shadow-xl">
+                <Warehouse className="h-4 w-4" />
+                <TranslatedText>Mastery Level: 09 — Equity Engineering</TranslatedText>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>Equity Secrets:</TranslatedText>
+                <span className="block text-blue-600 italic mt-4"><TranslatedText>Turning Walls into Engines.</TranslatedText></span>
+              </h1>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                <TranslatedText>{`Equity is not a number on a statement. It is a live, working asset that can be recycled into a property empire. Today, we unlock the cage.`}</TranslatedText>
+              </p>
+            </header>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Mechanism: The Three Ways to Grow</TranslatedText></h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="p-8 bg-emerald-50 border-t-8 border-t-emerald-500 rounded-b-[40px] space-y-4 shadow-lg">
+                  <div className="h-12 w-12 rounded-2xl bg-white flex items-center justify-center text-emerald-600 shadow-sm"><Rocket className="h-6 w-6"/></div>
+                  <h4 className="font-black text-sm uppercase text-emerald-900">Principal Paydown</h4>
+                  <p className="text-xs font-medium text-emerald-800/70 leading-relaxed">The only mechanism 100% in your control. The Chunker strategy builds this 4-8x faster than traditional amortization.</p>
+                </div>
+                <div className="p-8 bg-blue-50 border-t-8 border-t-blue-500 rounded-b-[40px] space-y-4 shadow-lg">
+                  <div className="h-12 w-12 rounded-2xl bg-white flex items-center justify-center text-blue-600 shadow-sm"><Globe className="h-6 w-6"/></div>
+                  <h4 className="font-black text-sm uppercase text-blue-900">Market Appreciation</h4>
+                  <p className="text-xs font-medium text-blue-800/70 leading-relaxed">Outside your control, but captured more effectively when you own more property surface area earlier in your life.</p>
+                </div>
+                <div className="p-8 bg-amber-50 border-t-8 border-t-amber-500 rounded-b-[40px] space-y-4 shadow-lg">
+                  <div className="h-12 w-12 rounded-2xl bg-white flex items-center justify-center text-amber-600 shadow-sm"><Hammer className="h-6 w-6"/></div>
+                  <h4 className="font-black text-sm uppercase text-amber-900">Forced appreciation</h4>
+                  <p className="text-xs font-medium text-amber-800/70 leading-relaxed">Strategic improvements (kitchens, baths) that return $1.20 - $2.00 in value for every $1.00 spent. Equity engineering.</p>
+                </div>
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: AVM vs. Full Appraisal</TranslatedText></h2>
+              </div>
+              <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
+                <TranslatedText>{`Banks use robots (AVMs) to value your home. Robots don't see renovations. A $500 professional appraisal can unlock $30k+ in "Invisible Equity" for your next acquisition.`}</TranslatedText>
+              </p>
+              <CourseCard className="bg-white border-2 border-slate-100 shadow-2xl p-10 rounded-[56px] space-y-8">
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div className="space-y-6">
+                       <h4 className="text-2xl font-black text-slate-900 flex items-center gap-2"><Camera className="h-6 w-6 text-blue-500" /> The Appraisal Delta</h4>
+                       <ul className="space-y-4">
+                          <li className="flex gap-4">
+                             <div className="h-6 w-6 rounded-full bg-red-100 flex items-center justify-center text-red-600 shrink-0 mt-1"><Lock className="h-3 w-3" /></div>
+                             <p className="text-sm font-bold text-slate-600">AVM (The Robot): Only sees comparable sales. Ignores your $40k kitchen update.</p>
+                          </li>
+                          <li className="flex gap-4">
+                             <div className="h-6 w-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0 mt-1"><CheckCircle className="h-3 w-3" /></div>
+                             <p className="text-sm font-bold text-slate-900">Appraisal (The Human): Captures the "Condition Premium." Assigns value to improvements.</p>
+                          </li>
+                       </ul>
+                    </div>
+                    <div className="bg-slate-900 rounded-[40px] p-8 text-white space-y-4 text-center">
+                       <p className="text-[10px] font-black uppercase text-blue-400 tracking-widest">Average Value Gain</p>
+                       <h3 className="text-6xl font-black tracking-tighter">+$30,600</h3>
+                       <p className="text-xs text-slate-400 font-bold uppercase">Additional HELOC room on $500k home</p>
+                    </div>
+                 </div>
+              </CourseCard>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Live-In Flip Cycle</TranslatedText></h2>
+              </div>
+              <div className="space-y-8">
+                {[
+                  { title: "Identify & Buy", desc: "Target below-market properties (10-20% under) that need cosmetic surgery." },
+                  { title: "Improve & Live", desc: "Live in the project. Fund renovations via HELOC. Activate Primary Residence Exemption." },
+                  { title: "Capture & Scale", desc: "Appraise at new value. Draw deposit for Property #2. Keep or Sell for tax-free gain." }
+                ].map((s, i) => (
+                  <div key={i} className="flex gap-8 group">
+                    <div className="flex flex-col items-center">
+                      <div className="h-16 w-16 rounded-full bg-slate-900 text-white flex items-center justify-center font-black text-xl shadow-xl group-hover:bg-blue-600 transition-all">{i+1}</div>
+                      {i < 2 && <div className="w-1 flex-1 bg-slate-100 my-2" />}
+                    </div>
+                    <div className="pb-12 space-y-2">
+                       <h4 className="text-2xl font-black text-slate-900 uppercase tracking-tight">{s.title}</h4>
+                       <p className="text-lg text-slate-500 font-medium leading-relaxed max-w-xl">{s.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <EpiphanyBox>
+                <TranslatedText>{`In all four markets, your primary residence is a tax-sheltered fortress. The Live-in Flip allows you to capture $200k+ in equity gains with zero tax liability—a return profile no other asset class can match.`}</TranslatedText>
+              </EpiphanyBox>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">4</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Global Access Audit</TranslatedText></h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                 {[
+                    { c: "USA", cap: "85-90% CLTV", speed: "Instant Draw", tax: "$500k Married Exemption" },
+                    { c: "Canada", cap: "65% Revolving", speed: "Instant Draw", tax: "100% Principal Exemption" },
+                    { c: "UK", cap: "75-80% LTV", speed: "2-8 Weeks", tax: "Private Residence Relief" },
+                    { c: "Australia", cap: "80-90% LVR", speed: "Instant Redraw", tax: "Main Residence Relief" },
+                 ].map((item, i) => (
+                   <div key={i} className="p-8 bg-white border-2 border-slate-100 rounded-[40px] space-y-4">
+                      <div className="flex justify-between items-center">
+                         <h4 className="text-xl font-black text-slate-900">{item.c}</h4>
+                         <span className="text-[10px] font-black uppercase text-blue-500 bg-blue-50 px-2 py-1 rounded">{item.cap}</span>
+                      </div>
+                      <div className="space-y-2">
+                         <p className="text-sm font-bold text-slate-500 flex items-center gap-2"><Zap className="h-3 w-3" /> Access Speed: {item.speed}</p>
+                         <p className="text-sm font-bold text-slate-500 flex items-center gap-2"><ShieldCheck className="h-3 w-3" /> Tax Shield: {item.tax}</p>
+                      </div>
+                   </div>
+                 ))}
+              </div>
+            </section>
+          </div>
+        )}
+
+        {/* LESSON 11: THE 1% MULTIPLIER */}
+        {id === 11 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-50 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-100">
                 <Trophy className="h-4 w-4" />
-                <TranslatedText>Mastery Level: 08 — Portfolio Scaling</TranslatedText>
+                <TranslatedText>Mastery Level: 10 — Portfolio Scaling</TranslatedText>
               </div>
               <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
                 <TranslatedText>The 1% Multiplier:</TranslatedText>
@@ -1034,155 +1212,8 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 10: THE DETAILED MATH (SPEEDRUN) */}
-        {id === 10 && (
-          <div className="space-y-24 animate-in fade-in duration-1000">
-            <header className="space-y-10 text-center">
-              <div className="inline-flex items-center gap-2 px-6 py-2 bg-red-100 text-red-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-red-200 shadow-xl">
-                <Rocket className="h-4 w-4" />
-                <TranslatedText>Mastery Level: 09 — The Strategy Engine</TranslatedText>
-              </div>
-              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
-                <TranslatedText>Mortgage vs HELOC:</TranslatedText>
-                <span className="block text-red-600 italic mt-4"><TranslatedText>The Math That Changes Your Life.</TranslatedText></span>
-              </h1>
-              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
-                <TranslatedText>{`We're moving beyond theory. Today, we run the precise, month-by-month mathematical proof of the strategy across four countries.`}</TranslatedText>
-              </p>
-            </header>
-
-            <section className="space-y-12">
-              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-red-600 text-white flex items-center justify-center font-black">1</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The $100,000 Benchmark Audit</TranslatedText></h2>
-              </div>
-              
-              <div className="bg-slate-900 rounded-[48px] p-10 text-white space-y-10 shadow-2xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-8 opacity-5"><BarChart className="h-64 w-64 text-blue-400" /></div>
-                <div className="text-center space-y-2 relative z-10">
-                  <h3 className="text-2xl font-black uppercase tracking-[0.2em] text-blue-400"><TranslatedText>Side-by-Side Comparison</TranslatedText></h3>
-                  <p className="text-slate-400 font-bold"><TranslatedText>Same Loan, Same Income, Different Outcome</TranslatedText></p>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
-                  <div className="p-8 rounded-3xl text-center space-y-2 bg-white/5 border border-white/10">
-                    <p className="text-[10px] font-black uppercase tracking-widest opacity-60"><TranslatedText>Mortgage Interest</TranslatedText></p>
-                    <p className="text-3xl font-black text-red-400">$127,520</p>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase"><TranslatedText>30 Years at 6.5%</TranslatedText></p>
-                  </div>
-                  <div className="p-8 rounded-3xl text-center space-y-2 bg-emerald-600 shadow-xl">
-                    <p className="text-[10px] font-black uppercase tracking-widest opacity-80"><TranslatedText>HELOC Interest</TranslatedText></p>
-                    <p className="text-3xl font-black text-white">$28,400</p>
-                    <p className="text-[10px] font-bold text-white/70 uppercase"><TranslatedText>8.3 Years at 7.0%</TranslatedText></p>
-                  </div>
-                  <div className="p-8 rounded-3xl text-center space-y-2 bg-blue-600 shadow-xl">
-                    <p className="text-[10px] font-black uppercase tracking-widest opacity-80"><TranslatedText>Total Net Saved</TranslatedText></p>
-                    <p className="text-3xl font-black text-white">$99,120</p>
-                    <p className="text-[10px] font-bold text-white/70 uppercase"><TranslatedText>78% Reduction in Cost</TranslatedText></p>
-                  </div>
-                </div>
-                <p className="text-center text-slate-400 text-sm italic font-medium">
-                  <TranslatedText>Even with a higher interest rate (7.0% vs 6.5%), the HELOC wins by $99k purely through the physics of velocity.</TranslatedText>
-                </p>
-              </div>
-            </section>
-
-            <section className="space-y-12">
-              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-red-600 text-white flex items-center justify-center font-black">2</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Monthly Cash Cycle (The Heist)</TranslatedText></h2>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                 <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
-                    <p><TranslatedText>This strategy does not require you to earn more money or sacrifice your lifestyle. It requires you to change WHERE your money sits while you aren't spending it.</TranslatedText></p>
-                    <div className="space-y-4">
-                        {[
-                          { step: "01. Payday Injection", desc: "100% of salary hits the HELOC. Balance drops instantly. Interest recalculates on a lower number." },
-                          { step: "02. The Float", desc: "Draw living expenses as needed. Use a credit card to keep cash working inside the loan for 25+ days." },
-                          { step: "03. Surplus Capture", desc: "At the end of the month, your 'Surplus' remains as a permanent principal reduction." },
-                          { step: "04. Compound Cycle", desc: "The next month starts at a lower floor. The interest drain is smaller. The velocity increases." }
-                        ].map((s, i) => (
-                          <div key={i} className="flex gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                            <div className="h-8 w-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-black shrink-0">{i+1}</div>
-                            <div>
-                              <p className="font-black text-sm uppercase text-slate-900">{s.step}</p>
-                              <p className="text-sm text-slate-500">{s.desc}</p>
-                            </div>
-                          </div>
-                        ))}
-                    </div>
-                 </div>
-                 <div className="space-y-8">
-                    <OffsetVisual />
-                 </div>
-              </div>
-            </section>
-
-            <section className="space-y-12">
-              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-red-600 text-white flex items-center justify-center font-black">3</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Real Case Study Outcomes</TranslatedText></h2>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="p-8 bg-white border-2 border-slate-100 rounded-[40px] space-y-6 shadow-xl relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:rotate-12 transition-transform"><UserCircle2 className="h-12 w-12" /></div>
-                    <h4 className="font-black text-xl text-slate-900">The Patels</h4>
-                    <div className="space-y-2">
-                        <p className="text-sm font-bold text-emerald-600 uppercase tracking-widest">$284,000 Saved</p>
-                        <p className="text-3xl font-black text-slate-900">17 Years <span className="text-sm opacity-40">Saved</span></p>
-                        <p className="text-xs text-slate-400 font-medium">Columbus, Ohio · 6.75% · $1.7k Surplus</p>
-                    </div>
-                </div>
-                <div className="p-8 bg-white border-2 border-slate-100 rounded-[40px] space-y-6 shadow-xl relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:rotate-12 transition-transform"><Globe className="h-12 w-12" /></div>
-                    <h4 className="font-black text-xl text-slate-900">The Tremblays</h4>
-                    <div className="space-y-2">
-                        <p className="text-sm font-bold text-emerald-600 uppercase tracking-widest">$284,000 CAD Saved</p>
-                        <p className="text-3xl font-black text-slate-900">12 Years <span className="text-sm opacity-40">Saved</span></p>
-                        <p className="text-xs text-slate-400 font-medium">Montreal, QC · 5.89% · Readvanceable</p>
-                    </div>
-                </div>
-                <div className="p-8 bg-white border-2 border-slate-100 rounded-[40px] space-y-6 shadow-xl relative overflow-hidden group border-emerald-500/20">
-                    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:rotate-12 transition-transform"><Award className="h-12 w-12" /></div>
-                    <h4 className="font-black text-xl text-slate-900">The Garcias</h4>
-                    <div className="space-y-2">
-                        <p className="text-sm font-bold text-emerald-600 uppercase tracking-widest">$658,000 Saved</p>
-                        <p className="text-3xl font-black text-slate-900">16 Years <span className="text-sm opacity-40">Saved</span></p>
-                        <p className="text-xs text-slate-400 font-medium">Los Angeles, CA · 7.25% · $3.5k Surplus</p>
-                    </div>
-                </div>
-              </div>
-              <EpiphanyBox>
-                <TranslatedText>{`The strategy does not promise perfection. It promises mathematics. A falling balance, recalculating nightly, produces results that no fixed amortization schedule can match.`}</TranslatedText>
-              </EpiphanyBox>
-            </section>
-
-            <section className="space-y-12">
-              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-red-600 text-white flex items-center justify-center font-black">4</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Global Standard Validation</TranslatedText></h2>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                <div className="space-y-6">
-                    <h4 className="text-2xl font-black text-slate-900">UK & Australia: Offset Reality</h4>
-                    <p className="text-lg text-slate-600 leading-relaxed font-medium">
-                        <TranslatedText>{`This strategy is mainstream in other markets. 1 in 4 Australians use linked Offset Accounts to achieve the exact results we've shown. We are simply bringing the global high-performance standard to your local bank cage.`}</TranslatedText>
-                    </p>
-                </div>
-                <div className="bg-slate-900 p-10 rounded-[48px] text-white space-y-4 shadow-2xl text-center">
-                    <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Australia Multiple</p>
-                    <h3 className="text-7xl font-black tracking-tighter">1 in 4</h3>
-                    <p className="text-lg font-bold text-slate-400 uppercase tracking-widest">Mortgages Use Offsets</p>
-                </div>
-              </div>
-              <HyperdriveSim />
-              <BiWeeklyCalc />
-            </section>
-          </div>
-        )}
-
-        {/* LESSON 11: THE PHYSICS OF FREEDOM */}
-        {id === 11 && (
+        {/* LESSON 12: THE PHYSICS OF FREEDOM */}
+        {id === 12 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-white/10 shadow-xl">
@@ -1243,7 +1274,7 @@ function LessonContent({ id }: { id: number }) {
             <TranslatedText>Previous Phase</TranslatedText>
           </button>
           
-          {(id < 11 && (!isLocked || isPrivileged)) && (
+          {(id < 12 && (!isLocked || isPrivileged)) && (
             <button 
                 onClick={nextLesson}
                 className="group flex items-center gap-4 bg-[#2563EB] text-white px-12 py-6 rounded-[24px] font-black shadow-2xl shadow-blue-500/30 hover:bg-blue-600 transition-all active:scale-95 text-2xl"
