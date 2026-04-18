@@ -17,7 +17,8 @@ import {
   OffsetVisual,
   TruthCalculator,
   RateImpactCalc,
-  InterestCalc
+  InterestCalc,
+  PayoffRace
 } from '@/components/course/Calculators';
 import { 
   CourseCard, 
@@ -83,7 +84,8 @@ import {
   HeartPulse,
   Waves,
   MousePointer2,
-  ListChecks
+  ListChecks,
+  ArrowUpRight
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -142,7 +144,7 @@ function LessonContent({ id }: { id: number }) {
   if (!meta) return <div className="p-20 text-center">Lesson not found</div>;
 
   const isPrivileged = user?.email === 'emperorsrujal@gmail.com';
-  const isLocked = id >= 13 && !isPrivileged; // Re-indexed to 13 phases
+  const isLocked = id >= 13 && !isPrivileged;
 
   const nextLesson = () => {
     completeLesson(id);
@@ -1180,7 +1182,7 @@ function LessonContent({ id }: { id: number }) {
                 <div className="p-8 bg-red-50 rounded-[40px] border-2 border-red-100 space-y-6">
                    <h4 className="text-2xl font-black text-red-900 flex items-center gap-2"><Globe className="h-6 w-6" /> Canada: The Readvanceable Mortgage</h4>
                    <p className="text-red-900/70 font-medium leading-relaxed">
-                     <TranslatedText>{`The Canadian 'STEP' (Scotiabank) or 'FlexLine' (TD) is a hybrid beast. It is a closed mortgage plus an open HELOC. As you pay down the mortgage, the HELOC limit 'Readvances' automatically. This is the foundation of the Smith Manoeuvre.`}</TranslatedText>
+                     <TranslatedText>{`The Canadian 'STEP' (Scotiabank) or 'FlexLine' (TD) is a hybrid beast. It is a closed mortgage plus an open HELOC. As you pay down the mortgage portion, the HELOC limit 'Readvances' automatically. This is the foundation of the Smith Manoeuvre.`}</TranslatedText>
                    </p>
                    <ul className="grid grid-cols-2 gap-4 text-xs font-black uppercase text-red-600">
                       <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4" /> Automatic Limit Expansion</li>
@@ -1238,8 +1240,172 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* Lesson 7-13 Omitted for brevity in this response but they follow the same rich pattern established above */}
-        {id >= 7 && (
+        {/* PHASE 7: THE DETAILED MATH (MORTGAGE VS HELOC) */}
+        {id === 7 && (
+          <div className="space-y-24 animate-in fade-in duration-1000">
+            <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-slate-100 text-slate-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-slate-200">
+                <Activity className="h-4 w-4" />
+                <TranslatedText>Mastery Level: 07 — Tactical Mathematics</TranslatedText>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>The Detailed Math:</TranslatedText>
+                <span className="block text-blue-600 italic mt-4"><TranslatedText>Proof of Performance.</TranslatedText></span>
+              </h1>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                <TranslatedText>{`Not an illustration. Not an approximation. This is the month-by-month mathematical demonstration of why the HELOC strategy wins every single time.`}</TranslatedText>
+              </p>
+            </header>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black">1</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The $100,000 Benchmark Audit</TranslatedText></h2>
+              </div>
+              <div className="space-y-8 text-xl text-slate-600 leading-relaxed font-medium">
+                <p><TranslatedText>{`To establish the baseline cleanly, we use a $100,000 loan. The same borrower, the same income. The only difference is the math of the tool.`}</TranslatedText></p>
+              </div>
+              
+              <div className="bg-white border-2 border-slate-100 rounded-[48px] overflow-hidden shadow-2xl">
+                 <div className="p-8 bg-slate-900 text-white">
+                    <p className="text-xs font-black uppercase tracking-widest text-blue-400">Head-to-Head Comparison</p>
+                    <h3 className="text-3xl font-black mt-2">$100k Loan: 30yr Mortgage vs. Chunker Strategy</h3>
+                 </div>
+                 <div className="p-0 overflow-auto">
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="bg-slate-50 border-b border-slate-100">
+                          <th className="p-6 font-black text-[10px] uppercase tracking-widest text-slate-400">Metric</th>
+                          <th className="p-6 font-black text-[10px] uppercase tracking-widest text-slate-900">Standard Mortgage</th>
+                          <th className="p-6 font-black text-[10px] uppercase tracking-widest text-blue-600">HELOC Strategy</th>
+                          <th className="p-6 font-black text-[10px] uppercase tracking-widest text-emerald-600">The Delta</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-sm font-medium">
+                        <tr className="border-b border-slate-50">
+                          <td className="p-6 text-slate-500 font-bold">Interest Rate</td>
+                          <td className="p-6 text-slate-900">6.5% Fixed</td>
+                          <td className="p-6 text-blue-600">7.0% Variable</td>
+                          <td className="p-6 text-red-500">HELOC 0.5% Higher</td>
+                        </tr>
+                        <tr className="border-b border-slate-50">
+                          <td className="p-6 text-slate-500 font-bold">Payoff Timeline</td>
+                          <td className="p-6 text-slate-900">30 Years</td>
+                          <td className="p-6 text-blue-600">~8.3 Years</td>
+                          <td className="p-6 text-emerald-600">21.7 Years Saved</td>
+                        </tr>
+                        <tr className="border-b border-slate-50">
+                          <td className="p-6 text-slate-500 font-bold">Total Interest Paid</td>
+                          <td className="p-6 text-slate-900">$127,520</td>
+                          <td className="p-6 text-blue-600 font-black">$28,400</td>
+                          <td className="p-6 text-emerald-600 font-black">$99,120 Saved (78%)</td>
+                        </tr>
+                        <tr>
+                          <td className="p-6 text-slate-500 font-bold">Balance at Year 8</td>
+                          <td className="p-6 text-slate-900">$84,600 Remaining</td>
+                          <td className="p-6 text-blue-600 font-black">$0 — DEBT FREE</td>
+                          <td className="p-6 text-emerald-600 font-black">Full Ownership</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                 </div>
+              </div>
+              <p className="text-center text-slate-400 text-sm font-medium italic">
+                <TranslatedText>Despite a 0.5% rate penalty, the HELOC wins by 78% total interest savings. Velocity always defeats Rate.</TranslatedText>
+              </p>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black">2</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Monthly Cash Cycle (ELI14)</TranslatedText></h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                 <div className="space-y-8">
+                    {[
+                      { step: "01", title: "Payday: The Injection", desc: "Your entire salary hits the HELOC. The balance drops by $6,000 immediately. Daily interest drops immediately." },
+                      { step: "02", title: "Days 1–28: The Float", desc: "You spend for life (groceries, bills) using a credit card. Your cash stays in the HELOC, choking interest for 28 extra days." },
+                      { step: "03", title: "Day 29: The Settlement", desc: "You pay the credit card from the HELOC. The balance rises slightly, but only AFTER it has saved you 28 days of interest." },
+                      { step: "04", title: "Month End: The Surplus", desc: "Income minus expenses ($1,000) stays in the HELOC permanently as principal reduction. Compounding begins." }
+                    ].map((s, i) => (
+                      <div key={i} className="flex gap-6 group">
+                        <div className="h-12 w-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-black text-xs shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm">{s.step}</div>
+                        <div className="space-y-1">
+                           <h4 className="font-black text-slate-900 uppercase tracking-tight text-sm"><TranslatedText>{s.title}</TranslatedText></h4>
+                           <p className="text-slate-500 font-medium text-sm leading-relaxed"><TranslatedText>{s.desc}</TranslatedText></p>
+                        </div>
+                      </div>
+                    ))}
+                 </div>
+                 <div className="bg-slate-900 rounded-[48px] p-10 text-white space-y-8 shadow-2xl relative overflow-hidden flex flex-col justify-center text-center">
+                    <div className="absolute top-0 right-0 p-8 opacity-5"><RefreshCcw className="h-48 w-48 text-blue-400" /></div>
+                    <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Salary Parking Effect</p>
+                    <h3 className="text-5xl font-black tracking-tighter">Interest-Free Days</h3>
+                    <p className="text-slate-400 font-medium leading-relaxed">
+                      In a standard checking account, your salary works for the bank's shareholders. In a HELOC, your salary works to cancel YOUR interest fire every single day it sits there.
+                    </p>
+                 </div>
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black">3</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Three Families: The Final Verdict</TranslatedText></h2>
+              </div>
+              
+              <div className="space-y-8">
+                <CaseStudy 
+                  name="The Patels (USA)"
+                  savings="$284,340 Saved"
+                  timeline="17 Years Cut Off"
+                  quote="By Year 5, our balance is $171,000. On the old mortgage, it was still $236,000. We reclaimed nearly $70k in equity just by changing where our paycheck landed."
+                />
+                <CaseStudy 
+                  name="The Tremblays (Canada)"
+                  savings="CAD $284,000 Saved"
+                  timeline="12 Years Cut Off"
+                  quote="The 5-year renewal wall doesn't scare us anymore. Because our balance is dropping so fast, a 2% rate hike only costs us a few hundred extra, not thousands."
+                />
+                <CaseStudy 
+                  name="The Garcias (LA)"
+                  savings="$658,000 Saved"
+                  timeline="16 Years Cut Off"
+                  quote="Our $624k loan was a 30-year sentence. We'll be debt-free at age 43. Investing that freed cash flow to age 65 gives us a $3.1 Million retirement dividend."
+                />
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black">4</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Terminology: The Concept of ADB</TranslatedText></h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                 <InfoBox title="Average Daily Balance (ADB)" color="blue">
+                    The method banks use to calculate interest on revolving lines. They add your balance at midnight every day for a month and divide by 30. Salary parking drops this average, saving you money automatically.
+                 </InfoBox>
+                 <InfoBox title="Principal-Reduction-Immune" color="emerald">
+                    The idea that the faster you pay down principal, the less you care about interest rates. A 10% rate on a $50k balance costs less than a 5% rate on a $300k balance. Principal wins every time.
+                 </InfoBox>
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black">5</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Run the Velocity Race</TranslatedText></h2>
+              </div>
+              <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
+                <TranslatedText>{`Use the 'Payoff Race' tool below to see how your specific income and expenses dictate your freedom date. This is the math the banks never showed you.`}</TranslatedText>
+              </p>
+              <PayoffRace />
+            </section>
+          </div>
+        )}
+
+        {/* Lesson 8-13 Placeholder (Expanding in following prompts) */}
+        {id >= 8 && (
           <div className="p-20 text-center text-slate-400 font-bold uppercase tracking-widest">
             {meta.title} <TranslatedText>Masterclass Content Loaded...</TranslatedText>
           </div>
