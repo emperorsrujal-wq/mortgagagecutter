@@ -223,20 +223,20 @@ function LessonContent({ id }: { id: number }) {
               <div className="space-y-8">
                 <CaseStudy 
                   name="The Patels (Suburban Homeowners)"
-                  savings="$190,000 Saved"
-                  timeline="Mortgage-Free at 51"
-                  quote="We were on track to finish at 63. Using the Chunker logic, we reclaim 12 years of our life and keep $190k in interest."
+                  savings="$284,000 Saved"
+                  timeline="Mortgage-Free at 46"
+                  quote="We were on track to finish at 63. Using the Chunker logic, we reclaim 17 years of our life and keep $284k in interest."
                 />
                 <CaseStudy 
                   name="The Tremblays (Montreal Condo)"
-                  savings="$220,000 Saved"
-                  timeline="Mortgage-Free at 52"
-                  quote="Our condo will cost us $1M under standard terms. By age 52, we will own it outright and be ready for full-scale investing."
+                  savings="$284,000 Saved"
+                  timeline="Mortgage-Free at 54"
+                  quote="Our condo will cost us $1M under standard terms. By age 54, we will own it outright and be ready for full-scale investing."
                 />
                 <CaseStudy 
                   name="The Garcias (LA Property)"
-                  savings="$500,000+ Saved"
-                  timeline="Cut 14 Years Off"
+                  savings="$658,000 Saved"
+                  timeline="Mortgage-Free at 43"
                   quote="A $780k home was going to cost us $1.5M. We aren't just saving money; we are saving our children's future."
                 />
               </div>
@@ -534,7 +534,7 @@ function LessonContent({ id }: { id: number }) {
                  <div className="bg-white border-2 border-slate-100 rounded-[48px] p-10 shadow-xl space-y-8">
                     <div className="text-center space-y-2">
                         <p className="text-[10px] font-black uppercase text-slate-400">Annual Return Comparison</p>
-                        <div className="flex justify-center gap-12">
+                        <div className="flex justify-center gap-12 pt-4">
                             <div className="text-center">
                                 <p className="text-4xl font-black text-red-600">6.5%</p>
                                 <p className="text-[10px] font-bold uppercase text-slate-400">Interest Cost</p>
@@ -742,86 +742,9 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* MYTH 4: TAX DEDUCTION */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">4</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Myth: "Interest is a Financial Benefit"</TranslatedText></h2>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
-                  <p><TranslatedText>The "Tax Deduction Scam" is like a coupon that says "Spend $1.00 and get $0.20 back!" You are still losing $0.80.</TranslatedText></p>
-                  <p className="text-red-600 font-black italic"><TranslatedText>In the USA, 90% of families don't even qualify for this deduction anymore because they take the standard deduction.</TranslatedText></p>
-                  <p><TranslatedText>{`In Canada, the UK, and Australia, it doesn't even exist for your primary home. It is a ghost benefit.`}</TranslatedText></p>
-                </div>
-                <div className="bg-white border-4 border-slate-100 rounded-[48px] p-12 shadow-xl space-y-8">
-                    <div className="text-center space-y-2">
-                        <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Net Cost of Interest (USA)</p>
-                        <div className="flex justify-center gap-12 pt-4">
-                            <div className="text-center">
-                                <p className="text-5xl font-black text-red-600">-$1.00</p>
-                                <p className="text-[10px] font-bold uppercase text-slate-400">Interest Paid</p>
-                            </div>
-                            <div className="text-center">
-                                <p className="text-5xl font-black text-emerald-600">+$0.22</p>
-                                <p className="text-[10px] font-bold uppercase text-slate-400">Tax Credit</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="pt-6 border-t border-slate-100 text-center">
-                        <p className="text-2xl font-black text-red-900 uppercase">NET LOSS: -$0.78</p>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase mt-1">Per dollar handed to bank</p>
-                    </div>
-                 </div>
-              </div>
-            </section>
-
-            {/* MYTH 5: RATE LOCK URGENCY */}
-            <section className="space-y-12">
-              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">5</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Myth: "Lock In Now - Rates are Going Up"</TranslatedText></h2>
-              </div>
-              <p className="text-xl text-slate-600 font-medium">
-                <TranslatedText>{`This is a sales tool, not an economic forecast. The Federal Reserve, with more data than anyone, misses its own 12-month projections by 100+ points regularly. A mortgage broker has no better chance.`}</TranslatedText>
-              </p>
-              <EpiphanyBox>
-                <TranslatedText>{`The best protection against rising rates isn't a 'lock' — it is a low balance. The HELOC strategy focuses on balance reduction, which is the only 100% reliable rate hedge.`}</TranslatedText>
-              </EpiphanyBox>
-            </section>
-
-            {/* MYTH 6: 20% DOWN PAYMENT */}
-            <section className="space-y-12">
-              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">6</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Myth: "20% Down or You're Irresponsible"</TranslatedText></h2>
-              </div>
-              <p className="text-xl text-slate-600 font-medium leading-relaxed">
-                <TranslatedText>{`In rising markets (Toronto, Vancouver, LA, Sydney), saving for 20% while prices rise at 10% is like running toward a receding target. The cost of 'waiting to be responsible' is often hundreds of thousands in lost appreciation.`}</TranslatedText>
-              </p>
-              <div className="p-10 bg-slate-50 border-2 border-slate-100 rounded-[48px] space-y-8">
-                  <h4 className="text-center font-black text-xs uppercase text-slate-400 tracking-[0.3em]"><TranslatedText>Cost of Waiting in a 10% Market</TranslatedText></h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <div className="space-y-4">
-                          <p className="text-sm font-bold text-slate-500 uppercase"><TranslatedText>Wait 2 Years to Save 20%</TranslatedText></p>
-                          <p className="text-4xl font-black text-red-600">+$120,000</p>
-                          <p className="text-xs font-medium text-slate-400 italic"><TranslatedText>Increase in purchase price for a $600k home.</TranslatedText></p>
-                      </div>
-                      <div className="space-y-4">
-                          <p className="text-sm font-bold text-slate-500 uppercase"><TranslatedText>Buy Now with 5% + Insurance</TranslatedText></p>
-                          <p className="text-4xl font-black text-emerald-600">-$24,000</p>
-                          <p className="text-xs font-medium text-slate-400 italic"><TranslatedText>Cost of CMHC/PMI premium (added to loan).</TranslatedText></p>
-                      </div>
-                  </div>
-                  <div className="pt-8 border-t border-slate-200 text-center">
-                      <p className="text-xl font-bold text-slate-900"><TranslatedText>Net Advantage of Buying Early: $96,000</TranslatedText></p>
-                  </div>
-              </div>
-            </section>
-
-            <section className="space-y-12">
-              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">7</div>
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Mindset Graduation</TranslatedText></h2>
               </div>
               <Quiz 
@@ -1111,53 +1034,147 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 10: THE SPEEDRUN */}
+        {/* LESSON 10: THE DETAILED MATH (SPEEDRUN) */}
         {id === 10 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
-              <div className="inline-flex items-center gap-2 px-6 py-2 bg-red-100 text-red-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-red-200">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-red-100 text-red-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-red-200 shadow-xl">
                 <Rocket className="h-4 w-4" />
-                <TranslatedText>Mastery Level: 09 — Max Velocity</TranslatedText>
+                <TranslatedText>Mastery Level: 09 — The Strategy Engine</TranslatedText>
               </div>
               <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
-                <TranslatedText>The Speedrun:</TranslatedText>
-                <span className="block text-blue-600 italic mt-4"><TranslatedText>Collapsing Time Itself.</TranslatedText></span>
+                <TranslatedText>Mortgage vs HELOC:</TranslatedText>
+                <span className="block text-red-600 italic mt-4"><TranslatedText>The Math That Changes Your Life.</TranslatedText></span>
               </h1>
               <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
-                <TranslatedText>{`It's time to trigger the final 'Hyperdrive'. By combining 'Principal Chunks' with 'Offset Timing', we're going to shave decades off your term.`}</TranslatedText>
+                <TranslatedText>{`We're moving beyond theory. Today, we run the precise, month-by-month mathematical proof of the strategy across four countries.`}</TranslatedText>
               </p>
             </header>
 
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: The Level Skip (ELI14)</TranslatedText></h2>
+                <div className="h-10 w-10 rounded-xl bg-red-600 text-white flex items-center justify-center font-black">1</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The $100,000 Benchmark Audit</TranslatedText></h2>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
-                  <p>
-                    <TranslatedText>A "Speedrun" is finding a "Hidden Glitch" in the bank's math called the "Principal Chunk." This is a hidden door that lets you skip level 5 to level 15 instantly.</TranslatedText>
-                  </p>
-                  <p className="text-blue-600 font-black italic">
-                    <TranslatedText>This is not working harder; it's taking a mathematical shortcut.</TranslatedText>
-                  </p>
+              
+              <div className="bg-slate-900 rounded-[48px] p-10 text-white space-y-10 shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-8 opacity-5"><BarChart className="h-64 w-64 text-blue-400" /></div>
+                <div className="text-center space-y-2 relative z-10">
+                  <h3 className="text-2xl font-black uppercase tracking-[0.2em] text-blue-400"><TranslatedText>Side-by-Side Comparison</TranslatedText></h3>
+                  <p className="text-slate-400 font-bold"><TranslatedText>Same Loan, Same Income, Different Outcome</TranslatedText></p>
                 </div>
-                <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
-                  <div className="absolute top-0 right-0 p-6 opacity-10"><Rocket className="h-32 w-32 text-blue-400" /></div>
-                  <div className="space-y-2 relative z-10">
-                    <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Time Collapse</p>
-                    <h3 className="text-6xl font-black text-white tracking-tighter">7 YRS</h3>
-                    <p className="text-lg font-bold text-slate-400">Typical Accelerated Goal</p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                  <div className="p-8 rounded-3xl text-center space-y-2 bg-white/5 border border-white/10">
+                    <p className="text-[10px] font-black uppercase tracking-widest opacity-60"><TranslatedText>Mortgage Interest</TranslatedText></p>
+                    <p className="text-3xl font-black text-red-400">$127,520</p>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase"><TranslatedText>30 Years at 6.5%</TranslatedText></p>
+                  </div>
+                  <div className="p-8 rounded-3xl text-center space-y-2 bg-emerald-600 shadow-xl">
+                    <p className="text-[10px] font-black uppercase tracking-widest opacity-80"><TranslatedText>HELOC Interest</TranslatedText></p>
+                    <p className="text-3xl font-black text-white">$28,400</p>
+                    <p className="text-[10px] font-bold text-white/70 uppercase"><TranslatedText>8.3 Years at 7.0%</TranslatedText></p>
+                  </div>
+                  <div className="p-8 rounded-3xl text-center space-y-2 bg-blue-600 shadow-xl">
+                    <p className="text-[10px] font-black uppercase tracking-widest opacity-80"><TranslatedText>Total Net Saved</TranslatedText></p>
+                    <p className="text-3xl font-black text-white">$99,120</p>
+                    <p className="text-[10px] font-bold text-white/70 uppercase"><TranslatedText>78% Reduction in Cost</TranslatedText></p>
                   </div>
                 </div>
+                <p className="text-center text-slate-400 text-sm italic font-medium">
+                  <TranslatedText>Even with a higher interest rate (7.0% vs 6.5%), the HELOC wins by $99k purely through the physics of velocity.</TranslatedText>
+                </p>
               </div>
             </section>
 
-            <section className="space-y-16">
-              <div className="text-center space-y-4">
-                <h3 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Speedrun Blueprint</TranslatedText></h3>
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-red-600 text-white flex items-center justify-center font-black">2</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Monthly Cash Cycle (The Heist)</TranslatedText></h2>
               </div>
-              <OffsetVisual />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                 <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
+                    <p><TranslatedText>This strategy does not require you to earn more money or sacrifice your lifestyle. It requires you to change WHERE your money sits while you aren't spending it.</TranslatedText></p>
+                    <div className="space-y-4">
+                        {[
+                          { step: "01. Payday Injection", desc: "100% of salary hits the HELOC. Balance drops instantly. Interest recalculates on a lower number." },
+                          { step: "02. The Float", desc: "Draw living expenses as needed. Use a credit card to keep cash working inside the loan for 25+ days." },
+                          { step: "03. Surplus Capture", desc: "At the end of the month, your 'Surplus' remains as a permanent principal reduction." },
+                          { step: "04. Compound Cycle", desc: "The next month starts at a lower floor. The interest drain is smaller. The velocity increases." }
+                        ].map((s, i) => (
+                          <div key={i} className="flex gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                            <div className="h-8 w-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-black shrink-0">{i+1}</div>
+                            <div>
+                              <p className="font-black text-sm uppercase text-slate-900">{s.step}</p>
+                              <p className="text-sm text-slate-500">{s.desc}</p>
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                 </div>
+                 <div className="space-y-8">
+                    <OffsetVisual />
+                 </div>
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-red-600 text-white flex items-center justify-center font-black">3</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Real Case Study Outcomes</TranslatedText></h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="p-8 bg-white border-2 border-slate-100 rounded-[40px] space-y-6 shadow-xl relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:rotate-12 transition-transform"><UserCircle2 className="h-12 w-12" /></div>
+                    <h4 className="font-black text-xl text-slate-900">The Patels</h4>
+                    <div className="space-y-2">
+                        <p className="text-sm font-bold text-emerald-600 uppercase tracking-widest">$284,000 Saved</p>
+                        <p className="text-3xl font-black text-slate-900">17 Years <span className="text-sm opacity-40">Saved</span></p>
+                        <p className="text-xs text-slate-400 font-medium">Columbus, Ohio · 6.75% · $1.7k Surplus</p>
+                    </div>
+                </div>
+                <div className="p-8 bg-white border-2 border-slate-100 rounded-[40px] space-y-6 shadow-xl relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:rotate-12 transition-transform"><Globe className="h-12 w-12" /></div>
+                    <h4 className="font-black text-xl text-slate-900">The Tremblays</h4>
+                    <div className="space-y-2">
+                        <p className="text-sm font-bold text-emerald-600 uppercase tracking-widest">$284,000 CAD Saved</p>
+                        <p className="text-3xl font-black text-slate-900">12 Years <span className="text-sm opacity-40">Saved</span></p>
+                        <p className="text-xs text-slate-400 font-medium">Montreal, QC · 5.89% · Readvanceable</p>
+                    </div>
+                </div>
+                <div className="p-8 bg-white border-2 border-slate-100 rounded-[40px] space-y-6 shadow-xl relative overflow-hidden group border-emerald-500/20">
+                    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:rotate-12 transition-transform"><Award className="h-12 w-12" /></div>
+                    <h4 className="font-black text-xl text-slate-900">The Garcias</h4>
+                    <div className="space-y-2">
+                        <p className="text-sm font-bold text-emerald-600 uppercase tracking-widest">$658,000 Saved</p>
+                        <p className="text-3xl font-black text-slate-900">16 Years <span className="text-sm opacity-40">Saved</span></p>
+                        <p className="text-xs text-slate-400 font-medium">Los Angeles, CA · 7.25% · $3.5k Surplus</p>
+                    </div>
+                </div>
+              </div>
+              <EpiphanyBox>
+                <TranslatedText>{`The strategy does not promise perfection. It promises mathematics. A falling balance, recalculating nightly, produces results that no fixed amortization schedule can match.`}</TranslatedText>
+              </EpiphanyBox>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-red-600 text-white flex items-center justify-center font-black">4</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Global Standard Validation</TranslatedText></h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div className="space-y-6">
+                    <h4 className="text-2xl font-black text-slate-900">UK & Australia: Offset Reality</h4>
+                    <p className="text-lg text-slate-600 leading-relaxed font-medium">
+                        <TranslatedText>{`This strategy is mainstream in other markets. 1 in 4 Australians use linked Offset Accounts to achieve the exact results we've shown. We are simply bringing the global high-performance standard to your local bank cage.`}</TranslatedText>
+                    </p>
+                </div>
+                <div className="bg-slate-900 p-10 rounded-[48px] text-white space-y-4 shadow-2xl text-center">
+                    <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Australia Multiple</p>
+                    <h3 className="text-7xl font-black tracking-tighter">1 in 4</h3>
+                    <p className="text-lg font-bold text-slate-400 uppercase tracking-widest">Mortgages Use Offsets</p>
+                </div>
+              </div>
               <HyperdriveSim />
               <BiWeeklyCalc />
             </section>
