@@ -135,7 +135,6 @@ function LessonContent({ id }: { id: number }) {
   if (!meta) return <div className="p-20 text-center">Lesson not found</div>;
 
   const isPrivileged = user?.email === 'emperorsrujal@gmail.com';
-  // Lock lessons after index 5 if not privileged
   const isLocked = id >= 6 && !isPrivileged;
 
   const nextLesson = () => {
@@ -273,17 +272,6 @@ function LessonContent({ id }: { id: number }) {
                 <TranslatedText>{`Use the 'Truth Calculator' below to see your current "Freedom Date" and the monthly interest bite you are currently suffering in ${country.name}.`}</TranslatedText>
               </p>
               <TruthCalculator />
-              <Quiz 
-                question="Why is the 'Sticker Price' of your home a distraction?"
-                options={[
-                  "Because property taxes are even more expensive",
-                  "Because the bank collects nearly double that amount in interest profit",
-                  "Because houses lose value every single year",
-                  "Because you never actually own the land"
-                ]}
-                correctAnswer={1}
-                explanation="Lenders market 'affordable monthly payments' because they don't want you to see the Total Amount Paid, which often exceeds 200% of the home's value."
-              />
             </section>
           </div>
         )}
@@ -401,17 +389,6 @@ function LessonContent({ id }: { id: number }) {
                 <TranslatedText>{`Look at the chart below. This is how the "Price of Debt" has moved in your region. Watch how your specific loan date determined your lifetime interest sentence.`}</TranslatedText>
               </p>
               <BankRateChart />
-              <Quiz 
-                question="Why did banks invent the 30-year amortizing mortgage?"
-                options={[
-                  "To help families retire earlier",
-                  "To make payments look 'affordable' while maximizing front-loaded interest",
-                  "To ensure every citizen owns land",
-                  "To lower the total amount paid for a home"
-                ]}
-                correctAnswer={1}
-                explanation="The 30-year structure is a psychological trick. It lowers the monthly barrier to entry while ensuring the bank captures the vast majority of your labor in the first two decades."
-              />
             </section>
           </div>
         )}
@@ -582,17 +559,6 @@ function LessonContent({ id }: { id: number }) {
                 <TranslatedText>{`Watch the split between Interest (Red) and Principal (Green) below. Most people sell their home before the 'Crossover Point' (Year 19), meaning they spend their entire life only paying the bank's profit.`}</TranslatedText>
               </p>
               <AmortViz />
-              <Quiz 
-                question="Why is property appreciation a false defense against mortgage interest?"
-                options={[
-                  "Because it only happens in large cities",
-                  "Because it inflates the price of every other home you'd want to buy, nullifying your gain",
-                  "Because interest rates always fall when home prices rise",
-                  "Because you have to pay a 50% tax on all appreciation"
-                ]}
-                correctAnswer={1}
-                explanation="Appreciation is largely a paper gain. Unless you sell and exit the market entirely, a more expensive home means your next home is also more expensive. Interest, however, is real cash that leaves your net worth forever."
-              />
             </section>
           </div>
         )}
@@ -658,38 +624,6 @@ function LessonContent({ id }: { id: number }) {
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-orange-600 text-white flex items-center justify-center font-black">2</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Cumulative Damage</TranslatedText></h2>
-              </div>
-              
-              <div className="bg-slate-900 rounded-[48px] p-10 text-white space-y-10 shadow-2xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-8 opacity-5"><ShieldAlert className="h-64 w-64 text-orange-400" /></div>
-                <div className="text-center space-y-2 relative z-10">
-                  <h3 className="text-2xl font-black uppercase tracking-[0.2em] text-orange-400"><TranslatedText>The Price of the Seven Scams</TranslatedText></h3>
-                  <p className="text-slate-400 font-bold"><TranslatedText>Above and beyond the core interest cost</TranslatedText></p>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
-                  <div className="p-8 rounded-3xl bg-white/5 border border-white/10 text-center">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400"><TranslatedText>Conservative Total</TranslatedText></p>
-                    <p className="text-5xl font-black text-white">$50,000</p>
-                    <p className="text-[10px] font-bold text-slate-500 uppercase mt-2"><TranslatedText>Direct Leakage</TranslatedText></p>
-                  </div>
-                  <div className="p-8 rounded-3xl bg-orange-600 text-center shadow-xl">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-orange-200"><TranslatedText>Aggressive / Canadian Peak</TranslatedText></p>
-                    <p className="text-5xl font-black text-white">$140,000</p>
-                    <p className="text-[10px] font-bold text-orange-200 uppercase mt-2"><TranslatedText>Maximum Extracted</TranslatedText></p>
-                  </div>
-                </div>
-              </div>
-
-              <EpiphanyBox>
-                <TranslatedText>{`Every one of these costs is legal. Every one is technically disclosed. None of them is your friend. This is why we move from "Debtor" to "Expert Architect" — to avoid these tolls entirely.`}</TranslatedText>
-              </EpiphanyBox>
-            </section>
-
-            <section className="space-y-12">
-              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-orange-600 text-white flex items-center justify-center font-black">3</div>
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: The Five Defense Questions</TranslatedText></h2>
               </div>
               <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
@@ -710,23 +644,11 @@ function LessonContent({ id }: { id: number }) {
                   </div>
                 ))}
               </div>
-
-              <Quiz 
-                question="Why is roll-in financing for closing costs dangerous?"
-                options={[
-                  "Because it increases your credit score too fast",
-                  "Because you end up paying interest on the fees for 30 years, doubling their cost",
-                  "Because it is illegal in 12 states",
-                  "Because the bank doesn't get to keep the money"
-                ]}
-                correctAnswer={1}
-                explanation="Fees rolled into a 30-year mortgage compound just like principal. A $15k fee can easily cost you $37k in total repayment by the time the loan is closed."
-              />
             </section>
           </div>
         )}
 
-        {/* NEW LESSON 4: THE SIX DEADLY MYTHS */}
+        {/* LESSON 4: THE SIX DEADLY MYTHS */}
         {id === 4 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
@@ -739,98 +661,168 @@ function LessonContent({ id }: { id: number }) {
                 <span className="block text-purple-600 italic mt-4"><TranslatedText>The Beliefs That Keep You in Debt.</TranslatedText></span>
               </h1>
               <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
-                <TranslatedText>{`Lenders rely on six widely believed myths to keep you passive. Today, we dismantle them with cold hard math.`}</TranslatedText>
+                <TranslatedText>{`The mortgage industry's most powerful tool is not the amortization schedule. It is the collection of widely believed myths that prevent homeowners from questioning it.`}</TranslatedText>
               </p>
             </header>
 
+            {/* MYTH 1: RENT VS BUY */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">1</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Myth #1: The Renting Lie</TranslatedText></h2>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Myth: "Renting is Throwing Money Away"</TranslatedText></h2>
               </div>
               <div className="space-y-8">
                 <p className="text-xl text-slate-600 leading-relaxed font-medium">
-                    <TranslatedText>{`The myth says "Renting is throwing money away." In reality, a traditional homeowner "throws away" nearly double their home's price in interest. Renting while investing the difference often creates more wealth than a traditional 30-year cage.`}</TranslatedText>
+                    <TranslatedText>{`The myth says "Buying always builds wealth." In reality, a traditional homeowner "throws away" nearly 128% of their home's price in interest. Renting while investing the difference often creates more wealth than a traditional 30-year cage.`}</TranslatedText>
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="p-8 bg-slate-900 text-white rounded-3xl space-y-4">
-                        <p className="text-[10px] font-black uppercase text-blue-400 tracking-widest">Renter-Investor</p>
-                        <p className="text-3xl font-black text-emerald-400">$1.49 Million</p>
-                        <p className="text-xs text-slate-400 font-bold uppercase">Net Assets after 30 years</p>
+                    <div className="p-10 bg-slate-900 text-white rounded-[40px] space-y-6 shadow-2xl relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-8 opacity-5"><TrendingUp className="h-32 w-32" /></div>
+                        <p className="text-[10px] font-black uppercase text-emerald-400 tracking-[0.4em]">The Renter-Investor</p>
+                        <p className="text-5xl font-black text-emerald-400">$1,492,000</p>
+                        <p className="text-sm text-slate-400 font-bold uppercase leading-tight"><TranslatedText>Total Invested Assets after 30 years (7% return)</TranslatedText></p>
+                        <ul className="text-xs text-slate-500 space-y-2 pt-4 border-t border-white/5">
+                            <li><CheckCircle2 className="inline h-3 w-3 mr-2" /> <TranslatedText>Zero Interest Paid</TranslatedText></li>
+                            <li><CheckCircle2 className="inline h-3 w-3 mr-2" /> <TranslatedText>Zero Maintenance Costs</TranslatedText></li>
+                            <li><CheckCircle2 className="inline h-3 w-3 mr-2" /> <TranslatedText>100% Capital Mobility</TranslatedText></li>
+                        </ul>
                     </div>
-                    <div className="p-8 bg-white border-2 border-slate-100 rounded-3xl space-y-4">
-                        <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Traditional Buyer</p>
-                        <p className="text-3xl font-black text-slate-900">$900k Equity</p>
-                        <p className="text-xs text-slate-400 font-bold uppercase">Minus $509k interest cost</p>
+                    <div className="p-10 bg-white border-4 border-slate-100 rounded-[40px] space-y-6 shadow-xl relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-8 opacity-5"><HomeIcon className="h-32 w-32" /></div>
+                        <p className="text-[10px] font-black uppercase text-slate-400 tracking-[0.4em]">The Traditional Buyer</p>
+                        <p className="text-5xl font-black text-slate-900">$900,000</p>
+                        <p className="text-sm text-slate-400 font-bold uppercase leading-tight"><TranslatedText>Net Equity Position after 30 years (inc. int/tax/maint)</TranslatedText></p>
+                        <ul className="text-xs text-slate-400 space-y-2 pt-4 border-t border-slate-100">
+                            <li><AlertCircle className="inline h-3 w-3 mr-2" /> <TranslatedText>$509,000 in Interest "Thrown Away"</TranslatedText></li>
+                            <li><AlertCircle className="inline h-3 w-3 mr-2" /> <TranslatedText>$216,000 in Property Taxes</TranslatedText></li>
+                            <li><AlertCircle className="inline h-3 w-3 mr-2" /> <TranslatedText>Wealth trapped in "Dead Walls"</TranslatedText></li>
+                        </ul>
                     </div>
                 </div>
               </div>
             </section>
 
+            {/* MYTH 2: 15-YEAR SPRINT */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">2</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Myth #2: The 15-Year Sprint</TranslatedText></h2>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Myth: "Short Term is Always Smarter"</TranslatedText></h2>
               </div>
-              <EpiphanyBox>
-                <TranslatedText>{`A 15-year mortgage saves interest but destroys flexibility. It locks you into a high "Heavy Backpack" payment. The Mortgage Cutter strategy (Lesson 10) gives you the speed of a 15-year with the safety of a 30-year.`}</TranslatedText>
-              </EpiphanyBox>
+              <div className="space-y-8 text-xl text-slate-600 font-medium">
+                <p>
+                  <TranslatedText>{`A 15-year mortgage saves interest but destroys flexibility. It locks you into a high "Heavy Backpack" payment ($2,927 vs $2,023). If you have a job loss, the 15-year payment triggers default 45% faster than the 30-year.`}</TranslatedText>
+                </p>
+                <EpiphanyBox>
+                  <TranslatedText>{`The Mortgage Cutter strategy gives you the speed of a 15-year with the safety of a 30-year. You keep your commitment low, and apply velocity voluntarily.`}</TranslatedText>
+                </EpiphanyBox>
+              </div>
             </section>
 
+            {/* MYTH 3: RETIREMENT DATE GOAL */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">3</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Myth #3: The Tax Deduction Mirage</TranslatedText></h2>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Myth: "Pay Off By Retirement (65)"</TranslatedText></h2>
+              </div>
+              <p className="text-xl text-slate-600 font-medium">
+                <TranslatedText>{`Accepting the 30-year timeline means accepting that the bank gets your prime earning years. If you finish at 50 instead of 65 and invest the freed-up cash flow, you generate nearly $800k in additional retirement wealth.`}</TranslatedText>
+              </p>
+              <div className="bg-slate-900 text-white p-12 rounded-[56px] shadow-2xl space-y-10 text-center relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-8 opacity-5"><Trophy className="h-64 w-64 text-blue-400" /></div>
+                <div className="space-y-2 relative z-10">
+                   <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Retirement Dividend</p>
+                   <h3 className="text-7xl font-black tracking-tighter">+$791,000</h3>
+                   <p className="text-lg font-bold text-slate-400 uppercase tracking-widest"><TranslatedText>Additional Wealth at Age 65</TranslatedText></p>
+                </div>
+                <div className="pt-6 border-t border-white/10 relative z-10 max-w-lg mx-auto">
+                    <p className="text-sm text-slate-500 italic font-medium leading-relaxed">
+                        <TranslatedText>{`Assumes a $2,500 monthly payment invested at 7% for the 15 years between age 50 (Mortgage Cutter finish) and age 65 (Traditional finish).`}</TranslatedText>
+                    </p>
+                </div>
+              </div>
+            </section>
+
+            {/* MYTH 4: TAX DEDUCTION */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">4</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Myth: "Interest is a Financial Benefit"</TranslatedText></h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
                   <p><TranslatedText>The "Tax Deduction Scam" is like a coupon that says "Spend $1.00 and get $0.20 back!" You are still losing $0.80.</TranslatedText></p>
-                  <p className="text-red-600 font-black italic"><TranslatedText>In the USA, 90% of families don't even qualify for this deduction anymore.</TranslatedText></p>
-                  <p><TranslatedText>{`In Canada, the UK, and Australia, it doesn't even exist for your home. Don't carry debt to chase a phantom tax break.`}</TranslatedText></p>
+                  <p className="text-red-600 font-black italic"><TranslatedText>In the USA, 90% of families don't even qualify for this deduction anymore because they take the standard deduction.</TranslatedText></p>
+                  <p><TranslatedText>{`In Canada, the UK, and Australia, it doesn't even exist for your primary home. It is a ghost benefit.`}</TranslatedText></p>
                 </div>
-                <div className="bg-white border-2 border-slate-100 rounded-[48px] p-10 shadow-xl space-y-8">
+                <div className="bg-white border-4 border-slate-100 rounded-[48px] p-12 shadow-xl space-y-8">
                     <div className="text-center space-y-2">
-                        <p className="text-[10px] font-black uppercase text-slate-400">Net Cost of Interest (USA)</p>
-                        <div className="flex justify-center gap-12">
+                        <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Net Cost of Interest (USA)</p>
+                        <div className="flex justify-center gap-12 pt-4">
                             <div className="text-center">
-                                <p className="text-4xl font-black text-red-600">-$1.00</p>
+                                <p className="text-5xl font-black text-red-600">-$1.00</p>
                                 <p className="text-[10px] font-bold uppercase text-slate-400">Interest Paid</p>
                             </div>
                             <div className="text-center">
-                                <p className="text-4xl font-black text-emerald-600">+$0.22</p>
+                                <p className="text-5xl font-black text-emerald-600">+$0.22</p>
                                 <p className="text-[10px] font-bold uppercase text-slate-400">Tax Credit</p>
                             </div>
                         </div>
                     </div>
-                    <p className="text-lg text-red-900 text-center font-black">NET LOSS: -$0.78</p>
+                    <div className="pt-6 border-t border-slate-100 text-center">
+                        <p className="text-2xl font-black text-red-900 uppercase">NET LOSS: -$0.78</p>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase mt-1">Per dollar handed to bank</p>
+                    </div>
                  </div>
+              </div>
+            </section>
+
+            {/* MYTH 5: RATE LOCK URGENCY */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">5</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Myth: "Lock In Now - Rates are Going Up"</TranslatedText></h2>
+              </div>
+              <p className="text-xl text-slate-600 font-medium">
+                <TranslatedText>{`This is a sales tool, not an economic forecast. The Federal Reserve, with more data than anyone, misses its own 12-month projections by 100+ points regularly. A mortgage broker has no better chance.`}</TranslatedText>
+              </p>
+              <EpiphanyBox>
+                <TranslatedText>{`The best protection against rising rates isn't a 'lock' — it is a low balance. The HELOC strategy focuses on balance reduction, which is the only 100% reliable rate hedge.`}</TranslatedText>
+              </EpiphanyBox>
+            </section>
+
+            {/* MYTH 6: 20% DOWN PAYMENT */}
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">6</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Myth: "20% Down or You're Irresponsible"</TranslatedText></h2>
+              </div>
+              <p className="text-xl text-slate-600 font-medium leading-relaxed">
+                <TranslatedText>{`In rising markets (Toronto, Vancouver, LA, Sydney), saving for 20% while prices rise at 10% is like running toward a receding target. The cost of 'waiting to be responsible' is often hundreds of thousands in lost appreciation.`}</TranslatedText>
+              </p>
+              <div className="p-10 bg-slate-50 border-2 border-slate-100 rounded-[48px] space-y-8">
+                  <h4 className="text-center font-black text-xs uppercase text-slate-400 tracking-[0.3em]"><TranslatedText>Cost of Waiting in a 10% Market</TranslatedText></h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-4">
+                          <p className="text-sm font-bold text-slate-500 uppercase"><TranslatedText>Wait 2 Years to Save 20%</TranslatedText></p>
+                          <p className="text-4xl font-black text-red-600">+$120,000</p>
+                          <p className="text-xs font-medium text-slate-400 italic"><TranslatedText>Increase in purchase price for a $600k home.</TranslatedText></p>
+                      </div>
+                      <div className="space-y-4">
+                          <p className="text-sm font-bold text-slate-500 uppercase"><TranslatedText>Buy Now with 5% + Insurance</TranslatedText></p>
+                          <p className="text-4xl font-black text-emerald-600">-$24,000</p>
+                          <p className="text-xs font-medium text-slate-400 italic"><TranslatedText>Cost of CMHC/PMI premium (added to loan).</TranslatedText></p>
+                      </div>
+                  </div>
+                  <div className="pt-8 border-t border-slate-200 text-center">
+                      <p className="text-xl font-bold text-slate-900"><TranslatedText>Net Advantage of Buying Early: $96,000</TranslatedText></p>
+                  </div>
               </div>
             </section>
 
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">4</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Myth #4: The 20% Obstacle</TranslatedText></h2>
-              </div>
-              <p className="text-xl text-slate-600 font-medium">
-                <TranslatedText>{`Waiting for a 20% down payment in a rising market is like running toward a receding finish line. In Canada and Australia, prices often rise faster than you can save. Buying sooner with insurance (PMI/CMHC) often builds more wealth than waiting 5 years while the home price jumps $150k.`}</TranslatedText>
-              </p>
-              <div className="bg-slate-50 border border-slate-100 p-8 rounded-[40px] text-center">
-                 <p className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">The Wealth Gap</p>
-                 <div className="flex justify-center gap-12">
-                    <div className="space-y-1">
-                        <p className="text-4xl font-black text-emerald-600">Free at 50</p>
-                        <p className="text-[10px] font-bold uppercase text-slate-400">Mortgage Cutter Path</p>
-                    </div>
-                    <div className="space-y-1">
-                        <p className="text-4xl font-black text-red-600">Free at 65</p>
-                        <p className="text-[10px] font-bold uppercase text-slate-400">Traditional Path</p>
-                    </div>
-                 </div>
-                 <div className="mt-8 pt-6 border-t border-slate-200">
-                    <p className="text-2xl font-black text-slate-900">$791,000 difference</p>
-                    <p className="text-xs font-bold text-slate-400 uppercase">In invested retirement wealth</p>
-                 </div>
+                <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">7</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Mindset Graduation</TranslatedText></h2>
               </div>
               <Quiz 
                 question="Why is the 'Tax Deduction' for mortgage interest often a net loss?"
@@ -847,7 +839,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 5: THE SECRET SCORECARD (SHIFTED) */}
+        {/* LESSON 5: THE SECRET SCORECARD */}
         {id === 5 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
@@ -896,30 +888,6 @@ function LessonContent({ id }: { id: number }) {
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Terminology Masterclass</TranslatedText></h2>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {[
-                  { term: "DTI (Debt-to-Income)", desc: "Your 'Backpack Weight'. It is the percentage of your monthly income that goes toward paying back debts. Lenders want this under 43%.", icon: <Scale className="h-5 w-5 text-blue-500" /> },
-                  { term: "LTV (Loan-to-Value)", desc: "How much of the house you own. Most high-performance tools require you to own at least 20% of the home (80% LTV).", icon: <HomeIcon className="h-5 w-5 text-emerald-500" /> },
-                  { term: "The Stress Test", desc: `A mandatory check where ${country.name} lenders pretend your interest rate is much higher to see if you can still survive.`, icon: <Activity className="h-5 w-5 text-red-500" /> },
-                  { term: "Tier 1 Credit", desc: "Your 'Trust Rating'. A score (usually above 740) that tells the bank you are an expert at managing other people's money.", icon: <ShieldCheck className="h-5 w-5 text-amber-500" /> },
-                ].map((t, i) => (
-                  <div key={i} className="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-all space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-slate-50 rounded-lg">{t.icon}</div>
-                      <h4 className="font-black text-lg text-slate-900"><TranslatedText>{t.term}</TranslatedText></h4>
-                    </div>
-                    <p className="text-slate-500 font-medium leading-relaxed"><TranslatedText>{t.desc}</TranslatedText></p>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section className="space-y-12">
-              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: Run Your Scorecard</TranslatedText></h2>
               </div>
               <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
@@ -930,7 +898,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 6: THE STRATEGIC ARSENAL (SHIFTED) */}
+        {/* LESSON 6: THE STRATEGIC ARSENAL */}
         {id === 6 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
@@ -983,7 +951,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 7: THE LEGAL LOOPHOLE (SHIFTED) */}
+        {/* LESSON 7: THE LEGAL LOOPHOLE */}
         {id === 7 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
@@ -1035,7 +1003,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 8: THE AUTOMATED HEIST (SHIFTED) */}
+        {/* LESSON 8: THE AUTOMATED HEIST */}
         {id === 8 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
@@ -1087,7 +1055,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 9: THE 1% MULTIPLIER (SHIFTED) */}
+        {/* LESSON 9: THE 1% MULTIPLIER */}
         {id === 9 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
@@ -1143,7 +1111,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 10: THE SPEEDRUN (SHIFTED) */}
+        {/* LESSON 10: THE SPEEDRUN */}
         {id === 10 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
@@ -1196,7 +1164,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 11: THE PHYSICS OF FREEDOM (SHIFTED) */}
+        {/* LESSON 11: THE PHYSICS OF FREEDOM */}
         {id === 11 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
