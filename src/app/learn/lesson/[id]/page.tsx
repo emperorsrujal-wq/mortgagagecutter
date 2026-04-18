@@ -505,7 +505,7 @@ function LessonContent({ id }: { id: number }) {
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Proof in One Sentence</TranslatedText></h2>
               </div>
               <EpiphanyBox>
-                <TranslatedText>{`On a standard amortizing mortgage, you will pay between 1.5x and 2.5x the purchase price of your home by the time you own it outright — and this extra cost goes entirely to the bank, produces nothing for you, and cannot be recovered through property appreciation.`}</TranslatedText>
+                <TranslatedText>{`On a standard amortizing mortgage, you will pay between 1.5x and 2.5x the purchase price of your home by the time you own it outright — and this extra cost goes entirely to the bank, produces nothing for you, and cannot be recovered through property appreciation because appreciation simply raises the price of every other home you might want to buy.`}</TranslatedText>
               </EpiphanyBox>
             </section>
 
@@ -527,7 +527,8 @@ function LessonContent({ id }: { id: number }) {
                     <div className="space-y-6">
                       <h4 className="text-2xl font-black text-slate-900">USA — $420,000 Home</h4>
                       <ul className="space-y-4 text-lg text-slate-600 font-medium">
-                        <li className="flex justify-between border-b pb-2"><span>Financed Amount (80%)</span> <span className="font-black text-slate-900">$336,000</span></li>
+                        <li className="flex justify-between border-b pb-2"><span>Purchase Price</span> <span className="font-black text-slate-900">$420,000</span></li>
+                        <li className="flex justify-between border-b pb-2"><span>Amount Financed (80%)</span> <span className="font-black text-slate-900">$336,000</span></li>
                         <li className="flex justify-between border-b pb-2"><span>Interest Paid (30 yrs @ 6.75%)</span> <span className="font-black text-red-600">$448,440</span></li>
                         <li className="flex justify-between border-b pb-2 font-black text-xl text-slate-900"><span>Total Cost of Home</span> <span>$868,440</span></li>
                       </ul>
@@ -538,6 +539,9 @@ function LessonContent({ id }: { id: number }) {
                        <p className="text-lg font-bold text-slate-400">Total Payout vs. Purchase Price</p>
                     </div>
                   </div>
+                  <p className="text-sm text-slate-500 italic font-medium leading-relaxed">
+                    <TranslatedText>Year 1 interest paid: $22,680 of $26,148 in payments (87%). Year 1 equity gained from payments: $3,468. You spend the first two decades paying for the privilege of a roof.</TranslatedText>
+                  </p>
                 </TabsContent>
 
                 <TabsContent value="Canada" className="mt-8 space-y-8 animate-in fade-in">
@@ -545,7 +549,8 @@ function LessonContent({ id }: { id: number }) {
                     <div className="space-y-6">
                       <h4 className="text-2xl font-black text-slate-900">Canada — $685,000 Home</h4>
                       <ul className="space-y-4 text-lg text-slate-600 font-medium">
-                        <li className="flex justify-between border-b pb-2"><span>Financed Amount (80%)</span> <span className="font-black text-slate-900">$548,000</span></li>
+                        <li className="flex justify-between border-b pb-2"><span>Purchase Price</span> <span className="font-black text-slate-900">$685,000</span></li>
+                        <li className="flex justify-between border-b pb-2"><span>Amount Financed (80%)</span> <span className="font-black text-slate-900">$548,000</span></li>
                         <li className="flex justify-between border-b pb-2"><span>Interest Paid (25 yrs @ 5.54%)</span> <span className="font-black text-red-600">$455,200</span></li>
                         <li className="flex justify-between border-b pb-2 font-black text-xl text-slate-900"><span>Total Cost of Home</span> <span>$1,140,200</span></li>
                       </ul>
@@ -556,6 +561,9 @@ function LessonContent({ id }: { id: number }) {
                        <p className="text-lg font-bold text-slate-400">Excluding CMHC & Renewal Shocks</p>
                     </div>
                   </div>
+                  <p className="text-sm text-slate-500 italic font-medium leading-relaxed">
+                    <TranslatedText>Canadian interest is compounded semi-annually, but the front-loading is identical. At 25 years, the cost is slightly lower than the US, but higher city prices mean larger absolute dollar waste.</TranslatedText>
+                  </p>
                 </TabsContent>
 
                 <TabsContent value="UK" className="mt-8 space-y-8 animate-in fade-in">
@@ -563,7 +571,8 @@ function LessonContent({ id }: { id: number }) {
                     <div className="space-y-6">
                       <h4 className="text-2xl font-black text-slate-900">UK — £290,000 Home</h4>
                       <ul className="space-y-4 text-lg text-slate-600 font-medium">
-                        <li className="flex justify-between border-b pb-2"><span>Financed Amount (80%)</span> <span className="font-black text-slate-900">£232,000</span></li>
+                        <li className="flex justify-between border-b pb-2"><span>Purchase Price</span> <span className="font-black text-slate-900">£290,000</span></li>
+                        <li className="flex justify-between border-b pb-2"><span>Amount Financed (80%)</span> <span className="font-black text-slate-900">£232,000</span></li>
                         <li className="flex justify-between border-b pb-2"><span>Interest Paid (25 yrs @ 4.9%)</span> <span className="font-black text-red-600">£192,000</span></li>
                         <li className="flex justify-between border-b pb-2 font-black text-xl text-slate-900"><span>Total Cost of Home</span> <span>£482,000</span></li>
                       </ul>
@@ -574,6 +583,9 @@ function LessonContent({ id }: { id: number }) {
                        <p className="text-lg font-bold text-slate-400">Total Interest vs. Purchase Price</p>
                     </div>
                   </div>
+                  <p className="text-sm text-slate-500 italic font-medium leading-relaxed">
+                    <TranslatedText>UK figures assume a constant rate; actual UK cost varies with 2–5-year remortgaging cycles. Each cycle adds arrangement fees (£1k–£2k) that compound this multiple.</TranslatedText>
+                  </p>
                 </TabsContent>
 
                 <TabsContent value="Australia" className="mt-8 space-y-8 animate-in fade-in">
@@ -581,7 +593,8 @@ function LessonContent({ id }: { id: number }) {
                     <div className="space-y-6">
                       <h4 className="text-2xl font-black text-slate-900">Australia — $780,000 Home</h4>
                       <ul className="space-y-4 text-lg text-slate-600 font-medium">
-                        <li className="flex justify-between border-b pb-2"><span>Financed Amount (80%)</span> <span className="font-black text-slate-900">$624,000</span></li>
+                        <li className="flex justify-between border-b pb-2"><span>Purchase Price</span> <span className="font-black text-slate-900">$780,000</span></li>
+                        <li className="flex justify-between border-b pb-2"><span>Amount Financed (80%)</span> <span className="font-black text-slate-900">$624,000</span></li>
                         <li className="flex justify-between border-b pb-2"><span>Interest Paid (30 yrs @ 6.3%)</span> <span className="font-black text-red-600">$768,480</span></li>
                         <li className="flex justify-between border-b pb-2 font-black text-xl text-slate-900"><span>Total Cost of Home</span> <span>$1,548,480</span></li>
                       </ul>
@@ -592,6 +605,9 @@ function LessonContent({ id }: { id: number }) {
                        <p className="text-lg font-bold text-slate-400">Pay 2 Houses to Own 1</p>
                     </div>
                   </div>
+                  <p className="text-sm text-slate-500 italic font-medium leading-relaxed">
+                    <TranslatedText>Australia has the highest proportion of variable-rate exposure. This multiple is a moving target, but the 30-year term ensures the bank nearly always gets a "Free House" from your labor.</TranslatedText>
+                  </p>
                 </TabsContent>
               </Tabs>
             </section>
@@ -599,14 +615,14 @@ function LessonContent({ id }: { id: number }) {
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black">3</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Appreciation Defense (ELI14)</TranslatedText></h2>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Appreciation Defense (Forensic Audit)</TranslatedText></h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                  <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
-                    <p><TranslatedText>Banks love to say: "Don't worry about the interest, your home will double in value!"</TranslatedText></p>
-                    <p><TranslatedText>But here is the trick: If your $420k home doubles to $840k, the $500k home you want to move into also doubled to $1 Million. You aren't richer in housing power; you've just inflated the environment.</TranslatedText></p>
+                    <p><TranslatedText>Banks love to say: "Don't worry about the interest, your home will double in value!" But here is the trick: appreciation is mostly housing inflation.</TranslatedText></p>
+                    <p><TranslatedText>If your $420k home doubles to $840k, the $500k home you want to move into also doubled to $1 Million. You aren't richer in housing power; you've just inflated the environment.</TranslatedText></p>
                     <p className="text-red-600 font-black italic"><TranslatedText>Real appreciation (after inflation) is usually only 1-2% per year. Your interest cost is 6-7%.</TranslatedText></p>
-                    <p><TranslatedText>Appreciation is a paper gain. Interest is a visceral, monthly cash loss of your life force.</TranslatedText></p>
+                    <p><TranslatedText>Appreciation is a paper gain. Interest is a visceral, monthly cash loss of your life force. The HELOC strategy benefits from the SAME appreciation while eliminating the interest loss.</TranslatedText></p>
                  </div>
                  <div className="bg-white border-2 border-slate-100 rounded-[48px] p-10 shadow-xl space-y-8">
                     <div className="text-center space-y-2">
@@ -622,6 +638,11 @@ function LessonContent({ id }: { id: number }) {
                             </div>
                         </div>
                     </div>
+                    <div className="p-6 bg-slate-50 rounded-3xl border border-slate-100">
+                        <p className="text-sm font-bold text-slate-600 italic">
+                            <TranslatedText>"Property appreciation does not save you from the interest trap. It simply inflates both sides of the equation. The gap between what you pay and what you owe remains just as large."</TranslatedText>
+                        </p>
+                    </div>
                  </div>
               </div>
             </section>
@@ -629,6 +650,55 @@ function LessonContent({ id }: { id: number }) {
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black">4</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Regional "Hidden" Scams</TranslatedText></h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                 <div className="p-8 bg-white border-4 border-slate-100 rounded-[40px] space-y-4">
+                    <div className="flex items-center gap-3">
+                        <ShieldAlert className="h-6 w-6 text-red-500" />
+                        <h4 className="text-xl font-black text-slate-900 uppercase">USA: The PMI Trap</h4>
+                    </div>
+                    <p className="text-slate-600 font-medium text-sm leading-relaxed">
+                        <TranslatedText>Conventional loans with under 20% down require PMI (0.5–1.5% annually). On $336k, that's $3,360/year of pure profit for the bank's insurer, giving you zero equity benefit.</TranslatedText>
+                    </p>
+                 </div>
+                 <div className="p-8 bg-white border-4 border-slate-100 rounded-[40px] space-y-4">
+                    <div className="flex items-center gap-3">
+                        <Lock className="h-6 w-6 text-red-500" />
+                        <h4 className="text-xl font-black text-slate-900 uppercase">Canada: The CMHC Surcharge</h4>
+                    </div>
+                    <p className="text-slate-600 font-medium text-sm leading-relaxed">
+                        <TranslatedText>Less than 20% down? You pay a 4% premium (£27k on $685k home) which is ADDED to your balance. You pay interest on that insurance premium for 25 years. Total cost: ~$50k.</TranslatedText>
+                    </p>
+                 </div>
+                 <div className="p-8 bg-white border-4 border-slate-100 rounded-[40px] space-y-4">
+                    <div className="flex items-center gap-3">
+                        <Gavel className="h-6 w-6 text-red-500" />
+                        <h4 className="text-xl font-black text-slate-900 uppercase">UK: The SDLT/Remortgage Fee</h4>
+                    </div>
+                    <p className="text-slate-600 font-medium text-sm leading-relaxed">
+                        <TranslatedText>Stamp duty plus £2,000 in arrangement fees every 2-5 years when you remortgage. Over 25 years, these "friction fees" add £15k+ to your cost multiple.</TranslatedText>
+                    </p>
+                 </div>
+                 <div className="p-8 bg-white border-4 border-slate-100 rounded-[40px] space-y-4">
+                    <div className="flex items-center gap-3">
+                        <Activity className="h-6 w-6 text-red-500" />
+                        <h4 className="text-xl font-black text-slate-900 uppercase">AU: The LMI/Variable Exposure</h4>
+                    </div>
+                    <p className="text-slate-600 font-medium text-sm leading-relaxed">
+                        <TranslatedText>LMI can cost $20k upfront. Combined with 13 consecutive rate rises, Australian borrowers saw payments jump $1,400/mo in 18 months, wiping out a decade of expected savings.</TranslatedText>
+                    </p>
+                 </div>
+              </div>
+
+              <EpiphanyBox>
+                <TranslatedText>{`You buy your home twice. Once for you (Principal), and once for the bank (Interest). The mortgage is a financial instrument designed to maximize interest extraction through complexity.`}</TranslatedText>
+              </EpiphanyBox>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black">5</div>
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Audit Your Amortization</TranslatedText></h2>
               </div>
               <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
