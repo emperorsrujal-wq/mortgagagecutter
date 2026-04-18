@@ -33,6 +33,7 @@ import {
   ChevronRight, 
   Home as HomeIcon, 
   CheckCircle2, 
+  CheckCircle,
   Rocket, 
   Zap, 
   ShieldCheck,
@@ -152,7 +153,7 @@ function LessonContent({ id }: { id: number }) {
       
       <div className="max-w-[800px] mx-auto px-4 py-16 space-y-24">
         
-        {/* PHASE 0: THE AWAKENING */}
+        {/* PHASE 0: THE AWAKENING (THE 2X COST TRAP) */}
         {id === 0 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
              <header className="space-y-10 text-center">
@@ -220,19 +221,19 @@ function LessonContent({ id }: { id: number }) {
 
               <div className="space-y-8">
                 <CaseStudy 
-                  name="The Patels (Suburban Homeowners)"
+                  name="The Patels (Ohio)"
                   savings="$284,340 Saved"
                   timeline="Mortgage-Free at 46"
                   quote="We were on track to finish at 63. Using the Chunker logic, we reclaim 17 years of our life and keep $284k in interest."
                 />
                 <CaseStudy 
-                  name="The Tremblays (Montreal Condo)"
+                  name="The Tremblays (Montréal)"
                   savings="$284,000 Saved"
                   timeline="Mortgage-Free at 54"
                   quote="Our condo will cost us $1M under standard terms. By age 54, we will own it outright and be ready for full-scale investing."
                 />
                 <CaseStudy 
-                  name="The Garcias (LA Property)"
+                  name="The Garcias (LA)"
                   savings="$658,000 Saved"
                   timeline="Mortgage-Free at 43"
                   quote="A $780k home was going to cost us $1.5M. We aren't just saving money; we are saving our children's future."
@@ -274,7 +275,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 1: THE DIRTY HISTORY OF BANKING */}
+        {/* PHASE 1: THE DIRTY HISTORY OF BANKING */}
         {id === 1 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
@@ -391,7 +392,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 2: THE MATHEMATICAL PROOF (THE SCAM) */}
+        {/* PHASE 2: THE MATHEMATICAL PROOF (THE SCAM) */}
         {id === 2 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
@@ -561,7 +562,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 3: THE SEVEN MORTGAGE SCAMS */}
+        {/* PHASE 3: THE SEVEN MORTGAGE SCAMS */}
         {id === 3 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
@@ -646,7 +647,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 4: THE SIX DEADLY MYTHS */}
+        {/* PHASE 4: THE SIX DEADLY MYTHS */}
         {id === 4 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
@@ -742,7 +743,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 5: THE SECRET SCORECARD (CREDIT MASTERY) */}
+        {/* PHASE 5: THE SECRET SCORECARD (CREDIT MASTERY) */}
         {id === 5 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
@@ -873,7 +874,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 6: THE STRATEGIC ARSENAL (REINDEXED) */}
+        {/* PHASE 6: THE STRATEGIC ARSENAL (TOOL ACQUISITION) */}
         {id === 6 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
@@ -926,7 +927,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 7: THE LEGAL LOOPHOLE */}
+        {/* PHASE 7: THE LEGAL LOOPHOLE (STRUCTURAL DECODING) */}
         {id === 7 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
@@ -978,7 +979,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 8: THE AUTOMATED HEIST */}
+        {/* PHASE 8: THE AUTOMATED HEIST (PROCESS AUTOMATION) */}
         {id === 8 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
@@ -1030,7 +1031,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 9: THE DETAILED MATH */}
+        {/* PHASE 9: THE DETAILED MATH (STRATEGY VERIFICATION) */}
         {id === 9 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
              <header className="space-y-10 text-center">
@@ -1105,7 +1106,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 10: HELOC EQUITY SECRETS */}
+        {/* PHASE 10: HELOC EQUITY SECRETS (EQUITY ENGINEERING) */}
         {id === 10 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
              <header className="space-y-10 text-center">
@@ -1180,7 +1181,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 11: INTEREST RATE SECRETS */}
+        {/* PHASE 11: INTEREST RATE SECRETS (RATE DYNAMICS) */}
         {id === 11 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
@@ -1232,7 +1233,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 12: THE 1% MULTIPLIER (PORTFOLIO CASCADE) */}
+        {/* PHASE 12: THE 1% MULTIPLIER (PORTFOLIO SCALING) */}
         {id === 12 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
@@ -1279,7 +1280,7 @@ function LessonContent({ id }: { id: number }) {
 
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black">2</div>
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Three-Bank Resiliency Rule</TranslatedText></h2>
               </div>
               <p className="text-xl text-slate-600 font-medium leading-relaxed">
@@ -1364,7 +1365,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 13: THE PHYSICS OF FREEDOM */}
+        {/* PHASE 13: THE PHYSICS OF FREEDOM (GRADUATION) */}
         {id === 13 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
