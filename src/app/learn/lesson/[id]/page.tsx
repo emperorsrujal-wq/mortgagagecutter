@@ -155,7 +155,7 @@ function LessonContent({ id }: { id: number }) {
     <div className="min-h-screen bg-[#FAFBFD] font-body pb-32">
       <ProgressBar current={id} />
       
-      <div className="max-w-[800px] mx-auto px-4 py-16 space-y-24">
+      <div className="max-w-[850px] mx-auto px-4 py-16 space-y-24">
         
         {/* PHASE 0: THE AWAKENING (THE 2X COST TRAP) */}
         {id === 0 && (
@@ -181,9 +181,12 @@ function LessonContent({ id }: { id: number }) {
               </div>
               <div className="space-y-8 text-xl text-slate-600 leading-relaxed font-medium">
                 <p>
-                  <TranslatedText>{`Somewhere in your home is a piece of paper that represented your proudest moment. But inside that fine print, the math is working against you. On a typical $400,000 home purchase in ${country.name}, by the time you make your final payment, you will have handed the bank approximately $909,000.`}</TranslatedText>
+                  <TranslatedText>{`Somewhere in your home is a piece of paper that represented your proudest moment. You shook hands, received keys, and walked into a home you could finally call your own. But buried inside its fine print, the math is working against you.`}</TranslatedText>
                 </p>
-                <p className="text-blue-600 font-black">
+                <p>
+                  <TranslatedText>{`On a typical $400,000 home purchase in ${country.name}, financed over 30 years at 6.5% interest, that number is not $400,000. By the time you make your final payment, you will have handed the bank approximately $909,000.`}</TranslatedText>
+                </p>
+                <p className="text-blue-600 font-black p-6 bg-blue-50 rounded-3xl border-l-8 border-blue-600">
                   <TranslatedText>The extra $509,000? Not equity. Not your future. Pure bank profit. A fee for the privilege of borrowing money.</TranslatedText>
                 </p>
               </div>
@@ -192,14 +195,14 @@ function LessonContent({ id }: { id: number }) {
                 <div className="absolute top-0 right-0 p-8 opacity-5"><Landmark className="h-64 w-64 text-blue-400" /></div>
                 <div className="text-center space-y-2 relative z-10">
                   <h3 className="text-2xl font-black uppercase tracking-[0.2em] text-blue-400"><TranslatedText>The Price of Silence</TranslatedText></h3>
-                  <p className="text-slate-400 font-bold"><TranslatedText>Assumes a 30-year term at 6.5% interest</TranslatedText></p>
+                  <p className="text-slate-400 font-bold"><TranslatedText>Mathematical Reality of a $400k Purchase</TranslatedText></p>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
                   {[
                     { label: "Purchase Price", val: "$400,000", sub: "The Sticker Price" },
                     { label: "Total Paid", val: "$909,000", sub: "The Real Price", highlight: true },
-                    { label: "Bank Profit", val: "$509,000", sub: "Interest Captured", danger: true }
+                    { label: "Bank Profit", val: "$509,000", sub: "Interest Siphon", danger: true }
                   ].map((s, i) => (
                     <div key={i} className={cn("p-8 rounded-3xl text-center space-y-2 border border-white/10", s.highlight ? "bg-blue-600 border-none shadow-xl" : "bg-white/5")}>
                        <p className="text-[10px] font-black uppercase tracking-widest opacity-60"><TranslatedText>{s.label}</TranslatedText></p>
@@ -209,7 +212,7 @@ function LessonContent({ id }: { id: number }) {
                   ))}
                 </div>
                 <p className="text-center text-slate-400 text-sm italic font-medium">
-                  <TranslatedText>In every single case, the interest you pay is equal to or greater than the original cost of the home.</TranslatedText>
+                  <TranslatedText>This is not a glitch. It is the deliberate architecture of the modern mortgage, designed to maximize wealth transfer from you to the lender.</TranslatedText>
                 </p>
               </div>
             </section>
@@ -217,6 +220,27 @@ function LessonContent({ id }: { id: number }) {
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black">2</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>ELI14: The Terminology Vault</TranslatedText></h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                 <InfoBox title="Amortization" color="red">
+                    "The Interest-First Treadmill." A mathematical schedule that ensures you pay the bank's profit first. In the early years, nearly 90% of your check is just a "cover charge" to live in the house.
+                 </InfoBox>
+                 <InfoBox title="Principal" color="green">
+                    "The Actual Bricks." The original amount you borrowed. This is the only number that builds your net worth. The goal of this course is to hit this number with maximum velocity.
+                 </InfoBox>
+                 <InfoBox title="Interest" color="amber">
+                    "The Daily Rent on Debt." On a standard mortgage, this is calculated monthly. On a HELOC, it's calculated daily. This subtle shift is the key to saving hundreds of thousands.
+                 </InfoBox>
+                 <InfoBox title="Equity" color="blue">
+                    "The Percentage You Actually Own." Most people only own the front door and maybe a window after 5 years of payments. We want you to own the whole house in half the time.
+                 </InfoBox>
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black">3</div>
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Three Destinies</TranslatedText></h2>
               </div>
               <p className="text-xl text-slate-600 font-medium">
@@ -226,38 +250,50 @@ function LessonContent({ id }: { id: number }) {
               <div className="space-y-8">
                 <CaseStudy 
                   name="The Patels (Ohio)"
-                  savings="$284,340 Saved"
-                  timeline="Mortgage-Free at 46"
-                  quote="We were on track to finish at 63. Using the Chunker logic, we reclaim 17 years of our life and keep $284k in interest."
+                  savings="$284,340 Reclaimed"
+                  timeline="Mortgage-Free at 51"
+                  quote="We were on track to finish at 63. By age 51, we will own our home and have $284k extra for our children's education."
                 />
                 <CaseStudy 
                   name="The Tremblays (Montréal)"
-                  savings="$284,000 Saved"
+                  savings="$220,000 Reclaimed"
                   timeline="Mortgage-Free at 54"
-                  quote="Our condo will cost us $1M under standard terms. By age 54, we will own it outright and be ready for full-scale investing."
+                  quote="A $550k condo was going to cost us nearly $1M. Now, we're finishing 12 years early and keeping our life force for ourselves."
                 />
                 <CaseStudy 
                   name="The Garcias (LA)"
-                  savings="$658,000 Saved"
+                  savings="$500,000+ Reclaimed"
                   timeline="Mortgage-Free at 43"
-                  quote="A $780k home was going to cost us $1.5M. We aren't just saving money; we are saving our children's future."
+                  quote="Our $780k home was a $1.5M debt sentence. The HELOC strategy cut our timeline in half. We are building a portfolio now."
                 />
               </div>
             </section>
 
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black">3</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Renting Myth</TranslatedText></h2>
+                <div className="h-10 w-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black">4</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Renting Myth (Forensic Audit)</TranslatedText></h2>
               </div>
               <CourseCard className="border-l-[12px] border-l-amber-500 shadow-2xl p-12 md:p-16 bg-white">
                  <div className="space-y-8 leading-relaxed text-xl text-[#334155] font-medium">
                     <p>
-                      <TranslatedText>{`You've heard it a hundred times: "Renting is throwing money away." But the framing obscures a bigger lie. Traditional homeowners "throw away" an average of 128% of their home's price in interest payments.`}</TranslatedText>
+                      <TranslatedText>{`You've heard it a hundred times: "Renting is throwing money away." But the framing obscures a bigger lie.`}</TranslatedText>
                     </p>
                     <p>
-                      <TranslatedText>{`This course is not arguing against homeownership. It is arguing for the REAL cost of it—and then teaching you how to cut that cost in half while still building equity.`}</TranslatedText>
+                      <TranslatedText>{`Traditional homeowners "throw away" an average of 128% of their home's price in interest. On a $400k home, that's $509,000 GONE. Renters pay for a ceiling; traditional buyers pay for the ceiling twice.`}</TranslatedText>
                     </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6">
+                       <div className="p-8 bg-red-50 rounded-3xl border border-red-100">
+                          <p className="text-xs font-black text-red-600 uppercase mb-2">Standard Homeowner</p>
+                          <p className="text-3xl font-black text-slate-900">$509,000</p>
+                          <p className="text-sm font-bold text-slate-500">Interest "Thrown Away"</p>
+                       </div>
+                       <div className="p-8 bg-emerald-50 rounded-3xl border border-emerald-100">
+                          <p className="text-xs font-black text-emerald-600 uppercase mb-2">Mortgage Cutter</p>
+                          <p className="text-3xl font-black text-slate-900">$135,000</p>
+                          <p className="text-sm font-bold text-slate-500">Interest Cost (Target)</p>
+                       </div>
+                    </div>
                   </div>
               </CourseCard>
 
@@ -268,11 +304,11 @@ function LessonContent({ id }: { id: number }) {
 
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black">4</div>
+                <div className="h-10 w-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black">5</div>
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Face Your Truth</TranslatedText></h2>
               </div>
               <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
-                <TranslatedText>{`Use the 'Truth Calculator' below to see your current "Freedom Date" and the monthly interest bite you are currently suffering in ${country.name}.`}</TranslatedText>
+                <TranslatedText>{`Use the 'Truth Calculator' below to see your current "Freedom Date" and the monthly interest bite you are currently suffering. This is the first step toward sovereignty.`}</TranslatedText>
               </p>
               <TruthCalculator />
             </section>
@@ -607,7 +643,7 @@ function LessonContent({ id }: { id: number }) {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[
-                  { q: "Total Payout", text: "What is the total of all payments in dollars over the full term?" },
+                  { q: "Total Payout", text: "What is the total of all payments in dollars, over the full term?" },
                   { q: "Prepayment Caps", text: "What are the exact prepayment limits and the formula for exceeding them?" },
                   { q: "Insurance Cost", text: "Is PMI/CMHC required, and what is its total dollar cost over the policy life?" },
                   { q: "Strategic Offer", text: "Do you offer an offset account or a first-lien HELOC as an alternative?" },
@@ -1148,10 +1184,8 @@ function LessonContent({ id }: { id: number }) {
             </section>
 
             <section className="space-y-12">
-              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black">3</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Model Your Cascade</TranslatedText></h2>
-              </div>
+              <div className="flex items-center gap-4 border-b border-emerald-600 text-white flex items-center justify-center font-black">3</div>
+              <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Model Your Cascade</TranslatedText></h2>
               <WealthSimulator />
               <div className="space-y-8 pt-12">
                 <h3 className="text-3xl font-fraunces font-black text-center text-slate-900"><TranslatedText>The Property Ladder Blueprint</TranslatedText></h3>
@@ -1240,5 +1274,3 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     </CourseProvider>
   );
 }
-
-    
