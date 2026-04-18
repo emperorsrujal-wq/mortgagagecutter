@@ -1,4 +1,3 @@
-
 'use client';
 import React, { useState, useEffect, useMemo } from 'react';
 import { useCourse } from './CourseProvider';
@@ -831,7 +830,7 @@ export function QualificationCalc() {
   const n = 30 * 12;
 
   // Monthly PITI estimation
-  const pmt = balance * (rate * Math.pow(1 + rate, n)) / (Math.pow(1 + monthlyRate, n) - 1);
+  const pmt = balance * (rate * Math.pow(1 + rate, n)) / (Math.pow(1 + rate, n) - 1);
   const stressPmt = balance * (stressRate * Math.pow(1 + stressRate, n)) / (Math.pow(1 + stressRate, n) - 1);
   
   const totalMonthly = pmt + debts + taxIns;
@@ -1277,11 +1276,11 @@ export function PayoffRace() {
             </div>
             <div className="space-y-2">
               <div className="flex justify-between text-[10px] font-black uppercase text-slate-400"><span>Net Income</span><span>{fmt(income)}</span></div>
-              <input type="range" min="3000" max="25000" step="100" value={income} onChange={(e) => setIncome(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none cursor-pointer accent-blue-600" />
+              <input type="range" min="3000" max="25000" step="100" value={income} onChange={(e) => setIncome(Number(e.target.value))} className="w-full h-3 bg-slate-100 rounded-full appearance-none cursor-pointer accent-blue-600" />
             </div>
             <div className="space-y-2">
               <div className="flex justify-between text-[10px] font-black uppercase text-slate-400"><span>Living Expenses</span><span>{fmt(expenses)}</span></div>
-              <input type="range" min="1500" max="15000" step="100" value={expenses} onChange={(e) => setExpenses(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none cursor-pointer accent-blue-600" />
+              <input type="range" min="1500" max="15000" step="100" value={expenses} onChange={(e) => setExpenses(Number(e.target.value))} className="w-full h-3 bg-slate-100 rounded-full appearance-none cursor-pointer accent-blue-600" />
             </div>
           </div>
 

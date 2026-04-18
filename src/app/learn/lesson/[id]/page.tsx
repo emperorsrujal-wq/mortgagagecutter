@@ -1,4 +1,3 @@
-
 'use client';
 import React, { use, useState, useEffect } from 'react';
 import { CourseProvider, useCourse } from '@/components/course/CourseProvider';
@@ -144,6 +143,8 @@ function LessonContent({ id }: { id: number }) {
     if (id > 0) router.push(`/learn/lesson/${id - 1}`);
     else router.push('/learn');
   };
+
+  const fmt = (val: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: country.currency, maximumFractionDigits: 0 }).format(val);
 
   return (
     <div className="min-h-screen bg-[#FAFBFD] font-body pb-32">
