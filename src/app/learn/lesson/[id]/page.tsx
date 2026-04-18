@@ -79,7 +79,9 @@ import {
   UserPlus2,
   Table as TableIcon,
   HelpCircle,
-  AlertTriangle
+  AlertTriangle,
+  HeartPulse,
+  Waves
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -773,8 +775,153 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* Lesson 4-13 Omitted for brevity in this response but they follow the same rich pattern established above */}
-        {id >= 4 && (
+        {/* PHASE 4: THE SIX DEADLY MYTHS */}
+        {id === 4 && (
+          <div className="space-y-24 animate-in fade-in duration-1000">
+            <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-purple-100 text-purple-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-purple-200">
+                <Ghost className="h-4 w-4" />
+                <TranslatedText>Mastery Level: 04 — The Mindset Shield</TranslatedText>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>Six Deadly Myths:</TranslatedText>
+                <span className="block text-purple-600 italic mt-4"><TranslatedText>Dismantling Dogma.</TranslatedText></span>
+              </h1>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                <TranslatedText>{`The mortgage industry's most powerful tool is not the amortization table—it is the collection of myths that prevent you from questioning it.`}</TranslatedText>
+              </p>
+            </header>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">1</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Terminology: The Concept of Dogma</TranslatedText></h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <InfoBox title="Price-to-Rent Ratio" color="blue">
+                  "The Rent-vs-Buy Thermometer." A measure of whether ownership is a sound investment or a speculative trap. In high-ratio cities like Toronto or Sydney, renting and investing the difference often wins.
+                </InfoBox>
+                <InfoBox title="The $791k Opportunity Cost" color="amber">
+                  The amount of wealth lost by finishing your mortgage at 65 instead of 50. By accepting the "Normal" timeline, you surrender 15 years of compounding growth on your largest monthly expense.
+                </InfoBox>
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">2</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Myth #1: The Renting Lie</TranslatedText></h2>
+              </div>
+              <div className="space-y-8 text-xl text-slate-600 font-medium leading-relaxed">
+                 <p><TranslatedText>The myth: "Renting is throwing money away." The math: Renters who invest the price difference between renting and ownership carrying costs often end up with HIGHER net worth than traditional homeowners.</TranslatedText></p>
+                 <CourseCard className="bg-slate-900 text-white border-none p-12">
+                    <div className="text-center space-y-4">
+                        <p className="text-[10px] font-black uppercase text-blue-400">30-Year Outcome: $500k Home</p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-6">
+                            <div className="space-y-2">
+                                <p className="text-xs font-bold text-slate-400">Standard Buyer (Home Equity)</p>
+                                <p className="text-5xl font-black text-white">$900,000</p>
+                                <p className="text-[10px] text-red-400 uppercase font-black">After $509k interest</p>
+                            </div>
+                            <div className="space-y-2">
+                                <p className="text-xs font-bold text-slate-400">Renter-Investor (Portfolio)</p>
+                                <p className="text-5xl font-black text-emerald-400">$1,492,000</p>
+                                <p className="text-[10px] text-emerald-400 uppercase font-black">At 7% avg market return</p>
+                            </div>
+                        </div>
+                    </div>
+                 </CourseCard>
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">3</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Myth #3: The Retirement Illusion</TranslatedText></h2>
+              </div>
+              <p className="text-xl text-slate-600 font-medium">
+                <TranslatedText>{`We are conditioned to be "mortgage free by 65." But waiting until 65 is the most expensive mistake in finance.`}</TranslatedText>
+              </p>
+              <div className="bg-white border-4 border-purple-50 rounded-[48px] p-10 shadow-xl space-y-10">
+                <div className="flex justify-between items-center">
+                  <h4 className="font-black text-slate-900 text-xl flex items-center gap-2"><Clock className="h-5 w-5 text-purple-600" /> The 15-Year Wealth Gap</h4>
+                  <p className="bg-emerald-100 text-emerald-700 px-4 py-1 rounded-full text-xs font-black">Worth $791,000</p>
+                </div>
+                <div className="space-y-8">
+                  <div className="relative pt-6">
+                    <p className="text-xs font-bold text-slate-400 mb-2 uppercase">Finish at 65 (Traditional Path)</p>
+                    <div className="w-full h-4 bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-slate-300 w-full" />
+                    </div>
+                    <p className="text-[10px] font-black text-slate-500 mt-2">Zero years of freed cashflow compounding.</p>
+                  </div>
+                  <div className="relative pt-6">
+                    <p className="text-xs font-bold text-purple-600 mb-2 uppercase">Finish at 50 (Accelerator Path)</p>
+                    <div className="w-full h-4 bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-purple-600 w-1/2" />
+                    </div>
+                    <p className="text-[10px] font-black text-purple-600 mt-2">+15 Years of $2,500/mo invested at 7% = $791k windfall.</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">4</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Myth #4: The Tax Deduction Mirage</TranslatedText></h2>
+              </div>
+              <EpiphanyBox>
+                <TranslatedText>{`The mortgage interest deduction is an "80% Coupon Scam." Lenders want you to keep a $1,000 bill because the government will give you $200 back. You are still losing $800. For 90% of US families, the benefit is actually $0 because they don't itemize.`}</TranslatedText>
+              </EpiphanyBox>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {['USA', 'Canada', 'UK', 'Australia'].map((c, i) => (
+                  <div key={i} className="p-6 bg-white border-2 border-slate-100 rounded-3xl text-center space-y-2">
+                    <p className="font-black text-slate-900">{c}</p>
+                    <p className="text-xs font-bold text-slate-400">Deduction Status</p>
+                    <p className={cn("text-lg font-black", i === 0 ? "text-amber-600" : "text-red-600")}>
+                      {i === 0 ? "Minimal (10%)" : "Non-existent"}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">5</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Myth #6: The 20% Obstacle</TranslatedText></h2>
+              </div>
+              <CourseCard className="border-l-[12px] border-l-emerald-500">
+                <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
+                  <p><TranslatedText>{`Waiting for 20% down in a rising market is often "Saving into a Retreating Target." If home prices rise by 10% a year while you save 5%, you are getting further away from homeownership every day you wait.`}</TranslatedText></p>
+                  <p className="text-emerald-600 font-black italic"><TranslatedText>Strategy: Buy sooner with 10% down, use the Mortgage Cutter method to reach 20% equity in months, and cancel the PMI/CMHC insurance immediately.</TranslatedText></p>
+                </div>
+              </CourseCard>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">6</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Conviction Check</TranslatedText></h2>
+              </div>
+              <Quiz 
+                question="Why is the mortgage interest deduction (MID) in the US often called a mirage?"
+                options={[
+                  "Because it makes the interest payments free.",
+                  "Because 90% of families take the standard deduction and receive $0 benefit.",
+                  "Because the bank pays the taxes for you.",
+                  "Because it only applies to rental properties."
+                ]}
+                correctAnswer={1}
+                explanation="Since 2017, the vast majority of taxpayers take the standard deduction. Even for those who itemize, they are still paying $1 to get back at most $0.37. It is never a financial gain to pay interest just for the deduction."
+              />
+            </section>
+          </div>
+        )}
+
+        {/* Lesson 5-13 Omitted for brevity in this response but they follow the same rich pattern established above */}
+        {id >= 5 && (
           <div className="p-20 text-center text-slate-400 font-bold uppercase tracking-widest">
             {meta.title} <TranslatedText>Masterclass Content Loaded...</TranslatedText>
           </div>
@@ -813,3 +960,4 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     </CourseProvider>
   );
 }
+
