@@ -1,7 +1,7 @@
 
 export const lessonMeta = [
   { id: 0, title: "The 2x Cost Trap", icon: "🚪", accent: "#1A1D26" },
-  { id: 1, title: "The Dirty History", icon: "🕰️", accent: "#DC2626" },
+  { id: 1, title: "Dirty History of Banking", icon: "🕰️", accent: "#DC2626" },
   { id: 2, title: "The Mathematical Proof", icon: "🧮", accent: "#059669" },
   { id: 3, title: "The Seven Mortgage Scams", icon: "⚠️", accent: "#EA580C" },
   { id: 4, title: "The Six Deadly Myths", icon: "👻", accent: "#7C3AED" },

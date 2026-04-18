@@ -6,7 +6,8 @@ import { lessonMeta } from '@/lib/course/lesson-meta';
 import { 
   InterestCalc,
   TruthCalculator,
-  AmortViz
+  AmortViz,
+  BankRateChart
 } from '@/components/course/Calculators';
 import { 
   CourseCard, 
@@ -73,12 +74,13 @@ import {
   Waves,
   MousePointer2,
   ListChecks,
-  ArrowUpRight
+  ArrowUpRight,
+  GanttChartSquare,
+  Milestone
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { useUser } from '@/firebase';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 function ProgressBar({ current }: { current: number }) {
   const total = 13;
@@ -96,7 +98,7 @@ function ProgressBar({ current }: { current: number }) {
           <span className="hidden sm:inline uppercase tracking-widest"><TranslatedText>Course Hub</TranslatedText></span>
         </Link>
         <div className="text-[10px] font-black uppercase text-slate-400 tracking-[0.3em]">
-          {current === 0 ? <TranslatedText>Module 1: Awakening</TranslatedText> : <><TranslatedText>Module</TranslatedText> {current} <TranslatedText>of</TranslatedText> {total}</>}
+          {current === 0 ? <TranslatedText>Module 1: Awakening</TranslatedText> : current === 1 ? <TranslatedText>Module 2: History</TranslatedText> : <><TranslatedText>Module</TranslatedText> {current + 1} <TranslatedText>of</TranslatedText> {total + 1}</>}
         </div>
         <div className="w-20" />
       </div>
@@ -133,6 +135,24 @@ function LessonHeader({ title, number, subtitle }: { title: string, number: numb
         <TranslatedText>{title}</TranslatedText>
       </h2>
       {subtitle && <p className="text-lg text-slate-500 font-medium italic"><TranslatedText>{subtitle}</TranslatedText></p>}
+    </div>
+  );
+}
+
+function MilestoneCard({ year, event, description, icon: Icon }: { year: string, event: string, description: string, icon: any }) {
+  return (
+    <div className="flex gap-6 items-start group">
+      <div className="flex flex-col items-center">
+        <div className="h-12 w-12 rounded-full bg-slate-900 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform relative z-10">
+          <Icon className="h-5 w-5" />
+        </div>
+        <div className="w-0.5 h-full bg-slate-200 mt-2" />
+      </div>
+      <div className="space-y-2 pb-12">
+        <span className="text-blue-600 font-black text-sm uppercase tracking-widest">{year}</span>
+        <h4 className="text-xl font-bold text-slate-900">{event}</h4>
+        <p className="text-slate-500 leading-relaxed font-medium">{description}</p>
+      </div>
     </div>
   );
 }
@@ -182,7 +202,6 @@ function LessonContent({ id }: { id: number }) {
               </p>
             </header>
 
-            {/* LESSON 1: THE NUMBER NOBODY SHOWS YOU */}
             <section className="space-y-12">
               <LessonHeader 
                 number={1} 
@@ -201,7 +220,6 @@ function LessonContent({ id }: { id: number }) {
                 </p>
               </div>
 
-              {/* SHOCK CHART */}
               <div className="bg-slate-900 rounded-[48px] p-10 text-white space-y-10 shadow-2xl relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-8 opacity-5"><Landmark className="h-64 w-64 text-blue-400" /></div>
                 <div className="text-center space-y-2 relative z-10">
@@ -228,7 +246,6 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* LESSON 2: AMORTIZATION FRONT-LOADS INTEREST */}
             <section className="space-y-12">
               <LessonHeader 
                 number={2} 
@@ -248,7 +265,6 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* LESSON 3: THE MISLEADING MONTHLY PAYMENT */}
             <section className="space-y-12">
               <LessonHeader 
                 number={3} 
@@ -266,7 +282,6 @@ function LessonContent({ id }: { id: number }) {
               </CourseCard>
             </section>
 
-            {/* LESSON 4: NORTH AMERICAN DEBT CONTEXT */}
             <section className="space-y-12">
               <LessonHeader 
                 number={4} 
@@ -283,7 +298,6 @@ function LessonContent({ id }: { id: number }) {
               </p>
             </section>
 
-            {/* LESSON 5: WHY THE SYSTEM WAS BUILT THIS WAY */}
             <section className="space-y-12">
               <LessonHeader 
                 number={5} 
@@ -298,7 +312,6 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* LESSON 6: MORTGAGE VS WEALTH MINDSET */}
             <section className="space-y-12">
               <LessonHeader 
                 number={6} 
@@ -317,7 +330,6 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* TOTAL COST CALCULATOR */}
             <section className="space-y-12">
               <div className="text-center space-y-4">
                 <h3 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Face Your Truth</TranslatedText></h3>
@@ -326,7 +338,6 @@ function LessonContent({ id }: { id: number }) {
               <InterestCalc />
             </section>
 
-            {/* END OF MODULE QUIZ */}
             <section className="space-y-12">
                <Quiz 
                   question="If you buy a $400,000 home at 6.5% interest for 30 years, roughly how much will you pay in total?"
@@ -347,7 +358,6 @@ function LessonContent({ id }: { id: number }) {
                />
             </section>
 
-            {/* GLOSSARY ITEMS */}
             <section className="space-y-6">
               <h3 className="text-xl font-black uppercase text-slate-400 tracking-[0.2em] mb-4">Module 1 Glossary</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -358,7 +368,6 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* CTA TO MODULE 2 */}
             <div className="pt-20 border-t-4 border-blue-600 text-center space-y-8">
                <div className="inline-flex h-20 w-20 rounded-full bg-blue-600 items-center justify-center shadow-2xl shadow-blue-500/40">
                   <Award className="h-10 w-10 text-white" />
@@ -375,12 +384,247 @@ function LessonContent({ id }: { id: number }) {
                   <ChevronRight className="h-8 w-8 group-hover:translate-x-3 transition-transform" />
                </button>
             </div>
-
           </div>
         )}
 
-        {/* Lessons 1-13 Placeholder */}
-        {id >= 1 && (
+        {/* MODULE 2: THE DIRTY HISTORY OF BANKING */}
+        {id === 1 && (
+          <div className="space-y-24 animate-in fade-in duration-1000">
+            <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-white/10">
+                <History className="h-4 w-4 text-blue-400" />
+                <TranslatedText>Module 02 — Forensic History</TranslatedText>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>The Dirty History</TranslatedText>
+                <span className="block text-blue-600 italic mt-4"><TranslatedText>Of Banking.</TranslatedText></span>
+              </h1>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium italic">
+                <TranslatedText>"To understand why you are trapped in a 30-year contract, you must understand the profit motives of the men who designed it."</TranslatedText>
+              </p>
+            </header>
+
+            {/* LESSON 1: EARLY LENDING & THE GOLDSMITH'S SECRET */}
+            <section className="space-y-12">
+              <LessonHeader 
+                number={1} 
+                title="Early Lending & The Goldsmith's Secret" 
+                subtitle="How Fractional Reserve Banking was Born"
+              />
+              <div className="space-y-8 text-xl text-slate-600 leading-relaxed font-medium">
+                <p>
+                  <TranslatedText>{`In the 1600s, London's goldsmiths offered a safe place for people to store their gold. They issued paper "receipts" for the gold. Soon, people began trading the receipts as money instead of the actual gold.`}</TranslatedText>
+                </p>
+                <p>
+                  <TranslatedText>{`The goldsmiths noticed that people rarely came back for their physical gold all at once. They realized they could issue more paper receipts than they had gold—and charge interest on those receipts. This was the birth of "Fractional Reserve Banking."`}</TranslatedText>
+                </p>
+                <EpiphanyBox>
+                  Banking was founded on a secret: you can lend money that doesn't exist, provided everyone doesn't ask for it at the same time. This "Goldsmith's Secret" is the engine behind every modern mortgage.
+                </EpiphanyBox>
+              </div>
+            </section>
+
+            {/* LESSON 2: HOW MODERN BANKS GAINED POWER */}
+            <section className="space-y-12">
+              <LessonHeader 
+                number={2} 
+                title="How Modern Banks Gained Power" 
+                subtitle="From Private Guilds to Centralized Control"
+              />
+              <div className="space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                   <MilestoneCard 
+                    year="1694" 
+                    event="Bank of England Founded" 
+                    description="The first private institution granted the right to issue a nation's currency. The government became the bank's largest debtor." 
+                    icon={Landmark}
+                  />
+                  <MilestoneCard 
+                    year="1913" 
+                    event="The Federal Reserve Act" 
+                    description="A secret meeting at Jekyll Island created a centralized banking system for the US, essentially outsourcing the dollar to private banks." 
+                    icon={Gavel}
+                  />
+                  <MilestoneCard 
+                    year="1933" 
+                    event="Ending the Gold Standard" 
+                    description="Money was decoupled from physical assets, allowing banks to expand the debt bubble to unprecedented levels." 
+                    icon={ShieldAlert}
+                  />
+                  <MilestoneCard 
+                    year="1970" 
+                    event="MBS Securitization" 
+                    description="The birth of the Mortgage-Backed Security. Loans were no longer held by banks; they were sold to investors as 'products'." 
+                    icon={RefreshCcw}
+                  />
+                </div>
+              </div>
+            </section>
+
+            {/* LESSON 3: THE BIRTH OF THE LONG-TERM MORTGAGE */}
+            <section className="space-y-12">
+              <LessonHeader 
+                number={3} 
+                title="The Birth of the 30-Year Mortgage" 
+                subtitle="The 1933 Great Depression Pivot"
+              />
+              <div className="space-y-8 text-xl text-slate-600 font-medium">
+                <p><TranslatedText>{`Before the 1930s, mortgages were rarely longer than 5 years. You paid interest annually and the principal at the end. If you couldn't pay, you lost the home.`}</TranslatedText></p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                   <div className="p-8 bg-red-50 rounded-[40px] border-2 border-red-100 space-y-4">
+                      <h4 className="font-black text-xs uppercase text-red-700 tracking-widest flex items-center gap-2"><Lock className="h-4 w-4" /> Pre-1933 (Traditional)</h4>
+                      <p className="text-sm font-bold text-red-900 leading-relaxed">Short terms, balloon payments, high ownership risk. Banks were local and held the risk.</p>
+                   </div>
+                   <div className="p-8 bg-blue-600 rounded-[40px] text-white space-y-4 shadow-xl shadow-blue-500/20">
+                      <h4 className="font-black text-xs uppercase text-blue-200 tracking-widest flex items-center gap-2"><Trophy className="h-4 w-4 fill-white" /> Post-1933 (Modern)</h4>
+                      <p className="text-sm font-bold opacity-90 leading-relaxed">The 30-year term was created to prevent mass foreclosures during the Depression. It made debt "affordable" by extending the sentence.</p>
+                   </div>
+                </div>
+                <EpiphanyBox>
+                   The 30-year mortgage was a government-sponsored stabilization tool, not a wealth-building one. It was designed to keep people in homes, but also in debt for their entire working lives.
+                </EpiphanyBox>
+              </div>
+            </section>
+
+            {/* LESSON 4: SECURITIZATION & VOLUME LENDING */}
+            <section className="space-y-12">
+              <LessonHeader 
+                number={4} 
+                title="Securitization: You are the Product" 
+                subtitle="How Your Debt is Traded on Wall Street"
+              />
+              <div className="space-y-8">
+                 <p className="text-xl text-slate-600 font-medium leading-relaxed">
+                   <TranslatedText>{`In the 1970s, banks found a way to move your mortgage off their balance sheets. They bundled thousands of mortgages into a single pool called a Mortgage-Backed Security (MBS) and sold them to investors.`}</TranslatedText>
+                 </p>
+                 <div className="bg-slate-900 rounded-[48px] p-10 text-white shadow-2xl relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-8 opacity-5"><Layers className="h-64 w-64 text-blue-400" /></div>
+                    <h3 className="text-2xl font-black uppercase tracking-[0.2em] text-blue-400 mb-8"><TranslatedText>The Securitization Cycle</TranslatedText></h3>
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+                       <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                          <p className="text-blue-400 font-black text-lg">Bank</p>
+                          <p className="text-[10px] uppercase opacity-60">Originates Loan</p>
+                       </div>
+                       <div className="flex items-center justify-center"><ArrowRight className="h-6 w-6 text-slate-600"/></div>
+                       <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                          <p className="text-emerald-400 font-black text-lg">MBS Pool</p>
+                          <p className="text-[10px] uppercase opacity-60">Bundled Assets</p>
+                       </div>
+                       <div className="flex items-center justify-center"><ArrowRight className="h-6 w-6 text-slate-600"/></div>
+                       <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                          <p className="text-amber-400 font-black text-lg">Wall St.</p>
+                          <p className="text-[10px] uppercase opacity-60">Sold to Investors</p>
+                       </div>
+                    </div>
+                    <p className="mt-8 text-sm text-slate-400 italic">
+                       Effectively, your local bank is now just a middleman (servicer). They collect a fee, but your true lender is a global investment fund that views your family as a predictable cash flow stream.
+                    </p>
+                 </div>
+              </div>
+            </section>
+
+            {/* LESSON 5: WHY COMPLEXITY BENEFITS LENDERS */}
+            <section className="space-y-12">
+              <LessonHeader 
+                number={5} 
+                title="The Complexity Trap" 
+                subtitle="Hiding Profit in the Fine Print"
+              />
+              <div className="space-y-8 text-xl text-slate-600 font-medium">
+                <p><TranslatedText>{`Why is your mortgage contract 100 pages long? Why are there terms like APR, Escrow, Amortization, and Points? Complexity is a strategic tool. It creates "information asymmetry"—where the bank knows more about the deal than you do.`}</TranslatedText></p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                   <StatBox label="Average Pages" value="82" />
+                   <StatBox label="Hidden Fees" value="14+" colorClass="text-red-600" />
+                   <StatBox label="Legalese Level" value="PHD" colorClass="text-blue-600" />
+                </div>
+              </div>
+            </section>
+
+            {/* LESSON 6: WHAT HISTORY TEACHES BORROWERS TODAY */}
+            <section className="space-y-12">
+              <LessonHeader 
+                number={6} 
+                title="Reclaiming History" 
+                subtitle="Moving from 'Subject' to 'Strategist'"
+              />
+              <div className="space-y-8 text-xl text-slate-600 font-medium">
+                <p><TranslatedText>{`The history of banking shows that the house always wins when the game is slow. The 30-year term, the monthly payment, and the closed loan structure are all designed for institutional safety. Our method is a return to sovereignty—using the bank's own technology (HELOCs/Offsets) to reverse 300 years of profit engineering.`}</TranslatedText></p>
+                <div className="p-8 bg-slate-900 text-white rounded-[40px] shadow-xl relative overflow-hidden">
+                   <div className="absolute top-0 right-0 p-8 opacity-10"><Award className="h-32 w-32" /></div>
+                   <h4 className="text-xl font-black mb-4">Historical Lessons for the Strategist</h4>
+                   <ul className="space-y-4">
+                      <li className="flex gap-3"><CheckCircle className="h-5 w-5 text-blue-400 shrink-0 mt-1"/> <span>Banks love predictability; we will introduce volatility (payoff speed).</span></li>
+                      <li className="flex gap-3"><CheckCircle className="h-5 w-5 text-blue-400 shrink-0 mt-1"/> <span>Banks love "Closed" systems; we will only use "Open" systems.</span></li>
+                      <li className="flex gap-3"><CheckCircle className="h-5 w-5 text-blue-400 shrink-0 mt-1"/> <span>Banks profit from your time; we will buy our time back at a discount.</span></li>
+                   </ul>
+                </div>
+              </div>
+            </section>
+
+            <section className="space-y-12">
+               <div className="text-center space-y-4">
+                  <h3 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Historical Audit</TranslatedText></h3>
+                  <p className="text-xl text-slate-500 font-medium"><TranslatedText>Review your current loan through a historical lens.</TranslatedText></p>
+               </div>
+               <BankRateChart />
+            </section>
+
+            <section className="space-y-12">
+               <Quiz 
+                  question="What was the 'Goldsmith's Secret' that birthed modern banking?"
+                  options={[
+                    "Lending physical gold at 0% interest.",
+                    "Issuing more paper receipts than they had gold in reserve.",
+                    "Charging fees to protect gold from thieves.",
+                    "Creating the first credit card in 1690."
+                  ]}
+                  correctAnswer={1}
+                  explanation="Goldsmiths noticed that only a fraction of gold was withdrawn at any time, allowing them to issue multiple paper receipts (loans) for the same gold, effectively creating money."
+               />
+               <Quiz 
+                  question="Why did the government pivot to 30-year mortgages in 1933?"
+                  options={[
+                    "To help families build wealth faster.",
+                    "To stabilize the economy by extending debt repayment terms.",
+                    "To compete with European banking systems.",
+                    "Because house prices tripled in one year."
+                  ]}
+                  correctAnswer={1}
+                  explanation="By extending the term to 30 years, monthly payments became lower and more 'affordable,' which stabilized the banking system by preventing mass defaults during the Depression."
+               />
+            </section>
+
+            <section className="space-y-6">
+              <h3 className="text-xl font-black uppercase text-slate-400 tracking-[0.2em] mb-4">Module 2 Glossary</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <ExpandSection title="Fractional Reserve">A banking system in which only a fraction of bank deposits are backed by actual cash on hand and available for withdrawal.</ExpandSection>
+                <ExpandSection title="Securitization">The process of taking an illiquid asset (like your mortgage) and, through financial engineering, transforming it into a security.</ExpandSection>
+                <ExpandSection title="Asymmetry">A situation where one party to a transaction has more or superior information compared to the other.</ExpandSection>
+                <ExpandSection title="MBS">Mortgage-Backed Security: An investment similar to a bond that is made up of a bundle of home loans.</ExpandSection>
+              </div>
+            </section>
+
+            <div className="pt-20 border-t-4 border-blue-600 text-center space-y-8">
+               <div className="inline-flex h-20 w-20 rounded-full bg-blue-600 items-center justify-center shadow-2xl shadow-blue-500/40">
+                  <Milestone className="h-10 w-10 text-white" />
+               </div>
+               <div className="space-y-4">
+                  <h2 className="text-4xl font-fraunces font-black text-slate-900">History Decoded</h2>
+                  <p className="text-xl text-slate-500 font-medium max-w-xl mx-auto">You've seen the historical design. Now, let's look at the Mathematical Proof of why the system is failing you.</p>
+               </div>
+               <button 
+                  onClick={nextLesson}
+                  className="group flex items-center gap-4 bg-[#2563EB] text-white px-12 py-6 rounded-[32px] font-black shadow-2xl shadow-blue-500/30 hover:bg-blue-600 transition-all active:scale-95 text-2xl mx-auto"
+               >
+                  <TranslatedText>Start Module 3: Mathematical Proof</TranslatedText>
+                  <ChevronRight className="h-8 w-8 group-hover:translate-x-3 transition-transform" />
+               </button>
+            </div>
+          </div>
+        )}
+
+        {/* Placeholder for remaining lessons */}
+        {id >= 2 && (
           <div className="p-20 text-center text-slate-400 font-bold uppercase tracking-widest">
             {meta.title} <TranslatedText>Module Content Loading...</TranslatedText>
           </div>
