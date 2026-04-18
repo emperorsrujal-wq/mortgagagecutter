@@ -413,7 +413,7 @@ function LessonContent({ id }: { id: number }) {
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Proof in One Sentence</TranslatedText></h2>
               </div>
               <EpiphanyBox>
-                <TranslatedText>{`On a standard amortizing mortgage, you will pay between 1.5x and 2.5x the purchase price of your home by the time you own it outright. This extra cost goes entirely to the bank and cannot be recovered through appreciation.`}</TranslatedText>
+                <TranslatedText>{`On a standard amortizing mortgage, you will pay between 1.5x and 2.5x the purchase price of your home by the time you own it outright, depending on your interest rate and loan term — and this extra cost goes entirely to the bank, produces nothing for you, and cannot be recovered through property appreciation because appreciation simply raises the price of every other home you might want to buy.`}</TranslatedText>
               </EpiphanyBox>
             </section>
 
@@ -662,7 +662,6 @@ function LessonContent({ id }: { id: number }) {
               </p>
             </header>
 
-            {/* MYTH 1: RENT VS BUY */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">1</div>
@@ -699,10 +698,9 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* MYTH 3: RETIREMENT DATE GOAL */}
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">3</div>
+                <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">2</div>
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Myth: "Pay Off By Retirement (65)"</TranslatedText></h2>
               </div>
               <p className="text-xl text-slate-600 font-medium">
@@ -725,7 +723,7 @@ function LessonContent({ id }: { id: number }) {
 
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">4</div>
+                <div className="h-10 w-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black">3</div>
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Mindset Graduation</TranslatedText></h2>
               </div>
               <Quiz 
@@ -743,7 +741,7 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 5: THE SECRET SCORECARD */}
+        {/* LESSON 5: THE SECRET SCORECARD (CREDIT MASTERY) */}
         {id === 5 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
@@ -756,31 +754,39 @@ function LessonContent({ id }: { id: number }) {
                 <span className="block text-blue-600 italic mt-4"><TranslatedText>Mastering the Gatekeeper's Math.</TranslatedText></span>
               </h1>
               <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
-                <TranslatedText>{`Lenders in ${country.name} have a secret 'Report Card' they use to decide who gets the high-performance tools. We're going to learn how to ace it.`}</TranslatedText>
+                <TranslatedText>{`Your credit score is not a judgment. It is a calculation — and every calculation has levers. Know the levers, pull them in the right order, and the number moves.`}</TranslatedText>
               </p>
             </header>
 
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: The Heavy Backpack Test (ELI14)</TranslatedText></h2>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Anatomy of a High Score</TranslatedText></h2>
               </div>
-              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
-                  <p>
-                    <TranslatedText>Imagine you want to borrow your friend's really fast racing bike (The HELOC). Your friend says, "I'll let you use it, but first I need to know if you're strong enough to pedal it up a steep hill without crashing."</TranslatedText>
-                  </p>
-                  <p>
-                    <TranslatedText>To test you, they put a heavy backpack on you and ask you to run. The weight in the backpack represents your other debts (car loans, credit cards, taxes). If the backpack is too heavy for your body weight (income), your friend won't give you the bike because they're afraid you'll fall.</TranslatedText>
-                  </p>
+                  <p><TranslatedText>A credit score is a mathematical summary of your history. In the USA and Canada, the FICO model weights five factors. Understanding these weights is understanding the game.</TranslatedText></p>
+                  <ul className="space-y-4">
+                    <li className="flex gap-4">
+                      <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-black shrink-0">35%</div>
+                      <p className="text-sm font-bold">Payment History: Every on-time payment adds a small positive signal. One 30-day late can stay for 7 years.</p>
+                    </li>
+                    <li className="flex gap-4">
+                      <div className="h-10 w-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-black shrink-0">30%</div>
+                      <p className="text-sm font-bold">Credit Utilisation: How much of your limit are you using? Target is under 10% for the best scores.</p>
+                    </li>
+                    <li className="flex gap-4">
+                      <div className="h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 font-black shrink-0">15%</div>
+                      <p className="text-sm font-bold">Length of History: Old accounts are gold. Never close your oldest credit card.</p>
+                    </li>
+                  </ul>
                 </div>
-                <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
-                  <div className="absolute top-0 right-0 p-6 opacity-10"><Target className="h-32 w-32 text-blue-400" /></div>
+                <div className="bg-slate-900 p-10 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4">
+                  <div className="absolute top-0 right-0 p-6 opacity-10"><Target className="h-48 w-48 text-blue-400" /></div>
                   <div className="space-y-2 relative z-10">
-                    <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Gatekeeper's Metric</p>
-                    <h3 className="text-6xl font-black text-white tracking-tighter">DTI</h3>
-                    <p className="text-lg font-bold text-slate-400">Debt-to-Income Capacity</p>
+                    <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Target Score</p>
+                    <h3 className="text-8xl font-black text-white tracking-tighter">760+</h3>
+                    <p className="text-lg font-bold text-slate-400">Unlock Tier 1 HELOC Rates</p>
                   </div>
                 </div>
               </div>
@@ -789,7 +795,74 @@ function LessonContent({ id }: { id: number }) {
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: Run Your Scorecard</TranslatedText></h2>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Global Score Bands</TranslatedText></h2>
+              </div>
+              <div className="bg-white border-2 border-slate-100 rounded-[48px] p-10 shadow-xl overflow-hidden relative">
+                 <div className="absolute top-0 right-0 p-8 opacity-5"><Globe className="h-64 w-64" /></div>
+                 <div className="overflow-auto relative z-10">
+                    <table className="w-full text-left text-sm font-medium border-collapse">
+                       <thead>
+                          <tr className="border-b border-slate-100">
+                             <th className="py-4 text-blue-600 uppercase tracking-widest">Score Band</th>
+                             <th className="py-4">USA / Canada</th>
+                             <th className="py-4">UK (Experian)</th>
+                             <th className="py-4">Australia</th>
+                          </tr>
+                       </thead>
+                       <tbody className="text-slate-600">
+                          <tr className="border-b border-slate-50">
+                             <td className="py-4 font-black">Poor (Declined)</td>
+                             <td className="py-4">Below 620</td>
+                             <td className="py-4">Below 560</td>
+                             <td className="py-4">Below 509</td>
+                          </tr>
+                          <tr className="border-b border-slate-50">
+                             <td className="py-4 font-black">Good (Approved)</td>
+                             <td className="py-4">660 - 719</td>
+                             <td className="py-4">721 - 880</td>
+                             <td className="py-4">622 - 725</td>
+                          </tr>
+                          <tr>
+                             <td className="py-4 font-black text-emerald-600">Excellent (Best Rate)</td>
+                             <td className="py-4 text-emerald-600 font-bold">760+</td>
+                             <td className="py-4 text-emerald-600 font-bold">961+</td>
+                             <td className="py-4 text-emerald-600 font-bold">833+</td>
+                          </tr>
+                       </tbody>
+                    </table>
+                 </div>
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Fast Boosters & The 90-Day Plan</TranslatedText></h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="p-8 bg-blue-50 border-t-8 border-t-blue-600 rounded-b-3xl space-y-4 shadow-sm">
+                  <h4 className="font-black text-sm uppercase text-blue-900">Days: Paydown</h4>
+                  <p className="text-xs font-medium text-blue-800/70 leading-relaxed">Pay card balances to under 10% total limit. Utilization updates every 30 days. Instant score jump once reported.</p>
+                </div>
+                <div className="p-8 bg-emerald-50 border-t-8 border-t-emerald-600 rounded-b-3xl space-y-4 shadow-sm">
+                  <h4 className="font-black text-sm uppercase text-emerald-900">Immediate: Errors</h4>
+                  <p className="text-xs font-medium text-emerald-800/70 leading-relaxed">Dispute errors at AnnualCreditReport.com (USA) or Equifax/TU (Canada). Legitimate removals jump scores 30-100 pts.</p>
+                </div>
+                <div className="p-8 bg-amber-50 border-t-8 border-t-amber-600 rounded-b-3xl space-y-4 shadow-sm">
+                  <h4 className="font-black text-sm uppercase text-amber-900">30-90 Days: Autopay</h4>
+                  <p className="text-xs font-medium text-amber-800/70 leading-relaxed">Set all minimums to autopay. Protect your history during the preparation phase. One miss ruins months of work.</p>
+                </div>
+              </div>
+
+              <EpiphanyBox>
+                <TranslatedText>{`The Statement Date Trick: Lenders report your balance on your statement closing date, not your due date. Pay your balance to zero the day BEFORE your statement closes to show 0% utilization to the bureaus.`}</TranslatedText>
+              </EpiphanyBox>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">4</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Audit Your Scorecard</TranslatedText></h2>
               </div>
               <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
                 <TranslatedText>{`Use the "Lender Probability" simulator below. It uses ${country.name}'s specific regulatory limits to show you how a Senior Loan Officer sees your financial profile.`}</TranslatedText>
@@ -799,17 +872,17 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 6: THE STRATEGIC ARSENAL */}
+        {/* LESSON 6: THE STRATEGIC ARSENAL (REINDEXED) */}
         {id === 6 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
-              <div className="inline-flex items-center gap-2 px-6 py-2 bg-purple-100 text-purple-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-purple-200">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-pink-50 text-pink-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-pink-100">
                 <Zap className="h-4 w-4" />
                 <TranslatedText>Mastery Level: 05 — Tool Acquisition</TranslatedText>
               </div>
               <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
                 <TranslatedText>The Strategic Arsenal:</TranslatedText>
-                <span className="block text-blue-600 italic mt-4"><TranslatedText>Choosing the Right Tool.</TranslatedText></span>
+                <span className="block text-pink-600 italic mt-4"><TranslatedText>Choosing the Right Tool.</TranslatedText></span>
               </h1>
               <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
                 <TranslatedText>{`In the top 1%, the tools are different. Today, you learn to swap your "Cage" for a "Swiss Army Wallet" in ${country.name}.`}</TranslatedText>
@@ -818,7 +891,7 @@ function LessonContent({ id }: { id: number }) {
 
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
+                <div className="h-10 w-10 rounded-xl bg-pink-600 text-white flex items-center justify-center font-black">1</div>
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: The Swiss Army Wallet (ELI14)</TranslatedText></h2>
               </div>
               
@@ -844,7 +917,7 @@ function LessonContent({ id }: { id: number }) {
 
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
+                <div className="h-10 w-10 rounded-xl bg-pink-600 text-white flex items-center justify-center font-black">2</div>
                 <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: The Lender Audit</TranslatedText></h2>
               </div>
               <ScriptGenerator />
