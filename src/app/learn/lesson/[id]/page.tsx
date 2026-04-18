@@ -15,7 +15,8 @@ import {
   HyperdriveSim, 
   BiWeeklyCalc, 
   OffsetVisual,
-  TruthCalculator
+  TruthCalculator,
+  RateImpactCalc
 } from '@/components/course/Calculators';
 import { 
   CourseCard, 
@@ -76,7 +77,7 @@ import { useUser } from '@/firebase';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 function ProgressBar({ current }: { current: number }) {
-  const total = 12;
+  const total = 13;
   return (
     <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-[#E8ECF2]">
       <div className="h-1 bg-slate-100 w-full">
@@ -120,7 +121,7 @@ function EpiphanyBox({ children }: { children: React.ReactNode }) {
 
 function LessonContent({ id }: { id: number }) {
   const { country, completeLesson } = useCourse();
-  const { user } = useAuth();
+  const { user } = useUser();
   const meta = lessonMeta.find(l => l.id === id);
   const router = useRouter();
 
@@ -131,7 +132,7 @@ function LessonContent({ id }: { id: number }) {
 
   const nextLesson = () => {
     completeLesson(id);
-    if (id < 12) router.push(`/learn/lesson/${id + 1}`);
+    if (id < 13) router.push(`/learn/lesson/${id + 1}`);
     else router.push('/members/chunker');
   };
 
@@ -704,7 +705,7 @@ function LessonContent({ id }: { id: number }) {
                 <TranslatedText>{`Accepting the 30-year timeline means accepting that the bank gets your prime earning years. If you finish at 50 instead of 65 and invest the freed-up cash flow, you generate nearly $800k in additional retirement wealth.`}</TranslatedText>
               </p>
               <div className="bg-slate-900 text-white p-12 rounded-[56px] shadow-2xl space-y-10 text-center relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-8 opacity-5"><Trophy className="h-64 w-64 text-blue-400" /></div>
+                <div className="absolute top-0 right-0 p-8 opacity-10"><Trophy className="h-64 w-64 text-blue-400" /></div>
                 <div className="space-y-2 relative z-10">
                    <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em]">The Retirement Dividend</p>
                    <h3 className="text-7xl font-black tracking-tighter">+$791,000</h3>
@@ -1098,71 +1099,88 @@ function LessonContent({ id }: { id: number }) {
                  </div>
               </CourseCard>
             </section>
+          </div>
+        )}
+
+        {/* LESSON 11: INTEREST RATE SECRETS */}
+        {id === 11 && (
+          <div className="space-y-24 animate-in fade-in duration-1000">
+            <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-amber-100 text-amber-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-amber-200">
+                <TrendingUp className="h-4 w-4" />
+                <TranslatedText>Mastery Level: 11 — Rate Dynamics</TranslatedText>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>Rate Secrets:</TranslatedText>
+                <span className="block text-amber-600 italic mt-4"><TranslatedText>Managing the Price of Debt.</TranslatedText></span>
+              </h1>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                <TranslatedText>{`Most people know their rate like their blood pressure—a number that exists but they don't control. Today, you gain the power to manage it.`}</TranslatedText>
+              </p>
+            </header>
 
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Live-In Flip Cycle</TranslatedText></h2>
+                <div className="h-10 w-10 rounded-xl bg-amber-600 text-white flex items-center justify-center font-black">1</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Anatomy of a Rate</TranslatedText></h2>
               </div>
-              <div className="space-y-8">
-                {[
-                  { title: "Identify & Buy", desc: "Target below-market properties (10-20% under) that need cosmetic surgery." },
-                  { title: "Improve & Live", desc: "Live in the project. Fund renovations via HELOC. Activate Primary Residence Exemption." },
-                  { title: "Capture & Scale", desc: "Appraise at new value. Draw deposit for Property #2. Keep or Sell for tax-free gain." }
-                ].map((s, i) => (
-                  <div key={i} className="flex gap-8 group">
-                    <div className="flex flex-col items-center">
-                      <div className="h-16 w-16 rounded-full bg-slate-900 text-white flex items-center justify-center font-black text-xl shadow-xl group-hover:bg-blue-600 transition-all">{i+1}</div>
-                      {i < 2 && <div className="w-1 flex-1 bg-slate-100 my-2" />}
-                    </div>
-                    <div className="pb-12 space-y-2">
-                       <h4 className="text-2xl font-black text-slate-900 uppercase tracking-tight">{s.title}</h4>
-                       <p className="text-lg text-slate-500 font-medium leading-relaxed max-w-xl">{s.desc}</p>
-                    </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
+                  <p><TranslatedText>Every lending rate is built from two stacked components. The 'Base Rate' is set by your Central Bank (The Fed, BoC, BoE, RBA). The 'Margin' is the bank's profit slice.</TranslatedText></p>
+                  <p className="text-amber-600 font-black italic"><TranslatedText>Your Rate = Prime + Margin</TranslatedText></p>
+                  <p><TranslatedText>The Base Rate is non-negotiable. The Margin is a business decision—and business decisions can be changed with the right script.</TranslatedText></p>
+                </div>
+                <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
+                  <div className="absolute top-0 right-0 p-6 opacity-10"><Coins className="h-48 w-48 text-amber-400" /></div>
+                  <div className="space-y-2 relative z-10">
+                    <p className="text-[10px] font-black uppercase text-amber-400 tracking-[0.5em]">The Negotiable Slice</p>
+                    <h3 className="text-6xl font-black text-white tracking-tighter">MARGIN</h3>
+                    <p className="text-lg font-bold text-slate-400">The Bank's Negotiable Spread</p>
                   </div>
-                ))}
+                </div>
               </div>
-
-              <EpiphanyBox>
-                <TranslatedText>{`In all four markets, your primary residence is a tax-sheltered fortress. The Live-in Flip allows you to capture $200k+ in equity gains with zero tax liability—a return profile no other asset class can match.`}</TranslatedText>
-              </EpiphanyBox>
             </section>
 
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">4</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Global Access Audit</TranslatedText></h2>
+                <div className="h-10 w-10 rounded-xl bg-amber-600 text-white flex items-center justify-center font-black">2</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Rate Immunity Strategy</TranslatedText></h2>
+              </div>
+              <EpiphanyBox>
+                <TranslatedText>{`The homeowner who obsessively predicts rates is playing the wrong game. The homeowner who obsessively reduces their balance is playing the right one. A $180,000 balance at 8% costs significantly less than a $300,000 balance at 6%. Principal reduction is the only guaranteed rate immunity.`}</TranslatedText>
+              </EpiphanyBox>
+              <RateImpactCalc />
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-amber-600 text-white flex items-center justify-center font-black">3</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Global Strategic Guide</TranslatedText></h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                 {[
-                    { c: "USA", cap: "85-90% CLTV", speed: "Instant Draw", tax: "$500k Married Exemption" },
-                    { c: "Canada", cap: "65% Revolving", speed: "Instant Draw", tax: "100% Principal Exemption" },
-                    { c: "UK", cap: "75-80% LTV", speed: "2-8 Weeks", tax: "Private Residence Relief" },
-                    { c: "Australia", cap: "80-90% LVR", speed: "Instant Redraw", tax: "Main Residence Relief" },
-                 ].map((item, i) => (
-                   <div key={i} className="p-8 bg-white border-2 border-slate-100 rounded-[40px] space-y-4">
-                      <div className="flex justify-between items-center">
-                         <h4 className="text-xl font-black text-slate-900">{item.c}</h4>
-                         <span className="text-[10px] font-black uppercase text-blue-500 bg-blue-50 px-2 py-1 rounded">{item.cap}</span>
-                      </div>
-                      <div className="space-y-2">
-                         <p className="text-sm font-bold text-slate-500 flex items-center gap-2"><Zap className="h-3 w-3" /> Access Speed: {item.speed}</p>
-                         <p className="text-sm font-bold text-slate-500 flex items-center gap-2"><ShieldCheck className="h-3 w-3" /> Tax Shield: {item.tax}</p>
-                      </div>
-                   </div>
-                 ))}
+                {[
+                  { c: "USA", strategy: "Prime + Margin", tip: "Get quotes from 3+ lenders. 0.25% margin reduction is worth $7,500 over 10 years." },
+                  { c: "Canada", strategy: "Open HELOC Advantage", tip: "HELOCs are penalty-free. Throw every dollar at the high-rate open portion first." },
+                  { c: "UK", strategy: "Base Rate + Offset", tip: "Offset balances reduce interest 1:1. Rate level matters less as offset balance grows." },
+                  { c: "Australia", strategy: "Cash Rate Transmission", tip: "Variable rates drop automatically with RBA cuts. Full velocity cycling is your best friend." },
+                ].map((item, i) => (
+                  <div key={i} className="p-8 bg-white border-2 border-slate-100 rounded-[40px] space-y-4">
+                    <h4 className="text-xl font-black text-slate-900">{item.c} Strategy</h4>
+                    <p className="text-sm font-bold text-slate-500">{item.tip}</p>
+                  </div>
+                ))}
               </div>
             </section>
           </div>
         )}
 
-        {/* LESSON 11: THE 1% MULTIPLIER */}
-        {id === 11 && (
+        {/* LESSON 12: THE 1% MULTIPLIER */}
+        {id === 12 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-50 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-100">
                 <Trophy className="h-4 w-4" />
-                <TranslatedText>Mastery Level: 10 — Portfolio Scaling</TranslatedText>
+                <TranslatedText>Mastery Level: 12 — Portfolio Scaling</TranslatedText>
               </div>
               <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
                 <TranslatedText>The 1% Multiplier:</TranslatedText>
@@ -1212,8 +1230,8 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* LESSON 12: THE PHYSICS OF FREEDOM */}
-        {id === 12 && (
+        {/* LESSON 13: THE PHYSICS OF FREEDOM */}
+        {id === 13 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-white/10 shadow-xl">
@@ -1274,7 +1292,7 @@ function LessonContent({ id }: { id: number }) {
             <TranslatedText>Previous Phase</TranslatedText>
           </button>
           
-          {(id < 12 && (!isLocked || isPrivileged)) && (
+          {(id < 13 && (!isLocked || isPrivileged)) && (
             <button 
                 onClick={nextLesson}
                 className="group flex items-center gap-4 bg-[#2563EB] text-white px-12 py-6 rounded-[24px] font-black shadow-2xl shadow-blue-500/30 hover:bg-blue-600 transition-all active:scale-95 text-2xl"

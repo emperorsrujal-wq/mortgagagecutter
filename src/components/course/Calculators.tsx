@@ -1,3 +1,4 @@
+
 'use client';
 import React, { useState, useEffect, useMemo } from 'react';
 import { useCourse } from './CourseProvider';
@@ -36,6 +37,69 @@ function ConfettiBurst() {
         />
       ))}
     </div>
+  );
+}
+
+export function RateImpactCalc() {
+  const { country } = useCourse();
+  const [balance, setBalance] = useState(300000);
+  const [change, setChange] = useState(1.0);
+
+  const monthlyChange = (balance * (change / 100)) / 12;
+  const annualChange = balance * (change / 100);
+  const decadeChange = annualChange * 10;
+
+  const fmt = (val: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: country.currency, maximumFractionDigits: 0 }).format(val);
+
+  return (
+    <CourseCard title="📊 Rate Change Impact Auditor" className="border-l-8 border-l-amber-500 shadow-2xl">
+      <div className="space-y-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">
+                <span>Outstanding Balance</span>
+                <span className="text-slate-900">{fmt(balance)}</span>
+              </div>
+              <input type="range" min="50000" max="1500000" step="10000" value={balance} onChange={e => setBalance(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-blue-600" />
+            </div>
+            <div className="space-y-4">
+              <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">
+                <span>Interest Rate Change (%)</span>
+                <span className={cn("font-black", change > 0 ? "text-red-600" : "text-emerald-600")}>{change > 0 ? `+${change}` : change}%</span>
+              </div>
+              <input type="range" min="-3" max="5" step="0.25" value={change} onChange={e => setChange(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-amber-500" />
+            </div>
+          </div>
+
+          <div className="bg-slate-900 rounded-[40px] p-8 text-white text-center space-y-6 shadow-xl relative overflow-hidden flex flex-col justify-center">
+            <div className="absolute top-0 right-0 p-6 opacity-5"><TrendingUp className="h-32 w-32" /></div>
+            <div className="space-y-1 relative z-10">
+              <p className="text-[10px] font-black uppercase text-amber-400 tracking-[0.5em]">Monthly Cash Flow Impact</p>
+              <h3 className="text-6xl font-black tracking-tighter">{fmt(monthlyChange)}</h3>
+              <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">Additional Interest Only</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+           <div className="p-6 bg-slate-50 border-2 border-slate-100 rounded-3xl text-center">
+              <p className="text-[10px] font-black uppercase text-slate-400 mb-1">Annual Exposure</p>
+              <p className="text-2xl font-black text-slate-900">{fmt(annualChange)}</p>
+           </div>
+           <div className="p-6 bg-amber-50 border-2 border-amber-100 rounded-3xl text-center">
+              <p className="text-[10px] font-black uppercase text-amber-600 mb-1">10-Year Lifecycle Cost</p>
+              <p className="text-2xl font-black text-amber-700">{fmt(decadeChange)}</p>
+           </div>
+        </div>
+
+        <div className="p-6 bg-blue-50 border-l-4 border-l-blue-500 rounded-r-2xl space-y-2">
+           <p className="text-sm font-bold text-blue-900 italic leading-relaxed">
+              <TranslatedText>{`The "Rate Immunity" Lesson: If you cycle your income and reduce this balance to ${fmt(balance / 2)}, the impact of the same ${change}% rate hike drops to ${fmt(monthlyChange / 2)} immediately. Principal reduction is the only 100% effective hedge.`}</TranslatedText>
+           </p>
+        </div>
+      </div>
+    </CourseCard>
   );
 }
 
@@ -767,7 +831,7 @@ export function QualificationCalc() {
   const n = 30 * 12;
 
   // Monthly PITI estimation
-  const pmt = balance * (rate * Math.pow(1 + rate, n)) / (Math.pow(1 + rate, n) - 1);
+  const pmt = balance * (rate * Math.pow(1 + rate, n)) / (Math.pow(1 + monthlyRate, n) - 1);
   const stressPmt = balance * (stressRate * Math.pow(1 + stressRate, n)) / (Math.pow(1 + stressRate, n) - 1);
   
   const totalMonthly = pmt + debts + taxIns;
@@ -848,7 +912,7 @@ export function QualificationCalc() {
                     <span>Tax & Insurance (Monthly)</span>
                     <span className="text-slate-900">{fmt(taxIns)}</span>
                   </div>
-                  <input type="range" min="0" max="2000" step="10" value={taxIns} onChange={e => setTaxIns(Number(e.target.value))} className="w-full h-2 bg-slate-100 rounded-full appearance-none accent-slate-600" />
+                  <input type="range" min="0" max="2000" step="10" value={taxIns} onChange={e => setTaxIns(Number(e.target.value))} className="w-full h-3 bg-slate-100 rounded-full appearance-none cursor-pointer accent-slate-600" />
                 </div>
                 <div className="space-y-4">
                   <div className="flex justify-between font-bold text-xs uppercase tracking-widest text-slate-400">
