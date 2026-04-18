@@ -81,7 +81,9 @@ import {
   HelpCircle,
   AlertTriangle,
   HeartPulse,
-  Waves
+  Waves,
+  MousePointer2,
+  ListChecks
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -920,8 +922,173 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
-        {/* Lesson 5-13 Omitted for brevity in this response but they follow the same rich pattern established above */}
-        {id >= 5 && (
+        {/* PHASE 5: THE SECRET SCORECARD (CREDIT MASTERY) */}
+        {id === 5 && (
+          <div className="space-y-24 animate-in fade-in duration-1000">
+            <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-50 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-100 shadow-sm">
+                <Award className="h-4 w-4" />
+                <TranslatedText>Mastery Level: 05 — The Physics of Qualification</TranslatedText>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>The Secret Scorecard:</TranslatedText>
+                <span className="block text-blue-600 italic mt-4"><TranslatedText>Moving the Levers.</TranslatedText></span>
+              </h1>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
+                <TranslatedText>{`Your credit score is not a judgment of your character. It is a mathematical calculation of your profitability to the bank. Today, we learn to move the levers.`}</TranslatedText>
+              </p>
+            </header>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Five Levers of FICO (ELI14)</TranslatedText></h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                 <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
+                    <p><TranslatedText>Think of your credit score as a bucket. There are five ways to fill it or drain it. The biggest one—35% of the bucket—is simply: "Did you do what you said you'd do?" (Payment History).</TranslatedText></p>
+                    <p><TranslatedText>The second biggest—30%—is the "Leaking Bathtub" (Utilization). If you have a $10k limit and use $9k, the bank sees a bathtub about to overflow. If you use $1k, they see a stable system.</TranslatedText></p>
+                    <p className="text-blue-600 font-black italic"><TranslatedText>Strategic Fact: Utilization is the fastest lever to pull. You can boost your score by 50 points in 30 days just by paying down cards.</TranslatedText></p>
+                 </div>
+                 <div className="bg-slate-900 rounded-[48px] p-10 text-white space-y-8 shadow-2xl relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-8 opacity-5"><Target className="h-48 w-48 text-blue-400" /></div>
+                    <div className="space-y-6 relative z-10">
+                       <h4 className="text-xs font-black uppercase text-blue-400 tracking-[0.3em] mb-4">The FICO Weightage</h4>
+                       {[
+                        { label: "Payment History", pct: 35, color: "bg-emerald-500" },
+                        { label: "Utilization (The Lever)", pct: 30, color: "bg-blue-500" },
+                        { label: "History Length", pct: 15, color: "bg-purple-500" },
+                        { label: "Credit Mix", pct: 10, color: "bg-amber-500" },
+                        { label: "New Credit", pct: 10, color: "bg-red-500" }
+                       ].map((l, i) => (
+                         <div key={i} className="space-y-2">
+                           <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
+                             <span>{l.label}</span>
+                             <span>{l.pct}%</span>
+                           </div>
+                           <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                             <div className={cn("h-full", l.color)} style={{ width: `${l.pct}%` }} />
+                           </div>
+                         </div>
+                       ))}
+                    </div>
+                 </div>
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Statement Date Trick (Forensic Hack)</TranslatedText></h2>
+              </div>
+              <EpiphanyBox>
+                <TranslatedText>{`Banks don't report your balance on your "Due Date." They report it on your "Statement Closing Date." If you spend $5,000 and pay it off on the due date, the bank still reports a $5,000 balance to the bureaus—making your utilization look high. The Hack: Pay your cards to $0 TWO DAYS BEFORE the statement closing date.`}</TranslatedText>
+              </EpiphanyBox>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
+                <InfoBox title="Why it works" color="green">
+                  The credit bureaus only see a snapshot once a month. By zeroing the balance before the snapshot, you artificially suppress your utilization to 0%, triggering a massive score boost without changing your spending.
+                </InfoBox>
+                <InfoBox title="When to use it" color="amber">
+                  Execute this strategy for 90 days leading up to your HELOC application. Lenders look for "Utilization Stability." A 0% reporting history signals a low-risk, high-liquidity borrower.
+                </InfoBox>
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">3</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Global Score Bands (Qualification Logic)</TranslatedText></h2>
+              </div>
+              <p className="text-xl text-slate-600 font-medium">
+                <TranslatedText>{`Lenders across the 4 major markets use different scales, but the logic is identical: The top 10% get the lowest rates. Your goal is the "Efficiency Zone."`}</TranslatedText>
+              </p>
+              
+              <Tabs defaultValue="USA" className="w-full">
+                <TabsList className="grid grid-cols-4 h-14 bg-slate-100 rounded-2xl p-1">
+                  {['USA', 'Canada', 'UK', 'Australia'].map(c => (
+                    <TabsTrigger key={c} value={c} className="rounded-xl font-black text-xs tracking-widest">{c}</TabsTrigger>
+                  ))}
+                </TabsList>
+                
+                <TabsContent value="USA" className="mt-8 space-y-8 animate-in fade-in">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {[
+                      { band: "760+", label: "Efficiency Zone", desc: "Access to Prime - 0.25% or flat Prime rates.", color: "border-emerald-500 bg-emerald-50" },
+                      { band: "700-759", label: "Standard Zone", desc: "Access to Prime + 0.5% to 1.0%.", color: "border-blue-500 bg-blue-50" },
+                      { band: "< 680", label: "Danger Zone", desc: "High probability of denial for first-lien HELOCs.", color: "border-red-500 bg-red-50" }
+                    ].map((b, i) => (
+                      <div key={i} className={cn("p-8 rounded-[32px] border-4 text-center space-y-2", b.color)}>
+                        <p className="text-3xl font-black text-slate-900">{b.band}</p>
+                        <p className="text-xs font-black uppercase text-slate-500 tracking-widest">{b.label}</p>
+                        <p className="text-sm font-medium text-slate-600">{b.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </TabsContent>
+
+                {/* Other countries follow same pattern - condensed for brevity */}
+                <TabsContent value="Canada" className="mt-8 animate-in fade-in">
+                  <div className="p-8 bg-slate-900 text-white rounded-[40px] text-center">
+                    <p className="text-[10px] font-black uppercase text-blue-400 mb-4 tracking-[0.4em]">Target Score: Equifax Canada</p>
+                    <h3 className="text-6xl font-black tracking-tighter">760+</h3>
+                    <p className="text-slate-400 mt-2 font-medium">To avoid the "Stress Test Cushion" fee, a 760 score is the gold standard for Canadian lenders.</p>
+                  </div>
+                </TabsContent>
+                <TabsContent value="UK" className="mt-8 animate-in fade-in">
+                   <div className="p-8 bg-slate-900 text-white rounded-[40px] text-center">
+                    <p className="text-[10px] font-black uppercase text-blue-400 mb-4 tracking-[0.4em]">Target Score: Experian UK</p>
+                    <h3 className="text-6xl font-black tracking-tighter">881+</h3>
+                    <p className="text-slate-400 mt-2 font-medium">UK lenders look for "Electoral Roll" presence and an 881+ score for Offset Mortgage products.</p>
+                  </div>
+                </TabsContent>
+                <TabsContent value="Australia" className="mt-8 animate-in fade-in">
+                   <div className="p-8 bg-slate-900 text-white rounded-[40px] text-center">
+                    <p className="text-[10px] font-black uppercase text-blue-400 mb-4 tracking-[0.4em]">Target Score: Equifax AU</p>
+                    <h3 className="text-6xl font-black tracking-tighter">726+</h3>
+                    <p className="text-slate-400 mt-2 font-medium">With Comprehensive Credit Reporting, AU scores are more dynamic. 726+ is required for top-tier LVR products.</p>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">4</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The 90-Day Blueprint (Action Plan)</TranslatedText></h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div className="space-y-8">
+                  <TaskItem id="credit_1" label="Pull forensic reports from ALL bureaus." />
+                  <TaskItem id="credit_2" label="Set autopay on EVERY account for the minimum." />
+                  <TaskItem id="credit_3" label="Zero-out utilization using the Statement Date Trick." />
+                  <TaskItem id="credit_4" label="Freeze all new credit applications for 6 months." />
+                  <TaskItem id="credit_5" label="Request limit increases (Soft Inquiry only)." />
+                </div>
+                <div className="bg-white border-2 border-slate-100 rounded-[48px] p-10 shadow-xl flex flex-col justify-center text-center space-y-6">
+                   <div className="h-16 w-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mx-auto"><ListChecks className="h-8 w-8" /></div>
+                   <h4 className="text-2xl font-black text-slate-900 leading-tight">The "Silent Period" Rule</h4>
+                   <p className="text-slate-500 font-medium leading-relaxed">
+                     Lenders hate "Surprise Noise." In the 90 days before your application, your credit file should be a desert. No new cards, no car loans, no store credit. Just clean, boring, on-time payments.
+                   </p>
+                </div>
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">5</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Audit Your Probability</TranslatedText></h2>
+              </div>
+              <p className="text-xl text-slate-600 font-medium text-center max-w-2xl mx-auto mb-10">
+                <TranslatedText>{`Use the tool below to input your current score and debt ratios. It will calculate your probability of approval for a first-lien HELOC in your region.`}</TranslatedText>
+              </p>
+              <QualificationCalc />
+            </section>
+          </div>
+        )}
+
+        {/* Lesson 6-13 Omitted for brevity in this response but they follow the same rich pattern established above */}
+        {id >= 6 && (
           <div className="p-20 text-center text-slate-400 font-bold uppercase tracking-widest">
             {meta.title} <TranslatedText>Masterclass Content Loaded...</TranslatedText>
           </div>
@@ -960,4 +1127,3 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     </CourseProvider>
   );
 }
-
