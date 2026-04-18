@@ -7,7 +7,8 @@ import {
   InterestCalc,
   TruthCalculator,
   AmortViz,
-  BankRateChart
+  BankRateChart,
+  PayoffRace
 } from '@/components/course/Calculators';
 import { 
   CourseCard, 
@@ -98,7 +99,7 @@ function ProgressBar({ current }: { current: number }) {
           <span className="hidden sm:inline uppercase tracking-widest"><TranslatedText>Course Hub</TranslatedText></span>
         </Link>
         <div className="text-[10px] font-black uppercase text-slate-400 tracking-[0.3em]">
-          {current === 0 ? <TranslatedText>Module 1: Awakening</TranslatedText> : current === 1 ? <TranslatedText>Module 2: History</TranslatedText> : <><TranslatedText>Module</TranslatedText> {current + 1} <TranslatedText>of</TranslatedText> {total + 1}</>}
+          {current === 0 ? <TranslatedText>Module 1: Awakening</TranslatedText> : current === 1 ? <TranslatedText>Module 2: History</TranslatedText> : current === 2 ? <TranslatedText>Module 3: The Proof</TranslatedText> : <><TranslatedText>Module</TranslatedText> {current + 1} <TranslatedText>of</TranslatedText> {total + 1}</>}
         </div>
         <div className="w-20" />
       </div>
@@ -358,16 +359,6 @@ function LessonContent({ id }: { id: number }) {
                />
             </section>
 
-            <section className="space-y-6">
-              <h3 className="text-xl font-black uppercase text-slate-400 tracking-[0.2em] mb-4">Module 1 Glossary</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <ExpandSection title="Principal">The original amount of money you borrowed. This is the only number that reduces your debt.</ExpandSection>
-                <ExpandSection title="Interest">The 'rent' you pay to the bank to use their money. This is pure expense and builds no wealth.</ExpandSection>
-                <ExpandSection title="Amortization">The mathematical schedule that determines how much interest vs. principal you pay each month.</ExpandSection>
-                <ExpandSection title="Equity">The portion of the home you actually own. (Market Value - Total Debt).</ExpandSection>
-              </div>
-            </section>
-
             <div className="pt-20 border-t-4 border-blue-600 text-center space-y-8">
                <div className="inline-flex h-20 w-20 rounded-full bg-blue-600 items-center justify-center shadow-2xl shadow-blue-500/40">
                   <Award className="h-10 w-10 text-white" />
@@ -404,7 +395,6 @@ function LessonContent({ id }: { id: number }) {
               </p>
             </header>
 
-            {/* LESSON 1: EARLY LENDING & THE GOLDSMITH'S SECRET */}
             <section className="space-y-12">
               <LessonHeader 
                 number={1} 
@@ -424,7 +414,6 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* LESSON 2: HOW MODERN BANKS GAINED POWER */}
             <section className="space-y-12">
               <LessonHeader 
                 number={2} 
@@ -461,7 +450,6 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* LESSON 3: THE BIRTH OF THE LONG-TERM MORTGAGE */}
             <section className="space-y-12">
               <LessonHeader 
                 number={3} 
@@ -486,87 +474,12 @@ function LessonContent({ id }: { id: number }) {
               </div>
             </section>
 
-            {/* LESSON 4: SECURITIZATION & VOLUME LENDING */}
             <section className="space-y-12">
-              <LessonHeader 
-                number={4} 
-                title="Securitization: You are the Product" 
-                subtitle="How Your Debt is Traded on Wall Street"
-              />
-              <div className="space-y-8">
-                 <p className="text-xl text-slate-600 font-medium leading-relaxed">
-                   <TranslatedText>{`In the 1970s, banks found a way to move your mortgage off their balance sheets. They bundled thousands of mortgages into a single pool called a Mortgage-Backed Security (MBS) and sold them to investors.`}</TranslatedText>
-                 </p>
-                 <div className="bg-slate-900 rounded-[48px] p-10 text-white shadow-2xl relative overflow-hidden">
-                    <div className="absolute top-0 right-0 p-8 opacity-5"><Layers className="h-64 w-64 text-blue-400" /></div>
-                    <h3 className="text-2xl font-black uppercase tracking-[0.2em] text-blue-400 mb-8"><TranslatedText>The Securitization Cycle</TranslatedText></h3>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
-                       <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
-                          <p className="text-blue-400 font-black text-lg">Bank</p>
-                          <p className="text-[10px] uppercase opacity-60">Originates Loan</p>
-                       </div>
-                       <div className="flex items-center justify-center"><ArrowRight className="h-6 w-6 text-slate-600"/></div>
-                       <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
-                          <p className="text-emerald-400 font-black text-lg">MBS Pool</p>
-                          <p className="text-[10px] uppercase opacity-60">Bundled Assets</p>
-                       </div>
-                       <div className="flex items-center justify-center"><ArrowRight className="h-6 w-6 text-slate-600"/></div>
-                       <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
-                          <p className="text-amber-400 font-black text-lg">Wall St.</p>
-                          <p className="text-[10px] uppercase opacity-60">Sold to Investors</p>
-                       </div>
-                    </div>
-                    <p className="mt-8 text-sm text-slate-400 italic">
-                       Effectively, your local bank is now just a middleman (servicer). They collect a fee, but your true lender is a global investment fund that views your family as a predictable cash flow stream.
-                    </p>
-                 </div>
+              <div className="text-center space-y-4">
+                <h3 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Historical Audit</TranslatedText></h3>
+                <p className="text-xl text-slate-500 font-medium"><TranslatedText>Review your current loan through a historical lens.</TranslatedText></p>
               </div>
-            </section>
-
-            {/* LESSON 5: WHY COMPLEXITY BENEFITS LENDERS */}
-            <section className="space-y-12">
-              <LessonHeader 
-                number={5} 
-                title="The Complexity Trap" 
-                subtitle="Hiding Profit in the Fine Print"
-              />
-              <div className="space-y-8 text-xl text-slate-600 font-medium">
-                <p><TranslatedText>{`Why is your mortgage contract 100 pages long? Why are there terms like APR, Escrow, Amortization, and Points? Complexity is a strategic tool. It creates "information asymmetry"—where the bank knows more about the deal than you do.`}</TranslatedText></p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                   <StatBox label="Average Pages" value="82" />
-                   <StatBox label="Hidden Fees" value="14+" colorClass="text-red-600" />
-                   <StatBox label="Legalese Level" value="PHD" colorClass="text-blue-600" />
-                </div>
-              </div>
-            </section>
-
-            {/* LESSON 6: WHAT HISTORY TEACHES BORROWERS TODAY */}
-            <section className="space-y-12">
-              <LessonHeader 
-                number={6} 
-                title="Reclaiming History" 
-                subtitle="Moving from 'Subject' to 'Strategist'"
-              />
-              <div className="space-y-8 text-xl text-slate-600 font-medium">
-                <p><TranslatedText>{`The history of banking shows that the house always wins when the game is slow. The 30-year term, the monthly payment, and the closed loan structure are all designed for institutional safety. Our method is a return to sovereignty—using the bank's own technology (HELOCs/Offsets) to reverse 300 years of profit engineering.`}</TranslatedText></p>
-                <div className="p-8 bg-slate-900 text-white rounded-[40px] shadow-xl relative overflow-hidden">
-                   <div className="absolute top-0 right-0 p-8 opacity-10"><Award className="h-32 w-32" /></div>
-                   <h4 className="text-xl font-black mb-4">Historical Lessons for the Strategist</h4>
-                   <ul className="space-y-4">
-                      <li className="flex gap-3"><CheckCircle className="h-5 w-5 text-blue-400 shrink-0 mt-1"/> <span>Banks love predictability; we will introduce volatility (payoff speed).</span></li>
-                      <li className="flex gap-3"><CheckCircle className="h-5 w-5 text-blue-400 shrink-0 mt-1"/> <span>Banks love "Closed" systems; we will only use "Open" systems.</span></li>
-                      <li className="flex gap-3"><CheckCircle className="h-5 w-5 text-blue-400 shrink-0 mt-1"/> <span>Banks profit from your time; we will buy our time back at a discount.</span></li>
-                   </ul>
-                </div>
-              </div>
-            </section>
-
-            <section className="space-y-12">
-               <div className="text-center space-y-4">
-                  <h3 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Historical Audit</TranslatedText></h3>
-                  <p className="text-xl text-slate-500 font-medium"><TranslatedText>Review your current loan through a historical lens.</TranslatedText></p>
-               </div>
-               <BankRateChart />
+              <BankRateChart />
             </section>
 
             <section className="space-y-12">
@@ -581,27 +494,6 @@ function LessonContent({ id }: { id: number }) {
                   correctAnswer={1}
                   explanation="Goldsmiths noticed that only a fraction of gold was withdrawn at any time, allowing them to issue multiple paper receipts (loans) for the same gold, effectively creating money."
                />
-               <Quiz 
-                  question="Why did the government pivot to 30-year mortgages in 1933?"
-                  options={[
-                    "To help families build wealth faster.",
-                    "To stabilize the economy by extending debt repayment terms.",
-                    "To compete with European banking systems.",
-                    "Because house prices tripled in one year."
-                  ]}
-                  correctAnswer={1}
-                  explanation="By extending the term to 30 years, monthly payments became lower and more 'affordable,' which stabilized the banking system by preventing mass defaults during the Depression."
-               />
-            </section>
-
-            <section className="space-y-6">
-              <h3 className="text-xl font-black uppercase text-slate-400 tracking-[0.2em] mb-4">Module 2 Glossary</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <ExpandSection title="Fractional Reserve">A banking system in which only a fraction of bank deposits are backed by actual cash on hand and available for withdrawal.</ExpandSection>
-                <ExpandSection title="Securitization">The process of taking an illiquid asset (like your mortgage) and, through financial engineering, transforming it into a security.</ExpandSection>
-                <ExpandSection title="Asymmetry">A situation where one party to a transaction has more or superior information compared to the other.</ExpandSection>
-                <ExpandSection title="MBS">Mortgage-Backed Security: An investment similar to a bond that is made up of a bundle of home loans.</ExpandSection>
-              </div>
             </section>
 
             <div className="pt-20 border-t-4 border-blue-600 text-center space-y-8">
@@ -623,8 +515,185 @@ function LessonContent({ id }: { id: number }) {
           </div>
         )}
 
+        {/* MODULE 3: THE MATHEMATICAL PROOF (THE SCAM) */}
+        {id === 2 && (
+          <div className="space-y-24 animate-in fade-in duration-1000">
+            <header className="space-y-10 text-center">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-slate-900 text-white rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-white/10">
+                <GanttChartSquare className="h-4 w-4 text-emerald-400" />
+                <TranslatedText>Module 03 — The Scam Proof</TranslatedText>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
+                <TranslatedText>The Math is Rigged.</TranslatedText>
+                <span className="block text-emerald-600 italic mt-4"><TranslatedText>Here is the Proof.</TranslatedText></span>
+              </h1>
+              <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium italic">
+                <TranslatedText>"DTI is not a judgment of your character. It is arithmetic. Your mortgage is not a loan; it is a wealth extraction instrument."</TranslatedText>
+              </p>
+            </header>
+
+            {/* THE PROOF LADDER */}
+            <section className="space-y-12">
+               <div className="text-center space-y-4">
+                  <h3 className="text-3xl font-fraunces font-black text-slate-900 tracking-tight">The Proof Ladder</h3>
+                  <p className="text-lg text-slate-500 font-medium">Five undeniable mathematical reasons the system works against you.</p>
+               </div>
+               <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                  {[
+                    { step: "01", title: "Interest First", desc: "The bank takes its profit before you pay a dollar of principal.", icon: <TrendingUp className="h-6 w-6" /> },
+                    { step: "02", title: "Daily Siphon", desc: "Interest is calculated nightly, but you only pay monthly.", icon: <Activity className="h-6 w-6" /> },
+                    { step: "03", title: "Static Capital", desc: "Your equity is 'dead money' trapped inside your walls.", icon: <Lock className="h-6 w-6" /> },
+                    { step: "04", title: "Time Multiplier", desc: "A 30-year term is a 30-year interest-bearing treadmill.", icon: <Clock className="h-6 w-6" /> },
+                    { step: "05", title: "Closed Loop", desc: "You cannot move capital freely to minimize daily charges.", icon: <RefreshCcw className="h-6 w-6" /> }
+                  ].map((s, i) => (
+                    <div key={i} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col items-center text-center space-y-3 group hover:border-emerald-500 transition-all">
+                      <div className="h-12 w-12 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-emerald-50 group-hover:text-emerald-600 transition-all">{s.icon}</div>
+                      <h4 className="font-black text-sm uppercase text-slate-900 tracking-tight">{s.title}</h4>
+                      <p className="text-[10px] font-medium text-slate-500 leading-relaxed">{s.desc}</p>
+                    </div>
+                  ))}
+               </div>
+            </section>
+
+            <section className="space-y-12">
+              <LessonHeader 
+                number={1} 
+                title="Structural Unfairness: The Closed Loop" 
+                subtitle="Why installment debt is a borrower's prison."
+              />
+              <div className="space-y-8 text-xl text-slate-600 leading-relaxed font-medium">
+                <p>
+                  <TranslatedText>{`A traditional mortgage is a "Closed Loop." Once you pay a dollar to the bank, you can never get it back without asking permission, paying a fee, and going through a weeks-long appraisal process. This design is deliberate.`}</TranslatedText>
+                </p>
+                <div className="p-8 bg-slate-900 text-white rounded-[40px] shadow-2xl relative overflow-hidden">
+                   <div className="absolute top-0 right-0 p-8 opacity-10"><Lock className="h-32 w-32" /></div>
+                   <h4 className="text-xl font-black mb-4">The Banker's Advantage</h4>
+                   <p className="opacity-80">By keeping your capital "Trapped" in equity, the bank ensures you cannot use that same money to reduce the daily interest on the remaining principal. They win by keeping your money stationary while their interest calculation runs 24/7.</p>
+                </div>
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <LessonHeader 
+                number={2} 
+                title="Affordability vs. Total Cost" 
+                subtitle="The psychological mirage of the monthly payment."
+              />
+              <CourseCard className="border-l-[12px] border-emerald-500">
+                 <div className="space-y-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                       <div className="space-y-4">
+                          <p className="font-black text-xs uppercase text-slate-400 tracking-widest">The Consumer Trap</p>
+                          <p className="text-2xl font-black text-slate-900 leading-tight">"Can I afford $2,800 per month?"</p>
+                          <p className="text-sm text-slate-500 font-medium">This focuses on budget, which feels manageable, but hides the systemic cost.</p>
+                       </div>
+                       <div className="space-y-4">
+                          <p className="font-black text-xs uppercase text-emerald-600 tracking-widest">The Strategist Proof</p>
+                          <p className="text-2xl font-black text-emerald-700 leading-tight">"Can I afford to pay $510,000 for a $400,000 loan?"</p>
+                          <p className="text-sm text-emerald-900/60 font-medium">This focuses on net worth, which is the only number that matters for freedom.</p>
+                       </div>
+                    </div>
+                    <EpiphanyBox>
+                      Monthly payments are designed to keep you comfortable with being in debt. Total lifecycle cost is designed to make you uncomfortable enough to act.
+                    </EpiphanyBox>
+                 </div>
+              </CourseCard>
+            </section>
+
+            <section className="space-y-12">
+              <LessonHeader 
+                number={3} 
+                title="Interest Timing: The Hidden Weapon" 
+                subtitle="How 'Daily Balance' math works against you."
+              />
+              <div className="space-y-8 text-xl text-slate-600 font-medium">
+                 <p><TranslatedText>{`Most people think their interest is calculated once a month when the bill arrives. It isn't. In ${country.name}, the bank calculates your interest every single night at midnight based on your outstanding principal balance.`}</TranslatedText></p>
+                 <InfoBox title="ELI14: The Midnight Thief" color="red">
+                    Think of interest like a burglar who checks your house every single night. If he sees $400k in your safe, he takes a small cut. If he sees $0, he takes nothing. By paying once a month, you let him steal for 29 days before you hide your money.
+                 </InfoBox>
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <LessonHeader 
+                number={4} 
+                title="The Myth vs. Math Forensic Audit" 
+                subtitle="Replacing cultural dogma with data."
+              />
+              <div className="space-y-6">
+                 {[
+                   { myth: "Renting is throwing money away.", math: "Traditional homeowners 'throw away' 1.5x more in interest than average renters do in rent over 30 years." },
+                   { myth: "I get a tax deduction for interest.", math: "A deduction is just an 80% discount on a bill you shouldn't have to pay in the first place." },
+                   { myth: "Property appreciation will save me.", math: "Nominal gains are often eaten entirely by interest, taxes, and maintenance, resulting in 0% real return." }
+                 ].map((m, i) => (
+                   <div key={i} className="grid grid-cols-1 md:grid-cols-2 border rounded-[32px] overflow-hidden">
+                      <div className="p-8 bg-red-50 text-red-900 flex items-center gap-4">
+                         <ShieldAlert className="h-6 w-6 shrink-0 opacity-40" />
+                         <div><p className="text-[10px] font-black uppercase opacity-60">Myth</p><p className="font-bold">{m.myth}</p></div>
+                      </div>
+                      <div className="p-8 bg-emerald-50 text-emerald-900 flex items-center gap-4">
+                         <ShieldCheck className="h-6 w-6 shrink-0 opacity-40" />
+                         <div><p className="text-[10px] font-black uppercase opacity-60">Math</p><p className="font-bold">{m.math}</p></div>
+                      </div>
+                   </div>
+                 ))}
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="text-center space-y-4">
+                <h3 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Payoff Velocity Race</TranslatedText></h3>
+                <p className="text-xl text-slate-500 font-medium"><TranslatedText>See how cash-flow velocity crushes the bank's schedule.</TranslatedText></p>
+              </div>
+              <PayoffRace />
+            </section>
+
+            <section className="space-y-12">
+               <Quiz 
+                  question="Why does 'Daily Interest Calculation' make a monthly mortgage inefficient?"
+                  options={[
+                    "Because the bank charges you extra fees every day.",
+                    "Because you only pay down the balance once a month, leaving it high for 29 days.",
+                    "Because interest rates change every night.",
+                    "Because the bank doesn't accept bi-weekly payments."
+                  ]}
+                  correctAnswer={1}
+                  explanation="By only paying once a month, you keep the principal balance at its highest possible level for most of the cycle, allowing the bank to charge interest on that full amount every single night."
+               />
+               <Quiz 
+                  question="In the 'Proof Ladder', why is a 30-year term considered a 'Time Multiplier'?"
+                  options={[
+                    "It gives you more time to save for retirement.",
+                    "It multiplies the amount of interest the bank can charge by extending the duration of the debt.",
+                    "It helps the government stabilize the housing market.",
+                    "It allows your home value to triple before you finish paying."
+                  ]}
+                  correctAnswer={1}
+                  explanation="The bank profits from the duration of your debt. The longer the term, the more 'daily cycles' they have to calculate interest, resulting in a total cost that is often double the purchase price."
+               />
+            </section>
+
+            <div className="pt-20 border-t-4 border-emerald-600 text-center space-y-8">
+               <div className="inline-flex h-20 w-20 rounded-full bg-emerald-600 items-center justify-center shadow-2xl shadow-emerald-500/40">
+                  <GanttChartSquare className="h-10 w-10 text-white" />
+               </div>
+               <div className="space-y-4">
+                  <h2 className="text-4xl font-fraunces font-black text-slate-900">Proof Established</h2>
+                  <p className="text-xl text-slate-500 font-medium max-w-xl mx-auto">You've seen the mathematical evidence. Now, let's expose the specific hidden scams they use to inflate your costs.</p>
+               </div>
+               <button 
+                  onClick={nextLesson}
+                  className="group flex items-center gap-4 bg-[#059669] text-white px-12 py-6 rounded-[32px] font-black shadow-2xl shadow-emerald-500/30 hover:bg-emerald-700 transition-all active:scale-95 text-2xl mx-auto"
+               >
+                  <TranslatedText>Start Module 4: Hidden Scams</TranslatedText>
+                  <ChevronRight className="h-8 w-8 group-hover:translate-x-3 transition-transform" />
+               </button>
+            </div>
+          </div>
+        )}
+
         {/* Placeholder for remaining lessons */}
-        {id >= 2 && (
+        {id >= 3 && (
           <div className="p-20 text-center text-slate-400 font-bold uppercase tracking-widest">
             {meta.title} <TranslatedText>Module Content Loading...</TranslatedText>
           </div>
