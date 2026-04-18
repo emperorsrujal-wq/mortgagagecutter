@@ -23,7 +23,8 @@ import {
   Quiz,
   CaseStudy,
   StatBox,
-  ExpandSection
+  ExpandSection,
+  InfoBox
 } from '@/components/course/UIComponents';
 import { TranslatedText } from '@/components/course/TranslatedText';
 import { cn } from '@/lib/utils';
@@ -69,7 +70,10 @@ import {
   Camera,
   Hammer,
   Coins,
-  Warehouse
+  Warehouse,
+  Building2,
+  UserPlus2,
+  Table as TableIcon
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -216,7 +220,7 @@ function LessonContent({ id }: { id: number }) {
               <div className="space-y-8">
                 <CaseStudy 
                   name="The Patels (Suburban Homeowners)"
-                  savings="$284,000 Saved"
+                  savings="$284,340 Saved"
                   timeline="Mortgage-Free at 46"
                   quote="We were on track to finish at 63. Using the Chunker logic, we reclaim 17 years of our life and keep $284k in interest."
                 />
@@ -1087,7 +1091,7 @@ function LessonContent({ id }: { id: number }) {
                           </li>
                           <li className="flex gap-4">
                              <div className="h-6 w-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0 mt-1"><CheckCircle className="h-3 w-3" /></div>
-                             <p className="text-sm font-bold text-slate-900">Appraisal (The Human): Captures the "Condition Premium." Assigns value to improvements.</p>
+                             <p className="text-sm font-bold text-slate-600">Appraisal (The Human): Captures the "Condition Premium." Assigns value to improvements.</p>
                           </li>
                        </ul>
                     </div>
@@ -1108,7 +1112,7 @@ function LessonContent({ id }: { id: number }) {
             <header className="space-y-10 text-center">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-amber-100 text-amber-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-amber-200">
                 <TrendingUp className="h-4 w-4" />
-                <TranslatedText>Mastery Level: 11 — Rate Dynamics</TranslatedText>
+                <TranslatedText>Mastery Level: 10 — Rate Dynamics</TranslatedText>
               </div>
               <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
                 <TranslatedText>Rate Secrets:</TranslatedText>
@@ -1151,40 +1155,20 @@ function LessonContent({ id }: { id: number }) {
               </EpiphanyBox>
               <RateImpactCalc />
             </section>
-
-            <section className="space-y-12">
-              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-amber-600 text-white flex items-center justify-center font-black">3</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Global Strategic Guide</TranslatedText></h2>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  { c: "USA", strategy: "Prime + Margin", tip: "Get quotes from 3+ lenders. 0.25% margin reduction is worth $7,500 over 10 years." },
-                  { c: "Canada", strategy: "Open HELOC Advantage", tip: "HELOCs are penalty-free. Throw every dollar at the high-rate open portion first." },
-                  { c: "UK", strategy: "Base Rate + Offset", tip: "Offset balances reduce interest 1:1. Rate level matters less as offset balance grows." },
-                  { c: "Australia", strategy: "Cash Rate Transmission", tip: "Variable rates drop automatically with RBA cuts. Full velocity cycling is your best friend." },
-                ].map((item, i) => (
-                  <div key={i} className="p-8 bg-white border-2 border-slate-100 rounded-[40px] space-y-4">
-                    <h4 className="text-xl font-black text-slate-900">{item.c} Strategy</h4>
-                    <p className="text-sm font-bold text-slate-500">{item.tip}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
           </div>
         )}
 
-        {/* LESSON 12: THE 1% MULTIPLIER */}
+        {/* LESSON 12: THE 1% MULTIPLIER (PORTFOLIO CASCADE) */}
         {id === 12 && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <header className="space-y-10 text-center">
-              <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-50 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-blue-100">
-                <Trophy className="h-4 w-4" />
-                <TranslatedText>Mastery Level: 12 — Portfolio Scaling</TranslatedText>
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-emerald-50 text-emerald-700 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-4 border border-emerald-100">
+                <Building2 className="h-4 w-4" />
+                <TranslatedText>Mastery Level: 11 — Portfolio Cascading</TranslatedText>
               </div>
               <h1 className="text-5xl md:text-8xl font-fraunces font-black text-[#1A1D26] leading-[0.95] tracking-tighter">
                 <TranslatedText>The 1% Multiplier:</TranslatedText>
-                <span className="block text-blue-600 italic mt-4"><TranslatedText>Turning Walls into Engines.</TranslatedText></span>
+                <span className="block text-emerald-600 italic mt-4"><TranslatedText>Build Wealth While You Sleep.</TranslatedText></span>
               </h1>
               <p className="text-[#5A6175] text-2xl md:text-3xl leading-relaxed max-w-2xl mx-auto font-medium">
                 <TranslatedText>{`Debt reduction was just the beginning. Now we use your home's equity as "Live Capital" to build a multi-property empire in ${country.name}.`}</TranslatedText>
@@ -1193,8 +1177,8 @@ function LessonContent({ id }: { id: number }) {
 
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">1</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Concept: The Monopoly Secret (ELI14)</TranslatedText></h2>
+                <div className="h-10 w-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black">1</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Concept: The Monopoly Secret</TranslatedText></h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 <div className="space-y-6 text-xl text-slate-600 leading-relaxed font-medium">
@@ -1203,6 +1187,9 @@ function LessonContent({ id }: { id: number }) {
                   </p>
                   <p className="text-blue-600 font-black italic">
                     <TranslatedText>This is "Equity Harvesting."</TranslatedText>
+                  </p>
+                  <p>
+                    <TranslatedText>{`The Cascade strategy means using Property One's HELOC room to fund Property Two's deposit. Property Two then generates rental income that cycles back into the original HELOC, creating a "Double-Engine" paydown.`}</TranslatedText>
                   </p>
                 </div>
                 <div className="bg-slate-900 p-8 rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col justify-center text-center space-y-4 min-h-[300px]">
@@ -1218,8 +1205,81 @@ function LessonContent({ id }: { id: number }) {
 
             <section className="space-y-12">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black">2</div>
-                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action Step: Model Your Scaling</TranslatedText></h2>
+                <div className="h-10 w-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black">2</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>The Three-Bank Resiliency Rule</TranslatedText></h2>
+              </div>
+              <p className="text-xl text-slate-600 font-medium leading-relaxed">
+                <TranslatedText>When all your HELOCs are at one institution, the bank has total visibility. If market conditions tighten, they can freeze all your lines at once. The "Three-Bank Strategy" ensures your portfolio is resilient.</TranslatedText>
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {[
+                  { title: "Bank A (Primary)", role: "Main Relationship", desc: "Holds HELOC 1 on your primary home. Best rates, longest history." },
+                  { title: "Bank B (Rental)", role: "Growth Partner", desc: "Holds HELOC 2 on your first investment. Credit Union or local lender." },
+                  { title: "Bank C (Reserve)", role: "Survival Buffer", desc: "A third line of credit kept mostly empty for emergencies or market dips." }
+                ].map((b, i) => (
+                  <div key={i} className="p-8 bg-white border-2 border-slate-100 rounded-[32px] space-y-4 shadow-sm group hover:border-blue-500 transition-colors">
+                    <h4 className="font-black text-lg text-slate-900">{b.title}</h4>
+                    <p className="text-xs font-black text-blue-600 uppercase tracking-widest">{b.role}</p>
+                    <p className="text-sm text-slate-500 font-medium">{b.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black">3</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Global Tax & Profit Logic</TranslatedText></h2>
+              </div>
+              <div className="bg-slate-900 rounded-[48px] p-10 text-white space-y-10 overflow-hidden relative">
+                 <div className="absolute top-0 right-0 p-8 opacity-5"><Coins className="h-64 w-64" /></div>
+                 <div className="text-center space-y-2 relative z-10">
+                    <h3 className="text-2xl font-black uppercase tracking-widest text-blue-400">Investor Treatment Comparison</h3>
+                    <p className="text-slate-400 font-bold">2024 Regulatory Frameworks</p>
+                 </div>
+                 <div className="overflow-auto relative z-10">
+                    <table className="w-full text-left text-sm font-medium border-collapse">
+                       <thead>
+                          <tr className="border-b border-white/10">
+                             <th className="py-4 text-blue-400 uppercase tracking-widest">Mechanism</th>
+                             <th className="py-4">USA</th>
+                             <th className="py-4">Canada</th>
+                             <th className="py-4">UK</th>
+                             <th className="py-4">Australia</th>
+                          </tr>
+                       </thead>
+                       <tbody className="text-slate-300">
+                          <tr className="border-b border-white/5">
+                             <td className="py-4 font-black">Rental Loss</td>
+                             <td className="py-4">Deductible*</td>
+                             <td className="py-4">Limits apply</td>
+                             <td className="py-4">Section 24 limit</td>
+                             <td className="py-4">Neg. Gearing ✅</td>
+                          </tr>
+                          <tr className="border-b border-white/5">
+                             <td className="py-4 font-black">Cap. Gains</td>
+                             <td className="py-4">1031 Exchange</td>
+                             <td className="py-4">50% Inclusion</td>
+                             <td className="py-4">18-24% Tax</td>
+                             <td className="py-4">50% Discount</td>
+                          </tr>
+                          <tr>
+                             <td className="py-4 font-black">HELOC Cap</td>
+                             <td className="py-4">85-90% CLTV</td>
+                             <td className="py-4">65% Revolving</td>
+                             <td className="py-4">75-80% LTV</td>
+                             <td className="py-4">80-90% LVR</td>
+                          </tr>
+                       </tbody>
+                    </table>
+                 </div>
+              </div>
+            </section>
+
+            <section className="space-y-12">
+              <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                <div className="h-10 w-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black">4</div>
+                <h2 className="text-3xl font-fraunces font-black text-slate-900"><TranslatedText>Action: Model Your Cascade</TranslatedText></h2>
               </div>
               <WealthSimulator />
               <div className="space-y-8 pt-12">
