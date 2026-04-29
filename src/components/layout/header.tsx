@@ -1,8 +1,7 @@
-
 'use client';
 
 import Link from 'next/link';
-import { Home, BookOpen, GraduationCap, Calculator, ChevronDown, Landmark, Zap, Trophy, ShieldCheck } from 'lucide-react';
+import { Home, BookOpen, GraduationCap, Calculator, ChevronDown, Landmark, Zap, Trophy, ShieldCheck, ArrowLeftRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { UserProfileButton } from '@/components/auth/user-profile-button';
 import { useUser } from '@/firebase';
@@ -90,6 +89,11 @@ export default function Header() {
                   <DropdownMenuItem asChild>
                     <Link href="/members/bank-screener" className="cursor-pointer py-2">
                       <Landmark className="mr-2 h-4 w-4 text-blue-400" /> Bank Screener
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/members/lender-loyalty-audit" className="cursor-pointer py-2">
+                      <ArrowLeftRight className="mr-2 h-4 w-4 text-orange-500" /> Lender Loyalty Audit™
                     </Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
