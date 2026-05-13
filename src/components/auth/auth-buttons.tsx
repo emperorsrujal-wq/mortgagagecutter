@@ -40,14 +40,7 @@ export function AuthButtons() {
 
   useEffect(() => {
     if (user) {
-      const isOAuth = user.providerData.some(
-        (p) => p.providerId === 'google.com' || p.providerId === 'apple.com'
-      );
-      if (isOAuth || user.emailVerified) {
-        router.push('/questionnaire');
-      } else {
-        router.push('/verify-email');
-      }
+      router.push('/questionnaire');
     }
   }, [user, router]);
 

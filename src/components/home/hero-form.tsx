@@ -17,7 +17,6 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
-  sendEmailVerification,
 } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Sparkles, Shield, Clock } from 'lucide-react';
@@ -48,15 +47,7 @@ export function HeroForm() {
 
   useEffect(() => {
     if (user) {
-      // OAuth providers usually have verified emails
-      const isOAuth = user.providerData.some(
-        (p) => p.providerId === 'google.com' || p.providerId === 'apple.com'
-      );
-      if (isOAuth || user.emailVerified) {
-        router.push('/questionnaire');
-      } else {
-        router.push('/verify-email');
-      }
+      router.push('/questionnaire');
     }
   }, [user, router]);
 
@@ -92,14 +83,8 @@ export function HeroForm() {
         submissionDate: serverTimestamp(),
       }, { merge: true });
 
-      // Send email verification
-      await sendEmailVerification(newUser, {
-        url: `${window.location.origin}/auth/action`,
-        handleCodeInApp: false,
-      });
-
-      toast({ title: 'Account Created!', description: 'Please check your email to verify your account.' });
-      router.push('/verify-email');
+      toast({ title: 'Account Created!', description: 'Welcome to Mortgage Cutter!' });
+      router.push('/questionnaire');
     } catch (error: any) {
       console.error('Error during sign-up:', error);
       toast({
@@ -124,17 +109,6 @@ export function HeroForm() {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
       const loggedInUser = userCredential.user;
-
-      if (!loggedInUser.emailVerified) {
-        // Auto-resend verification email on login if still unverified
-        await sendEmailVerification(loggedInUser, {
-          url: `${window.location.origin}/auth/action`,
-          handleCodeInApp: false,
-        });
-        toast({ title: 'Email Not Verified', description: 'A new verification link has been sent to your email.' });
-        router.push('/verify-email');
-        return;
-      }
 
       toast({ title: 'Welcome Back!', description: 'Redirecting you to the questionnaire.' });
       router.push('/questionnaire');

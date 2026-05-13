@@ -107,6 +107,7 @@ export const sendPurchaseConfirmationEmail = functions.firestore
       // Queue the email in the mail collection for the Trigger Email extension
       await db.collection("mail").add({
         to: userEmail,
+        from: "Mortgage Cutter <support@mortgagecutter.com>",
         template: {
           name: "purchase_confirmation",
           data: {
@@ -184,6 +185,7 @@ export const sendAbandonedQuestionnaireReminders = functions.pubsub
         const mailRef = db.collection("mail").doc();
         batch.set(mailRef, {
           to: userEmail,
+          from: "Mortgage Cutter <support@mortgagecutter.com>",
           template: {
             name: "abandoned_questionnaire",
             data: {
@@ -238,6 +240,7 @@ export const enrollChallenge = functions.firestore
       // Send welcome email via Trigger Email extension
       await db.collection("mail").add({
         to: email,
+        from: "Mortgage Cutter <welcome@mortgagecutter.com>",
         template: {
           name: "welcome_signup",
           data: {
@@ -330,6 +333,7 @@ export const sendChallengeEmails = functions.pubsub
         const mailRef = db.collection("mail").doc();
         batch.set(mailRef, {
           to: email,
+          from: "Mortgage Cutter <support@mortgagecutter.com>",
           template: {
             name: templateName,
             data: getTemplateData(currentDay, name, email),
@@ -355,3 +359,4 @@ export const sendChallengeEmails = functions.pubsub
       return null;
     }
   });
+

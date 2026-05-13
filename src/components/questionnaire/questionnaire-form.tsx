@@ -115,6 +115,7 @@ export function QuestionnaireForm() {
 
         addDocumentNonBlocking(collection(firestore, "mail"), {
           to: user.email,
+          from: 'Mortgage Cutter <support@mortgagecutter.com>',
           template: {
             name: 'blueprint_ready',
             data: {
