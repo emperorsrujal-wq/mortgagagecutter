@@ -6,6 +6,8 @@ import fetch from "node-fetch";
 // Initialize the Firebase Admin SDK
 admin.initializeApp();
 
+const db = admin.firestore();
+
 const SENDER_PHONE_NUMBER = "+13158777123"; // <-- IMPORTANT: Replace with your service's sending number
 const SMS_API_ENDPOINT = "https://gateway.voidfix.com/services/send.php"; // <-- Updated API Endpoint
 
@@ -26,10 +28,6 @@ export const sendWelcomeSms = functions.firestore
     }
 
     // --- Securely get the API Key ---
-    // This uses Firebase environment configuration.
-    // To set this, run in your terminal:
-    // firebase functions:config:set sms.api_key="YOUR_API_KEY_HERE"
-    // The key will be stored securely on the server.
     const apiKey = functions.config().sms.api_key;
     if (!apiKey) {
         functions.logger.error("FATAL: SMS API key is not configured. Set it with `firebase functions:config:set sms.api_key=...`");
@@ -40,9 +38,6 @@ export const sendWelcomeSms = functions.firestore
     const welcomeMessage = "Welcome to Mortgage Cutter! We're excited to help you on your path to financial freedom. A specialist will review your details soon.";
 
     // --- Prepare the request for the external API ---
-    // IMPORTANT: The structure of this body (e.g., 'to', 'from', 'body')
-    // and the headers might be different for your specific SMS provider.
-    // Check your provider's API documentation and adjust accordingly.
     const requestBody = {
       to: phoneNumber,
       from: SENDER_PHONE_NUMBER,
@@ -56,15 +51,12 @@ export const sendWelcomeSms = functions.firestore
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // This is a common way to authenticate. Your provider might use
-          // a different header like 'X-Api-Key' or Basic auth.
           "Authorization": `Bearer ${apiKey}`,
         },
         body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
-        // The API returned an error
         const errorText = await response.text();
         functions.logger.error(
           `Failed to send SMS. Status: ${response.status}. Body: ${errorText}`
@@ -77,6 +69,145 @@ export const sendWelcomeSms = functions.firestore
 
     } catch (error) {
       functions.logger.error("An unexpected error occurred while sending SMS:", error);
+      return null;
+    }
+  });
+
+/**
+ * Triggered when a new purchase is recorded for a lead.
+ * Sends a purchase confirmation email via the mail collection.
+ */
+export const sendPurchaseConfirmationEmail = functions.firestore
+  .document("/leads/{leadId}/purchases/{purchaseId}")
+  .onCreate(async (snapshot, context) => {
+    const purchaseData = snapshot.data();
+    const leadId = context.params.leadId;
+
+    try {
+      // Fetch the lead document to get the user's email and name
+      const leadDoc = await db.collection("leads").doc(leadId).get();
+      if (!leadDoc.exists) {
+        functions.logger.warn(`Lead ${leadId} not found for purchase confirmation.`);
+        return null;
+      }
+
+      const lead = leadDoc.data();
+      const userEmail = lead?.email;
+      const userName = lead?.name || "Valued Customer";
+
+      if (!userEmail) {
+        functions.logger.warn(`No email found for lead ${leadId}, skipping purchase confirmation.`);
+        return null;
+      }
+
+      const productName = purchaseData?.productName || "Your Purchase";
+      const amount = purchaseData?.amount || "";
+      const accessUrl = purchaseData?.accessUrl || `https://mortgagecutter.com/members`;
+
+      // Queue the email in the mail collection for the Trigger Email extension
+      await db.collection("mail").add({
+        to: userEmail,
+        template: {
+          name: "purchase_confirmation",
+          data: {
+            name: userName,
+            productName,
+            amount,
+            accessUrl,
+          },
+        },
+      });
+
+      functions.logger.log(`Purchase confirmation email queued for ${userEmail}`, {
+        leadId,
+        purchaseId: context.params.purchaseId,
+        productName,
+      });
+
+      return { success: true };
+    } catch (error) {
+      functions.logger.error("Error sending purchase confirmation email:", error);
+      return null;
+    }
+  });
+
+/**
+ * Scheduled function that runs every day at 9:00 AM.
+ * Finds leads who registered but haven't completed the questionnaire
+ * after 24 hours, and sends a reminder email.
+ */
+export const sendAbandonedQuestionnaireReminders = functions.pubsub
+  .schedule("0 9 * * *")
+  .timeZone("America/New_York")
+  .onRun(async (context) => {
+    const now = admin.firestore.Timestamp.now();
+    const twentyFourHoursAgo = new admin.firestore.Timestamp(
+      now.seconds - 24 * 60 * 60,
+      now.nanoseconds
+    );
+    const fortyEightHoursAgo = new admin.firestore.Timestamp(
+      now.seconds - 48 * 60 * 60,
+      now.nanoseconds
+    );
+
+    try {
+      // Find leads who:
+      // 1. Have status 'registered' (not 'completed_questionnaire')
+      // 2. Registered between 24 and 48 hours ago (so we don't spam recent signups or very old ones)
+      // 3. Have an email address
+      const leadsSnapshot = await db
+        .collection("leads")
+        .where("status", "==", "registered")
+        .where("submissionDate", ">=", fortyEightHoursAgo)
+        .where("submissionDate", "<=", twentyFourHoursAgo)
+        .get();
+
+      if (leadsSnapshot.empty) {
+        functions.logger.log("No abandoned questionnaires found for reminder.");
+        return null;
+      }
+
+      const batch = db.batch();
+      let reminderCount = 0;
+
+      for (const leadDoc of leadsSnapshot.docs) {
+        const lead = leadDoc.data();
+        const userEmail = lead?.email;
+        const userName = lead?.name || "Friend";
+
+        if (!userEmail) continue;
+
+        // Check if we already sent a reminder to this user
+        const reminderSent = lead?.abandonedQuestionnaireReminderSent;
+        if (reminderSent) continue;
+
+        const mailRef = db.collection("mail").doc();
+        batch.set(mailRef, {
+          to: userEmail,
+          template: {
+            name: "abandoned_questionnaire",
+            data: {
+              name: userName,
+              questionnaireUrl: "https://mortgagecutter.com/questionnaire",
+            },
+          },
+        });
+
+        // Mark reminder as sent so we don't send duplicates
+        batch.update(leadDoc.ref, {
+          abandonedQuestionnaireReminderSent: true,
+          abandonedQuestionnaireReminderSentAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
+
+        reminderCount++;
+      }
+
+      await batch.commit();
+      functions.logger.log(`Sent ${reminderCount} abandoned questionnaire reminders.`);
+      return { remindersSent: reminderCount };
+
+    } catch (error) {
+      functions.logger.error("Error sending abandoned questionnaire reminders:", error);
       return null;
     }
   });

@@ -13,7 +13,8 @@ import { useAuth, useUser, useFirestore } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect } from 'react';
-import { doc, setDoc, serverTimestamp, collection, addDoc } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp, collection } from 'firebase/firestore';
+import { addDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 
 const GoogleIcon = () => (
   <svg className="h-5 w-5" viewBox="0 0 24 24">
@@ -39,7 +40,14 @@ export function AuthButtons() {
 
   useEffect(() => {
     if (user) {
-      router.push('/questionnaire');
+      const isOAuth = user.providerData.some(
+        (p) => p.providerId === 'google.com' || p.providerId === 'apple.com'
+      );
+      if (isOAuth || user.emailVerified) {
+        router.push('/questionnaire');
+      } else {
+        router.push('/verify-email');
+      }
     }
   }, [user, router]);
 
@@ -63,26 +71,17 @@ export function AuthButtons() {
             submissionDate: serverTimestamp(),
         });
 
-        // Welcome Email
+        // Welcome Email (non-blocking)
         if (newUser.email) {
-          await addDoc(collection(firestore, "mail"), {
+          addDocumentNonBlocking(collection(firestore, "mail"), {
             to: newUser.email,
-            message: {
-              subject: "Welcome to Mortgage Cutter!",
-              html: `
-                <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-                  <h1 style="color: #2563EB;">Welcome aboard, ${newUser.displayName || 'Friend'}!</h1>
-                  <p>You've just unlocked access to the strategies the banks would rather you didn't know.</p>
-                  <p>Ready to see your personalized savings potential?</p>
-                  <div style="text-align: center; margin: 30px 0;">
-                    <a href="https://mortgagecutter.com/questionnaire" style="background-color: #2563EB; color: white; padding: 15px 25px; text-decoration: none; border-radius: 8px; font-weight: bold;">Calculate My Savings →</a>
-                  </div>
-                  <p>Let's get to work.</p>
-                  <p>Best,</p>
-                  <p><strong>The Mortgage Cutter Team</strong></p>
-                </div>
-              `
-            }
+            template: {
+              name: 'welcome_oauth',
+              data: {
+                name: newUser.displayName || 'Friend',
+                ctaUrl: 'https://mortgagecutter.com/questionnaire',
+              },
+            },
           });
         }
       }

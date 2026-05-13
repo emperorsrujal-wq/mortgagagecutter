@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "studio-3460964595-6810c"
+  },
+  "targets": {},
+  "etags": {
+    "studio-3460964595-6810c": {
+      "extensionInstances": {
+        "firestore-send-email": "b3e2f839a42b29c66848419d8521e575e39f9496fd0c62dca9bff0abb9b9e889",
+        "firestore-stripe-payments": "120da8af829b6186001e17672890bb83bea1271a847c8f59f8369e47103f9762",
+        "msg91-send-msg": "db3c9649fc9999a11ef56eb10796dd763233f94369a3d7b5ad46c22bbbe53c95"
+      }
+    }
+  }
+}

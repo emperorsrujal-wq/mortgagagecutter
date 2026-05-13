@@ -11,8 +11,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Info, Loader2, Save, Printer, CheckCircle } from 'lucide-react';
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { useUser, useFirestore } from '@/firebase';
-import { useRouter } from 'next/navigation';
+import { useFirestore } from '@/firebase';
+import { useAuthGuard } from '@/hooks/use-auth-guard';
 import { Separator } from '@/components/ui/separator';
 import { Form, FormField, FormItem, FormControl, FormMessage, FormLabel } from '@/components/ui/form';
 import { doc, setDoc, serverTimestamp, collection, query, where, getDocs, limit } from 'firebase/firestore';
@@ -69,10 +69,9 @@ const YesNoRadioGroup = ({ field }: { field: any }) => (
 );
 
 export default function BankScreenerPage() {
-  const { user, isUserLoading } = useUser();
+  const { user, isUserLoading } = useAuthGuard();
   const firestore = useFirestore();
   const { toast } = useToast();
-  const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
 
   const form = useForm({
@@ -139,11 +138,6 @@ export default function BankScreenerPage() {
   });
 
   useEffect(() => {
-    if (!isUserLoading && !user) {
-      router.push('/');
-      return;
-    }
-
     async function loadData() {
       if (!user || !firestore) return;
       const q = query(collection(firestore, 'leads', user.uid, 'bankScreeners'), limit(1));
@@ -154,7 +148,7 @@ export default function BankScreenerPage() {
       }
     }
     loadData();
-  }, [user, isUserLoading, router, firestore]);
+  }, [user, isUserLoading, firestore]);
 
   const onSubmit = async (values: any) => {
     if (!user || !firestore) return;

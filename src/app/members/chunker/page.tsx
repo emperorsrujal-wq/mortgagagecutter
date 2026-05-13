@@ -12,8 +12,8 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, Tooltip as RechartsTooltip } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Loader2, Save, Zap, TrendingDown, CheckCircle2, ChevronDown, ChevronUp, Table as TableIcon, ShieldCheck, Landmark } from 'lucide-react';
-import { useUser, useFirestore } from '@/firebase';
-import { useRouter } from 'next/navigation';
+import { useFirestore } from '@/firebase';
+import { useAuthGuard } from '@/hooks/use-auth-guard';
 import { doc, setDoc, serverTimestamp, collection, query, limit, getDocs } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -53,17 +53,11 @@ export default function ChunkerCalculatorPage() {
   const [res, setRes] = useState<Outputs | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [showTimeline, setShowTimeline] = useState(false);
-  const { user, isUserLoading } = useUser();
+  const { user, isUserLoading } = useAuthGuard();
   const firestore = useFirestore();
   const { toast } = useToast();
-  const router = useRouter();
 
   useEffect(() => {
-    if (!isUserLoading && !user) {
-      router.push('/');
-      return;
-    }
-
     async function loadData() {
       if (!user || !firestore) return;
       const q = query(collection(firestore, 'leads', user.uid, 'chunkerStates'), limit(1));
@@ -81,7 +75,7 @@ export default function ChunkerCalculatorPage() {
       }
     }
     loadData();
-  }, [user, isUserLoading, router, firestore]);
+  }, [user, isUserLoading, firestore]);
 
   const onChange = <K extends keyof Inputs>(k: K, v: Inputs[K]) => {
     setForm((f) => ({ ...f, [k]: v }));

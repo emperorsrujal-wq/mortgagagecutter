@@ -28,7 +28,8 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 import { useFirestore, useUser } from '@/firebase';
-import { collection, addDoc, doc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, doc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { addDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 
 const debtSchema = z.object({
   id: z.string(),
@@ -112,24 +113,14 @@ export function QuestionnaireForm() {
           lastCompletedAt: serverTimestamp(),
         });
 
-        await addDoc(collection(firestore, "mail"), {
+        addDocumentNonBlocking(collection(firestore, "mail"), {
           to: user.email,
-          message: {
-            subject: "Your Savings Blueprint is Ready!",
-            html: `
-              <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-                <h1 style="color: #059669;">The Numbers are In!</h1>
-                <p>We've analyzed your mortgage details, and the potential for savings is significant.</p>
-                <p>Your custom blueprint is securely stored in your account. You can access it anytime using the link below:</p>
-                <div style="text-align: center; margin: 30px 0;">
-                  <a href="${resultUrl}" style="background-color: #059669; color: white; padding: 15px 25px; text-decoration: none; border-radius: 8px; font-weight: bold;">View My Blueprint →</a>
-                </div>
-                <p>Don't let the interest trap slow you down. Start implementing your strategy today.</p>
-                <p>Best,</p>
-                <p><strong>The Mortgage Cutter Team</strong></p>
-              </div>
-            `
-          }
+          template: {
+            name: 'blueprint_ready',
+            data: {
+              resultUrl,
+            },
+          },
         });
       } catch (e) {
         console.error("Error updating lead/sending mail:", e);

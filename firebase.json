@@ -1,4 +1,3 @@
-
 {
   "hosting": {
     "source": ".",
@@ -10,5 +9,13 @@
   },
   "functions": {
     "source": "functions"
+  },
+  "extensions": {
+    "firestore-send-email": "firebase/firestore-send-email@0.2.4",
+    "firestore-stripe-payments": "stripe/firestore-stripe-payments@0.3.4",
+    "msg91-send-msg": "msg91/msg91-send-msg@0.0.3"
+  },
+  "firestore": {
+    "rules": "firestore.rules"
   }
 }

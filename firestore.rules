@@ -127,5 +127,40 @@ service cloud.firestore {
       allow create, update, delete: if false; // TODO: Add administrative role check for product management.
     }
 
+    /**
+     * @description Mail collection for Firebase Trigger Email extension.
+     * @path /mail/{mailId}
+     * @allow (create) For any authenticated user. The extension processes these docs and sends emails.
+     * @deny (read, update, delete) For all users. Only the backend extension should manage these.
+     * @principle Restricted write-only queue for authenticated users.
+     */
+    match /mail/{mailId} {
+      allow create: if isSignedIn();
+      allow read, update, delete: if false;
+    }
+
+    /**
+     * @description Email templates collection for Firebase Trigger Email extension.
+     * @path /email_templates/{templateId}
+     * @allow (get, list) For any authenticated user to read templates.
+     * @deny (write) For all users. Templates are managed administratively.
+     */
+    match /email_templates/{templateId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description User financial progress collection (Financial Academy).
+     * @path /userFinancialProgress/{userId}
+     * @principle Ownership.
+     */
+    match /userFinancialProgress/{userId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId);
+      allow update: if isExistingOwner(userId);
+      allow delete: if isExistingOwner(userId);
+    }
+
   }
 }
