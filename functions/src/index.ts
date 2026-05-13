@@ -234,6 +234,20 @@ export const enrollChallenge = functions.firestore
         challengeEmailsSent: [],
       });
       functions.logger.log(`Enrolled lead ${context.params.leadId} in challenge.`, { email });
+
+      // Send welcome email via Trigger Email extension
+      await db.collection("mail").add({
+        to: email,
+        template: {
+          name: "welcome_signup",
+          data: {
+            name: leadData?.name || "Friend",
+            ctaUrl: "https://mortgagecutter.com/questionnaire",
+          },
+        },
+      });
+      functions.logger.log(`Welcome email queued for lead ${context.params.leadId}.`);
+
       return { success: true };
     } catch (error) {
       functions.logger.error("Error enrolling lead in challenge:", error);

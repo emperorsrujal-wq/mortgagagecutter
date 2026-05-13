@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useAuth, useUser, useFirestore, setDocumentNonBlocking, addDocumentNonBlocking } from '@/firebase';
+import { useAuth, useUser, useFirestore, setDocumentNonBlocking } from '@/firebase';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -22,7 +22,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Sparkles, Shield, Clock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { doc, serverTimestamp, collection } from 'firebase/firestore';
+import { doc, serverTimestamp } from 'firebase/firestore';
 import { motion } from 'framer-motion';
 
 const signupSchema = z.object({
@@ -96,18 +96,6 @@ export function HeroForm() {
       await sendEmailVerification(newUser, {
         url: `${window.location.origin}/auth/action`,
         handleCodeInApp: false,
-      });
-
-      // Trigger Welcome Email (Non-blocking)
-      addDocumentNonBlocking(collection(firestore, 'mail'), {
-        to: values.email,
-        template: {
-          name: 'welcome_signup',
-          data: {
-            name: values.name,
-            ctaUrl: 'https://mortgagecutter.com/questionnaire',
-          },
-        },
       });
 
       toast({ title: 'Account Created!', description: 'Please check your email to verify your account.' });

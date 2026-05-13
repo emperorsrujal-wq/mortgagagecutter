@@ -13,8 +13,8 @@ import { useAuth, useUser, useFirestore } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect } from 'react';
-import { doc, setDoc, serverTimestamp, collection } from 'firebase/firestore';
-import { addDocumentNonBlocking } from '@/firebase/non-blocking-updates';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+
 
 const GoogleIcon = () => (
   <svg className="h-5 w-5" viewBox="0 0 24 24">
@@ -71,19 +71,6 @@ export function AuthButtons() {
             submissionDate: serverTimestamp(),
         });
 
-        // Welcome Email (non-blocking)
-        if (newUser.email) {
-          addDocumentNonBlocking(collection(firestore, "mail"), {
-            to: newUser.email,
-            template: {
-              name: 'welcome_oauth',
-              data: {
-                name: newUser.displayName || 'Friend',
-                ctaUrl: 'https://mortgagecutter.com/questionnaire',
-              },
-            },
-          });
-        }
       }
     } catch (error) {
       const authError = error as AuthError;
