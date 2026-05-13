@@ -5,6 +5,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { useUser } from "@/firebase";
+import { isAdmin } from "@/lib/admin";
 import { Award, CheckCircle, Zap } from "lucide-react";
 
 export default function PricingSection({
@@ -30,7 +31,7 @@ export default function PricingSection({
   const { user } = useUser();
   const goal = 5;
 
-  const isPrivileged = user?.email === 'emperorsrujal@gmail.com';
+  const isPrivileged = isAdmin(user);
 
   // Create a 72h deadline if one doesn't exist (persist in your DB if you want it sticky).
   useEffect(() => {
