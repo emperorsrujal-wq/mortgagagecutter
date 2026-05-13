@@ -4,7 +4,7 @@
 import Image from 'next/image';
 import { HeroForm } from '@/components/home/hero-form';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Star, CheckCircle, TrendingUp, Target, Award, ShieldCheck, Landmark, Calculator, ArrowRight, Zap, Clock, Users, Lock } from 'lucide-react';
+import { Star, CheckCircle, TrendingUp, Target, Award, ShieldCheck, Landmark, Calculator, ArrowRight, Zap, Clock, Users, Lock, BookOpen, Trophy, FileText, ArrowLeftRight, GraduationCap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -275,6 +275,94 @@ export default function Home() {
             <FadeInUp delay={0.6}>
               <p className="text-center text-sm text-muted-foreground mt-12">Fast. Private. No credit check.</p>
             </FadeInUp>
+          </div>
+        </section>
+
+        {/* Education Section */}
+        <section id="education" className="relative py-20 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-secondary/30 to-background" />
+          
+          <div className="container mx-auto px-4 relative">
+            <FadeInUp>
+              <div className="text-center mb-12">
+                <span className="text-primary font-bold text-sm uppercase tracking-widest">Learn</span>
+                <h2 className="text-3xl md:text-4xl font-bold mt-3">Master your mortgage</h2>
+                <p className="text-muted-foreground mt-3 max-w-xl mx-auto">Free resources to help you understand, plan, and execute your path to mortgage freedom.</p>
+              </div>
+            </FadeInUp>
+            
+            <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+              {[
+                { icon: <Zap className="h-6 w-6" />, title: 'Payoff Blueprint', desc: 'Step-by-step strategy to cut years off your mortgage.', href: '/learn', color: 'from-yellow-500/10 to-amber-500/10', iconColor: 'text-yellow-600' },
+                { icon: <Trophy className="h-6 w-6" />, title: 'Financial Academy', desc: 'Regional banking secrets and advanced strategies.', href: '/financial-academy', color: 'from-blue-500/10 to-indigo-500/10', iconColor: 'text-blue-600' },
+                { icon: <BookOpen className="h-6 w-6" />, title: 'The Book', desc: 'The complete guide to mortgage freedom.', href: '/book-sales', color: 'from-amber-500/10 to-orange-500/10', iconColor: 'text-amber-600' },
+                { icon: <FileText className="h-6 w-6" />, title: 'Blog', desc: 'Latest tips, news, and homeowner stories.', href: '/blog', color: 'from-emerald-500/10 to-teal-500/10', iconColor: 'text-emerald-600' },
+              ].map((item, i) => (
+                <StaggerItem key={i}>
+                  <Link href={item.href} className="block h-full">
+                    <motion.div 
+                      whileHover={{ y: -6 }}
+                      transition={{ duration: 0.3 }}
+                      className="bg-white rounded-2xl p-6 border border-border/50 shadow-sm hover:shadow-lg hover:border-primary/20 transition-all duration-300 h-full"
+                    >
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center ${item.iconColor} mb-4`}>
+                        {item.icon}
+                      </div>
+                      <h3 className="font-semibold text-lg mb-1">{item.title}</h3>
+                      <p className="text-muted-foreground text-sm">{item.desc}</p>
+                      <div className="flex items-center gap-1 mt-4 text-primary text-sm font-medium">
+                        <span>Explore</span>
+                        <ArrowRight className="h-4 w-4" />
+                      </div>
+                    </motion.div>
+                  </Link>
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
+          </div>
+        </section>
+
+        {/* Tools Section */}
+        <section id="tools" className="relative py-20 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-radial" />
+          
+          <div className="container mx-auto px-4 relative">
+            <FadeInUp>
+              <div className="text-center mb-12">
+                <span className="text-primary font-bold text-sm uppercase tracking-widest">Tools</span>
+                <h2 className="text-3xl md:text-4xl font-bold mt-3">Powerful calculators & simulators</h2>
+                <p className="text-muted-foreground mt-3 max-w-xl mx-auto">Interactive tools to estimate savings, compare strategies, and audit your lender.</p>
+              </div>
+            </FadeInUp>
+            
+            <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+              {[
+                { icon: <Calculator className="h-6 w-6" />, title: 'Savings Estimator', desc: 'See how much interest you could save in 60 seconds.', href: '/questionnaire', color: 'from-primary/10 to-emerald-500/10', iconColor: 'text-primary' },
+                { icon: <Zap className="h-6 w-6" />, title: 'Chunker Simulator', desc: 'Model chunk payments and their impact on your term.', href: '/members/chunker', color: 'from-yellow-500/10 to-amber-500/10', iconColor: 'text-yellow-600' },
+                { icon: <Landmark className="h-6 w-6" />, title: 'Bank Screener', desc: 'Compare lenders and find hidden fees.', href: '/members/bank-screener', color: 'from-blue-500/10 to-indigo-500/10', iconColor: 'text-blue-600' },
+                { icon: <ArrowLeftRight className="h-6 w-6" />, title: 'Lender Loyalty Audit™', desc: 'See if your bank is giving you the best deal.', href: '/members/lender-loyalty-audit', color: 'from-orange-500/10 to-red-500/10', iconColor: 'text-orange-600' },
+              ].map((item, i) => (
+                <StaggerItem key={i}>
+                  <Link href={item.href} className="block h-full">
+                    <motion.div 
+                      whileHover={{ y: -6 }}
+                      transition={{ duration: 0.3 }}
+                      className="bg-white rounded-2xl p-6 border border-border/50 shadow-sm hover:shadow-lg hover:border-primary/20 transition-all duration-300 h-full"
+                    >
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center ${item.iconColor} mb-4`}>
+                        {item.icon}
+                      </div>
+                      <h3 className="font-semibold text-lg mb-1">{item.title}</h3>
+                      <p className="text-muted-foreground text-sm">{item.desc}</p>
+                      <div className="flex items-center gap-1 mt-4 text-primary text-sm font-medium">
+                        <span>Try it free</span>
+                        <ArrowRight className="h-4 w-4" />
+                      </div>
+                    </motion.div>
+                  </Link>
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
           </div>
         </section>
 
