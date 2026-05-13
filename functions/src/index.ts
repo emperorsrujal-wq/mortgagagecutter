@@ -211,3 +211,133 @@ export const sendAbandonedQuestionnaireReminders = functions.pubsub
       return null;
     }
   });
+
+/**
+ * Triggered when a new lead is created.
+ * Automatically enrolls the user in the 5-Day Mortgage Freedom Challenge.
+ */
+export const enrollChallenge = functions.firestore
+  .document("/leads/{leadId}")
+  .onCreate(async (snapshot, context) => {
+    const leadData = snapshot.data();
+    const email = leadData?.email;
+
+    if (!email) {
+      functions.logger.log(`No email for lead ${context.params.leadId}, skipping challenge enrollment.`);
+      return null;
+    }
+
+    try {
+      await snapshot.ref.update({
+        challengeEnrolledAt: admin.firestore.FieldValue.serverTimestamp(),
+        challengeDay: 0,
+        challengeEmailsSent: [],
+      });
+      functions.logger.log(`Enrolled lead ${context.params.leadId} in challenge.`, { email });
+      return { success: true };
+    } catch (error) {
+      functions.logger.error("Error enrolling lead in challenge:", error);
+      return null;
+    }
+  });
+
+/**
+ * Scheduled function that runs every day at 8:00 AM ET.
+ * Sends the appropriate challenge email to each enrolled user based on their day.
+ */
+export const sendChallengeEmails = functions.pubsub
+  .schedule("0 8 * * *")
+  .timeZone("America/New_York")
+  .onRun(async (context) => {
+    const now = admin.firestore.Timestamp.now();
+
+    // Templates map: day number -> template name
+    const dayTemplates: Record<number, string> = {
+      1: "challenge_day1",
+      2: "challenge_day2",
+      3: "challenge_day3",
+      4: "challenge_day4",
+      5: "challenge_day5",
+    };
+
+    // URL templates
+    const getTemplateData = (day: number, name: string, email: string) => {
+      const baseUrl = "https://mortgagecutter.com";
+      switch (day) {
+        case 1:
+          return { name, lesson1Url: `${baseUrl}/learn/lesson/1` };
+        case 2:
+          return { name, calculatorUrl: `${baseUrl}/questionnaire` };
+        case 3:
+          return { name, lesson2Url: `${baseUrl}/learn/lesson/2` };
+        case 4:
+          return { name };
+        case 5:
+          return { name, salesUrl: `${baseUrl}/purchase?plan=elite_997` };
+        default:
+          return { name };
+      }
+    };
+
+    try {
+      // Find all leads enrolled in the challenge who haven't completed it
+      const leadsSnapshot = await db
+        .collection("leads")
+        .where("challengeEnrolledAt", ">", new admin.firestore.Timestamp(0, 0))
+        .where("challengeDay", "<", 5)
+        .get();
+
+      if (leadsSnapshot.empty) {
+        functions.logger.log("No active challenge enrollments found.");
+        return null;
+      }
+
+      let emailsQueued = 0;
+      const batch = db.batch();
+
+      for (const leadDoc of leadsSnapshot.docs) {
+        const lead = leadDoc.data();
+        const enrolledAt = lead.challengeEnrolledAt as admin.firestore.Timestamp;
+        const emailsSent = lead.challengeEmailsSent || [];
+        const name = lead.name || "Friend";
+        const email = lead.email;
+
+        if (!enrolledAt || !email) continue;
+
+        // Calculate which day the user should be on (1-5)
+        const hoursSinceEnrollment = (now.seconds - enrolledAt.seconds) / 3600;
+        const currentDay = Math.min(5, Math.max(1, Math.floor(hoursSinceEnrollment / 24) + 1));
+
+        // Only send if they haven't received this day's email yet
+        const templateName = dayTemplates[currentDay];
+        if (!templateName || emailsSent.includes(templateName)) continue;
+
+        // Queue the email
+        const mailRef = db.collection("mail").doc();
+        batch.set(mailRef, {
+          to: email,
+          template: {
+            name: templateName,
+            data: getTemplateData(currentDay, name, email),
+          },
+        });
+
+        // Update lead progress
+        batch.update(leadDoc.ref, {
+          challengeDay: currentDay,
+          challengeEmailsSent: admin.firestore.FieldValue.arrayUnion(templateName),
+          [`challengeDay${currentDay}SentAt`]: admin.firestore.FieldValue.serverTimestamp(),
+        });
+
+        emailsQueued++;
+      }
+
+      await batch.commit();
+      functions.logger.log(`Queued ${emailsQueued} challenge emails.`);
+      return { emailsQueued };
+
+    } catch (error) {
+      functions.logger.error("Error sending challenge emails:", error);
+      return null;
+    }
+  });
