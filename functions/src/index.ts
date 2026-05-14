@@ -108,6 +108,7 @@ export const sendPurchaseConfirmationEmail = functions.firestore
       await db.collection("mail").add({
         to: userEmail,
         from: "Mortgage Cutter <support@mortgagecutter.com>",
+        attachments: [],
         template: {
           name: "purchase_confirmation",
           data: {
@@ -186,6 +187,7 @@ export const sendAbandonedQuestionnaireReminders = functions.pubsub
         batch.set(mailRef, {
           to: userEmail,
           from: "Mortgage Cutter <support@mortgagecutter.com>",
+          attachments: [],
           template: {
             name: "abandoned_questionnaire",
             data: {
@@ -241,6 +243,7 @@ export const enrollChallenge = functions.firestore
       await db.collection("mail").add({
         to: email,
         from: "Mortgage Cutter <welcome@mortgagecutter.com>",
+        attachments: [],
         template: {
           name: "welcome_signup",
           data: {
@@ -334,6 +337,7 @@ export const sendChallengeEmails = functions.pubsub
         batch.set(mailRef, {
           to: email,
           from: "Mortgage Cutter <support@mortgagecutter.com>",
+          attachments: [],
           template: {
             name: templateName,
             data: getTemplateData(currentDay, name, email),
