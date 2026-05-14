@@ -359,4 +359,3 @@ export const sendChallengeEmails = functions.pubsub
       return null;
     }
   });
-
