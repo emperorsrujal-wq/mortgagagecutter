@@ -20,8 +20,9 @@ function AuthActionContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const mode = searchParams.get('mode');
-  const oobCode = searchParams.get('oobCode');
+  // Read params from useSearchParams (Next.js) with window.location fallback
+  const rawMode = searchParams.get('mode') || (typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('mode') : null);
+  const rawOobCode = searchParams.get('oobCode') || (typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('oobCode') : null);
 
   const [status, setStatus] = useState<'loading' | 'verifyEmailSuccess' | 'verifyEmailError' | 'resetPasswordForm' | 'resetPasswordSuccess' | 'error'>('loading');
   const [message, setMessage] = useState('Processing your request...');
@@ -32,43 +33,53 @@ function AuthActionContent() {
   const [passwordError, setPasswordError] = useState('');
 
   useEffect(() => {
-    if (!auth || !oobCode) {
+    console.log('[AuthAction] auth available:', !!auth);
+    console.log('[AuthAction] mode:', rawMode);
+    console.log('[AuthAction] oobCode present:', !!rawOobCode);
+
+    // Wait for auth to initialize before deciding it's an error
+    if (!auth) {
+      setStatus('loading');
+      setMessage('Initializing...');
+      return;
+    }
+
+    if (!rawOobCode) {
       setStatus('error');
-      setMessage('Invalid or missing verification link.');
+      setMessage('Invalid or missing action code. Please check the link in your email and try again.');
       return;
     }
 
     async function handleAction() {
-      if (!oobCode) return;
+      if (!rawOobCode) return;
       try {
-        if (mode === 'verifyEmail') {
-          await applyActionCode(auth, oobCode);
+        if (rawMode === 'verifyEmail') {
+          await applyActionCode(auth!, rawOobCode);
           setStatus('verifyEmailSuccess');
           setMessage('Your email has been verified successfully!');
-          // Redirect to questionnaire after a short delay
           setTimeout(() => router.push('/questionnaire'), 3000);
-        } else if (mode === 'resetPassword') {
-          const userEmail = await verifyPasswordResetCode(auth, oobCode);
+        } else if (rawMode === 'resetPassword') {
+          const userEmail = await verifyPasswordResetCode(auth!, rawOobCode);
           setEmail(userEmail);
           setStatus('resetPasswordForm');
         } else {
           setStatus('error');
-          setMessage('Unsupported action mode.');
+          setMessage(rawMode ? `Unsupported action mode: ${rawMode}` : 'No action mode specified.');
         }
       } catch (error: any) {
         console.error('Auth action error:', error);
-        setStatus('error');
-        if (mode === 'verifyEmail') {
+        if (rawMode === 'verifyEmail') {
           setStatus('verifyEmailError');
           setMessage('This verification link has expired or is invalid. Please try signing in to request a new one.');
         } else {
+          setStatus('error');
           setMessage(error.message || 'An error occurred while processing your request.');
         }
       }
     }
 
     handleAction();
-  }, [auth, mode, oobCode, router]);
+  }, [auth, rawMode, rawOobCode, router]);
 
   async function handlePasswordReset(e: React.FormEvent) {
     e.preventDefault();
@@ -83,11 +94,11 @@ function AuthActionContent() {
       return;
     }
 
-    if (!auth || !oobCode) return;
+    if (!auth || !rawOobCode) return;
 
     setIsSubmitting(true);
     try {
-      await confirmPasswordReset(auth, oobCode, newPassword);
+      await confirmPasswordReset(auth, rawOobCode, newPassword);
       setStatus('resetPasswordSuccess');
       setMessage('Your password has been reset successfully!');
       setTimeout(() => router.push('/'), 3000);
@@ -224,9 +235,14 @@ function AuthActionContent() {
             </div>
             <h2 className="text-xl font-semibold mb-2">Something Went Wrong</h2>
             <p className="text-muted-foreground mb-6 max-w-xs">{message}</p>
-            <Button onClick={() => router.push('/')} variant="outline">
-              Go Home
-            </Button>
+            <div className="flex gap-3">
+              <Button onClick={() => window.location.reload()} variant="outline">
+                Try Again
+              </Button>
+              <Button onClick={() => router.push('/')} variant="ghost">
+                Go Home
+              </Button>
+            </div>
           </motion.div>
         );
 
