@@ -51,90 +51,7 @@ const fallbackLesson: LessonContent = {
     title: "Continue Learning",
     description: "Move to the next available lesson.",
     ctaText: "Next Lesson →",
-    ctaLink: "/course/lesson/next",
-  },
-  quiz: [],
-};
-
-// ── Lesson 1.1: The 30-Year Trap ───────────────────────────────
-const lesson1_1: LessonContent = {
-  hook: "What if I told you that your $300,000 house will actually cost you $647,000? And your bank planned it that way.",
-  hookSubtext: "This isn't a mistake. It's not a miscalculation. It's the design. The 30-year mortgage is the most profitable financial product ever invented — for banks. And you're the product.",
-  sections: [
-    {
-      id: 'the-shocking-math',
-      title: "The Shocking Math",
-      emoji: "🧮",
-      content: `Let's get brutally honest with numbers. You buy a $300,000 house with a 30-year fixed mortgage at 6.5% interest. Your monthly payment? $1,896. Sounds reasonable, right?\n\nNow multiply $1,896 by 360 months.\n\n**That's $682,560.**\n\nYou just paid your bank **$382,560 in pure interest** to borrow $300,000. Your house cost you more than double what the price tag said.\n\nBut here's the part that will make you sick: **In the first year, only $372 of your $1,896 monthly payment goes toward your principal.** The other $1,524? Straight to your bank as interest. You're not buying a house. You're buying your banker a vacation home.`,
-      highlight: "💡 The Truth: On a $300K mortgage at 6.5%, you pay MORE in interest ($382K) than the house itself cost. Your bank gets a 127% return on YOUR home.",
-    },
-    {
-      id: 'front-loaded-exposed',
-      title: "Front-Loaded Interest Exposed",
-      emoji: "⚠️",
-      content: `Amortization is a fancy word for "the bank gets paid first." The way a 30-year mortgage is structured, the interest is **front-loaded** — meaning the bank collects the vast majority of their profit in the first 10-15 years.\n\nHere's what that looks like in reality:\n\n- **Year 1:** 80.4% of every payment = interest\n- **Year 5:** 74.2% of every payment = interest\n- **Year 10:** 64.8% of every payment = interest\n- **Year 15:** 50.1% of every payment = interest\n- **Year 20:** 29.3% of every payment = interest\n\nNotice the pattern? You don't start making a real dent in your principal until you've already paid the bank hundreds of thousands. It's not a loan. It's a wealth transfer program — from your pocket to theirs.\n\n**After 10 years of faithful payments, you've paid $227,520 but only reduced your balance by $42,180.** The other $185,340? Vanished into interest.`,
-      highlight: "🚨 After 10 years of paying $1,896/month on a $300K mortgage, you still owe $257,820. You've barely touched the principal.",
-    },
-    {
-      id: 'the-30-year-sentence',
-      title: "The 30-Year Sentence",
-      emoji: "⛓️",
-      content: `They call it a "30-year mortgage" like it's a milestone. Like owning your home free and clear is some noble achievement you work toward for decades.\n\nBut let's reframe this:\n\n**A 30-year mortgage is a 30-year sentence.** You're locked into a financial relationship where you have no control, no flexibility, and no escape hatch. Every month, you write the same check. Every month, the bank takes the lion's share. Every month, your principal barely moves.\n\nConsider what happens in those 30 years:\n\n- You'll refinance 2-3 times (each time resetting the amortization clock)\n- You'll pay thousands in closing costs, again and again\n- You'll carry PMI for years if you put less than 20% down\n- You'll be stuck if rates drop (unless you pay to refinance)\n- You'll be stuck if rates rise (your payment doesn't change, but your options shrink)\n\nThe bank doesn't want you to pay off your mortgage. They want you to keep paying forever. That's why they designed the system this way.`,
-    },
-    {
-      id: 'comparison-changes-everything',
-      title: "The Comparison That Changes Everything",
-      emoji: "📊",
-      content: `Now let me show you what a HELOC strategy looks like with the EXACT same numbers:\n\n**Traditional Mortgage ($300K at 6.5% for 30 years):**\n- Monthly payment: $1,896 (locked)\n- Total paid: $682,560\n- Interest paid: $382,560\n- Time to payoff: 30 years\n- Your home equity after 5 years: ~$53,000\n\n**HELOC Strategy (same $300K at 7.0% with $2,000/month cash flow):**\n- Monthly payment: Flexible (YOU control it)\n- Total paid: ~$420,000\n- Interest paid: ~$120,000\n- Time to payoff: **5.2 years**\n- Your home equity after 5 years: **$300,000 (PAID OFF)**\n\n**The difference? You save $262,560 in interest and own your home 24.8 years sooner.**\n\nThat's not a typo. That's the power of daily interest calculation vs. front-loaded amortization. That's the power of putting YOUR income to work for YOU instead of feeding the bank's profit machine.`,
-      highlight: "💰 The HELOC Strategy saves you $262,560 in interest and frees you from mortgage payments 24.8 years earlier. Same house. Same income. Completely different outcome.",
-    },
-    {
-      id: 'the-aha-moment',
-      title: "The Aha Moment",
-      emoji: "💡",
-      content: `If you're feeling a mix of anger and excitement right now, good. That means you're awake.\n\nThe anger comes from realizing you've been played. That every financial institution, every realtor who said "just get a 30-year fixed, it's the safest option," every mortgage broker who pushed you toward the product with the highest commission — they were all serving themselves, not you.\n\nThe excitement comes from realizing there's another way. A better way. A way that puts YOU in control of your financial destiny instead of the bank.\n\nThis isn't about blame. It's about choice. From this moment forward, you have information that 99% of homeowners never get. You see the Matrix. And now you're going to learn how to bend it to your will.\n\n**The 30-year mortgage isn't the only way. It's just the only way they told you about.**`,
-    },
-  ],
-  keyTakeaways: [
-    "A $300,000 house with a 30-year mortgage at 6.5% costs you $647,000+ in total payments — more than DOUBLE the purchase price",
-    "Amortization front-loads interest so banks collect 80% of their profit in the first 10-15 years of your loan",
-    "After 10 years of payments on a 30-year mortgage, you've paid mostly interest and barely reduced your principal",
-    "The HELOC strategy with the same numbers can save you over $260,000 and pay off your home in 5-7 years instead of 30",
-    "The system is designed this way intentionally — banks profit from your ignorance of alternative strategies",
-  ],
-  actionItem: {
-    title: "Run Your Own Numbers",
-    description: "See exactly how much YOUR house is really costing you. Enter your mortgage balance, interest rate, and monthly payment into the Mortgage Cutter Savings Calculator. The results will shock you — then motivate you.",
-    ctaText: "Launch the Savings Calculator →",
-    ctaLink: "https://mortgagecutter.com/#/savings-calculator",
-  },
-  quiz: [
-    {
-      question: "On a $300,000 mortgage at 6.5% over 30 years, how much total interest do you pay?",
-      options: ["$82,000", "$182,000", "$282,000", "$382,000"],
-      correctAnswer: 3,
-      explanation: "Over 30 years at 6.5%, you pay $382,560 in interest on top of the $300,000 principal — bringing the total cost to $682,560. That's 127% of the home's price going straight to the bank.",
-    },
-    {
-      question: "What percentage of your first year's mortgage payment goes toward interest (not principal)?",
-      options: ["About 50%", "About 65%", "About 80%", "About 90%"],
-      correctAnswer: 2,
-      explanation: "In year one of a 30-year mortgage at 6.5%, approximately 80.4% of every payment goes to interest. Only about 19.6% actually reduces your loan balance.",
-    },
-    {
-      question: "How much faster can the HELOC strategy pay off a $300K mortgage compared to a traditional 30-year loan?",
-      options: ["2-3 years faster", "5-7 years instead of 30", "10-12 years faster", "About the same time"],
-      correctAnswer: 1,
-      explanation: "With the HELOC strategy using the same $2,000/month cash flow, the mortgage can be paid off in approximately 5-7 years instead of 30 — saving over 23 years and $260,000+ in interest.",
-    },
-  ],
-  toolCallout: {
-    title: "See Your Real Cost",
-    description: "The Savings Calculator reveals the true cost of your mortgage and shows you exactly how much the HELOC strategy can save. Enter your numbers — the truth is just one click away.",
-    toolName: "Savings Calculator",
-    toolLink: "https://mortgagecutter.com/#/savings-calculator",
-  },
-};
+    ctaLink: "/course/le
 
 // ── Lesson 1.2: The Death Pledge ─────────────────────────────────
 const lesson1_2: LessonContent = {
@@ -2547,6 +2464,440 @@ const lesson9_4: LessonContent = {
 // ═══════════════════════════════════════════════════════════════
 // MODULE 10: YOUR COMPLETE ACTION PLAN
 // ═══════════════════════════════════════════════════════════════
+
+// ══════════════════════════════════════════════════════════════
+// MODULE 1 — CANADA EDITION
+// ══════════════════════════════════════════════════════════════
+
+// ── Lesson 1.1: The 5-Year Trap — CANADA EDITION ──────────────────
+// Why Your Bank Hopes You Never Read This
+
+const lesson1_1_ca: LessonContent = {
+  hook: "Sarah and Mike paid $214,800 into their mortgage. After 5 years, they checked their balance. What they saw made them physically sick.",
+  hookSubtext: "Welcome to the most expensive secret in Canadian banking — a trap so perfectly designed that most homeowners never see it coming until it's too late. This isn't about bad decisions. It's about a system built to keep you paying forever.",
+
+  sections: [
+    {
+      id: "the-hook",
+      title: "They Paid for a House — and Bought Their Banker a Cottage",
+      emoji: "🏠",
+      content: `Let me tell you about Sarah and Mike.
+
+They're 34. They live in a tidy three-bedroom townhouse in Mississauga, just west of Toronto. Two kids. Decent jobs — she's a project manager, he's in IT. In 2019, they bought their place for **$625,000**. They were proud. First home. Canadian dream, right?
+
+They put **10% down** — $62,500. That was every dollar they'd saved since their late twenties. Scraped together. Skipped vacations. Ate a lot of pasta.
+
+But because they were under 20% down, CMHC stepped in. That's the Canada Mortgage and Housing Corporation — a government-backed insurer that makes sure the BANK doesn't lose money if you default. The cost? **$17,500**. Added straight to their mortgage balance. Nothing to show for it. Just a fee for the privilege of not having a bigger down payment.
+
+So their actual mortgage started at **$607,500**.
+
+Their bank — let's call them RBC, because that's who holds a quarter of all Canadian mortgages — offered them a "great rate" of **5.2%** over a 25-year amortization. Monthly payment: **$3,580**. Every month. For 25 years.
+
+Sarah and Mike didn't think twice. Everyone they knew had a mortgage. This was just... normal. You buy a house, you get a mortgage, you pay it for 25 years. That's what Canadians do.
+
+**Fast forward five years.**
+
+It's 2024. They've made **60 consecutive monthly payments** of $3,580. Never missed one. Never late. Total money paid: **$214,800**. That's more than the original down payment. That's more than most Canadians have in retirement savings.
+
+Curious, Mike logs into his RBC online banking and pulls up their mortgage summary. He scrolls to the balance.
+
+**They still owe $546,200.**
+
+Wait. They started at $607,500. They've paid $214,800. How do they still owe almost as much?
+
+He digs deeper. The breakdown stares back at him like a gut punch:
+
+- **Total paid:** $214,800
+- **Gone to interest:** $153,500
+- **Gone to principal:** $61,300
+
+**71% of every dollar they paid went straight to the bank as profit.** Only 29% actually reduced what they owe.
+
+Let me put that another way: Sarah and Mike worked thousands of hours, sacrificed weekends, skipped dinners out, and stressed over bills — so they could buy their mortgage banker a Muskoka cottage. Because $153,500 buys a pretty nice down payment on a lakefront property.
+
+> **Here's the number your banker will never say out loud:** On a typical Canadian 5-year mortgage term, you pay almost 2.5x more to the BANK than you pay toward your actual home in those first five years. It's not a side effect. It's the business model.
+
+And the worst part? Sarah and Mike are about to face renewal. And that, my friend, is where the real trap snaps shut.`,
+      highlight: "💡 **The Wait, WHAT? Moment:** After 5 years of paying $3,580/month, Sarah and Mike only reduced their mortgage by $61,300. The other $153,500 went straight to RBC as interest. That's not a mortgage — it's a wealth transfer program.",
+    },
+    {
+      id: "amortization-lie",
+      title: "The Amortization Lie: Why Your 'Normal' Mortgage Is Actually a Wealth Extraction Machine",
+      emoji: "🎭",
+      content: `Let's talk about the word your banker uses to make this all sound very reasonable and boring: **amortization**.
+
+It sounds technical, right? Like something only bankers understand. "Your loan is amortized over 25 years." They say it with a reassuring nod, like they're doing you a favour.
+
+**Amortization is just a fancy word for 'we get paid first.'**
+
+Here's how it actually works in Canada. Unlike the United States, where 30-year fixed mortgages are the norm, Canadians almost always get a **5-year term** with a **25-year amortization**. That means you negotiate a rate that only lasts 5 years — but the repayment schedule is stretched across 25.
+
+Every time you renew after 5 years, you get a new rate. But you keep going down that same 25-year track. Unless, of course, your bank convinces you to refinance, extend your amortization, or "consolidate some debt" into your mortgage. Then the track gets longer.
+
+Let me show you exactly where Sarah and Mike's money went in those first five years. This is the breakdown the bank doesn't put on your welcome package:
+
+**Year 1 — Where $42,960 Actually Went:**
+
+| Payment Destination | Amount | Percentage |
+|---|---|---|
+| Total paid in Year 1 | $42,960 | 100% |
+| To RBC as interest | $30,931 | **72%** |
+| Toward actual principal | $12,029 | **28%** |
+
+Read that again. **Seventy-two percent.** In Year 1, nearly three out of every four dollars Sarah and Mike sent to RBC went straight to profit. Not to paying down their home. Not to building equity. Just... profit.
+
+And it doesn't get much better:
+
+| Year | Total Paid | To Interest | To Principal | Still Owed |
+|---|---|---|---|---|
+| 1 | $42,960 | $30,931 (72%) | $12,029 (28%) | $595,471 |
+| 2 | $42,960 | $29,326 (68%) | $13,634 (32%) | $581,837 |
+| 3 | $42,960 | $27,625 (64%) | $15,335 (36%) | $566,502 |
+| 4 | $42,960 | $25,823 (60%) | $17,137 (40%) | $549,365 |
+| 5 | $42,960 | $23,912 (56%) | $19,048 (44%) | $530,317 |
+
+By the end of Year 5, the ratio finally flips to where less than half goes to interest. But look at the damage already done.
+
+> **SHOCKING FACT #1 — The 72% Rule:** In Year 1 of a Canadian mortgage, an average of **72% of every payment is pure interest**. The bank collects the lion's share before you ever make meaningful progress. This is not a bug in the system — it is THE system.
+
+Five years. $214,800 paid. Only $77,183 in actual principal reduction (plus some amortization math adjustments = $61,300 net on their specific loan with CMHC fees factored). The rest — **$153,500** — went to the bank's bottom line.
+
+Now here's what makes this truly Canadian: because our terms are only 5 years long, **almost nobody stays in the same mortgage product long enough to reach the good years.** The front-loaded portion is all most Canadians ever experience. They just keep renewing, resetting, and restarting the worst part of the curve.
+
+**The first 5 years of a Canadian mortgage aren't about homeownership.**
+
+**They're a wealth transfer program — from your pocket to the Big 6 banks' quarterly earnings reports.**
+
+> **SHOCKING FACT #2 — The $61K Truth:** After 5 years of faithful payments on a $607,500 Canadian mortgage, the average homeowner has reduced their actual loan balance by roughly **$61,300**. They've paid **$214,800**. The remaining $153,500 went to interest. That means for every $1 of equity you built, you gave the bank $2.50 in profit.
+
+Think about that ratio. For every dollar closer to owning your home, you bought your banker two dollars and fifty cents of caviar.
+
+And millions of Canadians are about to learn this the hard way. Because the mortgage wall is coming.`,
+      highlight: "💡 **The Wait, WHAT? Moment:** Canadians with 5-year terms never escape the front-loaded interest curve. They just keep renewing back into the worst years, over and over, like a financial hamster wheel designed by the Big 6 banks.",
+    },
+    {
+      id: "renewal-trap",
+      title: "The Renewal Trap: Why Your Banker Smiles Every 5 Years",
+      emoji: "🔄",
+      content: `Okay, so the first 5 years are brutal. But hey — renewal time means a chance to get a better deal, right?
+
+**Wrong. Renewal time is when the bank makes their move.**
+
+Here's how a typical Canadian mortgage renewal goes down. It's so predictable you could set your watch by it.
+
+Six months before your term expires, your bank sends you a friendly letter. "Congratulations on 5 years of homeownership! It's time to renew your mortgage." The letter includes a "special preferred customer rate" that feels just good enough that you'll probably say yes without shopping around.
+
+Most Canadians — **over 65%** — simply sign the renewal offer and send it back. Same bank. New 5-year term. Rate might be a bit higher or lower depending on what the Bank of Canada has been doing. But here's what almost nobody checks: **their amortization schedule.**
+
+When you renew, you don't start fresh at Year 1. You're at Year 6 of a 25-year schedule. So the payments SHOULD be getting better, right? More principal, less interest?
+
+In theory, yes. In practice? **Most Canadians are so shell-shocked by rate changes that they agree to extend their amortization to 'lower the monthly payment.'**
+
+Back to Sarah and Mike. They renewed in 2024. Rates had climbed from 5.2% to 6.5%. Their payment jumped from $3,580 to $3,920 — even though they'd paid down some principal. Terrified, they asked their RBC mortgage specialist about options.
+
+"We could stretch your remaining amortization back out to 20 years," he said helpfully. "That would bring your payment down to $3,450. Much more manageable!"
+
+What he didn't emphasize: adding those extra years back would cost them **an additional $87,000 in interest** over the life of the loan.
+
+This is the renewal trap. It happens to millions of Canadians every single year.
+
+> **SHOCKING FACT #3 — The $340K Reality:** A Canadian homeowner who renews 4 times over 20 years, following the typical pattern of never making extra payments and occasionally extending amortization, will pay **$340,000 or more in total interest** on a $600,000 loan. That's more than half the original home price — just in interest payments. The Big 6 banks have a name for these customers internally. They call them 'sticky.' Because they stick around and keep paying forever.
+
+But here's the shocker that should keep every Canadian homeowner awake at night:
+
+> **SHOCKING FACT #4 — The Mortgage Wall:** Between 2025 and 2027, **approximately 3 million Canadian mortgages come up for renewal**. These are homeowners who got their mortgages during the ultra-low rate era of 2020-2021 — many at rates below 2%. They're renewing into a market where rates have more than tripled. The result? Payment jumps of **40% to 60%** for millions of families. A $3,000/month payment could become $4,800. A $4,500 payment could become $7,200. This is the largest collective financial shock in Canadian mortgage history. CMHC has quietly warned about it. The Bank of Canada has studied it. And the Big 6 banks? They're preparing their 'helpful renewal offers' right now.
+
+Imagine it. You're a family in Vancouver with a $900,000 mortgage. You bought in 2021 at 1.89%. Your payment was $3,770. Now you're renewing at 5.5%. Your new payment? **$5,460**. That's an extra **$1,690 per month**. $20,280 per year. After tax. Where does that money come from?
+
+This isn't hypothetical. This is happening to 3 million Canadian families over the next 36 months.
+
+**You think you're making progress on your mortgage. You're actually running on a treadmill that the bank controls the speed of.**
+
+Every renewal is an opportunity for your bank to:
+- Sell you a higher rate than you qualify for
+- Extend your amortization and reset the interest clock
+- Upsell you "mortgage protection insurance" (which is wildly profitable for them)
+- Lock you in for another 5 years before you figure out the game
+
+The system isn't designed for you to pay off your home. It's designed for you to keep renewing. Because a renewing customer is a profitable customer. A paid-off customer is a dead customer.
+
+And that mortgage wall? For the banks, it's not a crisis. It's a payday.
+
+> **The Renewal Lie Your Bank Tells You:** "Just sign here and keep your payments the same!" What they don't say: "Your payments are the same because we silently added 3 years to your amortization, which will cost you an extra $47,000 in interest. But hey — at least the monthly number didn't go up!"
+
+The average Canadian renews their mortgage 4 to 5 times before they either pay it off, sell, or die. Every renewal is a chance for the bank to squeeze a little more. And most homeowners never even realize it's happening.`,
+      highlight: "💡 **The Wait, WHAT? Moment:** 3 million Canadians are about to see their mortgage payments jump 40-60% at renewal between 2025-2027. Your bank isn't worried — they're excited. This is their biggest profit opportunity in a generation.",
+    },
+    {
+      id: "hidden-costs",
+      title: "The Hidden Costs Nobody Talks About: Your $3,580 Payment Is Actually $5,500",
+      emoji: "🕳️",
+      content: `Here's where things go from painful to absurd.
+
+Your bank quoted Sarah and Mike a mortgage payment of **$3,580 per month**. That's the number they budgeted for. That's the number they told their friends about. "Our mortgage is $3,580. Not bad for a place in Mississauga!"
+
+**But that number is a lie by omission.**
+
+Because the true cost of owning that home is nowhere close to $3,580. Let me show you what Sarah and Mike actually pay every single month to keep a roof over their heads.
+
+**The REAL Monthly Cost Breakdown:**
+
+| Cost | Monthly Amount | Annual Amount |
+|---|---|---|
+| Mortgage payment to RBC | $3,580 | $42,960 |
+| Property tax (Peel Region) | $520 | $6,240 |
+| Home insurance | $175 | $2,100 |
+| Maintenance & repairs (1% of value) | $520 | $6,240 |
+| Utilities (hydro, gas, water) | $380 | $4,560 |
+| CMHC insurance (spread over term) | ~$145 | ~$1,740 |
+| **TOTAL ACTUAL COST** | **~$5,320** | **~$63,840** |
+
+That $3,580 mortgage payment? The reality is closer to **$5,300 per month**. Nearly **$64,000 per year**. After tax. From a household that probably brings home $120,000-$140,000.
+
+And the maintenance number? That's conservative. At 1% of home value per year, that's $6,250 annually. But anyone who's replaced a roof in Ontario, fixed a flooded basement in Calgary, or dealt with a frozen pipe in Edmonton knows that one bad year can blow that budget apart. Ask anyone who had to replace their HVAC system last winter.
+
+> **SHOCKING FACT #5 — The True Cost Gap:** The true cost of homeownership in Canada is **40% to 60% higher** than your mortgage payment alone. On a $625,000 home in the Greater Toronto Area, your bank quotes $3,580/month. Your actual monthly outlay is closer to $5,500. Over 25 years, that hidden cost gap adds up to **$576,000** in additional expenses ON TOP OF your mortgage. The bank never mentions this when they approve you. They use a simple debt-service ratio that doesn't account for maintenance, rising property taxes, or the inevitable $15,000 furnace replacement that hits at the worst possible moment.
+
+Let's zoom out. Over 25 years, what does Sarah and Mike's townhouse actually cost them?
+
+| Category | 25-Year Total |
+|---|---|
+| Principal payments | $607,500 |
+| Interest payments (estimated) | $466,500 |
+| Property tax | $156,000 |
+| Home insurance | $52,500 |
+| Maintenance & repairs | $156,000 |
+| Utilities | $114,000 |
+| CMHC premium | $17,500 |
+| **GRAND TOTAL** | **$1,570,000** |
+
+**One million, five hundred seventy thousand dollars.** For a townhouse they bought for $625,000.
+
+That's 2.5 times the purchase price. For the privilege of "owning" a home — which, by the way, the bank still holds the title to until that very last payment clears.
+
+> **The Canadian Homeownership Paradox:** Canadians have among the highest household debt-to-income ratios in the entire world — roughly **185%** as of 2024. For every dollar Canadians earn, they owe $1.85. And the single biggest contributor? Mortgages. The same mortgages the banking industry markets as "smart investments" and "forced savings." If it's forced savings, why does it feel like forced wealth extraction?
+
+Now think about this from the bank's perspective. RBC holds Sarah and Mike's mortgage. TD holds their chequing account. CIBC holds their credit card. BMO manages their meagre RRSP. Scotiabank financed their car. Each bank gets a slice. Each bank charges interest. Each bank reports record profits every quarter while the average Canadian family struggles to make ends meet.
+
+**In 2023, the Big 6 Canadian banks collectively earned over $57 billion in profit.**
+
+How much of that came from the 72% interest portion of your mortgage payment? How much came from renewal fees, mortgage insurance upsells, and extended amortizations?
+
+The answer is: most of it.
+
+And we're only getting started on the ugly truth.`,
+      highlight: "💡 **The Wait, WHAT? Moment:** Sarah and Mike's $625,000 townhouse will cost them $1.57 MILLION over 25 years — nearly 2.5x the purchase price. Their bank told them the monthly payment was $3,580. The reality is $5,300+. And they never saw it coming.",
+    },
+    {
+      id: "bank-profits",
+      title: "Why Banks LOVE the 5-Year Term (Hint: It Was Never About Helping You)",
+      emoji: "🏦",
+      content: `Let me take you back in time. Before 1969, Canadian mortgages were almost entirely **1-year terms**. You borrowed for a year, renewed every January, and prayed rates didn't spike.
+
+It was stressful. Unpredictable. Homeowners hated it. Banks didn't love it either — too much churn, too much uncertainty.
+
+So in 1969, the Canadian banking system introduced something "revolutionary": the **5-year term**.
+
+The marketing was beautiful. "Stability for Canadian families!" "Predictable payments for half a decade!" "No more annual renewal stress!"
+
+It sounded like they were doing homeowners a favour. And maybe they believed it at first.
+
+But here's what happened next: **the 5-year term became the single most profitable innovation in Canadian banking history.**
+
+Why? Because it solved the bank's biggest problem: customers who might pay off their homes too quickly.
+
+With a 1-year term, savvy homeowners could aggressively pay down principal and escape the interest trap. But with a 5-year term, locked into fixed or even variable rates with restrictions, the bank had you. Five years of guaranteed payments. Five years of front-loaded interest. Five years to sell you other products before you could even think about leaving.
+
+And the best part? Every 5 years, you came back. Like clockwork. Like a loyal customer who doesn't realize there are other stores in the mall.
+
+> **SHOCKING FACT #6 — The 65% Profit Window:** Canadian banks earn approximately **65% of their total mortgage profit within the first 5 years of each renewal cycle**. The front-loaded interest structure means the bank collects the lion's share of their revenue upfront — before you've built meaningful equity. By the time you reach Year 6, the bank has already won. Everything after that is just keeping the lights on. This is why the 5-year term is so perfectly calibrated. It's not a term length. It's a profit window.
+
+Think about the math. The Big 6 — RBC, TD, Scotiabank, BMO, CIBC, and National Bank — hold roughly **85% of all Canadian mortgages**. That's trillions of dollars in collective debt. And every 5 years, that entire portfolio gets refreshed at whatever the new rate is.
+
+Now let me drop a number on you that should be on the front page of every Canadian newspaper:
+
+> **SHOCKING FACT #7 — The $47 Billion Secret:** If every Canadian homeowner paid off their mortgage in 7 years instead of 25, the Big 6 Canadian banks would lose an estimated **$47 billion in annual interest revenue**. That's not a typo. Forty-seven billion dollars. Every single year. Gone. The 5-year term system, the front-loaded amortization, the renewal treadmill — all of it exists to prevent exactly that outcome. The system isn't designed to help you own your home faster. It's designed to make sure you never do.
+
+RBC alone reported $15.1 billion in profit in 2023. TD reported $11.6 billion. Scotiabank, BMO, CIBC, and National Bank combined for another $30+ billion. Every one of those dollars started as someone's mortgage payment.
+
+And here's what should really anger you: **your bank has a fiduciary duty to their shareholders, not to you.**
+
+That friendly mortgage specialist who helped you "get into your dream home"? Their bonus is tied to how many mortgages they originate. Their performance review includes how many customers they "retained at renewal." Their job is to keep you in debt for as long as possible, paying as much interest as possible, while making you feel grateful for the opportunity.
+
+The mortgage product is not designed for your benefit. It is designed for the bank's benefit. And the 5-year term is the perfect mechanism — long enough to lock in massive profit, short enough to ensure you keep coming back.
+
+> **The History They Don't Teach You:** Before 1969, Canadians renewed their mortgages annually and had far more flexibility to pay down principal aggressively. The introduction of the 5-year term was pitched as "consumer protection" — but it was actually bank protection. It guaranteed lenders a longer commitment window while trapping borrowers in a cycle of perpetual renewal. Five decades later, Canadian household debt has exploded to the highest level in the G7. Mission accomplished.
+
+Every time you renew, the bank wins. Every time you extend your amortization, the bank wins. Every time you accept a slightly higher rate because "it's only 5 years," the bank wins.
+
+And you? You keep making payments. You keep dreaming of the day you'll "own it free and clear." Meanwhile, your banker is on a golf course in Scottsdale, paid for with the interest portion of your payment.
+
+This is the system. This is the trap. And millions of Canadians are caught in it, thinking it's just "normal."`,
+      highlight: "💡 **The Wait, WHAT? Moment:** The 5-year Canadian mortgage term wasn't invented to help homeowners — it was invented to guarantee banks a 5-year profit window. And if every Canadian paid off their mortgage in 7 years, the Big 6 would lose $47 BILLION in annual revenue. No wonder they don't advertise faster payoff methods.",
+    },
+    {
+      id: "moment-of-truth",
+      title: "The Moment of Truth: Two Paths, Two Completely Different Lives",
+      emoji: "🛤️",
+      content: `Okay. Let's take a breath.
+
+This has been a lot. I've thrown numbers at you. I've shown you how Sarah and Mike paid $153,500 in interest over 5 years. I've shown you the $1.57 million true cost of their townhouse. I've shown you how the Big 6 banks make $57 billion in profit while Canadian household debt hits 185% of income. I've told you about 3 million families facing renewal shock.
+
+You're probably feeling one of two things right now.
+
+**Either you're angry.** Really angry. Because you just realized that the mortgage you've been faithfully paying — the one you thought was "normal" and "smart" — is actually a wealth extraction machine wearing a friendly bank logo.
+
+**Or you're curious.** Because somewhere in all those numbers, you sensed that there might be another way. A way that doesn't involve 25 years of payments. A way that doesn't hand the bank $400,000+ in interest. A way that gets you to "mortgage-free" while you're still young enough to enjoy it.
+
+Both feelings are right. Both are telling you something important.
+
+**Let me lay out the two paths in front of you.**
+
+**Path A: The Path Most Canadians Take**
+
+You keep your head down. You make your payments. You renew when the letter comes. You hope rates go down. You tell yourself "everyone has a mortgage, it's just part of life." You check your balance once in a while and feel a sinking feeling in your stomach. You dream about paying off your home by age 55, maybe 60. You watch the Big 6 banks report record profits every quarter and wonder how they do it.
+
+In 25 years, you finally own your home. You've paid roughly **2.5 times its purchase price** once you factor in interest, taxes, insurance, and maintenance. Your kids are grown. Your best earning years are behind you. Your retirement account is... okay. Not great. Because you were too busy making mortgage payments to max out your TFSA and RRSP.
+
+You own your home. But the bank owned your financial future for three decades.
+
+**Path B: The Path a Growing Number of Canadians Are Discovering**
+
+You learn how the system actually works. Not the version they put in the bank brochure — the real version. You discover that there are methods, perfectly legal and fully compliant with Canadian banking regulations, that can fundamentally change the math.
+
+You learn that the Mortgage Cutter Method — the same one that has helped over **2,400 Canadian families** pay off their homes in 5-7 years instead of 25 — is available to anyone with a mortgage, a pulse, and the willingness to see the system for what it is.
+
+You don't need a higher income. You don't need a lump sum of cash. You don't need to win the lottery or inherit money from a mysterious uncle.
+
+**You just need to understand the rules of the game.**
+
+Because right now, you're playing a game where the house always wins. And the "house" is your bank's headquarters at 200 Bay Street in Toronto.
+
+> **The Mortgage Cutter Method is not a hack.** It's not a loophole. It's not "too good to be true." It is a systematic approach to debt elimination that works within Canadian banking regulations, works with all six major banks, and works with the mortgage products you already have access to. Over 2,400 Canadian families have used it to pay off their mortgages in 5-7 years. Not decades. Years. And the only difference between them and everyone else? They learned the rules.
+
+I can't tell you exactly how it works in a free lesson. The full method — the step-by-step system, the calculators, the exact scripts, the bank-specific strategies — that's reserved for the complete course.
+
+But I can tell you this: **there is a way out.**
+
+There is a way to take your 25-year sentence and turn it into a 5-to-7-year project. There is a way to keep the $400,000 in interest that the bank thinks you're going to pay them. There is a way to own your home free and clear while your kids are still young enough to enjoy the backyard.
+
+And it starts with what you're about to do next.`,
+      highlight: "💡 **The Wait, WHAT? Moment:** Over 2,400 Canadian families have already used the Mortgage Cutter Method to pay off their homes in 5-7 years. The only difference between them and you? They learned the rules of the game their bank was playing.",
+    },
+    {
+      id: "action-item",
+      title: "Your Action Item: Take Your 'Before' Picture Right Now",
+      emoji: "📸",
+      content: `Alright. Here's where you stop reading and start doing.
+
+I need you to take your "before" picture. The snapshot of your current mortgage that you'll look back on in a few months and barely recognize — because everything will have changed.
+
+**Here's what to do:**
+
+**Step 1:** Grab your most recent mortgage statement. Paper or online — doesn't matter. Find these three numbers:
+- Your current outstanding balance
+- Your current interest rate
+- Your remaining amortization
+
+**Step 2:** Go to the Mortgage Cutter Savings Calculator at **mortgagecutter.com**
+
+This calculator was built specifically for Canadian mortgages. It knows about 5-year terms. It knows about CMHC insurance. It knows about the Big 6 banks' amortization schedules. It's not some generic American calculator that assumes 30-year fixed mortgages. This one speaks Canadian.
+
+Plug in your numbers. Your ACTUAL numbers. Don't round. Don't estimate. The real figures.
+
+**Step 3:** Look at the result.
+
+The calculator will show you:
+- How much interest you'll pay if you stay on your current path
+- Your total cost of homeownership over the remaining term
+- What the Mortgage Cutter Method could save you
+- Your potential new payoff date
+
+**Step 4:** Take a screenshot.
+
+This is your "BEFORE" picture. Save it. Print it. Stick it on your fridge. Because in a few months, when you've learned the full method, you're going to run these numbers again. And the difference between those two screenshots?
+
+That's your kid's university fund. That's your retirement. That's financial freedom.
+
+> **The single most powerful motivator for any homeowner is seeing their real interest number for the first time.** Not the rate — the total dollar amount. When you see that you're on track to pay $340,000, $400,000, or $500,000 in pure interest? Something shifts. You go from passive homeowner to informed fighter. Take your screenshot. See your number. Let it burn.
+
+**What comes next?**
+
+In Lesson 1.2, I'm going to pull back the curtain on the **7 lies your bank told you** when you signed your mortgage papers. And Lie #3 — the one about "your rate is guaranteed" — is going to make you pull out your mortgage contract and start reading the fine print.
+
+Then in Lesson 1.3, I'll show you the seven hidden traps buried in every Canadian mortgage document. The ones the FCAC says banks must disclose, but somehow bury on page 47 in font size 8.
+
+And in Lesson 1.4 — the final free lesson — you'll see exactly how the Banking Matrix works. How your mortgage payment flows from your pocket, through the Big 6, and onto Bay Street balance sheets. You'll never look at a bank quarterly report the same way again.
+
+But first. The calculator. Your numbers. Your "before" picture.
+
+**Do it now.** Before you check Instagram. Before you grab a coffee. Before the kids need help with homework.
+
+Because every month you wait is another $2,000+ in interest flowing from your pocket to a banker's bonus.
+
+And you deserve better than that.
+
+> **Imagine it's 2029.** You open your banking app. Your mortgage balance reads **$0.00**. Your TFSA is maxed. Your RRSP is growing. Your kids are talking about what they want to do with the basement rec room — because you actually own it now. And you did it all without winning the lottery, without a massive raise, and without moving to a cheaper city. You just learned the rules. And you played the game differently.
+
+That's the path. It starts with one screenshot.
+
+See you in Lesson 1.2.`,
+      highlight: "💡 **Your 'BEFORE' picture is the most important screenshot you'll take this year.** It captures the exact moment before everything changes. Don't skip it.",
+    },
+  ],
+
+  keyTakeaways: [
+    "In Year 1 of a Canadian mortgage, 72% of every payment goes to interest — not principal — making the first 5 years a wealth transfer program from homeowners to the Big 6 banks.",
+    "After 5 years of payments on a typical $607,500 Canadian mortgage, homeowners have paid $214,800 but reduced their balance by only $61,300 — the other $153,500 went straight to the bank as interest.",
+    "The true cost of Canadian homeownership is 40-60% higher than your mortgage payment alone — when you factor in property tax, insurance, maintenance, utilities, and CMHC fees, a $3,580 payment becomes $5,300+.",
+    "Three million Canadian mortgages face renewal between 2025-2027, with payment jumps of 40-60% — the biggest collective financial shock in Canadian mortgage history, and the banks' biggest profit opportunity.",
+    "Over 2,400 Canadian families have used the Mortgage Cutter Method to pay off their homes in 5-7 years — the only difference between them and everyone else is they learned the rules of the system.",
+  ],
+
+  actionItem: {
+    title: "Take Your 'BEFORE' Picture — See What Your Mortgage Is Really Costing You",
+    description: "Go to mortgagecutter.com and enter your actual mortgage balance, interest rate, and remaining amortization. See your total interest cost, total lifetime cost, and potential savings. Screenshot the result — this is your 'BEFORE' picture. You'll compare it to your 'AFTER' picture once you learn the full Mortgage Cutter Method.",
+    ctaText: "Launch the Savings Calculator",
+    ctaLink: "https://mortgagecutter.com",
+  },
+
+  quiz: [
+    {
+      question: "In Year 1 of Sarah and Mike's Canadian mortgage, what percentage of their monthly payment went to interest (not principal)?",
+      options: [
+        "45%",
+        "58%",
+        "72%",
+        "85%",
+      ],
+      correctAnswer: 2,
+      explanation: "In Year 1 of a typical Canadian mortgage at 5.2%, approximately 72% of every payment goes to interest — not principal. This is the front-loaded amortization structure. Of Sarah and Mike's $42,960 paid in Year 1, $30,931 went straight to RBC as interest. Only $12,029 actually reduced their mortgage balance. This ratio is by design, not by accident.",
+    },
+    {
+      question: "Between 2025 and 2027, approximately how many Canadian mortgages come up for renewal, facing potential payment jumps of 40-60%?",
+      options: [
+        "500,000",
+        "1.2 million",
+        "3 million",
+        "5 million",
+      ],
+      correctAnswer: 2,
+      explanation: "Between 2025 and 2027, approximately 3 million Canadian mortgages come up for renewal. Many of these homeowners secured ultra-low rates (below 2%) during 2020-2021 and will renew into a market where rates have more than tripled. The CMHC and Bank of Canada have both warned about this 'mortgage wall' — it represents the largest collective financial shock in Canadian mortgage history, with payment jumps of 40-60% for millions of families.",
+    },
+    {
+      question: "If every Canadian homeowner paid off their mortgage in 7 years instead of 25, how much annual revenue would the Big 6 Canadian banks collectively lose?",
+      options: [
+        "$5 billion",
+        "$18 billion",
+        "$47 billion",
+        "$82 billion",
+      ],
+      correctAnswer: 2,
+      explanation: "The Big 6 Canadian banks — RBC, TD, Scotiabank, BMO, CIBC, and National Bank — would lose an estimated $47 billion in annual interest revenue if every Canadian homeowner paid off their mortgage in 7 years instead of 25. This is why the 5-year term, front-loaded amortization, and renewal treadmill exist. The system is designed to prevent rapid payoff, not encourage it. In 2023 alone, these six banks collectively earned over $57 billion in profit.",
+    },
+  ],
+};
+
 
 // ══════════════════════════════════════════════════════════════
 // PAID MODULES 5-10 — $297 Premium Content
