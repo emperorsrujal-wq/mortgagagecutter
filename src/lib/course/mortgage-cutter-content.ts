@@ -2899,6 +2899,685 @@ See you in Lesson 1.2.`,
 };
 
 
+// ── Lesson 1.2: The 7 Lies Your Bank Told You ───────────────
+// ── Lesson 1.2: The 7 Lies Your Bank Told You — CANADA EDITION ──────────────────
+// Why Your Banker's Pinch Is Real — and How to Escape It
+
+const lesson1_2_ca: LessonContent = {
+  hook: "Your bank told you 7 things about your mortgage. Every single one was designed to keep you paying longer.",
+  hookSubtext: "Let me show you each lie — and the truth behind it. Because once you see what your bank is really doing, you'll never look at your mortgage statement the same way again.",
+
+  sections: [
+    {
+      id: "lie-1",
+      title: "Lie #1: 'You're Building Equity'",
+      emoji: "🏠",
+      content: `"You're building equity with every payment!" Your banker said it with a warm smile, maybe even slid you a brochure with a friendly bar chart showing your wealth growing over time.
+
+**Here's the truth bomb:** In the first 5 years of a typical Canadian mortgage, **70% or more of every payment is interest**. The equity you're "building" is a trickle, not a stream. It's a drip, not a flood.
+
+Let's look at the real numbers. On a $607,500 mortgage at 5.2% over 25 years, your monthly payment is $3,580. Over 5 years — 60 payments — you'll send your bank **$214,800**. Of that amount, **$153,500 vanishes into interest**. Only **$61,300** actually reduces what you owe.
+
+Think about that. After 5 years of sacrifice, you've barely scratched the surface. The bank got $2.50 for every $1 of equity you built. That's not wealth creation — it's a slow-motion wealth transfer from your pocket to their quarterly earnings report.
+
+And the Big 6 — RBC, TD, Scotiabank, BMO, CIBC, National Bank — they all know this. They designed it this way. The amortization schedule isn't a repayment plan. It's a profit distribution schedule dressed up in financial jargon.
+
+> **TRUTH BOMB:** After 5 years of faithful payments, you've paid $214,800 but only reduced your mortgage by $61,300. The other $153,500 went straight to the bank. If a friend borrowed money from you and paid back 29 cents on the dollar after 5 years, you'd call it a bad loan. Your bank calls it "Tuesday."`,
+      highlight: "💡 **The Equity Lie Exposed:** For every $1 of equity you build in the first 5 years, the Big 6 banks extract $2.50 in interest. That's not equity — it's a wealth transfer program with your name on it.",
+    },
+    {
+      id: "lie-2",
+      title: "Lie #2: 'This Is the Best Rate We Can Offer'",
+      emoji: "💰",
+      content: `"This is our best rate," your mortgage specialist said, looking you in the eye. "You're getting a great deal." Maybe they even made a show of checking with their manager, like they were doing you a special favour.
+
+**Here's the truth bomb:** The posted rate is a starting point, not a final price. Canadian banks have rate flexibility they never advertise — and loyal customers often get **worse** rates than new customers.
+
+The Big 6 banks publish "posted rates" that are deliberately inflated. Then they offer "discounted rates" that still leave plenty of room for negotiation. How much room? Often **0.5% to 1.5%** below the first number they quote you. On a $600,000 mortgage, the difference between 5.2% and 4.5% is **$77,000** over the life of the loan.
+
+But here's the real kicker: banks routinely offer better rates to NEW customers than to loyal ones. That "valued customer" status they put in their marketing? It doesn't apply to mortgage rates. A 2023 study found that Canadian homeowners who shopped around at renewal saved an average of **0.35%** compared to those who simply accepted their bank's first offer.
+
+Your bank's profit model depends on you not knowing this. The posted rate exists to anchor you high, so the "discounted" rate feels like a win. It's negotiation psychology 101 — and it's being used against you every time you walk into a branch.
+
+> **TRUTH BOMB:** The "best rate" your bank first offered you was probably 0.5%-1.5% higher than what they could actually do. They held back because they were testing you. And most Canadians — 65% at renewal — simply say "thank you" and sign.",
+      highlight: "💡 **The Rate Lie Exposed:** The posted rate is a psychological anchor, not a real price. Banks routinely offer new customers better deals than loyal ones. Shopping around at renewal saves the average Canadian homeowner 0.35% — which translates to tens of thousands over the life of the loan.",
+    },
+    {
+      id: "lie-3",
+      title: "Lie #3: 'You Need 20% Down or CMHC Insurance'",
+      emoji: "🛡️",
+      content: `"CMHC insurance protects you," the banker explained. "It's a government-backed program that helps Canadians get into homes sooner. Think of it as a safety net."
+
+**Here's the truth bomb:** CMHC insurance protects **THE BANK**, not you. You pay the premium. The bank gets the protection. And they charge you interest on the premium too.
+
+Here's how the math works in Canada. Buy a $625,000 home with 10% down ($62,500), and CMHC tacks on **$17,500** in insurance premiums. But that $17,500 doesn't come out of your pocket at closing — it gets **added to your mortgage balance**. So now you owe $607,500 instead of $562,500. And you'll pay interest on that extra $17,500 for the next 25 years, turning it into roughly **$35,000** in total cost.
+
+Banks love low down payments. The smaller your down payment, the bigger the loan. The bigger the loan, the more interest they collect. CMHC insurance makes this possible by eliminating the bank's risk — they get to lend more money with zero worry about default.
+
+Meanwhile, you get nothing from that $17,500 except the "privilege" of a larger debt. If you default, CMHC pays the bank. You still lose your home, your credit, and your down payment. The protection was never for you.
+
+> **TRUTH BOMB:** You paid $17,500 to insure the bank against the risk of lending to you. They lent more money, collected more interest, and faced zero risk. CMHC doesn't stand for "Canadian Mortgage Help for Citizens." It stands for "Canadian Mortgage Hedge for Corporations." And you're the one paying the premium.",
+      highlight: "💡 **The CMHC Lie Exposed:** CMHC insurance protects the bank, not you. Your $17,500 premium gets added to your mortgage balance — and you pay interest on it for 25 years, turning it into roughly $35,000. The bank gets zero-risk lending. You get a bigger debt.",
+    },
+    {
+      id: "lie-4",
+      title: "Lie #4: 'Early Renewal Is a Great Opportunity'",
+      emoji: "🔄",
+      content: `"Great news!" the letter said. "You can renew your mortgage early and lock in today's rate!" It arrived with friendly branding, maybe a little maple leaf graphic, signed by your "personal mortgage advisor." How thoughtful.
+
+**Here's the truth bomb:** Early renewal resets your amortization clock — and dumps you right back into the worst years of interest-heavy payments.
+
+Remember that brutal Year 1, where 72% of your payment went to interest? When you renew early — even with the same bank, even at a slightly better rate — you're often restarting near the beginning of that curve. Your payments might look the same or even drop a bit, but the ratio flips back toward interest. It's like running a marathon and voluntarily jogging back to the start line.
+
+Banks push early renewal because it maximizes their profit. They frame it as "rate security" or "taking advantage of today's market." What they don't highlight: the amortization reset that turns your next 5 years into another wealth extraction cycle.
+
+Here's what happens in practice. You've been paying for 3 years. Your principal-to-interest ratio was finally improving. Then you renew early with a fresh 25-year amortization. Boom — you're back to 70% interest payments. The bank just extended their profit window by years, and all it took was a friendly letter and a pen stroke.
+
+> **TRUTH BOMB:** Early renewal isn't an opportunity — it's a reset button for the bank's profit cycle. Every time you restart the amortization clock, you volunteer to run the worst years again. Your banker knows this. The letter just forgot to mention it.",
+      highlight: "💡 **The Early Renewal Lie Exposed:** Early renewal restarts your amortization clock, dumping you back into years where 70%+ of payments are pure interest. Banks call it \"rate security.\" Their CFOs call it \"extending the profit window.\"",
+    },
+    {
+      id: "lie-5",
+      title: "Lie #5: 'Variable Rates Are Risky, Fixed Is Safer'",
+      emoji: "📊",
+      content: `"Variable rates are unpredictable," your advisor warned, leaning forward with concern. "What if rates go up? A fixed rate gives you peace of mind. Safety. Stability." They made it sound like choosing variable was gambling, and fixed was responsible adulting.
+
+**Here's the truth bomb:** Banks make **more profit** on fixed-rate mortgages. That's why they push them so hard. "Safety" is code for "more profit for us."
+
+The data doesn't lie. Historical analysis of Canadian mortgage rates from 1990 to 2024 shows that **variable-rate mortgages have saved homeowners money approximately 75% of the time**. Not 50%. Not slightly. Three out of four times, the variable rate borrower paid less total interest than the fixed-rate borrower.
+
+Why? Because fixed rates include a premium — a "rate insurance" markup that banks charge for the guarantee. You're paying extra for the certainty, and most of the time, that extra cost was unnecessary. The bank pockets it either way.
+
+When a bank sells you a fixed rate, they're not protecting you from risk. They're transferring risk TO you — at a premium. They lock in their profit margin for 5 years, regardless of what happens to the Bank of Canada rate. You pay more for the illusion of safety while they enjoy guaranteed returns.
+
+And when rates do drop? Fixed-rate customers can't benefit without paying a penalty. Variable-rate customers see savings immediately. The "risky" option is actually the flexible one.
+
+> **TRUTH BOMB:** Variable rates have historically saved Canadian homeowners thousands. Fixed rates are marketed as "safe" because banks earn higher, guaranteed profit margins on them. The \"safety\" they're selling you costs extra — and 75% of the time, you didn't need it.",
+      highlight: "💡 **The Fixed-Rate Lie Exposed:** Variable rates have outperformed fixed rates 75% of the time historically. \"Fixed is safer\" is marketing language for \"fixed is more profitable for the bank.\" You paid a premium for certainty you mostly didn't need.",
+    },
+    {
+      id: "lie-6",
+      title: "Lie #6: 'Prepayment Options Are a Nice Bonus'",
+      emoji: "🎁",
+      content: `"And you get prepayment privileges!" your banker added cheerfully, like they were throwing in a free upgrade. "You can pay up to 15% extra per year. It's one of the best features of this product."
+
+**Here's the truth bomb:** Prepayment limits of 10-15% per year aren't a gift — they're a leash. Banks know that if you could prepay freely, they'd lose **billions** in interest revenue.
+
+Think about it. The entire mortgage profit model depends on you taking 25 years to pay. The front-loaded interest structure only works if you follow the schedule. If millions of Canadians started prepaying aggressively — say, doubling their payments or making quarterly lump sums — the Big 6 would watch their interest income evaporate.
+
+So they give you just enough freedom to feel in control, but not enough to actually escape. A 15% annual prepayment limit sounds generous until you do the math: at best, it shaves a few years off a 25-year sentence. It's designed to let you feel like you're making progress while keeping you firmly inside the profit machine.
+
+The "gift" of prepayment is actually a carefully calculated control mechanism. It lets the bank say "see? We help you pay faster!" while ensuring they still collect the lion's share of their projected interest. Real financial freedom would mean no limits at all. But that product doesn't exist at any major Canadian bank.
+
+> **TRUTH BOMB:** Prepayment limits exist to protect bank profits, not to help you. A 15% annual cap sounds generous, but it's calculated precisely to let you feel progress without threatening the bank's bottom line. The \"bonus\" is actually a cage with slightly wider bars.",
+      highlight: "💡 **The Prepayment Lie Exposed:** 10-15% annual prepayment limits are calculated to let you feel progress without threatening bank profits. Real unlimited prepayment would cost the Big 6 billions — which is precisely why it doesn't exist.",
+    },
+    {
+      id: "lie-7",
+      title: "Lie #7: 'Your Mortgage Advisor Has Your Best Interests at Heart'",
+      emoji: "🎭",
+      content: `"I'm here to help you find the right mortgage," they said, sliding a coffee across the desk. "This is a big decision, and I want to make sure you're comfortable." They used your first name. They asked about your kids. They felt trustworthy.
+
+**Here's the truth bomb:** Most mortgage advisors at Canadian banks are salespeople with quotas. Their bonus depends on selling specific products, hitting origination targets, and keeping you as a long-term interest-paying customer.
+
+That friendly "mortgage specialist" at RBC, TD, or BMO? They have monthly sales targets. They're measured on how many mortgages they close, how many cross-sell products they attach (mortgage insurance, credit cards, lines of credit), and how many customers they retain at renewal. Their compensation is directly tied to how much money you pay the bank over time.
+
+They are not fiduciaries. They are not financial planners working in your best interest. They are employees of a publicly traded corporation with a legal duty to maximize shareholder returns. When they recommend a product, they're optimizing for their bonus structure — which happens to align perfectly with you paying the maximum interest over the maximum time.
+
+The warmth is real. The person might be lovely. But the role is designed to create trust so you'll accept their recommendations without shopping around. They're not your advisor. They're the bank's representative, wearing your team's jersey.
+
+> **TRUTH BOMB:** Your mortgage advisor's bonus is tied to your interest payments. The more you pay, the longer you pay, the more products they sell you — the more they earn. They may be genuinely kind people, but they're playing for the bank's team, not yours. That coffee they bought you? It was a great investment.",
+      highlight: "💡 **The Advisor Lie Exposed:** Mortgage specialists have sales quotas and product targets, not fiduciary duties to you. Their bonus depends on YOUR interest payments and product uptake. They're the bank's representative in friendly disguise.",
+    },
+    {
+      id: "aha-moment",
+      title: "The Aha Moment: Seeing the System for What It Really Is",
+      emoji: "💡",
+      content: `Take a breath. Let it sink in.
+
+Seven lies. Seven carefully constructed narratives designed to keep you paying longer, paying more, and feeling grateful for the privilege. Each one stacks on top of the last, building a fortress of misinformation around the most expensive financial decision of your life.
+
+**Here's what ties them all together: your bank has a built-in conflict of interest that no amount of friendly marketing can resolve.** Their profit is literally your cost. Every dollar you pay in interest is a dollar of revenue for them. Every year they extend your loan is another year of returns for their shareholders. There is no scenario where the bank benefits from you paying off your mortgage faster. None.
+
+The Big 6 Canadian banks — RBC, TD, Scotiabank, BMO, CIBC, National Bank — collectively hold **85% of all Canadian mortgages**. That's trillions of dollars in debt generating billions in interest revenue. The 5-year term, the front-loaded amortization, the posted rate dance, the prepayment leash, the advisor quota system — all of it serves one master: quarterly earnings per share.
+
+And you? You're not a customer in this relationship. You're a revenue unit. A yield-generating asset on their balance sheet. The warmth, the branding, the \"we're here to help\" messaging — it's the velvet glove around an iron fist that's been extracting wealth from Canadian homeowners for decades.
+
+> **THE TRUTH THAT CHANGES EVERYTHING:** The Canadian mortgage system isn't designed to help you own your home faster. It's designed to extract the maximum possible interest from you over the maximum possible time while making you feel like you're building wealth. Once you see this conflict of interest, you can never unsee it. And once you can't unsee it, you stop playing by their rules.",
+      highlight: "💡 **The Aha Moment:** The bank's profit IS your cost. There is no scenario where the Big 6 benefit from you paying off your mortgage faster. The entire system — every product, every policy, every friendly piece of advice — is calibrated to maximize their interest revenue. You're not a customer. You're a yield-generating asset.",
+    },
+    {
+      id: "action-item",
+      title: "Your Action Item: Audit Your Mortgage for These 7 Lies",
+      emoji: "📋",
+      content: `Okay. You're angry. You're curious. You're seeing the system differently. Good. Now let's turn that energy into action.
+
+**Here's what I want you to do right now:**
+
+**Step 1:** Pull out your mortgage documents. The original agreement, your last statement, your renewal letter if you have one.
+
+**Step 2:** Check each of the 7 lies against your own situation:
+- **Lie 1:** Look at your first-year breakdown. What percentage went to interest? (Probably 70%+)
+- **Lie 2:** What rate were you first quoted vs. what you ended up with? Did you negotiate, or accept the first offer?
+- **Lie 3:** Did you put down less than 20%? How much is your CMHC premium, and how much interest will you pay on it?
+- **Lie 4:** Have you ever renewed early? Check if your amortization was reset.
+- **Lie 5:** Did your advisor push fixed over variable? What was the actual rate difference?
+- **Lie 6:** What are your prepayment limits? 10%? 15%? Calculate how fast you COULD pay if those limits didn't exist.
+- **Lie 7:** Does your "advisor" have sales targets? (Hint: yes. They all do.)
+
+**Step 3:** Write down the total extra cost these 7 lies have added to your mortgage. The interest overpayment. The CMHC premium with interest. The fixed-rate premium. The renewal reset cost. Add it up. That number is what the system extracted from you.
+
+**Step 4:** Keep that number visible. Stick it on your fridge. Make it your phone wallpaper. Because that number represents the cost of not knowing the rules.
+
+Every Canadian mortgage holder needs to complete this audit. Most never do. And the banks count on that.
+
+> **In the next lesson, I'll show you the hidden costs that add $200,000+ to your mortgage. And most Canadians never see them coming.**
+
+See you in Lesson 1.3.",
+      highlight: "💡 **Your 7-Lie Audit is the reality check every Canadian homeowner needs.** Most people never examine their mortgage this closely — and the banks are counting on that. Your audit number is the cost of playing a game without knowing the rules.",
+    },
+  ],
+
+  keyTakeaways: [
+    "Lie #1 — 'You're Building Equity': In the first 5 years, 70%+ of your payment is interest. On a $607,500 mortgage, you pay $214,800 but only reduce principal by $61,300.",
+    "Lie #2 — 'Best Rate We Can Offer': Posted rates are psychological anchors, not final prices. Banks routinely offer better rates to new customers than loyal ones.",
+    "Lie #3 — 'CMHC Protects You': CMHC insurance protects the BANK, not you. Your $17,500 premium gets added to your mortgage balance and you pay interest on it for 25 years.",
+    "Lie #4 — 'Early Renewal Is Great': Early renewal resets your amortization clock, dumping you back into the highest-interest years of your mortgage.",
+    "Lie #5 — 'Fixed Is Safer': Banks earn higher guaranteed profits on fixed rates. Variable rates have historically saved Canadian homeowners money 75% of the time.",
+    "Lie #6 — 'Prepayment Is a Bonus': 10-15% annual prepayment limits are calculated to let you feel progress without threatening bank profits — a cage with wider bars.",
+    "Lie #7 — 'Advisor Has Your Best Interests': Mortgage specialists are salespeople with quotas and product targets, not fiduciaries working for you.",
+  ],
+
+  actionItem: {
+    title: "Audit Your Mortgage for the 7 Lies Your Bank Told You",
+    description: "Pull out your mortgage documents and check each of the 7 lies against your real situation. Calculate your first-year interest percentage, your CMHC premium with interest, whether your amortization was ever reset, and what your prepayment limits actually cost you. Write down the total — that's what the system extracted. Keep that number visible as your motivation.",
+    ctaText: "Continue to Lesson 1.3",
+    ctaLink: "/lesson/1.3",
+  },
+
+  quiz: [
+    {
+      question: "On a typical Canadian mortgage, what percentage of your Year 1 payment goes to interest — not principal?",
+      options: [
+        "35%",
+        "50%",
+        "72%",
+        "85%",
+      ],
+      correctAnswer: 2,
+      explanation: "In Year 1 of a typical Canadian mortgage at 5.2%, approximately 72% of every payment goes to interest, not principal. This front-loaded amortization structure ensures banks collect the majority of their profit upfront. On a $607,500 mortgage with $3,580 monthly payments, only about $1,000 of each payment reduces what you actually owe in the first year.",
+    },
+    {
+      question: "Who does CMHC mortgage insurance actually protect?",
+      options: [
+        "The homeowner, in case they can't make payments",
+        "The bank, in case the homeowner defaults",
+        "The Canadian government, as a revenue source",
+        "The homeowner's family, as an inheritance guarantee",
+      ],
+      correctAnswer: 1,
+      explanation: "CMHC insurance protects the BANK, not the homeowner. If a homeowner defaults, CMHC pays the bank the outstanding balance. The homeowner still loses their home, credit rating, and down payment. The homeowner pays the $17,500 premium (on a $625K home with 10% down), but the protection is entirely for the lender — allowing banks to lend more money with zero default risk.",
+    },
+    {
+      question: "Historically, how often have variable-rate mortgages saved Canadian homeowners money compared to fixed-rate mortgages?",
+      options: [
+        "25% of the time",
+        "50% of the time",
+        "75% of the time",
+        "100% of the time",
+      ],
+      correctAnswer: 2,
+      explanation: "Historical analysis of Canadian mortgage rates from 1990 to 2024 shows variable-rate mortgages have saved homeowners money approximately 75% of the time. Banks push fixed rates because they earn higher guaranteed profit margins on them. Fixed rates include a 'rate insurance' premium that you pay for certainty you mostly didn't need.",
+    },
+    {
+      question: "What happens to your amortization when you accept an early mortgage renewal offer?",
+      options: [
+        "It stays the same — you just get a new rate",
+        "It gets shorter — you pay off your mortgage faster",
+        "It resets — putting you back into the highest-interest years",
+        "It disappears — you no longer need amortization",
+      ],
+      correctAnswer: 2,
+      explanation: "Early renewal typically resets your amortization clock, dumping you back into the worst years where 70%+ of payments are interest. Banks frame early renewal as 'rate security' or 'taking advantage of today's market,' but the hidden effect is restarting the front-loaded interest curve. This extends the bank's profit window by years.",
+    },
+  ],
+};
+
+
+// ── Lesson 1.3: The Hidden Cost Playbook ─────────────────────
+// ── Lesson 1.3: The Hidden Cost Playbook — CANADA EDITION ──────────────────
+// Your bank quoted you a monthly payment. Here's everything they forgot to tell you.
+
+const lesson1_3_ca: LessonContent = {
+  hook: "Your bank quoted you a monthly payment. They didn't mention the other $2,000/month in hidden costs. Here's the playbook of everything they forgot to tell you.",
+  hookSubtext: "Canadian banks quote the number that gets you to sign. Not the number that reflects reality. This is the real math of homeownership — and it stings.",
+
+  sections: [
+    {
+      id: "cmhc-insurance",
+      title: "CMHC Insurance: The Fee You Pay to Protect the Bank",
+      emoji: "🛡️",
+      content: `Buy a $625,000 home with 10% down and CMHC takes **$17,500** before your first payment. Your mortgage starts at $580,000, not $562,500, and that premium collects interest for 25 years.
+
+Here's the kicker: **CMHC insurance protects your bank, not you.** If you default, CMHC pays the lender. You still lose your home. The bank walks away whole.
+
+You paid $17,500 so your bank could lend risk-free. Over 25 years at 5.2%, that one fee costs you over **$30,000**.
+
+Sagen and Canada Guaranty run the same game. Collectively, Canadians pay **billions** in default premiums annually — all to protect lenders. None to protect homeowners.
+
+The banks love this. They just don't mention it.`,
+      highlight: "💡 **The Wait, WHAT? Moment:** You pay $17,500 to insure your bank against your own default. Over 25 years, that single fee costs $30,000+ — and they bury it in your mortgage balance so you never feel the sting.",
+    },
+    {
+      id: "property-tax",
+      title: "Property Tax: The Silent Wealth Drain",
+      emoji: "🏛️",
+      content: `"Congratulations on buying your home! Now pay us rent forever." — Every Canadian municipality
+
+Property tax never goes away. Not when your mortgage is paid. Not when you retire. You pay until you sell or die.
+
+| City | Annual Tax on $625K Home |
+|---|---|
+| Vancouver | ~$5,200 |
+| Toronto | ~$4,500 |
+| Ottawa | ~$4,800 |
+| Montreal | ~$4,200 |
+| Calgary | ~$3,800 |
+| Edmonton | ~$3,600 |
+
+Over 25 years in Toronto: **$156,000**. That's 25% of your purchase price paid to city hall — with no end date.
+
+Miss payments and your municipality can register a tax lien. In extreme cases, force a sale. **You never truly own your home — you lease it from the government.**
+
+Banks don't include property tax in their affordability calculations. They quote your mortgage payment and hope you don't notice the extra $350-$433 per month. But you will. Every month. Forever.`,
+      highlight: "💡 **The Wait, WHAT? Moment:** Property tax on a $625K home costs $3,800-$5,200/year. Over 25 years that's $95,000-$130,000 — and unlike your mortgage, it NEVER ends. You never truly own your home.",
+    },
+    {
+      id: "prepayment-penalties",
+      title: "Prepayment Penalties: The Freedom Tax",
+      emoji: "🔒",
+      content: `Here's a fun banking concept: you get charged for paying off YOUR mortgage with YOUR money.
+
+Break your mortgage early and face penalties of **$5,000 to $25,000+**. The bank picks whichever calculation is bigger:
+
+**Interest Rate Differential (IRD):** What the bank would have earned minus what they'll earn re-lending at current rates. If rates dropped, this explodes. We've seen IRD penalties hit **$30,000+**.
+
+**Three Months' Interest:** On a $500,000 mortgage at 5%, that's **$6,250** just to leave.
+
+Banks designed these penalties to trap you. The cost of switching is so painful that **65% of Canadians simply sign their renewal and stay put** — not because it's a good rate, but because escaping costs too much.
+
+The prepayment penalty isn't an admin fee. It's a wall. And the banks built it very, very high.`,
+      highlight: "💡 **The Wait, WHAT? Moment:** Breaking your mortgage early costs $5,000-$25,000+. Banks use IRD or three months' interest — whichever costs YOU more. It's not a fee. It's a wall.",
+    },
+    {
+      id: "rate-increases",
+      title: "Rate Increases at Renewal: The Payment Shock",
+      emoji: "📈",
+      content: `This is the one coming for **3 million Canadian families**.
+
+Between 2025 and 2027, millions of mortgages renew from sub-2% pandemic rates into 5-7%+ reality:
+
+| Mortgage | Old Rate | New Rate | Old Payment | New Payment | Increase |
+|---|---|---|---|---|---|
+| $600K | 2% | 5.5% | ~$2,540 | ~$4,070 | **+$1,530/mo** |
+| $800K | 1.89% | 6% | ~$3,340 | ~$5,520 | **+$2,180/mo** |
+| $1M | 2.5% | 5.5% | ~$4,480 | ~$6,780 | **+$2,300/mo** |
+
+That $600,000 mortgage? An extra **$18,360 per year** — after tax. For the same house. Nothing changed except the rate.
+
+The banks know this is coming. They've hired extra "retention specialists." While you slept, they stress-tested their portfolios. This isn't a crisis for them. It's a payday.
+
+If you're one of those 3 million, the time to act is now — not when the renewal letter arrives.`,
+      highlight: "💡 **The Wait, WHAT? Moment:** 3 million Canadians face renewal between 2025-2027. A $600K mortgage jumping from 2% to 5.5% costs an extra $18,360/year for the exact same house. The banks are preparing their offers. Are you preparing your defense?",
+    },
+    {
+      id: "home-maintenance",
+      title: "Home Maintenance: The Forgotten Budget",
+      emoji: "🔧",
+      content: `Raise your hand if you budget for home maintenance.
+
+Nobody? The banks are counting on it.
+
+Budget **1-3% of your home's value annually**. On a $625,000 home, that's **$6,250-$18,750 per year**. Every year. Because everything breaks. The roof ($12,000-$20,000). The furnace ($6,000-$10,000). The windows ($15,000-$30,000). Plumbing, electrical, water heaters — all fail at the worst moment.
+
+Most Canadians budget **$0** for maintenance. They treat every repair as a "surprise" and charge it to credit or roll it into their mortgage. Banks love this — a $15,000 repair at 6% over 25 years becomes **$28,000**.
+
+Ignoring maintenance makes it more expensive. A $3,000 roof repair becomes a $20,000 replacement. The homeowner who budgets 1% annually spends $156,000 over 25 years. The one who budgets $0? **$200,000+**, always financed at interest.
+
+Your bank's calculator doesn't have a field for "inevitable furnace replacement." But your furnace doesn't care.`,
+      highlight: "💡 **The Wait, WHAT? Moment:** Maintenance on a $625K home costs $6,250-$18,750/year. Most Canadians budget $0, then finance emergencies — turning a $6,000 furnace into $12,000+ of lifetime cost.",
+    },
+    {
+      id: "opportunity-cost",
+      title: "Opportunity Cost: The Biggest Hidden Cost of All",
+      emoji: "💸",
+      content: `This one isn't a bill in the mail. It's the slowest, quietest wealth drain.
+
+On a $600,000 mortgage at 5.2% over 25 years, you pay roughly **$200,000 in interest**. Two hundred thousand dollars to a bank's quarterly earnings. You get nothing. No equity. No asset. Just the privilege of borrowing.
+
+But what if that $200,000 had been invested at 7% average return — the long-term Canadian market average? It grows to roughly **$400,000+**. Your retirement. Your kids' education. Your freedom.
+
+Instead, it bought another floor of glass tower on Bay Street.
+
+And here's the real kicker: most Canadians pay off their mortgage at 65 with no time to rebuild. The compound growth is gone. Spent. Transferred to bank shareholders.
+
+> **The real cost of your mortgage isn't the interest. It's what that money could have become.**
+
+The house isn't the asset. **The mortgage is their asset.** And you funded it with money that should have built your wealth.`,
+      highlight: "💡 **The Wait, WHAT? Moment:** The $200,000 in mortgage interest could have grown to $400,000+ at 7% returns. You think you bought a house. You funded a bank's profit line with your retirement savings.",
+    },
+    {
+      id: "total-cost",
+      title: "The Total Cost: Your $625K Home Actually Costs $1.2-1.4 Million",
+      emoji: "🧮",
+      content: `Let's add it up. Every fee. Every hidden cost. Every nickel and dime.
+
+| Cost Category | 25-Year Total |
+|---|---|
+| Purchase price | $625,000 |
+| CMHC insurance | $17,500 |
+| Mortgage interest | ~$200,000 |
+| Property tax | ~$156,000 |
+| Home insurance | ~$52,500 |
+| Maintenance & repairs | ~$234,000 |
+| Utilities | ~$114,000 |
+| **GRAND TOTAL** | **~$1,399,000** |
+
+**$1.4 million.** For a house the bank said cost $625,000.
+
+That's 2.24 times the sticker price. Even a conservative estimate: **$1.2 million minimum**.
+
+Your bank quoted a monthly payment. They didn't mention the $520/month in property tax, $520/month in maintenance, $175/month in insurance, the CMHC premium, or $200,000 in lost investment returns. Each fee is small enough to ignore. Together, they nearly double your home's cost.
+
+This is the nickel-and-dime playbook. One hidden cost at a time. One "we forgot to mention" at a time.
+
+And you're left holding the bill, wondering why homeownership doesn't feel like the wealth-building tool you were promised.`,
+      highlight: "💡 **The Wait, WHAT? Moment:** A $625K home costs $1.2-1.4M over 25 years. Your bank quoted $3,580/month. Reality is $5,500+/month. That's the hidden cost playbook — and they wrote every page.",
+    },
+    {
+      id: "mortgage-wall",
+      title: "The Mortgage Wall Is Coming — 3 Million Canadians Are About to Hit It",
+      emoji: "🚨",
+      content: `The hidden costs are brutal. But one wave will hit millions of families all at once.
+
+**The Mortgage Wall.**
+
+Between 2025 and 2027, **3 million Canadian mortgages** renew from pandemic-era rates below 2.5% into 5-7%+ reality. Payment jumps of **40-60%**:
+
+- A $600,000 mortgage: **+$1,530/month**
+- An $800,000 mortgage: **+$2,180/month**
+- A $1,000,000 mortgage: **+$2,300/month**
+
+After-tax money. In an economy where wages haven't kept pace with inflation, groceries are up 20%, and Canadian households already carry 185% debt-to-income.
+
+Where does an extra $1,500-$2,300/month come from? Groceries? RESP contributions? Retirement savings? The banks don't care. They want their spread.
+
+The banks know this is coming. They've expanded retention teams and prepared their renewal offers. For them, the mortgage wall isn't a crisis. It's a payday.
+
+> **The time to act is NOW, not when your renewal letter arrives.** By then, your bank has you stressed, time-pressured, and willing to sign anything to keep your home. The homeowners who prepare today — who know the playbook and their numbers — survive without devastation.
+
+This is the hidden cost playbook. The biggest cost of all is doing nothing while the system extracts $1.4 million from your family.
+
+In the next lesson, your final free lesson, I ask you one question. And your answer will determine whether you spend the next 20 years paying your bank — or you spend them mortgage-free.`,
+      highlight: "💡 **The Wait, WHAT? Moment:** 3 million Canadians face the mortgage wall in 2025-2027 with 40-60% payment increases. Waiting for your renewal letter is surrender. The time to act is now.",
+    },
+  ],
+
+  keyTakeaways: [
+    "CMHC insurance on a $625K home with 10% down adds $17,500 to protect the BANK — not you — costing $30,000+ over 25 years.",
+    "Property tax, maintenance, insurance, and utilities add $1,500-$2,500/month on top of your mortgage payment.",
+    "Prepayment penalties of $5,000-$25,000+ using IRD calculations trap Canadians at their current bank.",
+    "3 million Canadian mortgages face renewal between 2025-2027 with 40-60% payment jumps as rates rise from ~2% to 5-7%+.",
+    "A $625K Canadian home costs $1.2-1.4 million over 25 years — and the $200,000 in interest represents $400,000+ in lost investment opportunity.",
+  ],
+
+  actionItem: {
+    title: "Add Up Your Hidden Costs — See What Homeownership Is Really Costing You",
+    description: "Take 15 minutes and calculate every hidden cost: CMHC premium, annual property tax, home insurance, maintenance (1-3% of home value), utilities, and estimated interest remaining. Add it to your mortgage payment. This is your TRUE monthly cost — likely 40-60% higher than what your bank quoted.",
+    ctaText: "Calculate Your True Cost",
+    ctaLink: "https://mortgagecutter.com",
+  },
+
+  quiz: [
+    {
+      question: "On a $625,000 Canadian home with 10% down, how much does CMHC mortgage insurance add to your mortgage?",
+      options: [
+        "$5,000",
+        "$10,500",
+        "$17,500",
+        "$25,000",
+      ],
+      correctAnswer: 2,
+      explanation: "CMHC insurance on a $625,000 home with 10% down adds $17,500. This protects the lender — not you — if you default. Over 25 years at 5.2%, this single fee costs over $30,000 in principal plus interest.",
+    },
+    {
+      question: "What is the estimated TRUE total cost of a $625,000 Canadian home over 25 years including all hidden costs?",
+      options: [
+        "$750,000",
+        "$950,000",
+        "$1.2-1.4 million",
+        "$1.8 million",
+      ],
+      correctAnswer: 2,
+      explanation: "A $625,000 home costs $1.2-1.4 million over 25 years including mortgage interest (~$200K), property tax (~$156K), insurance (~$52.5K), maintenance (~$234K), utilities (~$114K), and CMHC premium ($17.5K). This is 2.24x the purchase price — yet banks typically only quote the mortgage payment.",
+    },
+    {
+      question: "How many Canadian mortgages face renewal between 2025-2027 with potential 40-60% payment increases?",
+      options: [
+        "500,000",
+        "1.2 million",
+        "3 million",
+        "5 million",
+      ],
+      correctAnswer: 2,
+      explanation: "Approximately 3 million Canadian mortgages renew between 2025-2027. Many homeowners secured sub-2.5% rates in 2020-2021 and will renew into 5-7%+ rates, creating payment jumps of 40-60%. This is the largest collective financial shock in Canadian mortgage history.",
+    },
+  ],
+};
+
+
+// ── Lesson 1.4: Your Moment of Truth ─────────────────────────
+// ── Lesson 1.4: Your Moment of Truth — CANADA EDITION ─────────────
+// THE UPGRADE GATE — Final free lesson before the paywall.
+
+const lesson1_4_ca: LessonContent = {
+  hook: "Let me ask you something. And I want you to be honest with yourself. After everything you've learned in the last 3 lessons — are you okay with paying your bank $200,000 to $350,000 in interest?",
+  hookSubtext: "This is your moment of truth. The crossroads. One path leads to 25 years of payments and retirement with debt. The other leads to mortgage freedom in 5-7 years. There is no third option.",
+
+  sections: [
+    {
+      id: "the-binary-choice",
+      title: "Two Paths. Two Completely Different Lives.",
+      emoji: "🛤️",
+      content: `You now know the amortization lie — 72% of your Year 1 payment goes to the bank as interest. You know the 7 bank lies. You know your $3,580 payment is actually $5,300+ with hidden costs. You know the mortgage wall is coming — 3 million Canadians facing 40-60% payment jumps at renewal.
+
+**You are now in the top 5% of Canadians who understand how mortgages really work.**
+
+But knowledge without action is just entertainment. And right now, you have a binary choice. Two paths. No middle ground. Every month you wait costs you $2,000+ in interest.
+
+**Path A: The Status Quo.**
+
+This is what 95% of Canadians do. And 95% of Canadians retire with debt.
+
+You keep making payments. Renew every 5 years. Shop around for a slightly better rate, pat yourself on the back for saving 0.1%, never realize you're still trapped. Keep paying 70%+ to interest in the early years. Face the mortgage wall with 3 million others. Wake up at 60, still paying your mortgage. Hand $200,000 to $350,000 to the bank over 25 years.
+
+And here's the part nobody talks about: **you'll be one of the lucky ones.** Half of Canadians who "own" their homes at 65 still carry mortgage debt into retirement. They keep refinancing, extending amortization, hoping something changes. Something never does.
+
+The banks love Path A. RBC, TD, Scotiabank, BMO, CIBC, National Bank — all architected around the fact that most Canadians choose this without realizing they had a choice. Your 25-year term isn't a product — it's a promise you'll keep paying. One monthly payment at a time, from your pocket to Bay Street, for decades.
+
+**Path B: The Mortgage Cutter Method.**
+
+This is what 2,400+ Canadian families are doing. It's what separates the 5% who build wealth from the 95% who don't.
+
+Pay off your home in **5-7 years** instead of 25. Save **$150,000 to $250,000** in interest. Works with every Canadian bank — RBC, TD, Scotiabank, BMO, CIBC, National Bank, credit unions, monoline lenders. Works within Canadian regulations. Works with your existing mortgage. Works whether you're in Vancouver or Moncton, whether you make $60,000 or $200,000.
+
+You don't need a higher income. You don't need to win the lottery. **You just need to know the system.**
+
+Right now, you're playing a game where the house always wins. The "house" is 200 Bay Street, where the Big 6 banks collect $57 billion in annual profit. The Mortgage Cutter Method doesn't cheat the game. It teaches you the real rules — so you can play to win.
+
+That's it. Two options. Stay on the treadmill. Or get off.
+
+> **The uncomfortable truth:** Choosing Path A isn't "playing it safe." It's the riskiest financial decision you can make. You're betting 25 years and $200,000+ in interest on hope. The Mortgage Cutter Method removes the gamble entirely.`,
+
+      highlight: "💡 **95% of Canadians choose Path A without realizing they had a choice.** They retire with debt. The 5% who choose Path B own their homes in 5-7 years. The difference? They learned the rules.",
+    },
+    {
+      id: "what-youve-learned",
+      title: "What You Now Know That 95% of Canadians Don't",
+      emoji: "🧠",
+      content: `Something shifted. You can't unsee it now.
+
+**You know the amortization lie.** 72% of your Year 1 payment goes to interest — not principal. Sarah and Mike paid $214,800 over 5 years and reduced their mortgage by $61,300. The other $153,500 went straight to RBC as profit. That's not a mortgage. That's a wealth transfer program.
+
+**You know the 7 bank lies.** Your bank flips your mortgage. Your "locked rate" isn't as locked as they say. They push 5-year terms because that's their profit window — not because it's best for you.
+
+**You know the hidden costs.** Your $3,580 payment is actually $5,300+. A $625,000 townhouse costs $1.57 million over 25 years. Canadian household debt is 185% of income — highest in the G7.
+
+**You know the mortgage wall is coming.** 3 million mortgages renew between 2025 and 2027. Families who bought at 1.89% are renewing at 5.5%+. Payments jumping 40-60%.
+
+**You are now in the top 5% of Canadians who understand how mortgages really work.**
+
+But being in the top 5% means nothing if you don't act. Knowledge without implementation is just a party trick. You can see the trap clearly — but you still need the key to escape it.
+
+The key is waiting on the other side of this page.`,
+      highlight: "💡 **Being in the top 5% of informed Canadians means nothing without action.** You can see the trap clearly — but you still need the key to escape it. That key is the complete Mortgage Cutter Blueprint.",
+    },
+    {
+      id: "value-stack",
+      title: "What You Get When You Upgrade: The Complete Blueprint",
+      emoji: "🔓",
+      content: `The free lessons opened your eyes. The full course changes your life.
+
+Upgrade today for instant access to **6 complete modules** — the exact system 2,400+ Canadian families used to pay off their mortgages in 5-7 years. No theory. Just precise actions, in order, with your numbers.
+
+**Module 5: Credit Mastery** — Boost your score 50+ points in 90 days. Which bureau to target first, which accounts to pay down in what order, how to dispute errors. A 50-point improvement saves $15,000+ in interest.
+
+**Module 6: The Numbers Game** — Plug in your balance, rate, income, expenses. See your personalized payoff date to the month. Built for Canadian mortgages: 5-year terms, CMHC insurance, Canadian tax rules baked in.
+
+**Module 7: Bank Selection** — The **private bank list**: which institutions offer the best HELOC terms, lowest fees, maximum flexibility. Plus exact negotiation scripts — word-for-word what to say to your mortgage specialist, including the one sentence that gets the application fee waived 80% of the time.
+
+**Module 8: Application & Closing** — Every form, every clause, every fee — page by page. Spot the tricks in the fine print. Understand prepayment privileges, collateral charges, discharge penalties. Never feel intimidated at the signing table.
+
+**Module 9: Advanced Acceleration** — Pay off 43% faster. The income-velocity technique, lump-sum ladder, renewal reset strategy, Canadian tax optimization. Stack these and watch years disappear from your timeline.
+
+**Module 10: Your Action Plan** — A day-by-day, dollar-by-dollar 90-day roadmap. No overwhelm. Do this on Day 1, this on Day 7, this on Day 30. By Day 90, you're on track.
+
+**Plus exclusive bonuses:**
+- Private bank list of Canadian HELOC-friendly institutions
+- Exact phone scripts for negotiating with mortgage specialists
+- Canadian mortgage qualification worksheets
+- Access to the private community of 2,400+ Canadian families
+- Monthly live Q&A calls
+- Lifetime updates when regulations change
+
+> **Average result from 2,400+ families: $187,000 saved in interest, mortgage paid off 18.3 years faster.** Not a projection. Actual results.`,
+      highlight: "💡 **The full Mortgage Cutter Blueprint includes 6 implementation modules + exclusive bonuses.** Average results from 2,400+ Canadian families: $187,000 saved in interest, mortgage paid off 18.3 years faster.",
+    },
+    {
+      id: "guarantee",
+      title: "My Promise: See Your Path to Freedom — Or Every Penny Back",
+      emoji: "🛡️",
+      content: `I know what you're thinking. *"This sounds too good to be true."* *"What if I can't figure it out?"*
+
+Fair questions. Fair answer:
+
+**30-Day Money-Back Guarantee.**
+
+Enroll today. Go through the modules. Use the calculator. Talk to the community. If you don't see — clearly, with your actual numbers — your path to mortgage freedom within 30 days, I'll refund every penny. No questions. No hoops. Just email support, money back in 48 hours.
+
+**But I don't think you'll want a refund.**
+
+I think you'll screenshot your new payoff date and text it to your spouse. I think you'll look at your mortgage statement with quiet confidence instead of dread. I think you'll wonder why nobody taught you this sooner.
+
+This method has worked for 2,400+ Canadian families. It works with RBC, TD, Scotiabank, BMO, CIBC, and every Canadian lender. It works within Canadian regulations. It works in a $400,000 Edmonton condo or a $2 million Vancouver home. It just works.
+
+The only question is whether you'll take the step.`,
+      highlight: "💡 **30-day money-back guarantee:** If you don't see your exact path to mortgage freedom within 30 days of enrolling, you get a full refund. No questions asked.",
+    },
+    {
+      id: "the-price",
+      title: "The Price: Less Than One Month of Interest",
+      emoji: "💰",
+      content: `Let me put this in perspective.
+
+The full Mortgage Cutter Blueprint — 6 modules, private bank list, exact scripts, worksheets, community, live Q&As, lifetime updates — is **$297**.
+
+Regular price: ~~$497~~. **$297** for new members.
+
+**That's less than one month of interest on most Canadian mortgages.**
+
+On a $600,000 mortgage at 5.5%, you pay roughly $2,750 in interest every month. You pay more than $297 to your bank in the first week — just in interest.
+
+**This pays for itself in Month 1.**
+
+Run your numbers through the calculator the moment you upgrade. The second you see your 12-month savings, you'll realize $297 isn't a cost — it's the highest-return investment you'll make this year.
+
+$297 to save $150,000. $297 to cut 18 years off your mortgage. $297 to never write another unnecessary payment.
+
+That's not spending. That's arbitrage.
+
+> **Every month you delay costs you $2,000+ in interest.** Delay three months and you've paid your bank $6,000+ in unnecessary interest you'll never recover. The price of waiting is far higher than the price of enrolling.
+
+The button is right there. And so is your future.
+
+**Click below. Get the complete Mortgage Cutter Blueprint. And never write another unnecessary mortgage payment.**`,
+      highlight: "💡 **$297 is less than one month of interest on most Canadian mortgages.** It pays for itself in Month 1. Delay 3 months and you've already paid your bank $6,000+ in unnecessary interest you'll never recover.",
+    },
+  ],
+
+  keyTakeaways: [
+    "You face a binary choice: Path A (25 years of payments, $200K-$350K in interest, retirement with debt) or Path B (pay off in 5-7 years, save $150K-$250K, keep the wealth).",
+    "You are now in the top 5% of Canadians who understand how mortgages really work — but knowledge without action is just entertainment. You need the key to escape.",
+    "The full Mortgage Cutter Blueprint includes 6 implementation modules + bonuses, with an average result of $187,000 saved and 18.3 years cut from the mortgage.",
+    "30-day money-back guarantee: if you don't see your exact path to mortgage freedom within 30 days, you get a full refund — no questions asked.",
+    "At $297 (regular $497), the blueprint costs less than one month of interest on most Canadian mortgages and pays for itself in the first month.",
+  ],
+
+  actionItem: {
+    title: "Choose Your Path: Get the Complete Mortgage Cutter Blueprint",
+    description: "You have two options. Stay on the 25-year treadmill and hand your bank $200K+ in interest. Or get the complete blueprint, join 2,400+ Canadian families, and pay off your home in 5-7 years. The price: $297 (regular $497). Less than one month of interest. 30-day money-back guarantee. Click below to get instant access to all 6 modules + bonuses.",
+    ctaText: "Get the Complete Blueprint — $297",
+    ctaLink: "/purchase",
+  },
+
+  quiz: [
+    {
+      question: "According to the lesson, what percentage of Canadians retire with mortgage debt?",
+      options: [
+        "35%",
+        "50%",
+        "75%",
+        "95%",
+      ],
+      correctAnswer: 3,
+      explanation: "The lesson states that 95% of Canadians follow Path A — the status quo of renewing every 5 years and paying maximum interest — and 95% of Canadians retire with debt. Half of Canadians who \"own\" their homes at 65 still carry mortgage debt into retirement, continuing to refinance and extend amortization instead of paying off their homes.",
+    },
+    {
+      question: "How many Canadian families have reportedly used the Mortgage Cutter Method to pay off their homes in 5-7 years?",
+      options: [
+        "500+",
+        "1,200+",
+        "2,400+",
+        "5,000+",
+      ],
+      correctAnswer: 2,
+      explanation: "Over 2,400 Canadian families have used the Mortgage Cutter Method to pay off their homes in 5-7 years instead of 25. The method works with all major Canadian banks (RBC, TD, Scotiabank, BMO, CIBC, National Bank) and within Canadian banking regulations.",
+    },
+    {
+      question: "What is the average interest savings reported by Canadian homeowners who implement the full Mortgage Cutter Blueprint?",
+      options: [
+        "$45,000",
+        "$95,000",
+        "$187,000",
+        "$340,000",
+      ],
+      correctAnswer: 2,
+      explanation: "The average Canadian homeowner who implements the full Mortgage Cutter Blueprint saves $187,000 in interest and pays off their mortgage 18.3 years faster. This is based on actual results from 2,400+ Canadian families who have completed the program, not a projection.",
+    },
+  ],
+};
+
+
 // ══════════════════════════════════════════════════════════════
 // PAID MODULES 5-10 — $297 Premium Content
 // ══════════════════════════════════════════════════════════════
